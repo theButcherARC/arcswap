@@ -1,0 +1,26 @@
+# ── Next.js ──────────────────────────────────
+.next/
+out/
+build/
+
+# ── Environment ───────────────────────────────
+.env
+.env.local
+.env.*.local
+
+# ── Node ─────────────────────────────────────
+node_modules/
+contracts/node_modules/
+
+# ── Hardhat ───────────────────────────────────
+contracts/artifacts/
+contracts/cache/
+contracts/dist/
+contracts/typechain-types/
+
+# ── Vercel ────────────────────────────────────
+.vercel/
+
+# ── Misc ─────────────────────────────────────
+.DS_Store
+*.log
