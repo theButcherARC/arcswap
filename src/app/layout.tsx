@@ -8,23 +8,18 @@ import "./globals.css";
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-sans",
 });
 
 export const metadata: Metadata = {
-  title: "ArcSwap — Arc Testnet DEX",
+  title: "VibeFlow — Arc Testnet DEX",
   description: "Swap tokens and bulk pay on Arc Testnet",
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
 };
 
-interface RootLayoutProps {
-  children: React.ReactNode;
-}
-
-export default function RootLayout({ children }: RootLayoutProps) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={inter.variable}>
-      <body className="flex min-h-screen flex-col">
+    <html lang="en" className={inter.className}>
+      <body className="flex min-h-screen flex-col bg-[#f7f7fb] text-[#1e1c2e]">
         <Providers>
           <Header />
           <div className="flex-1">{children}</div>

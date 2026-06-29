@@ -1,46 +1,76 @@
-import type { Address } from "viem";
+import { type Address, encodeFunctionData, erc20Abi } from "viem";
 import type { BulkPayParams } from "@/types/bulkPay";
 import type { Token } from "@/types/token";
 
-/**
- * Bulk pay service — builds the sequence of ERC20 transfer calls.
- *
- * MVP approach: individual sequential ERC20 transfers.
- * Each transfer is a separate transaction confirmed by the user.
- *
- * Post-MVP: replace with a single multicall transaction to an
- * on-chain Disperse-style contract for atomicity and gas savings.
- *
- * TODO (Phase 4):
- *   - Implement buildTransfers() — group by token, calculate total amounts.
- *   - Implement validateRecipients() — check addresses, amounts > 0, max count.
- */
+export const MULTICALL3_FROM_ADDRESS: Address =
+  "0x522fAf9A91c41c443c66765030741e4AaCe147D0";
+
+export const MULTICALL3_FROM_ABI = [
+  {
+    type: "function",
+    name: "aggregate3",
+    stateMutability: "nonpayable",
+    inputs: [
+      {
+        name: "calls",
+        type: "tuple[]",
+        components: [
+          { name: "target", type: "address" },
+          { name: "allowFailure", type: "bool" },
+          { name: "callData", type: "bytes" },
+        ],
+      },
+    ],
+    outputs: [
+      {
+        name: "returnData",
+        type: "tuple[]",
+        components: [
+          { name: "success", type: "bool" },
+          { name: "returnData", type: "bytes" },
+        ],
+      },
+    ],
+  },
+] as const;
 
 export interface TransferInstruction {
   token: Token;
   to: Address;
   amount: bigint;
+  name: string;
 }
 
-/**
- * Convert BulkPayParams into an ordered list of transfer instructions.
- * Validates input and throws descriptive errors on bad data.
- */
-export function buildTransfers(_params: BulkPayParams): TransferInstruction[] {
-  // TODO: Implement
-  // 1. Validate each recipient (valid address, amount > 0)
-  // 2. Return flat list of TransferInstructions
-  throw new Error("bulkPayService.buildTransfers not yet implemented");
+export interface Multicall3Call {
+  target: Address;
+  allowFailure: boolean;
+  callData: `0x${string}`;
 }
 
-/**
- * Aggregate total amounts per token needed across all recipients.
- * Used to determine approval amounts before sending.
- */
-export function aggregateByToken(
-  _instructions: TransferInstruction[]
-): Map<Address, bigint> {
-  // TODO: Implement
-  // Returns Map<tokenAddress, totalAmount>
-  throw new Error("bulkPayService.aggregateByToken not yet implemented");
+export function buildTransfers(params: BulkPayParams): TransferInstruction[] {
+  if (params.recipients.length === 0) throw new Error("No recipients provided.");
+  if (params.totalAmount === 0n) throw new Error("Total amount must be greater than zero.");
+
+  return params.recipients.map((r) => ({
+    token: params.token,
+    to: r.address,
+    amount: r.amount,
+    name: r.name,
+  }));
+}
+
+export function buildMulticallCalls(instructions: TransferInstruction[]): Multicall3Call[] {
+  return instructions.map((instr) => ({
+    target: instr.token.address as Address,
+    allowFailure: false,
+    callData: encodeFunctionData({
+      abi: erc20Abi,
+      functionName: "transfer",
+      args: [instr.to, instr.amount],
+    }),
+  }));
+}
+
+export function getTotalAmount(instructions: TransferInstruction[]): bigint {
+  return instructions.reduce((sum, i) => sum + i.amount, 0n);
 }

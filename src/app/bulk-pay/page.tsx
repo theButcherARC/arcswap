@@ -4,7 +4,7 @@ import { NetworkGuard } from "@/components/wallet/NetworkGuard";
 import { BulkPayForm } from "@/components/bulk-pay/BulkPayForm";
 
 export const metadata: Metadata = {
-  title: "Bulk Pay — ArcSwap",
+  title: "Bulk Pay — VibeFlow",
 };
 
 export default function BulkPayPage() {

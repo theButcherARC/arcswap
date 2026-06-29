@@ -121,3 +121,13 @@ Critical variables: `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID`, all token addresses,
 - Slippage tolerance UI
 - Transaction history via indexer
 - Permit2 for gasless approvals
+## Token Registry
+
+| Symbol | Address | Decimals | Source |
+|--------|---------|----------|--------|
+| USDC | `0x3600000000000000000000000000000000000000` | 6 | Arc native precompile (hardcoded) ✅ |
+| EURC | `0x89B50855Aa3bE2F677cD6303Cec089B5F319D72a` | 6 | Arc Testnet existing (hardcoded) ✅ |
+| cirBTC | `0xf0C4a4CE82A5746AbAAd9425360Ab04fbBA432BF` | 8 | Arc Testnet existing (hardcoded) ✅ — confirm decimals |
+| VIBE | `NEXT_PUBLIC_VIBE_TOKEN_ADDRESS` | 18 | Deployed by this project |
+
+---

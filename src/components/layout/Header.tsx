@@ -14,24 +14,27 @@ export function Header() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-30 border-b border-surface-200 bg-surface-0/80 backdrop-blur-sm">
-      <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
+    <header className="sticky top-0 z-30 border-b border-surface-100 bg-white/70 backdrop-blur-md">
+      <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4">
         {/* Logo */}
-        <Link href={ROUTES.HOME} className="text-base font-bold tracking-tight text-arc-500">
-          ArcSwap
+        <Link href={ROUTES.HOME} className="flex items-center gap-2 text-lg font-bold tracking-tight text-arc-900">
+          <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-arc-500 to-arc-700 text-sm text-white shadow-premium">
+            V
+          </span>
+          VibeFlow
         </Link>
 
         {/* Nav */}
-        <nav className="flex items-center gap-1">
+        <nav className="flex items-center gap-1 rounded-2xl border border-surface-100 bg-surface-50/60 p-1">
           {NAV_LINKS.map(({ href, label }) => (
             <Link
               key={href}
               href={href}
               className={[
-                "rounded-lg px-3 py-1.5 text-sm font-medium transition-colors",
+                "rounded-xl px-4 py-1.5 text-sm font-medium transition-all",
                 pathname === href
-                  ? "bg-arc-50 text-arc-600"
-                  : "text-surface-800 hover:bg-surface-50",
+                  ? "bg-white text-arc-700 shadow-premium"
+                  : "text-surface-300 hover:text-arc-700",
               ].join(" ")}
             >
               {label}

@@ -24,3 +24,5 @@ contracts/typechain-types/
 # ── Misc ─────────────────────────────────────
 .DS_Store
 *.log
+
+.vercel

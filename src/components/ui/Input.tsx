@@ -4,7 +4,6 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
   hint?: string;
-  /** Element rendered to the right inside the input (e.g. a token selector) */
   rightSlot?: React.ReactNode;
 }
 
@@ -13,12 +12,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const inputId = id ?? label?.toLowerCase().replace(/\s+/g, "-");
 
     return (
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1.5">
         {label && (
-          <label
-            htmlFor={inputId}
-            className="text-sm font-medium text-surface-800"
-          >
+          <label htmlFor={inputId} className="text-sm font-medium text-arc-900">
             {label}
           </label>
         )}
@@ -27,22 +23,20 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             id={inputId}
             className={[
-              "w-full rounded-xl border bg-surface-50 px-3 py-2.5 text-sm",
-              "placeholder:text-surface-200 focus:outline-none focus:ring-2",
+              "w-full rounded-2xl border bg-surface-25 px-4 py-3 text-sm transition-colors",
+              "placeholder:text-surface-300 focus:outline-none focus:ring-2 focus:bg-white",
               error
-                ? "border-red-400 focus:ring-red-300"
-                : "border-surface-200 focus:ring-arc-300",
+                ? "border-rose-300 focus:ring-rose-200"
+                : "border-surface-100 focus:border-arc-300 focus:ring-arc-100",
               rightSlot ? "pr-28" : "",
               className,
             ].join(" ")}
             {...props}
           />
-          {rightSlot && (
-            <div className="absolute right-2">{rightSlot}</div>
-          )}
+          {rightSlot && <div className="absolute right-2">{rightSlot}</div>}
         </div>
-        {error && <p className="text-xs text-red-500">{error}</p>}
-        {hint && !error && <p className="text-xs text-surface-200">{hint}</p>}
+        {error && <p className="text-xs text-rose-500">{error}</p>}
+        {hint && !error && <p className="text-xs text-surface-300">{hint}</p>}
       </div>
     );
   }

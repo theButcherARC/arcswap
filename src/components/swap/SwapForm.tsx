@@ -1,52 +1,43 @@
 "use client";
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { TokenSelector } from "./TokenSelector";
 import { useTokenBalance } from "@/hooks/useTokenBalance";
 import { useSwap } from "@/hooks/useSwap";
-import { formatTokenAmount } from "@/utils/format";
 import { TOKENS } from "@/constants/tokens";
 import type { Token } from "@/types/token";
-
-/**
- * Swap form shell.
- *
- * Manages local form state (token selection, input amount).
- * Delegates execution to the useSwap hook.
- *
- * TODO (Phase 3): Wire fetchQuote on amount change, show quote details,
- * and call executeSwap on submit.
- */
 export function SwapForm() {
   const [tokenIn, setTokenIn] = useState<Token>(TOKENS.USDC);
   const [tokenOut, setTokenOut] = useState<Token>(TOKENS.EURC);
   const [amountIn, setAmountIn] = useState("");
-
-  const { formatted: balanceIn } = useTokenBalance(tokenIn);
-  const { status, error, executeSwap } = useSwap();
-
+  const { formatted: balanceIn, refetch: refetchBalanceIn } = useTokenBalance(tokenIn);
+  const { status, estimatedOutput, error, txHash, fetchQuote, performSwap, reset } = useSwap();
   const isLoading = status === "approving" || status === "swapping";
-
+  useEffect(() => {
+    const handle = setTimeout(() => {
+      if (amountIn && Number(amountIn) > 0) {
+        fetchQuote({ tokenIn, tokenOut, amountIn });
+      }
+    }, 400);
+    return () => clearTimeout(handle);
+  }, [amountIn, tokenIn, tokenOut]);
   function handleFlip() {
     setTokenIn(tokenOut);
     setTokenOut(tokenIn);
     setAmountIn("");
+    reset();
   }
-
-  function handleSubmit() {
-    // TODO (Phase 3): Build SwapParams and call executeSwap()
+  async function handleSubmit() {
+    await performSwap({ tokenIn, tokenOut, amountIn });
+    refetchBalanceIn();
   }
-
   return (
     <Card className="mx-auto max-w-md w-full">
       <CardHeader>
         <CardTitle>Swap</CardTitle>
       </CardHeader>
-
-      {/* Token In */}
       <div className="space-y-2">
         <Input
           label="You pay"
@@ -55,7 +46,7 @@ export function SwapForm() {
           placeholder="0.00"
           value={amountIn}
           onChange={(e) => setAmountIn(e.target.value)}
-          hint={`Balance: ${balanceIn} ${tokenIn.symbol}`}
+          hint={"Balance: " + balanceIn + " " + tokenIn.symbol}
           rightSlot={
             <TokenSelector
               selected={tokenIn}
@@ -65,27 +56,23 @@ export function SwapForm() {
             />
           }
         />
-
-        {/* Flip button */}
         <div className="flex justify-center">
           <button
             type="button"
             onClick={handleFlip}
             disabled={isLoading}
             aria-label="Flip tokens"
-            className="rounded-xl border border-surface-200 bg-surface-50 p-2 text-surface-800 hover:bg-surface-100 transition-colors disabled:cursor-not-allowed"
+            className="rounded-xl border border-surface-100 bg-surface-25 p-2 text-arc-900 hover:bg-surface-50 transition-colors disabled:cursor-not-allowed"
           >
-            ↕
+            Flip
           </button>
         </div>
-
-        {/* Token Out */}
         <Input
           label="You receive (estimated)"
           type="text"
           readOnly
           placeholder="0.00"
-          value=""  // TODO (Phase 3): Populate from quote
+          value={estimatedOutput ?? ""}
           rightSlot={
             <TokenSelector
               selected={tokenOut}
@@ -96,15 +83,12 @@ export function SwapForm() {
           }
         />
       </div>
-
-      {/* Quote details — TODO Phase 3 */}
-
-      {/* Error */}
-      {error && (
-        <p className="mt-3 text-sm text-red-500">{error}</p>
+      {error && <p className="mt-3 text-sm text-rose-500">{error}</p>}
+      {status === "success" && txHash && (
+        <p className="mt-3 text-sm text-emerald-600">
+          Swap successful! <a href={"https://testnet.arcscan.app/tx/" + txHash} target="_blank" rel="noopener noreferrer" className="underline">View transaction</a>
+        </p>
       )}
-
-      {/* Submit */}
       <Button
         className="mt-5 w-full"
         size="lg"
@@ -112,7 +96,7 @@ export function SwapForm() {
         onClick={handleSubmit}
         disabled={!amountIn || isLoading}
       >
-        {status === "approving" ? "Approving…" : status === "swapping" ? "Swapping…" : "Swap"}
+        {status === "swapping" ? "Swapping..." : "Swap"}
       </Button>
     </Card>
   );

@@ -7,7 +7,7 @@ export function Card({ children, className = "" }: CardProps) {
   return (
     <div
       className={[
-        "rounded-2xl border border-surface-200 bg-surface-0 p-5 shadow-sm",
+        "rounded-3xl border border-surface-100 bg-white p-6 shadow-premium-lg",
         className,
       ].join(" ")}
     >
@@ -18,12 +18,12 @@ export function Card({ children, className = "" }: CardProps) {
 
 export function CardHeader({ children, className = "" }: CardProps) {
   return (
-    <div className={["mb-4 flex items-center justify-between", className].join(" ")}>
+    <div className={["mb-5 flex items-center justify-between", className].join(" ")}>
       {children}
     </div>
   );
 }
 
 export function CardTitle({ children }: { children: React.ReactNode }) {
-  return <h2 className="text-base font-semibold text-surface-800">{children}</h2>;
+  return <h2 className="text-lg font-semibold text-arc-900">{children}</h2>;
 }

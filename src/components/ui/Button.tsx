@@ -11,19 +11,19 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<Variant, string> = {
   primary:
-    "bg-arc-500 text-white hover:bg-arc-600 disabled:bg-arc-300 focus-visible:ring-arc-400",
+    "bg-gradient-to-r from-arc-500 to-arc-600 text-white hover:from-arc-600 hover:to-arc-700 disabled:from-arc-200 disabled:to-arc-200 shadow-premium focus-visible:ring-arc-300",
   secondary:
-    "bg-surface-100 text-surface-800 border border-surface-200 hover:bg-surface-200 disabled:opacity-50",
+    "bg-surface-50 text-arc-900 border border-surface-100 hover:bg-surface-100 disabled:opacity-50",
   ghost:
-    "text-surface-800 hover:bg-surface-100 disabled:opacity-40",
+    "text-surface-300 hover:bg-surface-50 hover:text-arc-700 disabled:opacity-40",
   danger:
-    "bg-red-600 text-white hover:bg-red-700 disabled:bg-red-300",
+    "bg-gradient-to-r from-rose-500 to-rose-600 text-white hover:from-rose-600 hover:to-rose-700 disabled:opacity-50",
 };
 
 const sizeClasses: Record<Size, string> = {
-  sm: "px-3 py-1.5 text-sm rounded-lg",
-  md: "px-4 py-2 text-sm rounded-xl",
-  lg: "px-6 py-3 text-base rounded-2xl",
+  sm: "px-3 py-1.5 text-sm rounded-xl",
+  md: "px-4 py-2.5 text-sm rounded-xl",
+  lg: "px-6 py-3.5 text-base rounded-2xl",
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -44,7 +44,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         disabled={disabled || isLoading}
         className={[
-          "inline-flex items-center justify-center gap-2 font-medium transition-colors",
+          "inline-flex items-center justify-center gap-2 font-semibold transition-all",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
           "disabled:cursor-not-allowed",
           variantClasses[variant],
