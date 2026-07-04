@@ -1,38 +1,33 @@
+import type { Address } from "viem";
+import type { Token } from "./token";
+
+export type InputMode = "percentage" | "amount";
+
 export interface Recipient {
   id: string;
   name: string;
-  address: string;
+  address: Address | "";
   percentageInput: string;
   percentage: number | null;
   amountInput: string;
   amount: number | null;
 }
 
-export type InputMode = "percentage" | "amount";
-
 export interface BulkPayParams {
   totalAmount: bigint;
-  token: {
-    address: string;
-    symbol: string;
-    decimals: number;
-  };
-  recipients: {
-    address: string;
+  token: Token;
+  recipients: Array<{
+    address: Address;
     amount: bigint;
     name: string;
-  }[];
+  }>;
 }
 
-export type TransferStatus = "pending" | "confirmed" | "failed";
-
-export interface BulkPayStatus {
-  status: "idle" | "preparing" | "sending" | "success" | "error";
-  txHash?: string;
+export interface TransferStatus {
+  recipientId: string;
+  status: "pending" | "confirming" | "success" | "error";
+  txHash?: `0x${string}`;
   error?: string;
-  transfers?: {
-    address: string;
-    amount: bigint;
-    status: TransferStatus;
-  }[];
 }
+
+export type BulkPayStatus = "idle" | "preparing" | "sending" | "success" | "error";
