@@ -1,17 +1,140 @@
 ﻿"use client";
 
-interface Props {
+import React from "react";
+
+interface BulkPaySuccessProps {
   txHash: string;
   onReset: () => void;
 }
 
-export function BulkPaySuccess({ txHash, onReset }: Props) {
+export default function BulkPaySuccess({ txHash, onReset }: BulkPaySuccessProps) {
+  const explorerUrl = "https://explorer.arc.io/tx/" + txHash;
+
   return (
-    <div className="text-center py-6">
-      <p className="text-green-400 font-semibold text-lg mb-2">Payments sent!</p>
-      <p className="text-xs text-gray-400 mb-2 break-all">{txHash}</p>
-      <a href={"https://testnet.arcscan.app/tx/" + txHash} target="_blank" rel="noopener noreferrer" className="text-arc-500 text-sm underline">View on ArcScan</a>
-      <button onClick={onReset} className="block mx-auto mt-4 text-sm text-surface-400 hover:text-white underline">New payment</button>
+    <div className="min-h-screen bg-[#050508] flex items-center justify-center px-4 py-12">
+      <div className="w-full max-w-lg">
+        {/* Success card */}
+        <div className="rounded-3xl border border-emerald-500/20 bg-white/5 backdrop-blur-2xl p-8 sm:p-10 text-center shadow-[0_0_60px_rgba(16,185,129,0.08)]">
+          {/* Animated checkmark circle */}
+          <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full border-2 border-emerald-500/30 bg-emerald-500/[0.08]">
+            <svg
+              width="36"
+              height="36"
+              viewBox="0 0 36 36"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle
+                cx="18"
+                cy="18"
+                r="16"
+                stroke="#10b981"
+                strokeWidth="2"
+                strokeOpacity="0.3"
+              />
+              <path
+                d="M11 18L16 23L25 13"
+                stroke="#10b981"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
+
+          <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight mb-2">
+            Payments Sent
+          </h2>
+          <p className="text-sm text-white/40 mb-8">
+            Your batch transaction has been submitted to Arc
+          </p>
+
+          {/* Transaction hash */}
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 mb-6">
+            <span className="block text-[10px] font-medium text-white/30 uppercase tracking-wider mb-2">
+              Transaction Hash
+            </span>
+            <a
+              href={explorerUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-violet-400 hover:text-violet-300 font-mono break-all transition-colors duration-200"
+            >
+              {txHash}
+            </a>
+          </div>
+
+          {/* Info rows */}
+          <div className="grid grid-cols-2 gap-3 mb-8">
+            <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5">
+              <span className="block text-[10px] text-white/25 uppercase tracking-wider mb-1">
+                Network
+              </span>
+              <span className="text-sm font-medium text-white/70">Arc</span>
+            </div>
+            <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5">
+              <span className="block text-[10px] text-white/25 uppercase tracking-wider mb-1">
+                Asset
+              </span>
+              <span className="text-sm font-medium text-white/70">USDC</span>
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className="flex flex-col sm:flex-row gap-3">
+            <a
+              href={explorerUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-5 py-3.5 text-sm font-medium text-white/70 hover:text-white hover:border-white/20 hover:bg-white/[0.08] transition-all duration-200"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M6 2H11C11.5523 2 12 2.44772 12 3V13C12 13.5523 11.5523 14 11 14H6M6 2H5C4.44772 2 4 2.44772 4 3V13C4 13.5523 4.44772 14 5 14H6M6 2V14"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              View on Explorer
+            </a>
+            <button
+              type="button"
+              onClick={onReset}
+              className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 px-5 py-3.5 text-sm font-semibold text-white shadow-lg shadow-violet-600/25 hover:shadow-violet-600/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M2 8C2 4.68629 4.68629 2 8 2C11.3137 2 14 4.68629 14 8C14 11.3137 11.3137 14 8 14C4.68629 14 2 11.3137 2 8Z"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                />
+                <path
+                  d="M8 5V8.5L10.5 10"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              New Payment
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

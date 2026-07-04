@@ -1,29 +1,27 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import { Providers } from "@/lib/providers";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
-import "./globals.css";
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
+import { Header } from '@/components/layout/Header';
+import { Providers } from '@/lib/providers';
 
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-});
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: "VibeFlow — Arc Testnet DEX",
-  description: "Swap tokens and bulk pay on Arc Testnet",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
+  title: 'VibeFlow — USDC Batch Payments on Arc',
+  description: 'Programmable USDC payroll and batch payments for Web3 teams. AI-powered. Built on Arc.',
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en" className={inter.className}>
-      <body className="flex min-h-screen flex-col bg-[#f7f7fb] text-[#1e1c2e]">
+    <html lang="en">
+      <body className={inter.className}>
         <Providers>
           <Header />
-          <div className="flex-1">{children}</div>
-          <Footer />
+          {children}
         </Providers>
       </body>
     </html>
