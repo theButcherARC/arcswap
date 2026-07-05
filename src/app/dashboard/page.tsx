@@ -12,37 +12,35 @@ import {
   YAxis,
 } from "recharts";
 
-type TxStatus = "confirmed" | "failed";
-
-interface ArcScanTx {
+interface TokenTx {
   hash: string;
   timeStamp: string;
+  from: string;
+  to: string;
   value: string;
-  isError: string;
-  from?: string;
-  to?: string;
-  input?: string;
+  tokenSymbol?: string;
+  tokenDecimal?: string;
 }
 
-interface Transaction {
-  date: string;
-  timestampMs: number;
+interface Recipient {
+  name: string;
+  address: string;
   amount: number;
-  status: TxStatus;
-  txHash: string;
 }
 
-const STATUS_STYLES: Record<TxStatus, string> = {
-  confirmed: "border-emerald-500/25 bg-emerald-500/10 text-emerald-400",
-  failed: "border-rose-500/25 bg-rose-500/10 text-rose-400",
-};
-
-const STATUS_LABELS: Record<TxStatus, string> = {
-  confirmed: "Confirmed",
-  failed: "Failed",
-};
+interface BulkPay {
+  hash: string;
+  timestampMs: number;
+  date: string;
+  total: number;
+  recipients: Recipient[];
+}
 
 const DAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+function truncateAddress(addr: string): string {
+  return addr.slice(0, 6) + "..." + addr.slice(-4);
+}
 
 function truncateHash(hash: string): string {
   return hash.slice(0, 8) + "..." + hash.slice(-6);
@@ -55,48 +53,72 @@ function formatUsdc(amount: number): string {
   });
 }
 
-async function fetchTransactions(url: string): Promise<Transaction[]> {
+function getAddressFromUrl(url: string): string {
+  const match = url.match(/address=([^&]+)/);
+  return match ? match[1].toLowerCase() : "";
+}
+
+async function fetchBulkPays(url: string): Promise<BulkPay[]> {
   const res = await fetch(url);
   if (!res.ok) {
-    throw new Error("Failed to fetch transactions from ArcScan");
+    throw new Error("Failed to fetch transfers from ArcScan");
   }
   const json = await res.json();
-  const list: ArcScanTx[] = Array.isArray(json?.result) ? json.result : [];
-  const MULTICALL_CONTRACT = "0x522fAf9A91c41c443c66765030741e4AaCe147D0";
+  const list: TokenTx[] = Array.isArray(json?.result) ? json.result : [];
+  const wallet = getAddressFromUrl(url);
 
-  return list
-    .filter(
-      (tx) =>
-        tx?.hash &&
-        tx?.timeStamp &&
-        tx?.to?.toLowerCase() === MULTICALL_CONTRACT.toLowerCase()
-    )
-    .map((tx) => {
-      const timestampMs = Number(tx.timeStamp) * 1000;
-      let amount = Number(tx.value) / 1e6;
+  // Keep only outgoing USDC transfers sent by the connected wallet
+  const outgoing = list.filter(
+    (tx) =>
+      tx?.hash &&
+      tx?.timeStamp &&
+      tx?.from?.toLowerCase() === wallet &&
+      (tx.tokenSymbol ? tx.tokenSymbol.toUpperCase() === "USDC" : true)
+  );
 
-      // If value is 0, estimate recipient count from input calldata length
-      if (amount === 0 && tx.input && tx.input.length > 10) {
-        const dataBytes = (tx.input.length - 2) / 2;
-        amount = Math.max(1, Math.round(dataBytes / 320));
-      }
+  // Group transfers by transaction hash — one hash = one bulk payment
+  const groups = new Map<string, TokenTx[]>();
+  for (const tx of outgoing) {
+    const existing = groups.get(tx.hash);
+    if (existing) {
+      existing.push(tx);
+    } else {
+      groups.set(tx.hash, [tx]);
+    }
+  }
 
-      return {
-        date: new Date(timestampMs).toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-          year: "numeric",
-        }),
-        timestampMs,
-        amount,
-        status: (tx.isError === "1" ? "failed" : "confirmed") as TxStatus,
-        txHash: tx.hash,
-      };
+  const bulkPays: BulkPay[] = [];
+  groups.forEach((transfers, hash) => {
+    const timestampMs = Number(transfers[0].timeStamp) * 1000;
+    const decimals = Number(transfers[0].tokenDecimal ?? "6") || 6;
+    const divisor = Math.pow(10, decimals);
+
+    const recipients: Recipient[] = transfers.map((t, index) => ({
+      name: "Recipient " + (index + 1),
+      address: t.to,
+      amount: Number(t.value) / divisor,
+    }));
+    const total = recipients.reduce((sum, r) => sum + r.amount, 0);
+
+    bulkPays.push({
+      hash,
+      timestampMs,
+      date: new Date(timestampMs).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      }),
+      total,
+      recipients,
     });
+  });
+
+  bulkPays.sort((a, b) => b.timestampMs - a.timestampMs);
+  return bulkPays;
 }
 
 function buildVolumeData(
-  transactions: Transaction[]
+  bulkPays: BulkPay[]
 ): { day: string; volume: number }[] {
   const now = Date.now();
   const days: { day: string; start: number; end: number; volume: number }[] =
@@ -115,11 +137,10 @@ function buildVolumeData(
       volume: 0,
     });
   }
-  for (const tx of transactions) {
-    if (tx.status !== "confirmed") continue;
+  for (const bp of bulkPays) {
     for (const bucket of days) {
-      if (tx.timestampMs >= bucket.start && tx.timestampMs < bucket.end) {
-        bucket.volume += tx.amount;
+      if (bp.timestampMs >= bucket.start && bp.timestampMs < bucket.end) {
+        bucket.volume += bp.total;
         break;
       }
     }
@@ -135,39 +156,45 @@ export default function DashboardPage() {
 
   const apiUrl =
     isConnected && address
-      ? "https://testnet.arcscan.app/api?module=account&action=txlist&address=" +
+      ? "https://testnet.arcscan.app/api?module=account&action=tokentx&address=" +
         address +
         "&sort=desc"
       : null;
 
-  const { data: transactions, error, isLoading } = useSWR(
-    apiUrl,
-    fetchTransactions,
-    { revalidateOnFocus: false }
+  const { data: bulkPays, error, isLoading } = useSWR(apiUrl, fetchBulkPays, {
+    revalidateOnFocus: false,
+  });
+
+  const payments = bulkPays ?? [];
+  const lastBulkPay = payments[0] ?? null;
+  const volumeData = buildVolumeData(payments);
+
+  const totalVolume = payments.reduce((sum, bp) => sum + bp.total, 0);
+  const totalRecipients = payments.reduce(
+    (sum, bp) => sum + bp.recipients.length,
+    0
   );
 
-  const txs = transactions ?? [];
-  const confirmedTxs = txs.filter((tx) => tx.status === "confirmed");
-  const totalVolume = confirmedTxs.reduce((sum, tx) => sum + tx.amount, 0);
-  const volumeData = buildVolumeData(txs);
-  const recentTxs = txs.slice(0, 10);
-
   const stats = [
+    {
+      label: "Last Payment",
+      value: lastBulkPay ? "$" + formatUsdc(lastBulkPay.total) : "$0.00",
+      sub: "USDC",
+    },
+    {
+      label: "Last Recipients",
+      value: lastBulkPay ? String(lastBulkPay.recipients.length) : "0",
+      sub: "addresses",
+    },
     {
       label: "Total Volume",
       value: "$" + formatUsdc(totalVolume),
       sub: "USDC",
     },
-    { label: "Transactions", value: String(txs.length), sub: "all time" },
     {
-      label: "Confirmed",
-      value: String(confirmedTxs.length),
-      sub: "successful",
-    },
-    {
-      label: "Failed",
-      value: String(txs.length - confirmedTxs.length),
-      sub: "reverted",
+      label: "Total Recipients",
+      value: String(totalRecipients),
+      sub: "all payments",
     },
   ];
 
@@ -276,28 +303,46 @@ export default function DashboardPage() {
               </div>
             </section>
 
-            {/* Transactions table */}
+            {/* Last bulk payment breakdown */}
             <section
-              aria-label="Recent transactions"
+              aria-label="Last bulk payment"
               className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-2xl"
             >
-              <div className="border-b border-white/10 px-5 py-4 sm:px-6">
-                <h2 className="text-base font-semibold text-white sm:text-lg">
-                  Recent Transactions
-                </h2>
+              <div className="flex flex-col gap-2 border-b border-white/10 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+                <div>
+                  <h2 className="text-base font-semibold text-white sm:text-lg">
+                    Last Bulk Payment
+                  </h2>
+                  {lastBulkPay ? (
+                    <p className="mt-0.5 text-xs text-gray-500">
+                      {lastBulkPay.date} · {lastBulkPay.recipients.length}{" "}
+                      recipients · {formatUsdc(lastBulkPay.total)} USDC
+                    </p>
+                  ) : null}
+                </div>
+                {lastBulkPay ? (
+                  <a
+                    href={"https://testnet.arcscan.app/tx/" + lastBulkPay.hash}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-mono text-xs text-violet-400 transition-colors hover:text-violet-300 hover:underline"
+                  >
+                    {truncateHash(lastBulkPay.hash)}
+                  </a>
+                ) : null}
               </div>
+
               {isLoading ? (
                 <div className="px-6 py-12 text-center text-sm text-gray-400">
-                  Loading transactions...
+                  Loading payment history...
                 </div>
               ) : error ? (
                 <div className="px-6 py-12 text-center text-sm text-rose-400">
-                  Failed to load transactions from ArcScan. Please try again
-                  later.
+                  Failed to load data from ArcScan. Please try again later.
                 </div>
-              ) : recentTxs.length === 0 ? (
+              ) : !lastBulkPay ? (
                 <div className="px-6 py-12 text-center text-sm text-gray-400">
-                  No transactions found for this wallet.
+                  No bulk payments found for this wallet.
                 </div>
               ) : (
                 <div className="overflow-x-auto">
@@ -308,65 +353,63 @@ export default function DashboardPage() {
                           scope="col"
                           className="px-5 py-3 text-xs font-medium uppercase tracking-wider text-gray-400 sm:px-6"
                         >
-                          Date
+                          Name
                         </th>
                         <th
                           scope="col"
                           className="px-5 py-3 text-xs font-medium uppercase tracking-wider text-gray-400 sm:px-6"
+                        >
+                          Address
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-5 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-400 sm:px-6"
                         >
                           Amount
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-5 py-3 text-xs font-medium uppercase tracking-wider text-gray-400 sm:px-6"
-                        >
-                          Status
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-5 py-3 text-xs font-medium uppercase tracking-wider text-gray-400 sm:px-6"
-                        >
-                          Tx Hash
                         </th>
                       </tr>
                     </thead>
                     <tbody>
-                      {recentTxs.map((tx) => (
+                      {lastBulkPay.recipients.map((r, index) => (
                         <tr
-                          key={tx.txHash}
+                          key={r.address + "-" + index}
                           className="border-b border-white/5 transition-colors last:border-0 hover:bg-white/[0.03]"
                         >
                           <td className="whitespace-nowrap px-5 py-4 text-gray-300 sm:px-6">
-                            {tx.date}
-                          </td>
-                          <td className="whitespace-nowrap px-5 py-4 font-medium text-white sm:px-6">
-                            {formatUsdc(tx.amount)} USDC
-                          </td>
-                          <td className="px-5 py-4 sm:px-6">
-                            <span
-                              className={
-                                "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium " +
-                                STATUS_STYLES[tx.status]
-                              }
-                            >
-                              {STATUS_LABELS[tx.status]}
-                            </span>
+                            {r.name}
                           </td>
                           <td className="whitespace-nowrap px-5 py-4 sm:px-6">
                             <a
                               href={
-                                "https://testnet.arcscan.app/tx/" + tx.txHash
+                                "https://testnet.arcscan.app/address/" +
+                                r.address
                               }
                               target="_blank"
                               rel="noopener noreferrer"
                               className="font-mono text-xs text-violet-400 transition-colors hover:text-violet-300 hover:underline"
                             >
-                              {truncateHash(tx.txHash)}
+                              {truncateAddress(r.address)}
                             </a>
+                          </td>
+                          <td className="whitespace-nowrap px-5 py-4 text-right font-medium text-white sm:px-6">
+                            {formatUsdc(r.amount)} USDC
                           </td>
                         </tr>
                       ))}
                     </tbody>
+                    <tfoot>
+                      <tr className="border-t border-white/10">
+                        <td
+                          className="px-5 py-4 text-xs font-medium uppercase tracking-wider text-gray-400 sm:px-6"
+                          colSpan={2}
+                        >
+                          Total
+                        </td>
+                        <td className="whitespace-nowrap px-5 py-4 text-right text-base font-semibold text-white sm:px-6">
+                          {formatUsdc(lastBulkPay.total)} USDC
+                        </td>
+                      </tr>
+                    </tfoot>
                   </table>
                 </div>
               )}
