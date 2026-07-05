@@ -38,19 +38,19 @@ export default function RecipientRow({
   const isHandleInput = (val: string) => val.trimStart().startsWith('@');
 
   async function resolveHandle(raw: string) {
-    const handle = raw.replace(/^@/, '').trim();
-    if (!handle) return;
+    const username = raw.replace(/^@/, '').trim();
+    if (!username) return;
     setHandleState('resolving');
     try {
-      const res = await fetch('/api/social/resolve?handle=' + encodeURIComponent(handle));
+      const res = await fetch('/api/social/resolve?username=' + encodeURIComponent(username));
       const json = await res.json();
       if (res.ok && json.address) {
         setHandleState('resolved');
-        setHandleText('@' + json.handle + ' \u2192 ' + json.address.slice(0, 6) + '...' + json.address.slice(-4));
+        setHandleText('@' + json.username + ' \u2192 ' + json.address.slice(0, 6) + '...' + json.address.slice(-4));
         onAddressChange(recipient.id, json.address);
       } else {
         setHandleState('not_found');
-        setHandleText('@' + handle + ' is not registered');
+        setHandleText('@' + username + ' is not registered');
       }
     } catch {
       setHandleState('error');
@@ -151,7 +151,7 @@ export default function RecipientRow({
         {/* Address input */}
         <div className="min-w-[180px] flex-[1.5]">
           <label className="block text-[10px] font-medium text-white/30 uppercase tracking-wider mb-1.5">
-            Address or @handle
+            Address or @username
           </label>
           <div className="relative">
             <input
@@ -159,7 +159,7 @@ export default function RecipientRow({
               value={recipient.address}
               onChange={(e) => handleAddressInput(e.target.value)}
               disabled={isDisabled}
-              placeholder="0x... or @xhandle"
+              placeholder="0x... or @username"
               className={addressClasses + " pr-9"}
             />
             {addressValid && (

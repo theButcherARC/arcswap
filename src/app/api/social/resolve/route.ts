@@ -4,17 +4,17 @@ import { eq } from 'drizzle-orm'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(req: NextRequest) {
-  const handle = req.nextUrl.searchParams.get('handle')
-  if (!handle) {
-    return NextResponse.json({ error: 'handle is required' }, { status: 400 })
+  const username = req.nextUrl.searchParams.get('username')
+  if (!username) {
+    return NextResponse.json({ error: 'username is required' }, { status: 400 })
   }
 
-  const clean = handle.replace(/^@/, '').toLowerCase()
+  const clean = username.replace(/^@/, '').toLowerCase()
 
   const rows = await db
     .select()
     .from(socialProfiles)
-    .where(eq(socialProfiles.xHandle, clean))
+    .where(eq(socialProfiles.username, clean))
     .limit(1)
 
   if (rows.length === 0) {
@@ -22,8 +22,8 @@ export async function GET(req: NextRequest) {
   }
 
   return NextResponse.json({
-    handle:  rows[0].xHandle,
-    address: rows[0].walletAddress,
+    username: rows[0].username,
+    address:  rows[0].walletAddress,
     verified: rows[0].verified,
   })
 }

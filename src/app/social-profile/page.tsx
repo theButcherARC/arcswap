@@ -49,12 +49,12 @@ export default function SocialProfilePage() {
       return
     }
 
-    const xHandleRaw = (session.user as { username?: string }).username ?? session.user.name ?? ''
-    const xHandle = xHandleRaw.replace(/^@/, '').toLowerCase()
+    const usernameRaw = (session.user as { username?: string }).username ?? session.user.name ?? ''
+    const username = usernameRaw.replace(/^@/, '').toLowerCase()
 
-    if (!xHandle) {
+    if (!username) {
       setStatus('error')
-      setMessage('Could not determine your X handle. Please try logging in again.')
+      setMessage('Could not determine your X username. Please try logging in again.')
       return
     }
 
@@ -65,23 +65,23 @@ export default function SocialProfilePage() {
       const res = await fetch('/api/social/link', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ xHandle, walletAddress: address }),
+        body: JSON.stringify({ username, walletAddress: address }),
       })
       const json = await res.json()
       if (!res.ok) {
         throw new Error(json.error ?? 'Failed to link account')
       }
       setStatus('success')
-      setLinkedHandle(xHandle)
+      setLinkedHandle(username)
       setLinkedAddress(address)
-      setMessage('@' + xHandle + ' is now linked to ' + address.slice(0, 6) + '...' + address.slice(-4))
+      setMessage('@' + username + ' is now linked to ' + address.slice(0, 6) + '...' + address.slice(-4))
     } catch (err) {
       setStatus('error')
       setMessage(err instanceof Error ? err.message : 'Unexpected error')
     }
   }
 
-  const xHandle = (session?.user as { username?: string } | undefined)?.username ?? session?.user?.name ?? null
+  const username = (session?.user as { username?: string } | undefined)?.username ?? session?.user?.name ?? null
 
   return (
     <main className="min-h-screen bg-[#050508] px-4 pb-16 pt-28 sm:px-6 lg:px-8">
@@ -133,7 +133,7 @@ export default function SocialProfilePage() {
                 )}
                 <div>
                   <p className="text-sm font-medium text-white">
-                    {'@' + (xHandle ?? session.user.name)}
+                    {'@' + (username ?? session.user.name)}
                   </p>
                   <p className="text-xs text-white/40">Connected via X</p>
                 </div>
@@ -223,9 +223,9 @@ export default function SocialProfilePage() {
           {/* Info card */}
           <div className="rounded-2xl border border-white/5 bg-white/[0.02] px-6 py-5">
             <p className="text-xs text-white/40 leading-relaxed">
-              Once linked, anyone using VibeFlow can type{' '}
-              <span className="text-violet-400 font-mono">{'@' + (xHandle ?? 'yourhandle')}</span>{' '}
-              in the Bulk Pay recipient field and your wallet address will auto-fill. You can re-link
+  Once linked, anyone using VibeFlow can type{' '}
+  <span className="text-violet-400 font-mono">{'@' + (username ?? 'yourhandle')}</span>{' '}
+  in the Bulk Pay recipient field and your wallet address will auto-fill. You can re-link
               at any time to update your wallet address.
             </p>
           </div>

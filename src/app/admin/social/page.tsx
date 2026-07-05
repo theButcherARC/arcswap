@@ -8,7 +8,7 @@ const ADMIN_WALLET = '0xa04C24A33Dd54cE8142319FEccDd9602C5D1AAaE'
 
 interface SocialProfile {
   id: string
-  xHandle: string
+  username: string
   walletAddress: string
   verified: boolean
   addedByAdmin: boolean
@@ -51,7 +51,7 @@ export default function AdminSocialPage() {
           'Content-Type': 'application/json',
           'x-wallet-address': address ?? '',
         },
-        body: JSON.stringify({ xHandle: handle, walletAddress: wallet }),
+        body: JSON.stringify({ username: handle, walletAddress: wallet }),
       })
       const json = await res.json()
       if (!res.ok) throw new Error(json.error ?? 'Failed')
@@ -66,14 +66,14 @@ export default function AdminSocialPage() {
     }
   }
 
-  async function handleDelete(xHandle: string) {
+  async function handleDelete(username: string) {
     await fetch('/api/social/admin', {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
         'x-wallet-address': address ?? '',
       },
-      body: JSON.stringify({ xHandle }),
+      body: JSON.stringify({ username }),
     })
     mutate()
   }
@@ -184,7 +184,7 @@ export default function AdminSocialPage() {
                   {profiles.map((p) => (
                     <tr key={p.id} className="hover:bg-white/[0.02] transition-colors">
                       <td className="px-6 py-4 text-violet-400 font-mono">
-                        {'@' + p.xHandle}
+                        {'@' + p.username}
                       </td>
                       <td className="px-6 py-4 text-white/60 font-mono text-xs">
                         {p.walletAddress.slice(0, 6) + '...' + p.walletAddress.slice(-4)}
@@ -201,7 +201,7 @@ export default function AdminSocialPage() {
                       </td>
                       <td className="px-6 py-4 text-right">
                         <button
-                          onClick={() => handleDelete(p.xHandle)}
+                          onClick={() => handleDelete(p.username)}
                           className="text-xs text-rose-400/60 hover:text-rose-400 transition-colors"
                         >
                           Remove

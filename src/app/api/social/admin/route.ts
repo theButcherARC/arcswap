@@ -25,34 +25,34 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json()
-  const xHandle: string = body.xHandle
+  const username: string = body.username
   const walletAddress: string = body.walletAddress
 
-  if (!xHandle || !walletAddress) {
-    return NextResponse.json({ error: 'xHandle and walletAddress required' }, { status: 400 })
+  if (!username || !walletAddress) {
+    return NextResponse.json({ error: 'username and walletAddress required' }, { status: 400 })
   }
 
   if (!/^0x[0-9a-fA-F]{40}$/.test(walletAddress)) {
     return NextResponse.json({ error: 'Invalid wallet address' }, { status: 400 })
   }
 
-  const clean = xHandle.replace(/^@/, '').toLowerCase()
+  const clean = username.replace(/^@/, '').toLowerCase()
 
   const existing = await db
     .select()
     .from(socialProfiles)
-    .where(eq(socialProfiles.xHandle, clean))
+    .where(eq(socialProfiles.username, clean))
     .limit(1)
 
   if (existing.length > 0) {
     await db
       .update(socialProfiles)
       .set({ walletAddress, addedByAdmin: true, updatedAt: new Date() })
-      .where(eq(socialProfiles.xHandle, clean))
+      .where(eq(socialProfiles.username, clean))
   } else {
     await db.insert(socialProfiles).values({
       id:           randomUUID(),
-      xHandle:      clean,
+      username:     clean,
       walletAddress,
       verified:     false,
       addedByAdmin: true,
@@ -70,12 +70,12 @@ export async function DELETE(req: NextRequest) {
   }
 
   const body = await req.json()
-  const xHandle: string = body.xHandle
-  if (!xHandle) {
-    return NextResponse.json({ error: 'xHandle required' }, { status: 400 })
+  const username: string = body.username
+  if (!username) {
+    return NextResponse.json({ error: 'username required' }, { status: 400 })
   }
 
-  const clean = xHandle.replace(/^@/, '').toLowerCase()
-  await db.delete(socialProfiles).where(eq(socialProfiles.xHandle, clean))
+  const clean = username.replace(/^@/, '').toLowerCase()
+  await db.delete(socialProfiles).where(eq(socialProfiles.username, clean))
   return NextResponse.json({ success: true })
 }

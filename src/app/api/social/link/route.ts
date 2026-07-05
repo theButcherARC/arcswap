@@ -14,23 +14,23 @@ export async function POST(req: NextRequest) {
 
   const body = await req.json()
   const walletAddress: string = body.walletAddress
-  const xHandle: string = body.xHandle
+  const username: string = body.username
 
-  if (!walletAddress || !xHandle) {
-    return NextResponse.json({ error: 'walletAddress and xHandle are required' }, { status: 400 })
+  if (!walletAddress || !username) {
+    return NextResponse.json({ error: 'walletAddress and username are required' }, { status: 400 })
   }
 
   if (!/^0x[0-9a-fA-F]{40}$/.test(walletAddress)) {
     return NextResponse.json({ error: 'Invalid wallet address' }, { status: 400 })
   }
 
-  const clean = xHandle.replace(/^@/, '').toLowerCase()
+  const clean = username.replace(/^@/, '').toLowerCase()
 
-  // Upsert: update if handle exists for this user, insert otherwise
+  // Upsert: update if username exists for this user, insert otherwise
   const existing = await db
     .select()
     .from(socialProfiles)
-    .where(eq(socialProfiles.xHandle, clean))
+    .where(eq(socialProfiles.username, clean))
     .limit(1)
 
   if (existing.length > 0) {
@@ -42,11 +42,11 @@ export async function POST(req: NextRequest) {
         verified: true,
         updatedAt: new Date(),
       })
-      .where(eq(socialProfiles.xHandle, clean))
+      .where(eq(socialProfiles.username, clean))
   } else {
     await db.insert(socialProfiles).values({
       id:            randomUUID(),
-      xHandle:       clean,
+      username:      clean,
       xUserId:       session.user.id,
       walletAddress,
       userId:        session.user.id,
@@ -57,5 +57,5 @@ export async function POST(req: NextRequest) {
     })
   }
 
-  return NextResponse.json({ success: true, handle: clean, address: walletAddress })
+  return NextResponse.json({ success: true, username: clean, address: walletAddress })
 }

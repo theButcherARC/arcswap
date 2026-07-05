@@ -9,7 +9,6 @@ const NAV_LINKS = [
   { label: 'Bulk Pay', href: ROUTES.BULK_PAY },
   { label: 'Dashboard', href: ROUTES.DASHBOARD },
   { label: 'Social', href: ROUTES.SOCIAL_PROFILE },
-  { label: 'Roadmap', href: ROUTES.ROADMAP },
 ];
 
 export function Header() {

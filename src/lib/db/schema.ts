@@ -57,8 +57,8 @@ export const verification = pgTable('verification', {
 
 export const socialProfiles = pgTable('social_profiles', {
   id:            text('id').primaryKey(),
-  xHandle:       text('xHandle').notNull().unique(),
-  xUserId:       text('xUserId'),
+  username:      text('username').notNull().unique(), // X username (unique identifier)
+  xUserId:       text('xUserId'),                       // X user ID for future use
   walletAddress: text('walletAddress').notNull(),
   userId:        text('userId'),
   verified:      boolean('verified').notNull().default(false),
