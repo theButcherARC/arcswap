@@ -62,15 +62,25 @@ async function fetchTransactions(url: string): Promise<Transaction[]> {
   }
   const json = await res.json();
   const list: ArcScanTx[] = Array.isArray(json?.result) ? json.result : [];
-  const USDC_CONTRACT = "0x3600000000000000000000000000000000000000";
-  
+  const MULTICALL_CONTRACT = "0x522fAf9A91c41c443c66765030741e4AaCe147D0";
+
   return list
-    .filter((tx) => tx?.hash && tx?.timeStamp && tx?.to?.toLowerCase() === USDC_CONTRACT.toLowerCase())
+    .filter(
+      (tx) =>
+        tx?.hash &&
+        tx?.timeStamp &&
+        tx?.to?.toLowerCase() === MULTICALL_CONTRACT.toLowerCase()
+    )
     .map((tx) => {
       const timestampMs = Number(tx.timeStamp) * 1000;
-      const amountWei = Number(tx.value);
-      const amountUsdc = amountWei / 1e18;
-      
+      let amount = Number(tx.value) / 1e6;
+
+      // If value is 0, estimate recipient count from input calldata length
+      if (amount === 0 && tx.input && tx.input.length > 10) {
+        const dataBytes = (tx.input.length - 2) / 2;
+        amount = Math.max(1, Math.round(dataBytes / 320));
+      }
+
       return {
         date: new Date(timestampMs).toLocaleDateString("en-US", {
           month: "short",
@@ -78,7 +88,7 @@ async function fetchTransactions(url: string): Promise<Transaction[]> {
           year: "numeric",
         }),
         timestampMs,
-        amount: amountUsdc > 1000000 ? 0 : amountUsdc,
+        amount,
         status: (tx.isError === "1" ? "failed" : "confirmed") as TxStatus,
         txHash: tx.hash,
       };
