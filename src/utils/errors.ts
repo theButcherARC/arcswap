@@ -22,7 +22,7 @@ export function isUserRejection(error: unknown): boolean {
   return code === 4001 || error.message.toLowerCase().includes("user rejected");
 }
 
-/** Well-known ArcSwap error messages shown in the UI */
+/** Well-known VibeFlow error messages shown in the UI */
 export const APP_ERRORS = {
   WRONG_NETWORK:        "Please switch to Arc Testnet to continue.",
   WALLET_NOT_CONNECTED: "Connect your wallet to continue.",

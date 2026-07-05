@@ -8,21 +8,18 @@ import type { Address } from "viem";
  *   USDC     — 0x3600000000000000000000000000000000000000 (native precompile, hardcoded)
  *   EURC     — from NEXT_PUBLIC_EURC_ADDRESS
  *   VIBE     — from NEXT_PUBLIC_VIBE_TOKEN_ADDRESS (deploy first via /contracts)
- *   Router   — from NEXT_PUBLIC_SWAP_ROUTER_ADDRESS (Uniswap-compatible on Arc)
  */
 
 interface ContractAddresses {
   usdc: Address;
   eurc: Address;
   vibeToken: Address;
-  swapRouter: Address;
 }
 
 const arcTestnetAddresses: ContractAddresses = {
   usdc:       "0x3600000000000000000000000000000000000000", // Arc native USDC precompile
   eurc:       (process.env.NEXT_PUBLIC_EURC_ADDRESS        ?? "") as Address,
   vibeToken:  (process.env.NEXT_PUBLIC_VIBE_TOKEN_ADDRESS  ?? "") as Address,
-  swapRouter: (process.env.NEXT_PUBLIC_SWAP_ROUTER_ADDRESS ?? "") as Address,
 };
 
 export const CONTRACT_ADDRESSES: Record<number, ContractAddresses> = {

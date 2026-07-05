@@ -2,7 +2,7 @@ import type { Token } from "@/types/token";
 import { arcTestnet } from "./chains";
 
 /**
- * Token registry for all tokens supported by ArcSwap.
+ * Token registry for all tokens supported by VibeFlow.
  *
  * USDC: 0x3600000000000000000000000000000000000000
  *   Arc L1 native asset — precompile address, 6 decimals.
