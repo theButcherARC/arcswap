@@ -21,6 +21,7 @@ interface ArcScanTx {
   isError: string;
   from?: string;
   to?: string;
+  input?: string;
 }
 
 interface Transaction {
@@ -61,10 +62,15 @@ async function fetchTransactions(url: string): Promise<Transaction[]> {
   }
   const json = await res.json();
   const list: ArcScanTx[] = Array.isArray(json?.result) ? json.result : [];
+  const USDC_CONTRACT = "0x3600000000000000000000000000000000000000";
+  
   return list
-    .filter((tx) => tx?.hash && tx?.timeStamp)
+    .filter((tx) => tx?.hash && tx?.timeStamp && tx?.to?.toLowerCase() === USDC_CONTRACT.toLowerCase())
     .map((tx) => {
       const timestampMs = Number(tx.timeStamp) * 1000;
+      const amountWei = Number(tx.value);
+      const amountUsdc = amountWei / 1e18;
+      
       return {
         date: new Date(timestampMs).toLocaleDateString("en-US", {
           month: "short",
@@ -72,7 +78,7 @@ async function fetchTransactions(url: string): Promise<Transaction[]> {
           year: "numeric",
         }),
         timestampMs,
-        amount: Number(tx.value) / 1e6,
+        amount: amountUsdc > 1000000 ? 0 : amountUsdc,
         status: (tx.isError === "1" ? "failed" : "confirmed") as TxStatus,
         txHash: tx.hash,
       };
