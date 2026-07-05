@@ -272,7 +272,9 @@ export default function BulkPayForm() {
 
   const handleAddressChange = useCallback((id: string, value: string) => {
     setRecipients((prev) =>
-      prev.map((r) => (r.id === id ? { ...r, address: value } : r))
+      prev.map((r) =>
+        r.id === id ? { ...r, address: value as Recipient["address"] } : r
+      )
     );
   }, []);
 
@@ -339,7 +341,7 @@ export default function BulkPayForm() {
       return {
         id: crypto.randomUUID(),
         name: r.name || "",
-        address: r.address || "",
+        address: (r.address || "") as Recipient["address"],
         percentageInput: "",
         percentage: null,
         amountInput: r.amount || "",
@@ -429,7 +431,7 @@ export default function BulkPayForm() {
 
         let checksumAddr: string;
         try {
-          checksumAddr = toChecksumAddress(r.address);
+          checksumAddr = toChecksumAddress(r.address) || r.address;
         } catch {
           checksumAddr = r.address;
         }
@@ -944,19 +946,20 @@ export default function BulkPayForm() {
             </div>
 
             {/* ===================== SECTION 6 + 7: SUMMARY + SEND (sticky) ===================== */}
-            <div className="sticky bottom-0 z-30 -mx-4 mt-8 px-4 pt-6 pb-4 bg-gradient-to-t from-[#050508] via-[#050508]/95 to-transparent">
-              {/* Summary card */}
+            <div className="sticky bottom-4 z-30 mt-10">
+              {/* Summary + send card */}
               <div
                 className={
-                  "rounded-2xl border p-5 mb-4 transition-all duration-300 " +
+                  "rounded-2xl border p-5 shadow-2xl shadow-black/60 backdrop-blur-2xl transition-all duration-300 " +
                   (summaryData.isFullyAllocated && !summaryData.isOverAllocated
-                    ? "border-emerald-500/20 bg-emerald-500/[0.04]"
+                    ? "border-emerald-500/25 bg-[#0a1010]/95"
                     : summaryData.isOverAllocated
-                      ? "border-rose-500/20 bg-rose-500/[0.04]"
-                      : "border-white/10 bg-white/5 backdrop-blur-2xl")
+                      ? "border-rose-500/25 bg-[#14090d]/95"
+                      : "border-white/10 bg-[#0b0b12]/95")
                 }
               >
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-5">
+                <div className="flex flex-col lg:flex-row lg:items-center gap-5">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-5 flex-1">
                   {/* Total */}
                   <div>
                     <span className="block text-[10px] font-medium text-white/30 uppercase tracking-wider mb-1.5">
@@ -1051,11 +1054,11 @@ export default function BulkPayForm() {
                     </span>
                   </div>
                 </div>
-              </div>
 
+                <div className="flex flex-col gap-3 lg:w-72 lg:shrink-0">
               {/* Error display */}
               {status === "error" && error ? (
-                <div className="mb-4 rounded-xl border border-rose-500/20 bg-rose-500/[0.06] px-4 py-3.5">
+                <div className="rounded-xl border border-rose-500/20 bg-rose-500/[0.06] px-4 py-3.5">
                   <div className="flex items-start gap-3">
                     <svg
                       className="mt-0.5 shrink-0"
@@ -1085,11 +1088,7 @@ export default function BulkPayForm() {
                         Transaction Failed
                       </p>
                       <p className="text-xs text-rose-400/70 mt-0.5 leading-relaxed">
-                        {typeof error === "string"
-                          ? error
-                          : error instanceof Error
-                            ? error.message
-                            : "An unexpected error occurred. Please try again."}
+                        {error}
                       </p>
                     </div>
                   </div>
@@ -1101,7 +1100,7 @@ export default function BulkPayForm() {
                 type="submit"
                 disabled={!canSend}
                 className={
-                  "w-full rounded-2xl px-6 py-4 text-base font-semibold transition-all duration-300 active:scale-[0.98] " +
+                  "w-full rounded-xl px-6 py-3.5 text-sm font-semibold transition-all duration-300 active:scale-[0.98] " +
                   (canSend
                     ? "bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-[0_0_30px_rgba(124,58,237,0.3)] hover:shadow-[0_0_40px_rgba(124,58,237,0.45)] hover:scale-[1.01]"
                     : "bg-white/[0.06] text-white/20 cursor-not-allowed")
@@ -1164,6 +1163,9 @@ export default function BulkPayForm() {
                   </span>
                 )}
               </button>
+                </div>
+                </div>
+              </div>
             </div>
           </form>
         </div>
