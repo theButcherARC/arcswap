@@ -5,6 +5,9 @@ import { ROUTES } from "@/constants/routes";
 const HeroCanvas = dynamic(() => import("@/components/landing/HeroCanvas"), {
   ssr: false,
 });
+const PoweredBySection = dynamic(() => import("@/components/landing/PoweredBySection"), {
+  ssr: false,
+});
 
 export default function VibeFlowLanding() {
   return (
@@ -56,10 +59,10 @@ export default function VibeFlowLanding() {
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-violet-500 to-indigo-500 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
             </Link>
             <Link
-              href="/roadmap"
+              href={ROUTES.DASHBOARD}
               className="inline-flex items-center gap-2.5 rounded-2xl border border-white/[0.12] bg-white/[0.03] backdrop-blur-xl px-8 py-4 text-base font-medium text-white/80 transition-all duration-300 hover:bg-white/[0.08] hover:border-white/[0.2] hover:text-white hover:scale-[1.02] active:scale-[0.97]"
             >
-              View Roadmap
+              View Dashboard
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M6 4L10 8L6 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
@@ -218,6 +221,9 @@ export default function VibeFlowLanding() {
         </div>
       </section>
 
+      {/* ==================== POWERED BY ==================== */}
+      <PoweredBySection />
+
       {/* ==================== HOW IT WORKS ==================== */}
       <section id="how-it-works" className="relative z-10 px-4 mb-32">
         <div className="absolute bottom-0 right-1/4 w-[600px] h-[400px] bg-indigo-600/[0.04] rounded-full blur-[120px] pointer-events-none" />
@@ -374,7 +380,8 @@ export default function VibeFlowLanding() {
               <h4 className="text-xs font-semibold text-white/60 tracking-wider uppercase mb-4">Product</h4>
               <ul className="space-y-3">
                 <li><Link href={ROUTES.BULK_PAY} className="text-sm text-white/30 hover:text-white/70 transition-colors duration-200">Bulk Payments</Link></li>
-                <li><Link href="/roadmap" className="text-sm text-white/30 hover:text-white/70 transition-colors duration-200">Roadmap</Link></li>
+                <li><Link href={ROUTES.DASHBOARD} className="text-sm text-white/30 hover:text-white/70 transition-colors duration-200">Dashboard</Link></li>
+                <li><Link href={ROUTES.SOCIAL_PROFILE} className="text-sm text-white/30 hover:text-white/70 transition-colors duration-200">Social Pay</Link></li>
               </ul>
             </div>
 
