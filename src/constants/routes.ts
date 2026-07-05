@@ -6,6 +6,7 @@ export const ROUTES = {
   HOME: "/",
   BULK_PAY: "/bulk-pay",
   DASHBOARD: "/dashboard",
+  SOCIAL_PROFILE: "/social-profile",
   ROADMAP: "/roadmap",
 } as const;
 
