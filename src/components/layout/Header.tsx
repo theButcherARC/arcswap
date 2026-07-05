@@ -7,6 +7,7 @@ import { ROUTES } from '@/constants/routes';
 
 const NAV_LINKS = [
   { label: 'Bulk Pay', href: ROUTES.BULK_PAY },
+  { label: 'Dashboard', href: ROUTES.DASHBOARD },
   { label: 'Roadmap', href: ROUTES.ROADMAP },
 ];
 

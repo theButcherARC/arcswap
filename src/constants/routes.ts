@@ -5,6 +5,7 @@
 export const ROUTES = {
   HOME: "/",
   BULK_PAY: "/bulk-pay",
+  DASHBOARD: "/dashboard",
   ROADMAP: "/roadmap",
 } as const;
 
