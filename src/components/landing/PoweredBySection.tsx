@@ -1,87 +1,70 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-
 const PARTNERS = [
   {
     name: "Vercel",
     role: "Deployment & Edge",
-    gradient: "from-white/10 to-white/5",
-    border: "border-white/[0.15]",
-    dot: "bg-white",
-    glow: "bg-white/20",
-    delay: "0ms",
+    dot: "#ffffff",
+    border: "rgba(255,255,255,0.12)",
+    bg: "linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)",
   },
   {
     name: "Gemini",
     role: "AI Intelligence",
-    gradient: "from-blue-500/15 to-indigo-500/5",
-    border: "border-blue-400/25",
-    dot: "bg-blue-400",
-    glow: "bg-blue-400/30",
-    delay: "120ms",
+    dot: "#60a5fa",
+    border: "rgba(96,165,250,0.22)",
+    bg: "linear-gradient(135deg, rgba(96,165,250,0.10) 0%, rgba(99,102,241,0.04) 100%)",
   },
   {
     name: "Circle",
     role: "USDC Stablecoin",
-    gradient: "from-cyan-500/15 to-teal-500/5",
-    border: "border-cyan-400/25",
-    dot: "bg-cyan-400",
-    glow: "bg-cyan-400/30",
-    delay: "240ms",
+    dot: "#34d399",
+    border: "rgba(52,211,153,0.22)",
+    bg: "linear-gradient(135deg, rgba(52,211,153,0.10) 0%, rgba(20,184,166,0.04) 100%)",
   },
   {
     name: "Arc Network",
     role: "L1 Blockchain",
-    gradient: "from-violet-500/15 to-purple-500/5",
-    border: "border-violet-400/25",
-    dot: "bg-violet-400",
-    glow: "bg-violet-400/30",
-    delay: "360ms",
+    dot: "#a78bfa",
+    border: "rgba(167,139,250,0.22)",
+    bg: "linear-gradient(135deg, rgba(167,139,250,0.10) 0%, rgba(139,92,246,0.04) 100%)",
   },
 ];
 
 export default function PoweredBySection() {
-  const cardsRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const cards = cardsRef.current?.querySelectorAll<HTMLElement>("[data-card]");
-    if (!cards) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            (entry.target as HTMLElement).style.animationPlayState = "running";
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.15 }
-    );
-
-    cards.forEach((card) => observer.observe(card));
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <>
       <style>{`
+        @keyframes marquee {
+          0%   { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
         @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(32px); }
+          from { opacity: 0; transform: translateY(28px); }
           to   { opacity: 1; transform: translateY(0); }
         }
-        @keyframes borderPulse {
-          0%, 100% { box-shadow: 0 0 0 0 transparent; }
-          50%       { box-shadow: 0 0 18px 2px var(--card-glow); }
+        @keyframes dotPing {
+          0%, 100% { transform: scale(1); opacity: 0.7; }
+          50%       { transform: scale(2.2); opacity: 0; }
         }
-        [data-card] {
+        .powered-card {
           opacity: 0;
-          animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) both paused;
+          animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
-        [data-card]:hover {
-          animation: borderPulse 1.6s ease-in-out infinite;
-          opacity: 1;
+        .powered-card:nth-child(1) { animation-delay: 0.05s; }
+        .powered-card:nth-child(2) { animation-delay: 0.15s; }
+        .powered-card:nth-child(3) { animation-delay: 0.25s; }
+        .powered-card:nth-child(4) { animation-delay: 0.35s; }
+        .marquee-track {
+          display: flex;
+          width: max-content;
+          animation: marquee 10s linear infinite;
+        }
+        .marquee-track:hover {
+          animation-play-state: paused;
+        }
+        .dot-ping {
+          animation: dotPing 2s ease-in-out infinite;
         }
       `}</style>
 
@@ -90,63 +73,87 @@ export default function PoweredBySection() {
 
           {/* Badge */}
           <div className="flex justify-center mb-6">
-            <div className="inline-flex items-center gap-2.5 rounded-full border border-white/[0.08] bg-white/[0.03] backdrop-blur-xl px-5 py-1.5">
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-violet-400 opacity-75" />
-                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-violet-400" />
-              </span>
-              <span className="text-[11px] font-semibold text-white/50 tracking-widest uppercase">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.03] px-5 py-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-violet-400 animate-pulse" />
+              <span className="text-[11px] font-semibold text-white/50 tracking-[0.18em] uppercase">
                 Powered by
               </span>
             </div>
           </div>
 
           {/* Heading */}
-          <h2 className="text-center text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight text-balance mb-4">
+          <h2 className="text-center text-4xl md:text-5xl font-bold text-white tracking-tight text-balance mb-14">
             Built on the best{" "}
-            <span className="bg-gradient-to-r from-violet-400 via-indigo-400 to-cyan-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-violet-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
               infrastructure in web3
             </span>
           </h2>
 
-          {/* Name row */}
-          <p className="text-center text-sm text-white/30 tracking-widest uppercase mb-12">
-            Vercel&nbsp;&nbsp;·&nbsp;&nbsp;Gemini&nbsp;&nbsp;·&nbsp;&nbsp;Circle&nbsp;&nbsp;·&nbsp;&nbsp;Arc Network
-          </p>
-
-          {/* 4 Cards */}
-          <div ref={cardsRef} className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {/* 4 Cards — fade up on mount */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
             {PARTNERS.map((p) => (
               <div
                 key={p.name}
-                data-card
+                className="powered-card rounded-2xl p-[1px] transition-transform duration-300 hover:scale-[1.04] hover:-translate-y-1"
                 style={{
-                  animationDelay: p.delay,
-                  // @ts-expect-error css custom property
-                  "--card-glow": p.glow.replace("bg-", ""),
+                  background: `linear-gradient(135deg, ${p.dot}33 0%, transparent 70%)`,
                 }}
-                className={`relative rounded-2xl border ${p.border} bg-gradient-to-br ${p.gradient} backdrop-blur-xl p-6 flex flex-col gap-3 overflow-hidden cursor-default transition-transform duration-300 hover:scale-[1.04] hover:-translate-y-1`}
               >
-                {/* Animated glow blob top-right */}
-                <div className={`absolute -top-8 -right-8 w-28 h-28 rounded-full blur-2xl opacity-0 ${p.glow} transition-opacity duration-500 group-hover:opacity-100`} />
+                <div
+                  className="rounded-2xl p-6 h-full flex flex-col gap-4"
+                  style={{ background: p.bg, border: `1px solid ${p.border}` }}
+                >
+                  {/* Pulsing dot */}
+                  <span className="relative flex h-2.5 w-2.5">
+                    <span
+                      className="dot-ping absolute inline-flex h-full w-full rounded-full"
+                      style={{ backgroundColor: p.dot, opacity: 0.5 }}
+                    />
+                    <span
+                      className="relative inline-flex h-2.5 w-2.5 rounded-full"
+                      style={{ backgroundColor: p.dot }}
+                    />
+                  </span>
 
-                {/* Pulsing dot */}
-                <span className="relative flex h-2 w-2">
-                  <span className={`absolute inline-flex h-full w-full rounded-full ${p.dot} opacity-60 animate-ping`} style={{ animationDuration: "2s" }} />
-                  <span className={`relative inline-flex h-2 w-2 rounded-full ${p.dot}`} />
-                </span>
+                  {/* Name */}
+                  <p className="text-xl font-bold text-white leading-tight">
+                    {p.name}
+                  </p>
 
-                {/* Name */}
-                <p className="text-lg font-bold text-white leading-tight tracking-tight">
-                  {p.name}
-                </p>
-
-                {/* Role */}
-                <p className="text-xs text-white/40 font-medium uppercase tracking-wider">
-                  {p.role}
-                </p>
+                  {/* Role */}
+                  <p className="text-[11px] font-semibold text-white/35 uppercase tracking-widest mt-auto">
+                    {p.role}
+                  </p>
+                </div>
               </div>
             ))}
+          </div>
+
+          {/* Horizontal scrolling marquee of names — BELOW the cards */}
+          <div className="relative overflow-hidden">
+            {/* Left fade */}
+            <div className="pointer-events-none absolute inset-y-0 left-0 w-24 z-10"
+              style={{ background: "linear-gradient(to right, #000 0%, transparent 100%)" }} />
+            {/* Right fade */}
+            <div className="pointer-events-none absolute inset-y-0 right-0 w-24 z-10"
+              style={{ background: "linear-gradient(to left, #000 0%, transparent 100%)" }} />
+
+            <div className="marquee-track select-none">
+              {[...Array(3)].map((_, i) =>
+                PARTNERS.map((p) => (
+                  <span
+                    key={`${p.name}-${i}`}
+                    className="inline-flex items-center gap-3 px-8 text-sm font-semibold text-white/25 tracking-widest uppercase whitespace-nowrap"
+                  >
+                    <span
+                      className="inline-block h-1 w-1 rounded-full flex-shrink-0"
+                      style={{ backgroundColor: p.dot, opacity: 0.6 }}
+                    />
+                    {p.name}
+                  </span>
+                ))
+              )}
+            </div>
           </div>
 
         </div>
