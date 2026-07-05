@@ -53,26 +53,53 @@ function formatUsdc(amount: number): string {
   });
 }
 
-function getAddressFromUrl(url: string): string {
-  const match = url.match(/address=([^&]+)/);
-  return match ? match[1].toLowerCase() : "";
+const MULTICALL_CONTRACT = "0x522fAf9A91c41c443c66765030741e4AaCe147D0";
+
+interface NormalTx {
+  hash: string;
+  to: string;
 }
 
-async function fetchBulkPays(url: string): Promise<BulkPay[]> {
-  const res = await fetch(url);
-  if (!res.ok) {
-    throw new Error("Failed to fetch transfers from ArcScan");
-  }
-  const json = await res.json();
-  const list: TokenTx[] = Array.isArray(json?.result) ? json.result : [];
-  const wallet = getAddressFromUrl(url);
+async function fetchBulkPays(wallet: string): Promise<BulkPay[]> {
+  const lower = wallet.toLowerCase();
+  const base =
+    "https://testnet.arcscan.app/api?module=account&address=" +
+    wallet +
+    "&sort=desc";
 
-  // Keep only outgoing USDC transfers sent by the connected wallet
+  // 1) normal txns to identify which hashes went through the bulk-pay contract
+  // 2) token transfers to read the real USDC amounts per recipient
+  const [txlistRes, tokentxRes] = await Promise.all([
+    fetch(base + "&action=txlist"),
+    fetch(base + "&action=tokentx"),
+  ]);
+  if (!txlistRes.ok || !tokentxRes.ok) {
+    throw new Error("Failed to fetch data from ArcScan");
+  }
+  const txlistJson = await txlistRes.json();
+  const tokentxJson = await tokentxRes.json();
+
+  const normalTxs: NormalTx[] = Array.isArray(txlistJson?.result)
+    ? txlistJson.result
+    : [];
+  const list: TokenTx[] = Array.isArray(tokentxJson?.result)
+    ? tokentxJson.result
+    : [];
+
+  // Only transactions routed through the Multicall3From (bulk-pay) contract
+  const bulkPayHashes = new Set(
+    normalTxs
+      .filter((t) => t?.to?.toLowerCase() === MULTICALL_CONTRACT.toLowerCase())
+      .map((t) => t.hash)
+  );
+
+  // Keep only outgoing USDC transfers that belong to a real bulk payment
   const outgoing = list.filter(
     (tx) =>
       tx?.hash &&
       tx?.timeStamp &&
-      tx?.from?.toLowerCase() === wallet &&
+      bulkPayHashes.has(tx.hash) &&
+      tx?.from?.toLowerCase() === lower &&
       (tx.tokenSymbol ? tx.tokenSymbol.toUpperCase() === "USDC" : true)
   );
 
@@ -154,14 +181,9 @@ function buildVolumeData(
 export default function DashboardPage() {
   const { address, isConnected } = useAccount();
 
-  const apiUrl =
-    isConnected && address
-      ? "https://testnet.arcscan.app/api?module=account&action=tokentx&address=" +
-        address +
-        "&sort=desc"
-      : null;
+  const swrKey = isConnected && address ? address.toLowerCase() : null;
 
-  const { data: bulkPays, error, isLoading } = useSWR(apiUrl, fetchBulkPays, {
+  const { data: bulkPays, error, isLoading } = useSWR(swrKey, fetchBulkPays, {
     revalidateOnFocus: false,
   });
 
