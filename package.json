@@ -16,7 +16,10 @@
     "@types/three": "^0.185.0",
     "@wagmi/connectors": "^5.1.0",
     "@wagmi/core": "^2.13.0",
+    "better-auth": "^1.6.23",
+    "drizzle-orm": "^0.45.2",
     "next": "^14.2.4",
+    "pg": "^8.22.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "recharts": "^3.9.2",
@@ -27,6 +30,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.14.0",
+    "@types/pg": "^8.20.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "autoprefixer": "^10.4.19",
