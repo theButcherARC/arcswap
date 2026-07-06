@@ -130,7 +130,7 @@ export default function RoadmapPage() {
                     <h3 className="text-2xl font-bold text-white mb-1">{p.title}</h3>
                     <p className="text-white/40 text-sm">Phase {p.phase}</p>
                   </div>
-                  <div className={`px-3 py-1 rounded-lg border text-xs font-semibold whitespace-nowrap ${statusBadgeColors[p.statusColor]}`}>
+                  <div className={'px-3 py-1 rounded-lg border text-xs font-semibold whitespace-nowrap ' + statusBadgeColors[p.statusColor as keyof typeof statusBadgeColors]}>
                     {p.status}
                   </div>
                 </div>
