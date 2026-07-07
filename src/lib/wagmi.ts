@@ -1,26 +1,24 @@
 import { createConfig, http } from "wagmi";
 import { metaMask } from "wagmi/connectors";
-import { arcTestnet } from "@/constants/chains";
+import { SUPPORTED_CHAINS } from "@/constants/chains";
 
 /**
  * Wagmi configuration.
  *
- * Chain:      Arc Testnet (5042002)
- * RPC:        https://rpc.testnet.arc.network (public, no key needed)
- * Connector:  MetaMask only (MVP scope)
+ * Chains:     Arc Testnet, Base Sepolia (testnet), Base Mainnet
+ * Connectors: MetaMask
  *
  * WalletConnect can be added post-MVP by importing `walletConnect`
  * from wagmi/connectors and adding it to the connectors array.
  */
 export const wagmiConfig = createConfig({
-  chains: [arcTestnet],
+  chains: SUPPORTED_CHAINS as any,
   connectors: [
     metaMask(),
   ],
-  transports: {
-    // RPC is already hardcoded in arcTestnet chain definition.
-    // Pass undefined here so wagmi uses the chain's default transport.
-    [arcTestnet.id]: http(),
-  },
+  transports: SUPPORTED_CHAINS.reduce((acc, chain) => {
+    acc[chain.id] = http();
+    return acc;
+  }, {} as Record<number, any>),
   ssr: true, // Required for Next.js App Router
 });

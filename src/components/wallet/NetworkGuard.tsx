@@ -10,15 +10,17 @@ interface NetworkGuardProps {
 }
 
 /**
- * Wraps pages that require a connected wallet on Arc Testnet.
+ * Wraps pages that require a connected wallet on a supported chain.
  *
  * - Not connected → prompt to connect
- * - Wrong network → prompt to switch
+ * - Wrong network → prompt to switch to a supported chain
  * - Correct → render children
+ *
+ * Supports: Arc Testnet, Base Sepolia, Base Mainnet
  */
 export function NetworkGuard({ children }: NetworkGuardProps) {
   const { isConnected } = useAccount();
-  const { isCorrectNetwork, isSwitching, switchToArc, requiredChainName } = useArcNetwork();
+  const { isCorrectNetwork, isSwitching, switchToDefault, defaultChainName, supportedChains } = useArcNetwork();
 
   if (!isConnected) {
     return (
@@ -34,19 +36,20 @@ export function NetworkGuard({ children }: NetworkGuardProps) {
   }
 
   if (!isCorrectNetwork) {
+    const chainList = supportedChains.map((c) => c.name).join(", ");
     return (
       <div className="flex min-h-[60vh] items-center justify-center px-4">
         <Card className="max-w-sm w-full text-center">
           <p className="mb-1 font-semibold text-surface-800">Wrong Network</p>
           <p className="mb-5 text-sm text-surface-200">
-            VibeFlow requires {requiredChainName}.
+            VibeFlow supports {chainList}.
           </p>
           <Button
-            onClick={switchToArc}
+            onClick={switchToDefault}
             isLoading={isSwitching}
             className="w-full"
           >
-            Switch to {requiredChainName}
+            Switch to {defaultChainName}
           </Button>
         </Card>
       </div>

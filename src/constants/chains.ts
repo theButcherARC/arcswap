@@ -1,4 +1,5 @@
 import { defineChain } from "viem";
+import { base, baseSepolia } from "viem/chains";
 
 /**
  * Arc Testnet chain definition.
@@ -31,6 +32,12 @@ export const arcTestnet = defineChain({
   testnet: true,
 });
 
-export const SUPPORTED_CHAINS = [arcTestnet] as const;
+export const SUPPORTED_CHAINS = [arcTestnet, baseSepolia, base] as const;
 
 export const DEFAULT_CHAIN = arcTestnet;
+
+export const CHAIN_DISPLAY_INFO: Record<number, { name: string; type: 'mainnet' | 'testnet'; icon?: string }> = {
+  [arcTestnet.id]: { name: 'Arc Testnet', type: 'testnet' },
+  [baseSepolia.id]: { name: 'Base Sepolia', type: 'testnet' },
+  [base.id]: { name: 'Base Mainnet', type: 'mainnet' },
+};
