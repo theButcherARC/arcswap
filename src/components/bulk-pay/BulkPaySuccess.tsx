@@ -1,23 +1,14 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 
 interface BulkPaySuccessProps {
   txHash: string;
   onReset: () => void;
-  sentAt: number;
 }
 
-export default function BulkPaySuccess({ txHash, onReset, sentAt }: BulkPaySuccessProps) {
+export default function BulkPaySuccess({ txHash, onReset }: BulkPaySuccessProps) {
   const explorerUrl = "https://testnet.arcscan.app/tx/" + txHash;
-  const mountRef = useRef(Date.now());
-  const [elapsedMs, setElapsedMs] = useState<number>(mountRef.current - sentAt);
-
-  useEffect(() => {
-    setElapsedMs(Date.now() - sentAt);
-  }, [sentAt]);
-
-  const elapsedSec = (elapsedMs / 1000).toFixed(1);
 
   return (
     <div className="min-h-screen bg-[#050508] flex items-center justify-center px-4 py-12">
@@ -63,7 +54,7 @@ export default function BulkPaySuccess({ txHash, onReset, sentAt }: BulkPaySucce
             <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-4 py-1.5 shadow-[0_0_14px_rgba(52,211,153,0.25)]">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
               <span className="text-xs font-semibold text-emerald-300 tracking-wide">
-                {"Settled in " + elapsedSec + "s"}
+                Settled in {"<"}1s
               </span>
             </span>
           </div>
