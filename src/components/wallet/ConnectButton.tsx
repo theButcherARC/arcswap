@@ -14,7 +14,7 @@ export function ConnectButton() {
   const { address, isConnected } = useAccount();
   const { connect, isPending } = useConnect();
   const { disconnect } = useDisconnect();
-  const { isCorrectNetwork, isSwitching, switchToDefault } = useArcNetwork();
+  const { isCorrectNetwork, isSwitching, switchToArc } = useArcNetwork();
 
   if (!isConnected) {
     return (
@@ -35,7 +35,7 @@ export function ConnectButton() {
         variant="danger"
         size="sm"
         isLoading={isSwitching}
-        onClick={switchToDefault}
+        onClick={switchToArc}
       >
         Switch Network
       </Button>

@@ -1,41 +1,30 @@
 "use client";
 
 import { useChainId, useSwitchChain } from "wagmi";
-import { SUPPORTED_CHAINS, DEFAULT_CHAIN, CHAIN_DISPLAY_INFO } from "@/constants/chains";
+import { arcTestnet } from "@/constants/chains";
 
 /**
- * Provides the current chain state and helpers to switch between supported chains.
+ * Provides the current chain state and a helper to switch to Arc Testnet.
  *
- * Use this hook in any component that needs to track the current network
- * or switch to a different supported chain (Arc Testnet, Base Sepolia, Base Mainnet).
+ * Use this hook in any component or hook that needs to guard against
+ * the user being on the wrong network before sending a transaction.
  */
 export function useArcNetwork() {
   const chainId = useChainId();
   const { switchChain, isPending: isSwitching } = useSwitchChain();
 
-  const isCorrectNetwork = SUPPORTED_CHAINS.some(chain => chain.id === chainId);
-  const supportedChainIds = SUPPORTED_CHAINS.map(chain => chain.id);
+  const isCorrectNetwork = chainId === arcTestnet.id;
 
-  function switchToChain(targetChainId: number) {
-    if (supportedChainIds.includes(targetChainId)) {
-      switchChain({ chainId: targetChainId });
-    }
-  }
-
-  function switchToDefault() {
-    switchChain({ chainId: DEFAULT_CHAIN.id });
+  function switchToArc() {
+    switchChain({ chainId: arcTestnet.id });
   }
 
   return {
     chainId,
     isCorrectNetwork,
     isSwitching,
-    switchToChain,
-    switchToDefault,
-    supportedChainIds,
-    supportedChains: SUPPORTED_CHAINS,
-    chainDisplayInfo: CHAIN_DISPLAY_INFO,
-    defaultChainId: DEFAULT_CHAIN.id,
-    defaultChainName: DEFAULT_CHAIN.name,
+    switchToArc,
+    requiredChainId: arcTestnet.id,
+    requiredChainName: arcTestnet.name,
   };
 }
