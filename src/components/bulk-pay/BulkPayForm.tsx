@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useMemo, useCallback } from "react";
-import { parseUnits } from "viem";
+import React, { useState, useMemo, useCallback, useEffect, useRef } from "react";
+import { parseUnits, createPublicClient, http } from "viem";
 import type { Address } from "viem";
 import { useBulkPay } from "@/hooks/useBulkPay";
 import { toChecksumAddress } from "@/utils/address";
@@ -13,6 +13,61 @@ import BulkPaySuccess from "./BulkPaySuccess";
 import RecipientRow from "./RecipientRow";
 import type { ParsedBulkPay } from "@/services/agentService";
 import type { Recipient, InputMode } from "@/types/bulkPay";
+
+/* --------------------------------------------------------------- */
+/*  Gas Estimate Hook                                               */
+/* --------------------------------------------------------------- */
+
+const arcPublicClient = createPublicClient({
+  chain: {
+    id: 5042002,
+    name: "Arc Testnet",
+    nativeCurrency: { name: "USD Coin", symbol: "USDC", decimals: 6 },
+    rpcUrls: { default: { http: ["https://rpc.testnet.arc.network"] } },
+  } as any,
+  transport: http("https://rpc.testnet.arc.network"),
+});
+
+const GAS_PER_RECIPIENT = 50_000n;
+
+function useGasEstimate(recipientCount: number) {
+  const [gasUsd, setGasUsd] = useState<number | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [tick, setTick] = useState(0);
+  const abortRef = useRef(false);
+
+  const refresh = useCallback(() => setTick((t) => t + 1), []);
+
+  useEffect(() => {
+    if (recipientCount === 0) {
+      setGasUsd(null);
+      return;
+    }
+    abortRef.current = false;
+    setLoading(true);
+
+    arcPublicClient.getGasPrice().then((gasPrice) => {
+      if (abortRef.current) return;
+      // gasPrice is in wei (18 decimals). Arc native currency is USDC with 6 decimals,
+      // but the chain represents 1 USDC as 1e18 at the EVM level.
+      // Formula: (gasPrice * GAS_PER_RECIPIENT * count) / 1e18 = USDC value
+      const totalWei = gasPrice * GAS_PER_RECIPIENT * BigInt(recipientCount);
+      const usd = Number(totalWei) / 1e18;
+      setGasUsd(usd);
+      setLoading(false);
+    }).catch(() => {
+      if (abortRef.current) return;
+      setGasUsd(null);
+      setLoading(false);
+    });
+
+    return () => {
+      abortRef.current = true;
+    };
+  }, [recipientCount, tick]);
+
+  return { gasUsd, loading, refresh };
+}
 
 /* --------------------------------------------------------------- */
 /*  Helpers                                                        */
@@ -218,6 +273,9 @@ export default function BulkPayForm() {
       isOverAllocated,
     };
   }, [recipients, inputMode, totalAmountInput]);
+
+  /* ---- Gas estimate ---- */
+  const { gasUsd, loading: gasLoading, refresh: refreshGas } = useGasEstimate(summaryData.validCount);
 
   /* ---- Can send validation ---- */
   const canSend = useMemo(() => {
@@ -1056,6 +1114,81 @@ export default function BulkPayForm() {
                 </div>
 
                 <div className="flex flex-col gap-3 lg:w-72 lg:shrink-0">
+
+              {/* Gas estimate card */}
+              <div className="rounded-xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-xl px-4 py-3.5">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-white/30">
+                    Transaction Preview
+                  </span>
+                  <button
+                    type="button"
+                    onClick={refreshGas}
+                    className="flex items-center justify-center w-6 h-6 rounded-lg hover:bg-white/[0.06] transition-colors duration-150"
+                    title="Refresh gas estimate"
+                  >
+                    <svg
+                      width="12"
+                      height="12"
+                      viewBox="0 0 12 12"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      className={gasLoading ? "animate-spin" : ""}
+                    >
+                      <path
+                        d="M10.5 6A4.5 4.5 0 1 1 6 1.5"
+                        stroke="currentColor"
+                        strokeWidth="1.2"
+                        strokeLinecap="round"
+                        className="text-white/40"
+                      />
+                      <path
+                        d="M6 1.5L8 3.5M6 1.5L8 0"
+                        stroke="currentColor"
+                        strokeWidth="1.2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="text-violet-400"
+                      />
+                    </svg>
+                  </button>
+                </div>
+
+                <div className="space-y-2">
+                  {/* Estimated Gas */}
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-white/40">Estimated Gas</span>
+                    <span className="text-xs font-semibold text-violet-300">
+                      {gasLoading
+                        ? "..."
+                        : gasUsd !== null
+                          ? "~$" + gasUsd.toFixed(4) + " USDC"
+                          : "—"}
+                    </span>
+                  </div>
+
+                  {/* Recipients */}
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-white/40">Recipients</span>
+                    <span className="text-xs font-semibold text-white/70">
+                      {summaryData.validCount}
+                    </span>
+                  </div>
+
+                  {/* Total Payout */}
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-white/40">Total Payout</span>
+                    <span className="text-xs font-semibold text-white">
+                      {"$" + summaryData.total.toFixed(2) + " USDC"}
+                    </span>
+                  </div>
+                </div>
+
+                <p className="mt-3 text-[10px] text-white/20 border-t border-white/[0.05] pt-2.5">
+                  Powered by Arc — gas paid in USDC
+                </p>
+              </div>
+
               {/* Error display */}
               {status === "error" && error ? (
                 <div className="rounded-xl border border-rose-500/20 bg-rose-500/[0.06] px-4 py-3.5">
