@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { useAccount, usePublicClient, useWriteContract } from "wagmi";
+import { encodeFunctionData } from "viem";
 import { useArcNetwork } from "./useArcNetwork";
 import { getErrorMessage, isUserRejection, APP_ERRORS } from "@/utils/errors";
 import { BULK_PAY_MAX_RECIPIENTS } from "@/constants/tokens";
@@ -14,6 +15,17 @@ import {
 } from "@/services/bulkPayService";
 import type { BulkPayParams, BulkPayStatus } from "@/types/bulkPay";
 
+const MEMO_CONTRACT_ADDRESS = "0x5294E9927c3306DcBaDb03fe70b92e01cCede505" as const;
+const MEMO_ABI = [
+  {
+    name: "sendMemo",
+    type: "function",
+    stateMutability: "nonpayable",
+    inputs: [{ name: "memo", type: "string" }],
+    outputs: [],
+  },
+] as const;
+
 export function useBulkPay() {
   const { address } = useAccount();
   const { isCorrectNetwork } = useArcNetwork();
@@ -25,7 +37,7 @@ export function useBulkPay() {
   const [error, setError] = useState<string | null>(null);
 
   const executeBulkPay = useCallback(
-    async (params: BulkPayParams, onSubmit?: (timestamp: number) => void) => {
+    async (params: BulkPayParams & { memo?: string }, onSubmit?: (timestamp: number) => void) => {
       if (!address) { setError(APP_ERRORS.WALLET_NOT_CONNECTED); return; }
       if (!isCorrectNetwork) { setError(APP_ERRORS.WRONG_NETWORK); return; }
       if (params.recipients.length === 0) { setError("Add at least one recipient."); return; }
@@ -40,7 +52,21 @@ export function useBulkPay() {
         setBulkStatus("preparing");
 
         const instructions = buildTransfers(params);
-        const calls = buildMulticallCalls(instructions);
+        const transferCalls = buildMulticallCalls(instructions);
+
+        const memoCall = params.memo && params.memo.trim().length > 0
+          ? [{
+              target: MEMO_CONTRACT_ADDRESS,
+              allowFailure: false,
+              callData: encodeFunctionData({
+                abi: MEMO_ABI,
+                functionName: "sendMemo",
+                args: [params.memo.trim()],
+              }),
+            }]
+          : [];
+
+        const calls = [...memoCall, ...transferCalls];
 
         // Simulate before MetaMask popup
         if (publicClient) {
@@ -53,10 +79,11 @@ export function useBulkPay() {
           });
 
           const results = simulation.result as { success: boolean; returnData: `0x${string}` }[];
-          const failedIdx = results.findIndex((r) => !r.success);
+          const memoOffset = memoCall.length;
+          const failedIdx = results.findIndex((r, i) => i >= memoOffset && !r.success);
           if (failedIdx !== -1) {
             throw new Error(
-              `Transfer to ${params.recipients[failedIdx]?.address} would fail. Check balance and addresses.`
+              `Transfer to ${params.recipients[failedIdx - memoOffset]?.address} would fail. Check balance and addresses.`
             );
           }
         }

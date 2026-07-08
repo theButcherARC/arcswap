@@ -216,6 +216,8 @@ export default function BulkPayForm() {
   const [agentError, setAgentError] = useState("");
   const [agentResult, setAgentResult] = useState<ParsedBulkPay | null>(null);
 
+  const [memo, setMemo] = useState("");
+
   const { executeBulkPay, status, txHash, error, reset } = useBulkPay();
 
   const isSending = status === "preparing" || status === "sending";
@@ -512,6 +514,7 @@ export default function BulkPayForm() {
         totalAmount: totalAmountRaw,
         token,
         recipients: transfers,
+        memo: memo.trim() || undefined,
       });
     },
     [canSend, recipients, inputMode, totalAmountInput, token, executeBulkPay]
@@ -982,6 +985,34 @@ export default function BulkPayForm() {
                     isDisabled={isSending}
                   />
                 ))}
+              </div>
+
+              {/* Payroll memo input */}
+              <div className="mt-6">
+                <label className="block text-xs font-medium text-white/40 mb-1.5">
+                  Payroll Label <span className="text-white/20">(optional)</span>
+                </label>
+                <input
+                  type="text"
+                  value={memo}
+                  onChange={(e) => setMemo(e.target.value.slice(0, 100))}
+                  disabled={isSending}
+                  placeholder="e.g. July Salary, Freelancer Batch, Marketing Team"
+                  maxLength={100}
+                  className={
+                    "w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-3.5 py-2.5 " +
+                    "text-sm text-white placeholder:text-white/20 " +
+                    "focus:outline-none focus:border-violet-500/50 focus:bg-white/[0.05] " +
+                    "transition-all duration-200 " +
+                    (isSending ? "opacity-50 cursor-not-allowed" : "")
+                  }
+                />
+                <p className="mt-1.5 text-[11px] text-white/25">
+                  Stored onchain with your transaction
+                  {memo.length > 0 && (
+                    <span className="ml-2 text-white/20">{memo.length}/100</span>
+                  )}
+                </p>
               </div>
 
               {/* Add recipient button */}
