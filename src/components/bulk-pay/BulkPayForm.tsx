@@ -502,12 +502,14 @@ export default function BulkPayForm() {
         };
       });
 
-      setSentAt(Date.now());
-      await executeBulkPay({
-        totalAmount: totalAmountRaw,
-        token,
-        recipients: transfers,
-      });
+      await executeBulkPay(
+        {
+          totalAmount: totalAmountRaw,
+          token,
+          recipients: transfers,
+        },
+        setSentAt
+      );
     },
     [canSend, recipients, inputMode, totalAmountInput, token, executeBulkPay]
   );

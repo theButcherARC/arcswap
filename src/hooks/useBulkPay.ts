@@ -25,7 +25,7 @@ export function useBulkPay() {
   const [error, setError] = useState<string | null>(null);
 
   const executeBulkPay = useCallback(
-    async (params: BulkPayParams) => {
+    async (params: BulkPayParams, onSubmit?: (timestamp: number) => void) => {
       if (!address) { setError(APP_ERRORS.WALLET_NOT_CONNECTED); return; }
       if (!isCorrectNetwork) { setError(APP_ERRORS.WRONG_NETWORK); return; }
       if (params.recipients.length === 0) { setError("Add at least one recipient."); return; }
@@ -69,6 +69,10 @@ export function useBulkPay() {
           functionName: "aggregate3",
           args: [calls],
         });
+
+        // Call onSubmit callback exactly when transaction is submitted
+        const submitTimestamp = Date.now();
+        onSubmit?.(submitTimestamp);
 
         setTxHash(hash);
 
