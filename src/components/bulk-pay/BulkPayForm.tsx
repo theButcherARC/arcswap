@@ -1115,78 +1115,42 @@ export default function BulkPayForm() {
 
                 <div className="flex flex-col gap-3 lg:w-72 lg:shrink-0">
 
-              {/* Gas estimate card */}
-              <div className="rounded-xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-xl px-4 py-3.5">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-[10px] font-semibold uppercase tracking-wider text-white/30">
-                    Transaction Preview
+              {/* Slim gas summary bar */}
+              <div className="flex items-center justify-between gap-2 rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 py-2">
+                <span className="text-[11px] text-white/40 leading-none truncate">
+                  {"Gas: "}
+                  <span className="text-violet-300 font-medium">
+                    {gasLoading ? "..." : gasUsd !== null ? "~$" + gasUsd.toFixed(4) : "—"}
                   </span>
-                  <button
-                    type="button"
-                    onClick={refreshGas}
-                    className="flex items-center justify-center w-6 h-6 rounded-lg hover:bg-white/[0.06] transition-colors duration-150"
-                    title="Refresh gas estimate"
+                  {" USDC"}
+                  <span className="mx-1.5 text-white/20">|</span>
+                  {"Recipients: "}
+                  <span className="text-white/60 font-medium">{summaryData.validCount}</span>
+                  <span className="mx-1.5 text-white/20">|</span>
+                  {"Total: "}
+                  <span className="text-white/60 font-medium">{"$" + summaryData.total.toFixed(2)}</span>
+                  {" USDC"}
+                  <span className="mx-1.5 text-white/20">|</span>
+                  <span className="text-white/20">Powered by Arc</span>
+                </span>
+                <button
+                  type="button"
+                  onClick={refreshGas}
+                  title="Refresh gas estimate"
+                  className="shrink-0 flex items-center justify-center w-5 h-5 rounded hover:bg-white/[0.06] transition-colors duration-150"
+                >
+                  <svg
+                    width="10"
+                    height="10"
+                    viewBox="0 0 12 12"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className={gasLoading ? "animate-spin text-violet-400" : "text-white/30"}
                   >
-                    <svg
-                      width="12"
-                      height="12"
-                      viewBox="0 0 12 12"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      className={gasLoading ? "animate-spin" : ""}
-                    >
-                      <path
-                        d="M10.5 6A4.5 4.5 0 1 1 6 1.5"
-                        stroke="currentColor"
-                        strokeWidth="1.2"
-                        strokeLinecap="round"
-                        className="text-white/40"
-                      />
-                      <path
-                        d="M6 1.5L8 3.5M6 1.5L8 0"
-                        stroke="currentColor"
-                        strokeWidth="1.2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="text-violet-400"
-                      />
-                    </svg>
-                  </button>
-                </div>
-
-                <div className="space-y-2">
-                  {/* Estimated Gas */}
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-white/40">Estimated Gas</span>
-                    <span className="text-xs font-semibold text-violet-300">
-                      {gasLoading
-                        ? "..."
-                        : gasUsd !== null
-                          ? "~$" + gasUsd.toFixed(4) + " USDC"
-                          : "—"}
-                    </span>
-                  </div>
-
-                  {/* Recipients */}
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-white/40">Recipients</span>
-                    <span className="text-xs font-semibold text-white/70">
-                      {summaryData.validCount}
-                    </span>
-                  </div>
-
-                  {/* Total Payout */}
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-white/40">Total Payout</span>
-                    <span className="text-xs font-semibold text-white">
-                      {"$" + summaryData.total.toFixed(2) + " USDC"}
-                    </span>
-                  </div>
-                </div>
-
-                <p className="mt-3 text-[10px] text-white/20 border-t border-white/[0.05] pt-2.5">
-                  Powered by Arc — gas paid in USDC
-                </p>
+                    <path d="M10.5 6A4.5 4.5 0 1 1 6 1.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+                    <path d="M6 1.5L8 3.5M6 1.5L8 0" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
               </div>
 
               {/* Error display */}
