@@ -210,6 +210,7 @@ export default function BulkPayForm() {
   const [agentResult, setAgentResult] = useState<ParsedBulkPay | null>(null);
 
   const { executeBulkPay, status, txHash, error, reset } = useBulkPay();
+  const [sentAt, setSentAt] = useState<number>(0);
 
   const isSending = status === "preparing" || status === "sending";
 
@@ -501,6 +502,7 @@ export default function BulkPayForm() {
         };
       });
 
+      setSentAt(Date.now());
       await executeBulkPay({
         totalAmount: totalAmountRaw,
         token,
@@ -521,6 +523,7 @@ export default function BulkPayForm() {
         <BulkPaySuccess
           txHash={txHash || ""}
           onReset={reset}
+          sentAt={sentAt}
         />
       ) : (
         <div className="mx-auto max-w-4xl">
