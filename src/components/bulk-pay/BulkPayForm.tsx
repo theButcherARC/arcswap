@@ -1116,28 +1116,37 @@ export default function BulkPayForm() {
                 <div className="flex flex-col gap-3 lg:w-72 lg:shrink-0">
 
               {/* Slim gas summary bar */}
-              <div className="flex items-center justify-between gap-2 rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 py-2">
-                <span className="text-[11px] text-white/40 leading-none truncate">
+              <div className="flex items-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 py-2.5 flex-wrap">
+                {/* Gas */}
+                <span className="text-[11px] text-white/40 whitespace-nowrap">
                   {"Gas: "}
                   <span className="text-violet-300 font-medium">
                     {gasLoading ? "..." : gasUsd !== null ? "~$" + gasUsd.toFixed(4) : "—"}
                   </span>
                   {" USDC"}
-                  <span className="mx-1.5 text-white/20">|</span>
+                </span>
+                <span className="text-white/20 text-[11px]">|</span>
+                {/* Recipients */}
+                <span className="text-[11px] text-white/40 whitespace-nowrap">
                   {"Recipients: "}
                   <span className="text-white/60 font-medium">{summaryData.validCount}</span>
-                  <span className="mx-1.5 text-white/20">|</span>
-                  {"Total: "}
-                  <span className="text-white/60 font-medium">{"$" + summaryData.total.toFixed(2)}</span>
-                  {" USDC"}
-                  <span className="mx-1.5 text-white/20">|</span>
-                  <span className="text-white/20">Powered by Arc</span>
                 </span>
+                <span className="text-white/20 text-[11px]">|</span>
+                {/* Total */}
+                <span className="text-[11px] text-white/40 whitespace-nowrap">
+                  {"Total: "}
+                  <span className="text-white/70 font-medium">{"$" + summaryData.total.toFixed(2)}</span>
+                  {" USDC"}
+                </span>
+                <span className="text-white/20 text-[11px]">|</span>
+                {/* Powered by Arc */}
+                <span className="text-[11px] text-white/20 whitespace-nowrap">Powered by Arc</span>
+                {/* Refresh — pushed to the right */}
                 <button
                   type="button"
                   onClick={refreshGas}
                   title="Refresh gas estimate"
-                  className="shrink-0 flex items-center justify-center w-5 h-5 rounded hover:bg-white/[0.06] transition-colors duration-150"
+                  className="ml-auto shrink-0 flex items-center justify-center w-5 h-5 rounded hover:bg-white/[0.06] transition-colors duration-150"
                 >
                   <svg
                     width="10"
