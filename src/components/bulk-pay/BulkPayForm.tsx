@@ -201,7 +201,14 @@ export default function BulkPayForm() {
   /* ---- State ---- */
   const [inputMode, setInputMode] = useState<InputMode>("percentage");
   const [totalAmountInput, setTotalAmountInput] = useState("");
-  const [token] = useState(TOKENS.USDC);
+  const [selectedSymbol, setSelectedSymbol] = useState<"USDC" | "EURC">("USDC");
+
+  const HARDCODED_TOKENS = {
+    USDC: { ...TOKENS.USDC, address: "0x3600000000000000000000000000000000000000" as `0x${string}` },
+    EURC: { ...TOKENS.EURC, address: "0x89B50855Aa3bE2F677cD6303Cec089B5F319D72a" as `0x${string}`, decimals: 6 },
+  };
+
+  const token = HARDCODED_TOKENS[selectedSymbol];
   const [recipients, setRecipients] = useState<Recipient[]>([createRecipient()]);
   const [showAgent, setShowAgent] = useState(true);
   const [agentInput, setAgentInput] = useState("");
@@ -533,8 +540,39 @@ export default function BulkPayForm() {
                 </span>
               </h1>
               <p className="text-sm text-white/40 mt-2 max-w-md">
-                Send USDC to your entire team in one transaction
+                {selectedSymbol === "USDC"
+                  ? "Send USDC to your entire team in one transaction"
+                  : "Send EURC to your entire team in one transaction"}
               </p>
+              {/* Token selector pills */}
+              <div className="flex items-center gap-2 mt-4">
+                <button
+                  type="button"
+                  onClick={() => setSelectedSymbol("USDC")}
+                  className={
+                    "flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-semibold transition-all duration-200 border " +
+                    (selectedSymbol === "USDC"
+                      ? "bg-violet-600/20 border-violet-500/50 text-violet-300 shadow-[0_0_12px_rgba(124,58,237,0.25)]"
+                      : "bg-white/[0.03] border-white/[0.08] text-white/40 hover:text-white/60 hover:border-white/20")
+                  }
+                >
+                  <span>$</span>
+                  <span>USDC</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSelectedSymbol("EURC")}
+                  className={
+                    "flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-semibold transition-all duration-200 border " +
+                    (selectedSymbol === "EURC"
+                      ? "bg-violet-600/20 border-violet-500/50 text-violet-300 shadow-[0_0_12px_rgba(124,58,237,0.25)]"
+                      : "bg-white/[0.03] border-white/[0.08] text-white/40 hover:text-white/60 hover:border-white/20")
+                  }
+                >
+                  {selectedSymbol === "EURC" && <span>€</span>}
+                  <span>EURC</span>
+                </button>
+              </div>
             </div>
             <div className="flex items-center gap-3">
               {/* Recipient counter badge */}
@@ -570,11 +608,13 @@ export default function BulkPayForm() {
               {/* Token display */}
               <div className="flex items-center gap-2.5 rounded-xl border border-white/10 bg-white/[0.03] backdrop-blur-xl px-3.5 py-2">
                 <div className="h-7 w-7 rounded-full bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-violet-600/20">
-                  <span className="text-white text-[10px] font-bold">$</span>
+                  <span className="text-white text-[10px] font-bold">
+                    {selectedSymbol === "EURC" ? "€" : "$"}
+                  </span>
                 </div>
                 <div className="flex flex-col">
                   <span className="text-sm font-semibold text-white leading-none">
-                    USDC
+                    {selectedSymbol}
                   </span>
                   <span className="text-[10px] text-white/30 mt-0.5">
                     Arc Network
@@ -1135,8 +1175,10 @@ export default function BulkPayForm() {
                 {/* Total */}
                 <span className="text-[11px] text-white/40 whitespace-nowrap">
                   {"Total: "}
-                  <span className="text-white/70 font-medium">{"$" + summaryData.total.toFixed(2)}</span>
-                  {" USDC"}
+                  <span className="text-white/70 font-medium">
+                    {(selectedSymbol === "EURC" ? "€" : "$") + summaryData.total.toFixed(2)}
+                  </span>
+                  {" " + selectedSymbol}
                 </span>
                 <span className="text-white/20 text-[11px]">|</span>
                 {/* Powered by Arc */}
