@@ -528,6 +528,7 @@ export default function BulkPayForm() {
         <BulkPaySuccess
           txHash={txHash || ""}
           onReset={reset}
+          tokenSymbol={selectedSymbol}
         />
       ) : (
         <div className="mx-auto max-w-4xl">

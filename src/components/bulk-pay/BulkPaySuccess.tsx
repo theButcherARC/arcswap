@@ -5,9 +5,10 @@ import React from "react";
 interface BulkPaySuccessProps {
   txHash: string;
   onReset: () => void;
+  tokenSymbol?: string;
 }
 
-export default function BulkPaySuccess({ txHash, onReset }: BulkPaySuccessProps) {
+export default function BulkPaySuccess({ txHash, onReset, tokenSymbol = "USDC" }: BulkPaySuccessProps) {
   const explorerUrl = "https://testnet.arcscan.app/tx/" + txHash;
 
   return (
@@ -91,7 +92,7 @@ export default function BulkPaySuccess({ txHash, onReset }: BulkPaySuccessProps)
               <span className="block text-[10px] text-white/25 uppercase tracking-wider mb-1">
                 Asset
               </span>
-              <span className="text-sm font-medium text-white/70">USDC</span>
+              <span className="text-sm font-medium text-white/70">{tokenSymbol}</span>
             </div>
           </div>
 
