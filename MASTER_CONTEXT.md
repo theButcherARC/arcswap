@@ -1,4 +1,4 @@
-# MASTER_CONTEXT — ArcSwap
+# MASTER_CONTEXT — VibeFlow
 
 > This file is the single source of truth for any AI or developer continuing this project.
 > Update it whenever a significant decision is made, a contract is deployed, or an integration changes.
@@ -7,10 +7,10 @@
 
 ## Project Identity
 
-- **Name**: ArcSwap
+- **Name**: VibeFlow
 - **Network**: Arc Testnet
-- **Purpose**: DEX interface — swap tokens and bulk-pay up to 10 recipients
-- **Deployment target**: Vercel (Next.js App Router, no custom server)
+- **Purpose**: Programmable USDC batch payroll infrastructure. Send USDC/EURC to 100+ recipients in one transaction with AI-powered payment parsing.
+- **Deployment target**: Vercel (Next.js 14 App Router, no custom server)
 
 ---
 
@@ -29,14 +29,13 @@
 - **Chain enforcement** is handled by `NetworkGuard` component — it wraps pages that require Arc Testnet and redirects/warns if the user is on the wrong chain.
 
 ### Contracts
-- **VIBE token** is a standard OpenZeppelin ERC20 deployed by this project.
-- **USDC and EURC** are pre-existing on Arc Testnet. Addresses go in `.env.local` and `src/contracts/config.ts`.
-- **No custom AMM** — swap routing uses existing Uniswap-compatible infrastructure on Arc Testnet or Centra liquidity. The `swapService.ts` is the integration point.
-- **Bulk Pay** sends individual ERC20 transfers in sequence (MVP). A multicall contract upgrade is a post-MVP consideration.
+- **USDC** and **EURC** are Circle stablecoins pre-existing on Arc Testnet. Both have 6 decimals.
+- **Multicall3From** (0x522fAf9A91c41c443c66765030741e4AaCe147D0) batches all ERC-20 transfers in a single transaction while preserving the original caller's `msg.sender`.
+- **Memo Contract** (0x5294E9927c3306DcBaDb03fe70b92e01cCede505) stores onchain payroll labels and batch metadata.
 
 ### Services
-- `swapService.ts` — responsible for quote fetching and building swap calldata. Wraps whatever DEX router is available on Arc Testnet.
-- `bulkPayService.ts` — encodes and sequences up to 10 ERC20 `transfer` calls.
+- `bulkPayService.ts` — encodes ERC-20 transfers and builds Multicall3From call sequences. Supports 100+ recipients.
+- `agentService.ts` — uses Groq AI (llama-3.3-70b-versatile) to parse natural language payment instructions into structured recipient lists.
 
 ---
 
@@ -54,21 +53,21 @@ Update `src/constants/chains.ts` once confirmed.
 
 ---
 
-## Token Registry
+## Stablecoin Registry
 
-| Symbol | Address | Decimals | Source |
-|--------|---------|----------|--------|
-| USDC | `0x3600000000000000000000000000000000000000` | 6 | Arc native precompile (hardcoded) ✅ |
-| EURC | `NEXT_PUBLIC_EURC_ADDRESS` | 6 | Arc Testnet existing |
-| VIBE | `NEXT_PUBLIC_VIBE_TOKEN_ADDRESS` | 18 | Deployed by this project |
+| Symbol | Address | Decimals | Source | Status |
+|--------|---------|----------|--------|--------|
+| USDC | `0x3600000000000000000000000000000000000000` | 6 | Circle (Arc native precompile, gas asset) | ✅ Live |
+| EURC | `0x89B50855Aa3bE2F677cD6303Cec089B5F319D72a` | 6 | Circle (Arc Testnet) | ✅ Live |
 
 ---
 
-## Contract Deployments
+## Key Contract Addresses
 
-| Contract | Address | Deployer | Tx Hash | Notes |
-|----------|---------|----------|---------|-------|
-| VibeToken | TBD | TBD | TBD | Deploy with `pnpm deploy:testnet` in /contracts |
+| Contract | Address | Purpose | Status |
+|----------|---------|---------|--------|
+| Multicall3From | `0x522fAf9A91c41c443c66765030741e4AaCe147D0` | Batch ERC-20 transfers, preserves msg.sender | ✅ Live |
+| Memo Contract | `0x5294E9927c3306DcBaDb03fe70b92e01cCede505` | Stores onchain payroll labels and metadata | ✅ Live |
 
 ---
 
@@ -113,21 +112,14 @@ Critical variables: `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID`, all token addresses,
 
 ---
 
-## Post-MVP Considerations (do not implement now)
+## Post-MVP Considerations (Phase 2+)
 
-- WalletConnect v2 for mobile wallets
-- Multicall contract for atomic bulk pay
-- Swap routing aggregator (1inch style)
-- Slippage tolerance UI
-- Transaction history via indexer
-- Permit2 for gasless approvals
-## Token Registry
+- CSV/spreadsheet import for recipient lists
+- Recurring payment scheduling (cron-based orchestration)
+- Multi-sig approval flow for large batches
+- Webhook notifications on settlement
+- Team workspaces with role-based access control
+- Payroll history export (PDF, CSV) with compliance metadata
+- Cross-chain support (Base Mainnet, Ethereum L1 via CCTP)
+- @vibeflow/sdk npm package for programmatic batch payment access
 
-| Symbol | Address | Decimals | Source |
-|--------|---------|----------|--------|
-| USDC | `0x3600000000000000000000000000000000000000` | 6 | Arc native precompile (hardcoded) ✅ |
-| EURC | `0x89B50855Aa3bE2F677cD6303Cec089B5F319D72a` | 6 | Arc Testnet existing (hardcoded) ✅ |
-| cirBTC | `0xf0C4a4CE82A5746AbAAd9425360Ab04fbBA432BF` | 8 | Arc Testnet existing (hardcoded) ✅ — confirm decimals |
-| VIBE | `NEXT_PUBLIC_VIBE_TOKEN_ADDRESS` | 18 | Deployed by this project |
-
----
