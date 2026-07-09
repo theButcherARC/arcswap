@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useCallback, useEffect, useRef } from "react";
+import Link from "next/link";
 import { parseUnits, createPublicClient, http } from "viem";
 import type { Address } from "viem";
 import { useBulkPay } from "@/hooks/useBulkPay";
@@ -579,6 +580,19 @@ export default function BulkPayForm() {
               </div>
             </div>
             <div className="flex items-center gap-3">
+              {/* Quick Pay / CSV Upload tabs */}
+              <div className="flex items-center rounded-xl border border-white/10 bg-white/[0.03] p-1 gap-1">
+                <span className="rounded-lg px-3.5 py-1.5 text-xs font-semibold text-white bg-white/[0.08] border border-white/10">
+                  Quick Pay
+                </span>
+                <Link
+                  href="/bulk-pay/upload"
+                  className="rounded-lg px-3.5 py-1.5 text-xs font-medium text-white/40 hover:text-white/70 hover:bg-white/[0.05] transition-all duration-200"
+                >
+                  CSV Upload
+                </Link>
+              </div>
+
               {/* Recipient counter badge */}
               <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] backdrop-blur-xl px-3.5 py-2">
                 <svg
