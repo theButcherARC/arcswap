@@ -13,12 +13,23 @@ export default function SocialProfilePage() {
   const [linkedHandle, setLinkedHandle] = useState<string | null>(null)
   const [linkedAddress, setLinkedAddress] = useState<string | null>(null)
 
-  // Check if already linked
+  // Check if already linked — also verify against DB on load
   useEffect(() => {
     if (!session?.user) return
-    const name = session.user.name ?? ''
-    if (name) {
-      setLinkedHandle(name)
+    const handle = (session.user as { username?: string }).username ?? ''
+    if (handle) {
+      setLinkedHandle(handle)
+      // Check DB to see if this handle is already linked
+      fetch('/api/social/resolve?username=' + encodeURIComponent(handle))
+        .then(r => r.json())
+        .then(json => {
+          if (json.address) {
+            setStatus('success')
+            setMessage('@' + handle + ' is now linked to ' + json.address.slice(0, 6) + '...' + json.address.slice(-4))
+            setLinkedAddress(json.address)
+          }
+        })
+        .catch(() => {/* not linked yet, that's fine */})
     }
     if (isConnected && address) {
       setLinkedAddress(address)
@@ -81,7 +92,9 @@ export default function SocialProfilePage() {
     }
   }
 
-  const username = (session?.user as { username?: string } | undefined)?.username ?? session?.user?.name ?? null
+  // Twitter username comes from session.user.username (the handle, e.g. "The_Last_Dip")
+  // session.user.name is the display name (e.g. "Butcher") - we never want to use that as handle
+  const username = (session?.user as { username?: string } | undefined)?.username ?? null
 
   return (
     <main className="min-h-screen bg-[#050508] px-4 pb-16 pt-28 sm:px-6 lg:px-8">

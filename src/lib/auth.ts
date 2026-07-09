@@ -35,16 +35,31 @@ export const auth = betterAuth({
     twitter: {
       clientId:     process.env.TWITTER_CLIENT_ID!,
       clientSecret: process.env.TWITTER_CLIENT_SECRET!,
+      // Map Twitter profile fields so username (handle) is always stored
+      mapProfileToUser: (profile: Record<string, unknown>) => {
+        const data = (profile.data ?? profile) as Record<string, unknown>
+        return {
+          name:     (data.name as string)     ?? (profile.name as string)     ?? '',
+          image:    (data.profile_image_url as string) ?? (profile.image as string) ?? '',
+          username: (data.username as string) ?? (profile.username as string) ?? '',
+        }
+      },
     },
   },
-  ...(process.env.NODE_ENV === 'development'
-    ? {
-        advanced: {
-          defaultCookieAttributes: {
-            sameSite: 'none' as const,
-            secure: true,
-          },
-        },
-      }
-    : {}),
+  user: {
+    additionalFields: {
+      username: {
+        type: 'string',
+        required: false,
+        defaultValue: '',
+        input: false,
+      },
+    },
+  },
+  advanced: {
+    defaultCookieAttributes: {
+      sameSite: 'none' as const,
+      secure: true,
+    },
+  },
 })
