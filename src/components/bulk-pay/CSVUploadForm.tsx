@@ -78,6 +78,8 @@ export default function CSVUploadForm() {
   const [rows, setRows] = useState<ParsedRow[]>([]);
   const [parseErrors, setParseErrors] = useState<ParseError[]>([]);
   const [showAll, setShowAll] = useState(false);
+  const [inputMode, setInputMode] = useState<"upload" | "paste">("upload");
+  const [pasteContent, setPasteContent] = useState("");
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -132,6 +134,41 @@ export default function CSVUploadForm() {
     setIsDragging(false);
     const file = e.dataTransfer.files[0];
     if (file) processFile(file);
+  };
+
+  const parseCSVText = (text: string) => {
+    setRows([]);
+    setParseErrors([]);
+    setShowAll(false);
+    setPasteContent(text);
+
+    Papa.parse<string[]>(text, {
+      skipEmptyLines: true,
+      complete(results) {
+        const validRows: ParsedRow[] = [];
+        const errors: ParseError[] = [];
+
+        results.data.forEach((raw, i) => {
+          const result = validateRow(raw, i + 1);
+          if (result.ok) validRows.push(result.row);
+          else errors.push(result.error);
+        });
+
+        setRows(validRows);
+        setParseErrors(errors);
+      },
+    });
+  };
+
+  const handlePaste = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const text = e.target.value;
+    setPasteContent(text);
+    if (text.trim()) {
+      parseCSVText(text);
+    } else {
+      setRows([]);
+      setParseErrors([]);
+    }
   };
 
   // ── Send ──────────────────────────────────────────────────────────────────
@@ -242,82 +279,131 @@ export default function CSVUploadForm() {
         {/* ── Main card ──────────────────────────────────────────────────── */}
         <div className="rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl shadow-[0_0_80px_rgba(124,58,237,0.08),0_0_160px_rgba(99,102,241,0.04)] overflow-hidden">
 
-          {/* ── Drop zone ──────────────────────────────────────────────── */}
-          <div className="p-6 sm:p-8 border-b border-white/[0.06]">
+          {/* ── Input mode tabs ────────────────────────────────────────── */}
+          <div className="px-6 sm:px-8 pt-6 pb-0 flex items-center gap-1 border-b border-white/[0.06]">
             <button
               type="button"
-              onClick={() => fileInputRef.current?.click()}
-              onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
-              onDragLeave={() => setIsDragging(false)}
-              onDrop={handleDrop}
-              className={[
-                "w-full rounded-2xl border-2 border-dashed transition-all duration-300 flex flex-col items-center justify-center gap-4 py-14 px-6 cursor-pointer group",
-                isDragging
-                  ? "border-violet-500/60 bg-violet-500/[0.07] shadow-[0_0_30px_rgba(124,58,237,0.15)]"
-                  : fileName
-                    ? "border-emerald-500/40 bg-emerald-500/[0.04] hover:border-emerald-500/60"
-                    : "border-white/10 bg-white/[0.02] hover:border-violet-500/35 hover:bg-violet-500/[0.04]",
-              ].join(" ")}
+              onClick={() => setInputMode("upload")}
+              className={
+                "rounded-t-2xl px-5 py-3 text-xs font-semibold transition-all duration-200 border-b-2 " +
+                (inputMode === "upload"
+                  ? "border-violet-500/60 text-white bg-white/[0.04]"
+                  : "border-transparent text-white/40 hover:text-white/70")
+              }
             >
-              {/* Icon */}
-              <div className={[
-                "flex h-14 w-14 items-center justify-center rounded-2xl border transition-colors duration-300",
-                fileName ? "border-emerald-500/30 bg-emerald-500/[0.08]" : "border-white/10 bg-white/[0.04] group-hover:border-violet-500/30 group-hover:bg-violet-500/[0.06]",
-              ].join(" ")}>
-                {fileName ? (
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M9 12.75L11.25 15 15 9.75" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <circle cx="12" cy="12" r="9" stroke="#10b981" strokeWidth="1.5" strokeOpacity="0.4"/>
-                  </svg>
-                ) : (
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 16V8M12 8L9 11M12 8L15 11" stroke="rgba(255,255,255,0.4)" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M3 16.5V18.75C3 19.9926 4.00736 21 5.25 21H18.75C19.9926 21 21 19.9926 21 18.75V16.5" stroke="rgba(255,255,255,0.25)" strokeWidth="1.75" strokeLinecap="round"/>
-                  </svg>
-                )}
-              </div>
-
-              {/* Label */}
-              {fileName ? (
-                <div className="text-center">
-                  <p className="text-sm font-semibold text-emerald-400">{fileName}</p>
-                  <p className="text-xs text-white/35 mt-1">
-                    {rows.length} valid recipient{rows.length !== 1 ? "s" : ""} loaded
-                    {parseErrors.length > 0 && `, ${parseErrors.length} row${parseErrors.length !== 1 ? "s" : ""} skipped`}
-                    {" · "}
-                    <span className="text-violet-400 hover:underline">Change file</span>
-                  </p>
-                </div>
-              ) : (
-                <div className="text-center">
-                  <p className="text-sm font-semibold text-white/70 group-hover:text-white/90 transition-colors">
-                    Upload CSV &mdash; Add 100+ Recipients
-                  </p>
-                  <p className="text-xs text-white/30 mt-1">
-                    Drag & drop or click to browse &mdash; .csv files only
-                  </p>
-                  <p className="text-[11px] text-white/20 mt-3 font-mono">
-                    Alice, 0x1234...abcd, 100.50
-                  </p>
-                </div>
-              )}
+              Upload File
             </button>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept=".csv,text/csv"
-              onChange={handleFileChange}
-              className="sr-only"
-              aria-label="Upload CSV file"
-            />
+            <button
+              type="button"
+              onClick={() => setInputMode("paste")}
+              className={
+                "rounded-t-2xl px-5 py-3 text-xs font-semibold transition-all duration-200 border-b-2 " +
+                (inputMode === "paste"
+                  ? "border-violet-500/60 text-white bg-white/[0.04]"
+                  : "border-transparent text-white/40 hover:text-white/70")
+              }
+            >
+              Paste CSV
+            </button>
+          </div>
 
-            {/* Format hint */}
-            <p className="mt-4 text-[11px] text-white/25 text-center leading-relaxed">
-              Columns: <span className="font-mono text-white/35">name, address, amount</span>
-              &nbsp;&mdash;&nbsp;or just&nbsp;
-              <span className="font-mono text-white/35">address, amount</span>
-              &nbsp;&mdash;&nbsp;no header row required
-            </p>
+          {/* ── Drop zone / Paste mode ─────────────────────────────────── */}
+          <div className="p-6 sm:p-8 border-b border-white/[0.06]">
+            {inputMode === "upload" ? (
+              <>
+                {/* Upload file mode */}
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+                  onDragLeave={() => setIsDragging(false)}
+                  onDrop={handleDrop}
+                  className={[
+                    "w-full rounded-2xl border-2 border-dashed transition-all duration-300 flex flex-col items-center justify-center gap-4 py-14 px-6 cursor-pointer group",
+                    isDragging
+                      ? "border-violet-500/60 bg-violet-500/[0.07] shadow-[0_0_30px_rgba(124,58,237,0.15)]"
+                      : fileName
+                        ? "border-emerald-500/40 bg-emerald-500/[0.04] hover:border-emerald-500/60"
+                        : "border-white/10 bg-white/[0.02] hover:border-violet-500/35 hover:bg-violet-500/[0.04]",
+                  ].join(" ")}
+                >
+                  {/* Icon */}
+                  <div className={[
+                    "flex h-14 w-14 items-center justify-center rounded-2xl border transition-colors duration-300",
+                    fileName ? "border-emerald-500/30 bg-emerald-500/[0.08]" : "border-white/10 bg-white/[0.04] group-hover:border-violet-500/30 group-hover:bg-violet-500/[0.06]",
+                  ].join(" ")}>
+                    {fileName ? (
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M9 12.75L11.25 15 15 9.75" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <circle cx="12" cy="12" r="9" stroke="#10b981" strokeWidth="1.5" strokeOpacity="0.4"/>
+                      </svg>
+                    ) : (
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 16V8M12 8L9 11M12 8L15 11" stroke="rgba(255,255,255,0.4)" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M3 16.5V18.75C3 19.9926 4.00736 21 5.25 21H18.75C19.9926 21 21 19.9926 21 18.75V16.5" stroke="rgba(255,255,255,0.25)" strokeWidth="1.75" strokeLinecap="round"/>
+                      </svg>
+                    )}
+                  </div>
+
+                  {/* Label */}
+                  {fileName ? (
+                    <div className="text-center">
+                      <p className="text-sm font-semibold text-emerald-400">{fileName}</p>
+                      <p className="text-xs text-white/35 mt-1">
+                        {rows.length} valid recipient{rows.length !== 1 ? "s" : ""} loaded
+                        {parseErrors.length > 0 && `, ${parseErrors.length} row${parseErrors.length !== 1 ? "s" : ""} skipped`}
+                        {" · "}
+                        <span className="text-violet-400 hover:underline">Change file</span>
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="text-center">
+                      <p className="text-sm font-semibold text-white/70 group-hover:text-white/90 transition-colors">
+                        Upload CSV &mdash; Add 100+ Recipients
+                      </p>
+                      <p className="text-xs text-white/30 mt-1">
+                        Drag & drop or click to browse &mdash; .csv files only
+                      </p>
+                      <p className="text-[11px] text-white/20 mt-3 font-mono">
+                        Alice, 0x1234...abcd, 100.50
+                      </p>
+                    </div>
+                  )}
+                </button>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".csv,text/csv"
+                  onChange={handleFileChange}
+                  className="sr-only"
+                  aria-label="Upload CSV file"
+                />
+
+                {/* Format hint */}
+                <p className="mt-4 text-[11px] text-white/25 text-center leading-relaxed">
+                  Columns: <span className="font-mono text-white/35">name, address, amount</span>
+                  &nbsp;&mdash;&nbsp;or just&nbsp;
+                  <span className="font-mono text-white/35">address, amount</span>
+                  &nbsp;&mdash;&nbsp;no header row required
+                </p>
+              </>
+            ) : (
+              <>
+                {/* Paste mode */}
+                <div className="space-y-3">
+                  <label className="block text-xs font-semibold text-white/70">CSV Content</label>
+                  <textarea
+                    value={pasteContent}
+                    onChange={handlePaste}
+                    placeholder="Paste CSV content here — name, address, amount per line"
+                    className="w-full h-48 rounded-xl bg-white/[0.03] border border-white/10 text-white placeholder-white/30 px-4 py-3 text-sm focus:outline-none focus:border-violet-500/50 focus:bg-white/[0.08] focus:shadow-[0_0_0_3px_rgba(124,58,237,0.12)] transition-all duration-200 font-mono hover:border-white/20 hover:bg-white/[0.07] resize-none"
+                  />
+                  <p className="text-[11px] text-white/25 leading-relaxed">
+                    Format: <span className="font-mono text-white/35">name, address, amount</span> or <span className="font-mono text-white/35">address, amount</span> — one row per line, no header required
+                  </p>
+                </div>
+              </>
+            )}
           </div>
 
           {/* ── Parse errors ───────────────────────────────────────────── */}
