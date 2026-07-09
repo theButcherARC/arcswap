@@ -1,67 +1,65 @@
-# ArcSwap — Project Structure
+# VibeFlow — Project Structure
 
 ```
-arcswap/
-├── contracts/                          # Solidity smart contracts (Hardhat)
-│   ├── src/
-│   │   └── VibeToken.sol               # Custom ERC20 token
-│   ├── test/
-│   │   └── VibeToken.test.ts
-│   ├── scripts/
-│   │   └── deploy.ts
-│   ├── hardhat.config.ts
-│   └── package.json
+vibeflow/
+├── contracts/                          # (Deprecated) Solidity contracts directory
+│   └── [legacy files from scaffolding]
 │
 ├── src/
-│   ├── app/                            # Next.js App Router
-│   │   ├── layout.tsx                  # Root layout (providers, fonts)
-│   │   ├── page.tsx                    # Landing / redirect
-│   │   ├── globals.css
-│   │   ├── swap/
-│   │   │   └── page.tsx               # Token Swap page
+│   ├── app/                            # Next.js 14 App Router
+│   │   ├── layout.tsx                  # Root layout (providers, fonts, metadata)
+│   │   ├── page.tsx                    # Landing page + features overview
+│   │   ├── globals.css                 # Global styles + animations
 │   │   ├── bulk-pay/
-│   │   │   └── page.tsx               # Bulk Pay page
+│   │   │   └── page.tsx               # Core bulk payment interface
+│   │   ├── dashboard/
+│   │   │   └── page.tsx               # Transaction history
+│   │   ├── social-profile/
+│   │   │   └── page.tsx               # Username → address registry
+│   │   ├── roadmap/
+│   │   │   └── page.tsx               # Public development roadmap
+│   │   ├── architecture/
+│   │   │   └── page.tsx               # Technical architecture diagram
 │   │   └── api/
-│   │       └── health/
-│   │           └── route.ts            # Health check endpoint
+│   │       ├── agent/
+│   │       │   └── route.ts            # Groq AI payment parsing endpoint
+│   │       └── social/
+│   │           └── route.ts            # Username resolution API
 │   │
 │   ├── components/
-│   │   ├── ui/                         # Primitive / design-system components
-│   │   │   ├── Button.tsx
-│   │   │   ├── Input.tsx
-│   │   │   ├── Card.tsx
-│   │   │   ├── Badge.tsx
-│   │   │   └── Spinner.tsx
-│   │   ├── layout/
-│   │   │   ├── Header.tsx
-│   │   │   ├── Footer.tsx
-│   │   │   └── PageWrapper.tsx
+│   │   ├── landing/
+│   │   │   ├── HeroSection.tsx
+│   │   │   ├── FeaturesGrid.tsx
+│   │   │   ├── StatsBar.tsx
+│   │   │   ├── PoweredBySection.tsx    # Tech stack marquee with pill badges
+│   │   │   └── CTABanner.tsx
 │   │   ├── wallet/
 │   │   │   ├── ConnectButton.tsx       # MetaMask connect / account display
-│   │   │   └── NetworkGuard.tsx        # Redirect if wrong chain
-│   │   ├── swap/
-│   │   │   ├── SwapForm.tsx            # Token swap UI shell
-│   │   │   └── TokenSelector.tsx       # Dropdown: USDC / EURC / VIBE
+│   │   │   └── NetworkGuard.tsx        # Arc Testnet enforcement
+│   │   ├── architecture/
+│   │   │   └── ArchitectureDiagram.tsx # 5-layer diagram with animated arrows
 │   │   └── bulk-pay/
-│   │       ├── BulkPayForm.tsx         # Bulk pay UI shell
-│   │       └── RecipientRow.tsx        # Single recipient input row
+│   │       ├── BulkPayForm.tsx         # Main form: token selector, recipients, memo, gas bar
+│   │       ├── AgentInput.tsx          # Natural language input for AI parsing
+│   │       ├── RecipientRow.tsx        # Address + amount input with slide-in animation
+│   │       └── BulkPaySuccess.tsx      # Success screen with settlement badge
 │   │
 │   ├── hooks/
-│   │   ├── useArcNetwork.ts            # Chain check + switch helper
-│   │   ├── useTokenBalance.ts          # Read ERC20 balance for connected wallet
-│   │   ├── useTokenAllowance.ts        # Read + approve ERC20 allowance
-│   │   ├── useSwap.ts                  # Swap execution hook (stub)
-│   │   └── useBulkPay.ts              # Bulk pay execution hook (stub)
+│   │   ├── useArcNetwork.ts            # Chain detection + network switch helper
+│   │   ├── useTokenBalance.ts          # ERC20 balance fetcher for USDC/EURC
+│   │   ├── useBulkPay.ts               # Bulk pay execution: simulate → Multicall3From → memo
+│   │   └── useGasEstimate.ts           # Real-time gas price from Arc RPC
 │   │
 │   ├── services/
-│   │   ├── swapService.ts              # Swap route / quote logic (stub)
-│   │   └── bulkPayService.ts           # Bulk transfer encoding (stub)
+│   │   ├── bulkPayService.ts           # Multicall3From sequence builder, memo encoding
+│   │   └── agentService.ts             # Groq AI LLM integration for payment parsing
 │   │
 │   ├── contracts/
 │   │   ├── abis/
-│   │   │   ├── erc20.abi.ts            # Minimal ERC20 ABI
-│   │   │   └── vibeToken.abi.ts        # VIBE token ABI (extends ERC20)
-│   │   └── config.ts                   # Contract addresses per chain
+│   │   │   ├── erc20.abi.ts            # ERC20 ABI (approve, transfer, transferFrom, balanceOf)
+│   │   │   ├── multicall3From.abi.ts   # Multicall3From batch execution ABI
+│   │   │   └── memo.abi.ts             # Memo contract ABI (sendMemo function)
+│   │   └── config.ts                   # Contract addresses (hardcoded for Arc Testnet)
 │   │
 │   ├── lib/
 │   │   ├── wagmi.ts                    # Wagmi + viem config
@@ -73,14 +71,14 @@ arcswap/
 │   │   └── routes.ts                   # App route constants
 │   │
 │   ├── types/
-│   │   ├── token.ts                    # Token, TokenAmount types
-│   │   ├── swap.ts                     # SwapQuote, SwapParams types
-│   │   └── bulkPay.ts                 # Recipient, BulkPayParams types
+│   │   ├── token.ts                    # Token metadata, balance types
+│   │   ├── bulkPay.ts                  # Recipient, BulkPayParams, BulkPayStatus types
+│   │   └── agent.ts                    # AgentParseResult, ParsedPayment types
 │   │
 │   └── utils/
-│       ├── format.ts                   # Token amount formatting helpers
-│       ├── address.ts                  # Address validation / truncation
-│       └── errors.ts                   # Typed error handling utilities
+│       ├── format.ts                   # Token amount formatting (parseUnits, formatUnits)
+│       ├── address.ts                  # Address validation, ENS resolution, truncation
+│       └── errors.ts                   # Typed error handling and user-friendly messages
 │
 ├── public/
 │   └── favicon.ico
