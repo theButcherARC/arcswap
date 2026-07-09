@@ -15,7 +15,7 @@
 
 ## What is VibeFlow?
 
-VibeFlow is a programmable payroll and batch payment protocol built natively on the Arc blockchain. Instead of sending payments one by one, operators upload a recipient list, type a natural-language instruction like "pay 50 USDC to each freelancer", and VibeFlow's AI agent parses it, builds the multicall, and submits a single transaction that settles in under 1 second — with gas paid entirely in USDC.
+VibeFlow is programmable USDC batch payroll infrastructure on Arc Blockchain. Send USDC or EURC to 100+ recipients in one transaction with AI-powered payment parsing. Type "pay Alice $50, Bob $100" and watch it settle in under a second — with gas paid entirely in stablecoins.
 
 ---
 
@@ -23,14 +23,12 @@ VibeFlow is a programmable payroll and batch payment protocol built natively on 
 
 | Feature | Description |
 |---|---|
-| **Bulk Payments** | Send to up to 100 recipients in a single on-chain transaction via Multicall3From |
-| **AI Agent** | Natural language parsing — type "pay 3 people $50 each" and it builds the recipient list |
-| **USDC / EURC Toggle** | Switch between Circle's dollar and euro stablecoins before sending |
-| **Onchain Memo Labels** | Attach a payroll label (e.g. "July Salary") stored permanently onchain |
+| **Bulk Pay** | Batch USDC/EURC transfers to 100+ recipients in a single transaction via Multicall3From |
+| **AI Payment Agent** | Groq AI natural language parsing — type "pay 3 people $50 each" and it auto-fills recipient rows |
+| **USDC + EURC Toggle** | Switch between Circle USD and EUR stablecoins before sending |
+| **Onchain Memo Labels** | Attach payroll tags (e.g. "July Salary") stored permanently onchain via Memo contract |
+| **Social Pay** | Pay by @handle instead of copying wallet addresses |
 | **Sub-second Finality** | Arc blockchain settles in under 1 second — orders of magnitude faster than L1 or L2s |
-| **Gas in USDC** | No ETH required. Arc's native gas asset is USDC — zero friction for payroll operators |
-| **Live Gas Estimator** | Fetches real-time `eth_gasPrice` from Arc RPC, displays estimated cost before sending |
-| **Social Pay** | Pay any registered username instead of pasting a raw wallet address |
 
 ---
 
@@ -166,7 +164,7 @@ src/
 ├── hooks/
 │   ├── useBulkPay.ts           # Core tx builder: simulate → Multicall3From → memo
 │   ├── useArcNetwork.ts        # Chain detection and switch helper
-│   ├── useTokenBalance.ts      # ERC-20 balance fetching
+│   ├���─ useTokenBalance.ts      # ERC-20 balance fetching
 │   └── useTokenAllowance.ts    # ERC-20 allowance checking
 │
 ├── services/
