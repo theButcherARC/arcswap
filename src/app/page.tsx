@@ -43,8 +43,7 @@ export default function VibeFlowLanding() {
           </h1>
 
           <p className="animate-fade-in-up delay-200 mx-auto max-w-2xl text-base sm:text-lg md:text-xl text-white/50 leading-relaxed mb-10 font-light">
-            Send thousands of USDC payments in a single transaction. Built for payroll,
-            rewards, vendor payouts, and mass disbursements on Arc.
+            Send USDC or EURC to your entire team in one transaction. AI-powered, zero approval, settled in under a second on Arc.
           </p>
 
           <div className="animate-fade-in-up delay-300 flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
@@ -106,16 +105,19 @@ export default function VibeFlowLanding() {
           <div className="animate-fade-in-up delay-200 rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-2">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-px rounded-2xl overflow-hidden bg-white/[0.05]">
               <div className="flex flex-col items-center justify-center bg-[#0a0a10] px-6 py-8 sm:py-10">
-                <span className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-violet-400 to-violet-300 bg-clip-text text-transparent mb-1">$50M+</span>
-                <span className="text-xs sm:text-sm text-white/40 font-medium tracking-wide">Total Paid Out</span>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-violet-400 to-violet-300 bg-clip-text text-transparent">$50M+</span>
+                  <span className="inline-flex items-center rounded-full border border-violet-500/25 bg-violet-500/[0.08] px-2 py-0.5 text-[9px] font-semibold text-violet-400 uppercase tracking-wider">Vision</span>
+                </div>
+                <span className="text-xs sm:text-sm text-white/40 font-medium tracking-wide">Volume Vision</span>
               </div>
               <div className="flex flex-col items-center justify-center bg-[#0a0a10] px-6 py-8 sm:py-10">
                 <span className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-indigo-400 to-indigo-300 bg-clip-text text-transparent mb-1">10K+</span>
                 <span className="text-xs sm:text-sm text-white/40 font-medium tracking-wide">Transactions</span>
               </div>
               <div className="flex flex-col items-center justify-center bg-[#0a0a10] px-6 py-8 sm:py-10">
-                <span className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-cyan-400 to-cyan-300 bg-clip-text text-transparent mb-1">0.2%</span>
-                <span className="text-xs sm:text-sm text-white/40 font-medium tracking-wide">Protocol Fee</span>
+                <span className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-cyan-400 to-cyan-300 bg-clip-text text-transparent mb-1">{"<1s"}</span>
+                <span className="text-xs sm:text-sm text-white/40 font-medium tracking-wide">Arc Finality</span>
               </div>
               <div className="flex flex-col items-center justify-center bg-[#0a0a10] px-6 py-8 sm:py-10">
                 <span className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-violet-400 to-cyan-300 bg-clip-text text-transparent mb-1">100+</span>
@@ -144,7 +146,7 @@ export default function VibeFlowLanding() {
             </p>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-3 mb-6">
             <div className="animate-fade-in-up delay-100 group relative rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-8 transition-all duration-500 hover:border-violet-500/20 hover:bg-white/[0.05]">
               <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-violet-600/[0.06] to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none" />
               <div className="relative">
@@ -218,6 +220,75 @@ export default function VibeFlowLanding() {
               </div>
             </div>
           </div>
+
+          <div className="grid gap-6 md:grid-cols-3">
+            {/* USDC + EURC */}
+            <div className="animate-fade-in-up delay-100 group relative rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-8 transition-all duration-500 hover:border-emerald-500/20 hover:bg-white/[0.05]">
+              <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-emerald-600/[0.06] to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none" />
+              <div className="relative">
+                <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-emerald-500/20 bg-emerald-500/[0.08]">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="9" cy="12" r="6" stroke="#10b981" strokeWidth="2"/>
+                    <circle cx="15" cy="12" r="6" stroke="#10b981" strokeWidth="2" strokeDasharray="4 2"/>
+                  </svg>
+                </div>
+                <h3 className="text-xl font-semibold text-white mb-3 tracking-tight">USDC + EURC</h3>
+                <p className="text-sm text-white/40 leading-relaxed mb-6">
+                  Pay in US dollars or Euros. Switch stablecoins with one click. Both Circle-issued, both on Arc.
+                </p>
+                <div className="flex items-center gap-3 pt-6 border-t border-white/[0.06]">
+                  <div className="flex h-8 items-center justify-center rounded-lg bg-emerald-500/10 px-2.5">
+                    <span className="text-xs font-bold text-emerald-400">2 Stablecoins</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Onchain Memo Labels */}
+            <div className="animate-fade-in-up delay-200 group relative rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-8 transition-all duration-500 hover:border-amber-500/20 hover:bg-white/[0.05]">
+              <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-amber-600/[0.06] to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none" />
+              <div className="relative">
+                <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-amber-500/20 bg-amber-500/[0.08]">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M12 2v6h6M8 13h8M8 17h5" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                </div>
+                <h3 className="text-xl font-semibold text-white mb-3 tracking-tight">Onchain Memo Labels</h3>
+                <p className="text-sm text-white/40 leading-relaxed mb-6">
+                  Tag every payroll batch with a label stored permanently onchain. July Salary. Q3 Bonus. Contractor Batch.
+                </p>
+                <div className="flex items-center gap-3 pt-6 border-t border-white/[0.06]">
+                  <div className="flex h-8 items-center justify-center rounded-lg bg-amber-500/10 px-2.5">
+                    <span className="text-xs font-bold text-amber-400">Memo Contract</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Social Pay */}
+            <div className="animate-fade-in-up delay-300 group relative rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-8 transition-all duration-500 hover:border-sky-500/20 hover:bg-white/[0.05]">
+              <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-sky-600/[0.06] to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none" />
+              <div className="relative">
+                <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-sky-500/20 bg-sky-500/[0.08]">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="8" r="4" stroke="#0ea5e9" strokeWidth="2"/>
+                    <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#0ea5e9" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                </div>
+                <h3 className="text-xl font-semibold text-white mb-3 tracking-tight">Social Pay</h3>
+                <p className="text-sm text-white/40 leading-relaxed mb-6">
+                  Pay anyone by their X/Twitter @handle. No wallet address needed — just @username.
+                </p>
+                <div className="flex items-center gap-3 pt-6 border-t border-white/[0.06]">
+                  <div className="flex h-8 items-center justify-center rounded-lg bg-sky-500/10 px-2.5">
+                    <span className="text-xs font-bold text-sky-400">@handle payments</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
 
