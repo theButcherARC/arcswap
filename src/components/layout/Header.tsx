@@ -19,11 +19,11 @@ export function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href={ROUTES.HOME} className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-violet-600 to-indigo-600 flex items-center justify-center">
-              <span className="text-white font-bold text-lg">V</span>
+          <Link href={ROUTES.HOME} className="flex items-center gap-2 group">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 via-purple-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-violet-500/30 group-hover:shadow-violet-500/50 transition-shadow duration-300">
+              <span className="text-white font-bold text-lg drop-shadow-sm">V</span>
             </div>
-            <span className="hidden sm:inline text-white font-semibold text-lg">VibeFlow</span>
+            <span className="hidden sm:inline text-white font-semibold text-lg group-hover:text-violet-300 transition-colors duration-300">VibeFlow</span>
           </Link>
 
           {/* Nav Links */}
