@@ -383,6 +383,7 @@ export default function VibeFlowLanding() {
                 <li><Link href={ROUTES.DASHBOARD} className="text-sm text-white/30 hover:text-white/70 transition-colors duration-200">Dashboard</Link></li>
                 <li><Link href={ROUTES.SOCIAL_PROFILE} className="text-sm text-white/30 hover:text-white/70 transition-colors duration-200">Social Pay</Link></li>
                 <li><Link href="/roadmap" className="text-sm text-white/30 hover:text-white/70 transition-colors duration-200">Roadmap</Link></li>
+                <li><Link href="/architecture" className="text-sm text-white/30 hover:text-white/70 transition-colors duration-200">Architecture</Link></li>
               </ul>
             </div>
 
