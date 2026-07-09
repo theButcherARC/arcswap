@@ -535,8 +535,7 @@ export default function BulkPayForm() {
           tokenSymbol={selectedSymbol}
         />
       ) : (
-        <div className="mx-auto max-w-7xl flex gap-6 [&>form]:rounded-3xl [&>form]:shadow-[0_0_80px_rgba(124,58,237,0.08),0_0_160px_rgba(99,102,241,0.04)]">
-          <div className="flex-1 max-w-4xl">
+        <div className="mx-auto max-w-4xl [&>form]:rounded-3xl [&>form]:shadow-[0_0_80px_rgba(124,58,237,0.08),0_0_160px_rgba(99,102,241,0.04)]">
           {/* ===================== SECTION 1: PAGE HEADER ===================== */}
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
             <div>
@@ -1249,6 +1248,57 @@ export default function BulkPayForm() {
                 </div>
               ) : null}
 
+              {/* Stats bar */}
+              <div className="flex items-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 py-2.5 flex-wrap text-xs">
+                {/* Gas */}
+                <span className="text-white/40 whitespace-nowrap">
+                  {"Gas: "}
+                  <span key={gasUsd?.toFixed(4)} className="text-violet-300 font-medium animate-value-flash">
+                    {gasLoading ? "..." : gasUsd !== null ? "~$" + gasUsd.toFixed(4) : "—"}
+                  </span>
+                  {" USDC"}
+                </span>
+                <span className="text-white/20">|</span>
+                {/* Recipients */}
+                <span className="text-white/40 whitespace-nowrap">
+                  {"Recipients: "}
+                  <span key={summaryData.validCount} className="text-white/60 font-medium animate-value-flash">
+                    {summaryData.validCount}
+                  </span>
+                </span>
+                <span className="text-white/20">|</span>
+                {/* Total */}
+                <span className="text-white/40 whitespace-nowrap">
+                  {"Total: "}
+                  <span key={summaryData.total.toFixed(2)} className="text-white/70 font-medium animate-value-flash">
+                    {(selectedSymbol === "EURC" ? "€" : "$") + summaryData.total.toFixed(2)}
+                  </span>
+                  {" " + selectedSymbol}
+                </span>
+                <span className="text-white/20">|</span>
+                {/* Powered by Arc */}
+                <span className="text-white/20 whitespace-nowrap">Powered by Arc</span>
+                {/* Refresh — pushed to the right */}
+                <button
+                  type="button"
+                  onClick={refreshGas}
+                  title="Refresh gas estimate"
+                  className="ml-auto shrink-0 flex items-center justify-center w-5 h-5 rounded hover:bg-white/[0.06] transition-colors duration-150"
+                >
+                  <svg
+                    width="10"
+                    height="10"
+                    viewBox="0 0 12 12"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className={gasLoading ? "animate-spin text-violet-400" : "text-white/30"}
+                  >
+                    <path d="M10.5 6A4.5 4.5 0 1 1 6 1.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+                    <path d="M6 1.5L8 3.5M6 1.5L8 0" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
+              </div>
+
               {/* Send button */}
               <button
                 type="submit"
@@ -1322,64 +1372,6 @@ export default function BulkPayForm() {
               </div>
             </div>
           </form>
-          </div>
-
-          {/* ===================== RIGHT SIDEBAR: STATS ===================== */}
-          <div className="hidden lg:flex w-72 flex-col gap-0 sticky top-24 h-fit">
-            {/* Vertical stats panel */}
-            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] backdrop-blur-xl overflow-hidden">
-              
-              {/* Gas */}
-              <div className="px-4 py-3.5 border-b border-white/[0.06] flex items-center justify-between gap-2">
-                <span className="text-[10px] font-semibold text-white/40 uppercase tracking-wider">Gas</span>
-                <span className="flex items-center gap-1">
-                  <span key={gasUsd?.toFixed(4)} className="text-sm font-semibold text-violet-300 animate-value-flash">
-                    {gasLoading ? "..." : gasUsd !== null ? "~$" + gasUsd.toFixed(4) : "—"}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={refreshGas}
-                    title="Refresh gas estimate"
-                    className="flex items-center justify-center w-4 h-4 rounded hover:bg-white/[0.08] transition-colors duration-150 shrink-0"
-                  >
-                    <svg
-                      width="8"
-                      height="8"
-                      viewBox="0 0 12 12"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      className={gasLoading ? "animate-spin text-violet-400" : "text-white/30 hover:text-white/50"}
-                    >
-                      <path d="M10.5 6A4.5 4.5 0 1 1 6 1.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-                      <path d="M6 1.5L8 3.5M6 1.5L8 0" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </button>
-                </span>
-              </div>
-
-              {/* Recipients */}
-              <div className="px-4 py-3.5 border-b border-white/[0.06] flex items-center justify-between gap-2">
-                <span className="text-[10px] font-semibold text-white/40 uppercase tracking-wider">Recipients</span>
-                <span key={summaryData.validCount} className="text-sm font-semibold text-white/60 animate-value-flash">
-                  {summaryData.validCount}
-                </span>
-              </div>
-
-              {/* Total */}
-              <div className="px-4 py-3.5 border-b border-white/[0.06] flex items-center justify-between gap-2">
-                <span className="text-[10px] font-semibold text-white/40 uppercase tracking-wider">Total</span>
-                <span key={summaryData.total.toFixed(2)} className="text-sm font-semibold text-white/70 animate-value-flash">
-                  {(selectedSymbol === "EURC" ? "€" : "$") + summaryData.total.toFixed(2)}
-                </span>
-              </div>
-
-              {/* Powered by Arc */}
-              <div className="px-4 py-3.5 flex items-center justify-between gap-2 bg-gradient-to-r from-violet-500/[0.04] to-transparent">
-                <span className="text-[10px] font-semibold text-white/40 uppercase tracking-wider">Network</span>
-                <span className="text-xs font-medium text-white/50">Arc Network</span>
-              </div>
-            </div>
-          </div>
         </div>
       )}
     </div>
