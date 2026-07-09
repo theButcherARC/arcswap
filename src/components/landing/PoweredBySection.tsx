@@ -2,13 +2,12 @@
 
 const PARTNERS = [
   { name: "Vercel",      dot: "#ffffff",  border: "rgba(255,255,255,0.12)", pillBg: "rgba(255,255,255,0.04)" },
-  { name: "Groq",        dot: "#f97316",  border: "rgba(249,115,22,0.22)",  pillBg: "rgba(249,115,22,0.06)"  },
+  { name: "Groq AI",     dot: "#f97316",  border: "rgba(249,115,22,0.22)",  pillBg: "rgba(249,115,22,0.06)"  },
   { name: "Circle",      dot: "#34d399",  border: "rgba(52,211,153,0.22)",  pillBg: "rgba(52,211,153,0.06)"  },
   { name: "Arc Network", dot: "#a78bfa",  border: "rgba(167,139,250,0.22)", pillBg: "rgba(167,139,250,0.06)" },
-  { name: "Next.js",     dot: "#ffffff",  border: "rgba(255,255,255,0.10)", pillBg: "rgba(255,255,255,0.03)" },
   { name: "USDC",        dot: "#34d399",  border: "rgba(52,211,153,0.18)",  pillBg: "rgba(52,211,153,0.05)"  },
   { name: "EURC",        dot: "#60a5fa",  border: "rgba(96,165,250,0.18)",  pillBg: "rgba(96,165,250,0.05)"  },
-  { name: "Wagmi",       dot: "#818cf8",  border: "rgba(129,140,248,0.18)", pillBg: "rgba(129,140,248,0.05)" },
+  { name: "MetaMask",    dot: "#f6851b",  border: "rgba(246,133,27,0.22)",  pillBg: "rgba(246,133,27,0.06)"  },
 ];
 
 export default function PoweredBySection() {
