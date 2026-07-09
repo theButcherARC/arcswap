@@ -1,6 +1,7 @@
 "use client";
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { ConnectButton } from '@/components/wallet/ConnectButton';
 import { ROUTES } from '@/constants/routes';
@@ -20,9 +21,14 @@ export function Header() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href={ROUTES.HOME} className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 via-purple-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-violet-500/30 group-hover:shadow-violet-500/50 transition-shadow duration-300">
-              <span className="text-white font-bold text-lg drop-shadow-sm">V</span>
-            </div>
+            <Image
+              src="/logo.jpeg"
+              alt="VibeFlow logo"
+              width={36}
+              height={36}
+              className="rounded-xl shadow-lg shadow-violet-500/30 group-hover:shadow-violet-500/50 transition-shadow duration-300"
+              priority
+            />
             <span className="hidden sm:inline text-white font-semibold text-lg group-hover:text-violet-300 transition-colors duration-300">VibeFlow</span>
           </Link>
 
