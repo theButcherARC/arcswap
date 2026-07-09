@@ -1,11 +1,11 @@
 // src/app/api/agent/route.ts
-// Server-side Next.js API route - keeps GEMINI_API_KEY secret
+// Server-side Next.js API route - keeps GROQ_API_KEY secret
 
 import { NextRequest, NextResponse } from "next/server";
 import { SYSTEM_PROMPT } from "@/services/agentService";
 
-const GEMINI_API_URL =
-  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
+const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
+
 export async function POST(req: NextRequest) {
   try {
     const { instruction } = await req.json();
@@ -17,48 +17,50 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const apiKey = process.env.GEMINI_API_KEY;
+    const apiKey = process.env.GROQ_API_KEY;
     if (!apiKey) {
       return NextResponse.json(
-        { error: "Gemini API key not configured" },
+        { error: "Groq API key not configured" },
         { status: 500 }
       );
     }
 
-    const geminiRes = await fetch(GEMINI_API_URL + "?key=" + apiKey, {
+    const groqRes = await fetch(GROQ_API_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
       body: JSON.stringify({
-        system_instruction: {
-          parts: [{ text: SYSTEM_PROMPT }],
-        },
-        contents: [
+        model: "llama-3.3-70b-versatile",
+        temperature: 0.1,
+        max_tokens: 1024,
+        messages: [
+          {
+            role: "system",
+            content: SYSTEM_PROMPT,
+          },
           {
             role: "user",
-            parts: [{ text: instruction }],
+            content: instruction,
           },
         ],
-        generationConfig: {
-          temperature: 0.1,
-          maxOutputTokens: 1024,
-        },
       }),
     });
 
-    if (!geminiRes.ok) {
-      const errText = await geminiRes.text();
-      console.error("Gemini error:", errText);
+    if (!groqRes.ok) {
+      const errText = await groqRes.text();
+      console.error("Groq error:", errText);
       return NextResponse.json(
-        { error: "Gemini API error: " + geminiRes.status },
+        { error: "Groq API error: " + groqRes.status },
         { status: 502 }
       );
     }
 
-    const geminiData = await geminiRes.json();
-    const rawText =
-      geminiData?.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+    const groqData = await groqRes.json();
+    const rawText = groqData?.choices?.[0]?.message?.content ?? "";
 
-    // Strip any markdown fences if Gemini adds them
+    // Strip any markdown fences if Groq adds them
     const cleaned = rawText
       .replace(/```json/gi, "")
       .replace(/```/g, "")

@@ -1,6 +1,6 @@
 /**
  * Minimal ERC20 ABI.
- * Includes only the functions used by ArcSwap hooks and services.
+ * Includes only the functions used by VibeFlow hooks and services.
  * Extend this if additional ERC20 functions are needed (e.g. permit).
  */
 export const ERC20_ABI = [

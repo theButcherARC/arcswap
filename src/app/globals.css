@@ -349,3 +349,80 @@ button:focus-visible {
   padding-top: 1.125rem;
   padding-bottom: 1.125rem;
 }
+
+/* ============================================
+   BulkPay Micro-interaction Animations
+   ============================================ */
+
+/* Recipient row slide-in from top */
+@keyframes slide-in-from-top {
+  0% {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-slide-in-top {
+  animation: slide-in-from-top 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Send button continuous pulse glow */
+@keyframes send-pulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(124, 58, 237, 0.35), 0 0 50px rgba(99, 102, 241, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 35px rgba(124, 58, 237, 0.6), 0 0 80px rgba(99, 102, 241, 0.25);
+  }
+}
+
+.animate-send-pulse {
+  animation: send-pulse 2.4s ease-in-out infinite;
+}
+
+/* Add recipient button border pulse */
+@keyframes add-btn-pulse {
+  0%, 100% {
+    border-color: rgba(124, 58, 237, 0.25);
+    box-shadow: none;
+  }
+  50% {
+    border-color: rgba(124, 58, 237, 0.5);
+    box-shadow: 0 0 16px rgba(124, 58, 237, 0.15);
+  }
+}
+
+.animate-add-btn-pulse {
+  animation: add-btn-pulse 2.5s ease-in-out infinite;
+}
+
+/* AI card animated gradient border */
+@keyframes gradient-border-flow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Number count-up flash */
+@keyframes value-flash {
+  0% { color: rgba(167, 139, 250, 0.9); }
+  100% { color: inherit; }
+}
+
+.animate-value-flash {
+  animation: value-flash 0.5s ease-out forwards;
+}
+
+/* Token pill slide indicator */
+@keyframes pill-slide-in {
+  0% { opacity: 0; transform: scale(0.92); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.animate-pill-active {
+  animation: pill-slide-in 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+}

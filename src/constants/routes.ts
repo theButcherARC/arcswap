@@ -4,8 +4,9 @@
  */
 export const ROUTES = {
   HOME: "/",
-  SWAP: "/swap",
   BULK_PAY: "/bulk-pay",
+  DASHBOARD: "/dashboard",
+  SOCIAL_PROFILE: "/social-profile",
 } as const;
 
 export type AppRoute = (typeof ROUTES)[keyof typeof ROUTES];

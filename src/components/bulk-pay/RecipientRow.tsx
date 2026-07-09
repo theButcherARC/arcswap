@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useRef } from "react";
 import { isValidAddress } from "@/utils/address";
 import type { Recipient, InputMode } from "@/types/bulkPay";
 
@@ -29,6 +29,49 @@ export default function RecipientRow({
   onRemove,
   isDisabled,
 }: RecipientRowProps) {
+  const [handleState, setHandleState] = useState<
+    'idle' | 'resolving' | 'resolved' | 'not_found' | 'error'
+  >('idle');
+  const [handleText, setHandleText] = useState('');
+  const resolveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const isHandleInput = (val: string) => val.trimStart().startsWith('@');
+
+  async function resolveHandle(raw: string) {
+    const username = raw.replace(/^@/, '').trim();
+    if (!username) return;
+    setHandleState('resolving');
+    try {
+      const res = await fetch('/api/social/resolve?username=' + encodeURIComponent(username));
+      const json = await res.json();
+      if (res.ok && json.address) {
+        setHandleState('resolved');
+        setHandleText('@' + json.username + ' \u2192 ' + json.address.slice(0, 6) + '...' + json.address.slice(-4));
+        onAddressChange(recipient.id, json.address);
+      } else {
+        setHandleState('not_found');
+        setHandleText('@' + username + ' is not registered');
+      }
+    } catch {
+      setHandleState('error');
+      setHandleText('Lookup failed');
+    }
+  }
+
+  function handleAddressInput(value: string) {
+    // Reset handle state when user edits
+    if (handleState !== 'idle') {
+      setHandleState('idle');
+      setHandleText('');
+    }
+    onAddressChange(recipient.id, value);
+
+    if (isHandleInput(value)) {
+      if (resolveTimer.current) clearTimeout(resolveTimer.current);
+      resolveTimer.current = setTimeout(() => resolveHandle(value), 600);
+    }
+  }
+
   const addressValid = useMemo(() => {
     if (!recipient.address || recipient.address.trim().length === 0) {
       return false;
@@ -68,7 +111,7 @@ export default function RecipientRow({
   };
 
   const inputClasses =
-    "w-full rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 px-4 py-3 text-sm focus:outline-none focus:border-violet-500/50 transition-all duration-200 hover:border-white/20 hover:bg-white/[0.08] disabled:opacity-40 disabled:cursor-not-allowed";
+    "w-full rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 px-4 py-3 text-sm focus:outline-none focus:border-violet-500/50 focus:bg-white/[0.08] focus:shadow-[0_0_0_3px_rgba(124,58,237,0.12)] transition-all duration-200 hover:border-white/20 hover:bg-white/[0.07] disabled:opacity-40 disabled:cursor-not-allowed";
 
   const addressClasses =
     "w-full rounded-xl border px-4 py-3 text-sm font-mono placeholder-white/30 focus:outline-none transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed " +
@@ -81,7 +124,7 @@ export default function RecipientRow({
   const rowNumber = index + 1;
 
   return (
-    <div className="group rounded-2xl bg-white/5 border border-white/10 p-4 hover:border-violet-500/20 hover:bg-white/[0.08] transition-all duration-200">
+    <div className="group animate-slide-in-top rounded-2xl bg-white/5 border border-white/10 p-4 hover:border-violet-500/25 hover:bg-white/[0.08] hover:shadow-[0_0_20px_rgba(124,58,237,0.08)] transition-all duration-200">
       <div className="flex flex-wrap items-start gap-3">
         {/* Row number badge */}
         <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-violet-500/20 mt-3">
@@ -108,15 +151,15 @@ export default function RecipientRow({
         {/* Address input */}
         <div className="min-w-[180px] flex-[1.5]">
           <label className="block text-[10px] font-medium text-white/30 uppercase tracking-wider mb-1.5">
-            Address
+            Address or @username
           </label>
           <div className="relative">
             <input
               type="text"
               value={recipient.address}
-              onChange={(e) => onAddressChange(recipient.id, e.target.value)}
+              onChange={(e) => handleAddressInput(e.target.value)}
               disabled={isDisabled}
-              placeholder="0x..."
+              placeholder="0x... or @username"
               className={addressClasses + " pr-9"}
             />
             {addressValid && (
@@ -145,32 +188,40 @@ export default function RecipientRow({
                 </svg>
               </div>
             )}
-            {addressHasInput && !addressValid && (
+            {addressHasInput && !addressValid && handleState === 'idle' && (
               <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <circle
-                    cx="8"
-                    cy="8"
-                    r="6.5"
-                    stroke="#f43f5e"
-                    strokeWidth="1.5"
-                  />
-                  <path
-                    d="M6 6L10 10M10 6L6 10"
-                    stroke="#f43f5e"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                  />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="6.5" stroke="#f43f5e" strokeWidth="1.5" />
+                  <path d="M6 6L10 10M10 6L6 10" stroke="#f43f5e" strokeWidth="1.5" strokeLinecap="round" />
                 </svg>
               </div>
             )}
           </div>
+          {/* Handle resolution feedback */}
+          {handleState === 'resolving' && (
+            <p className="mt-1.5 text-[11px] text-white/40 animate-pulse">Resolving handle...</p>
+          )}
+          {handleState === 'resolved' && (
+            <p className="mt-1.5 text-[11px] text-emerald-400 font-mono">{handleText}</p>
+          )}
+          {handleState === 'not_found' && (
+            <p className="mt-1.5 text-[11px] text-amber-400">
+              {handleText} &mdash;{' '}
+              <button
+                type="button"
+                className="underline hover:text-amber-300 transition-colors"
+                onClick={() => {
+                  setHandleState('idle');
+                  onAddressChange(recipient.id, '');
+                }}
+              >
+                paste address instead
+              </button>
+            </p>
+          )}
+          {handleState === 'error' && (
+            <p className="mt-1.5 text-[11px] text-rose-400">{handleText}</p>
+          )}
         </div>
 
         {/* Amount / Percentage input */}

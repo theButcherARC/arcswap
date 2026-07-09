@@ -1,6 +1,6 @@
 import type { Address } from "viem";
 
-/** A token in the ArcSwap token registry */
+/** A token in the VibeFlow token registry */
 export interface Token {
   symbol: string;
   name: string;

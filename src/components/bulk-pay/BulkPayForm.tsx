@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useMemo, useCallback } from "react";
-import { parseUnits } from "viem";
+import React, { useState, useMemo, useCallback, useEffect, useRef } from "react";
+import { parseUnits, createPublicClient, http } from "viem";
 import type { Address } from "viem";
 import { useBulkPay } from "@/hooks/useBulkPay";
 import { toChecksumAddress } from "@/utils/address";
@@ -13,6 +13,61 @@ import BulkPaySuccess from "./BulkPaySuccess";
 import RecipientRow from "./RecipientRow";
 import type { ParsedBulkPay } from "@/services/agentService";
 import type { Recipient, InputMode } from "@/types/bulkPay";
+
+/* --------------------------------------------------------------- */
+/*  Gas Estimate Hook                                               */
+/* --------------------------------------------------------------- */
+
+const arcPublicClient = createPublicClient({
+  chain: {
+    id: 5042002,
+    name: "Arc Testnet",
+    nativeCurrency: { name: "USD Coin", symbol: "USDC", decimals: 6 },
+    rpcUrls: { default: { http: ["https://rpc.testnet.arc.network"] } },
+  } as any,
+  transport: http("https://rpc.testnet.arc.network"),
+});
+
+const GAS_PER_RECIPIENT = 50_000n;
+
+function useGasEstimate(recipientCount: number) {
+  const [gasUsd, setGasUsd] = useState<number | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [tick, setTick] = useState(0);
+  const abortRef = useRef(false);
+
+  const refresh = useCallback(() => setTick((t) => t + 1), []);
+
+  useEffect(() => {
+    if (recipientCount === 0) {
+      setGasUsd(null);
+      return;
+    }
+    abortRef.current = false;
+    setLoading(true);
+
+    arcPublicClient.getGasPrice().then((gasPrice) => {
+      if (abortRef.current) return;
+      // gasPrice is in wei (18 decimals). Arc native currency is USDC with 6 decimals,
+      // but the chain represents 1 USDC as 1e18 at the EVM level.
+      // Formula: (gasPrice * GAS_PER_RECIPIENT * count) / 1e18 = USDC value
+      const totalWei = gasPrice * GAS_PER_RECIPIENT * BigInt(recipientCount);
+      const usd = Number(totalWei) / 1e18;
+      setGasUsd(usd);
+      setLoading(false);
+    }).catch(() => {
+      if (abortRef.current) return;
+      setGasUsd(null);
+      setLoading(false);
+    });
+
+    return () => {
+      abortRef.current = true;
+    };
+  }, [recipientCount, tick]);
+
+  return { gasUsd, loading, refresh };
+}
 
 /* --------------------------------------------------------------- */
 /*  Helpers                                                        */
@@ -146,13 +201,22 @@ export default function BulkPayForm() {
   /* ---- State ---- */
   const [inputMode, setInputMode] = useState<InputMode>("percentage");
   const [totalAmountInput, setTotalAmountInput] = useState("");
-  const [token] = useState(TOKENS.USDC);
+  const [selectedSymbol, setSelectedSymbol] = useState<"USDC" | "EURC">("USDC");
+
+  const HARDCODED_TOKENS = {
+    USDC: { ...TOKENS.USDC, address: "0x3600000000000000000000000000000000000000" as `0x${string}` },
+    EURC: { ...TOKENS.EURC, address: "0x89B50855Aa3bE2F677cD6303Cec089B5F319D72a" as `0x${string}`, decimals: 6 },
+  };
+
+  const token = HARDCODED_TOKENS[selectedSymbol];
   const [recipients, setRecipients] = useState<Recipient[]>([createRecipient()]);
   const [showAgent, setShowAgent] = useState(true);
   const [agentInput, setAgentInput] = useState("");
   const [agentLoading, setAgentLoading] = useState(false);
   const [agentError, setAgentError] = useState("");
   const [agentResult, setAgentResult] = useState<ParsedBulkPay | null>(null);
+
+  const [memo, setMemo] = useState("");
 
   const { executeBulkPay, status, txHash, error, reset } = useBulkPay();
 
@@ -219,6 +283,9 @@ export default function BulkPayForm() {
     };
   }, [recipients, inputMode, totalAmountInput]);
 
+  /* ---- Gas estimate ---- */
+  const { gasUsd, loading: gasLoading, refresh: refreshGas } = useGasEstimate(summaryData.validCount);
+
   /* ---- Can send validation ---- */
   const canSend = useMemo(() => {
     if (isSending) return false;
@@ -272,7 +339,9 @@ export default function BulkPayForm() {
 
   const handleAddressChange = useCallback((id: string, value: string) => {
     setRecipients((prev) =>
-      prev.map((r) => (r.id === id ? { ...r, address: value } : r))
+      prev.map((r) =>
+        r.id === id ? { ...r, address: value as Recipient["address"] } : r
+      )
     );
   }, []);
 
@@ -339,7 +408,7 @@ export default function BulkPayForm() {
       return {
         id: crypto.randomUUID(),
         name: r.name || "",
-        address: r.address || "",
+        address: (r.address || "") as Recipient["address"],
         percentageInput: "",
         percentage: null,
         amountInput: r.amount || "",
@@ -429,7 +498,7 @@ export default function BulkPayForm() {
 
         let checksumAddr: string;
         try {
-          checksumAddr = toChecksumAddress(r.address);
+          checksumAddr = toChecksumAddress(r.address) || r.address;
         } catch {
           checksumAddr = r.address;
         }
@@ -445,6 +514,7 @@ export default function BulkPayForm() {
         totalAmount: totalAmountRaw,
         token,
         recipients: transfers,
+        memo: memo.trim() || undefined,
       });
     },
     [canSend, recipients, inputMode, totalAmountInput, token, executeBulkPay]
@@ -461,9 +531,10 @@ export default function BulkPayForm() {
         <BulkPaySuccess
           txHash={txHash || ""}
           onReset={reset}
+          tokenSymbol={selectedSymbol}
         />
       ) : (
-        <div className="mx-auto max-w-4xl">
+        <div className="mx-auto max-w-4xl [&>form]:rounded-3xl [&>form]:shadow-[0_0_80px_rgba(124,58,237,0.08),0_0_160px_rgba(99,102,241,0.04)]">
           {/* ===================== SECTION 1: PAGE HEADER ===================== */}
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
             <div>
@@ -473,8 +544,39 @@ export default function BulkPayForm() {
                 </span>
               </h1>
               <p className="text-sm text-white/40 mt-2 max-w-md">
-                Send USDC to your entire team in one transaction
+                {selectedSymbol === "USDC"
+                  ? "Send USDC to your entire team in one transaction"
+                  : "Send EURC to your entire team in one transaction"}
               </p>
+              {/* Token selector pills */}
+              <div className="flex items-center gap-2 mt-4">
+                <button
+                  type="button"
+                  onClick={() => setSelectedSymbol("USDC")}
+                  className={
+                    "flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-semibold transition-all duration-200 border active:scale-95 " +
+                    (selectedSymbol === "USDC"
+                      ? "animate-pill-active bg-violet-600/25 border-violet-500/60 text-violet-300 shadow-[0_0_16px_rgba(124,58,237,0.35)]"
+                      : "bg-white/[0.03] border-white/[0.08] text-white/40 hover:text-white/70 hover:border-violet-500/30 hover:bg-violet-500/[0.06]")
+                  }
+                >
+                  <span>$</span>
+                  <span>USDC</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSelectedSymbol("EURC")}
+                  className={
+                    "flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-semibold transition-all duration-200 border active:scale-95 " +
+                    (selectedSymbol === "EURC"
+                      ? "animate-pill-active bg-violet-600/25 border-violet-500/60 text-violet-300 shadow-[0_0_16px_rgba(124,58,237,0.35)]"
+                      : "bg-white/[0.03] border-white/[0.08] text-white/40 hover:text-white/70 hover:border-violet-500/30 hover:bg-violet-500/[0.06]")
+                  }
+                >
+                  {selectedSymbol === "EURC" && <span>€</span>}
+                  <span>EURC</span>
+                </button>
+              </div>
             </div>
             <div className="flex items-center gap-3">
               {/* Recipient counter badge */}
@@ -510,11 +612,13 @@ export default function BulkPayForm() {
               {/* Token display */}
               <div className="flex items-center gap-2.5 rounded-xl border border-white/10 bg-white/[0.03] backdrop-blur-xl px-3.5 py-2">
                 <div className="h-7 w-7 rounded-full bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-violet-600/20">
-                  <span className="text-white text-[10px] font-bold">$</span>
+                  <span className="text-white text-[10px] font-bold">
+                    {selectedSymbol === "EURC" ? "€" : "$"}
+                  </span>
                 </div>
                 <div className="flex flex-col">
                   <span className="text-sm font-semibold text-white leading-none">
-                    USDC
+                    {selectedSymbol}
                   </span>
                   <span className="text-[10px] text-white/30 mt-0.5">
                     Arc Network
@@ -526,7 +630,14 @@ export default function BulkPayForm() {
 
           <form onSubmit={handleSubmit}>
             {/* ===================== SECTION 2: AI AGENT ===================== */}
-            <div className="mb-8 rounded-2xl border border-violet-500/20 bg-white/5 backdrop-blur-2xl p-6 shadow-[0_0_30px_rgba(124,58,237,0.1)]">
+            <div className="mb-8 relative rounded-2xl p-[1px] shadow-[0_0_40px_rgba(124,58,237,0.12)]"
+              style={{
+                background: "linear-gradient(135deg, rgba(124,58,237,0.35) 0%, rgba(99,102,241,0.15) 35%, rgba(139,92,246,0.08) 60%, rgba(124,58,237,0.3) 100%)",
+                backgroundSize: "300% 300%",
+                animation: "gradient-border-flow 5s ease infinite",
+              }}
+            >
+            <div className="rounded-2xl bg-[#0c0c16]/95 backdrop-blur-2xl p-6">
               {/* Agent header */}
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
@@ -745,6 +856,7 @@ export default function BulkPayForm() {
                 </div>
               ) : null}
             </div>
+            </div>
 
             {/* ===================== SECTION 3: INPUT MODE TOGGLE ===================== */}
             <div className="flex items-center justify-between mb-6">
@@ -883,17 +995,45 @@ export default function BulkPayForm() {
                 ))}
               </div>
 
+              {/* Payroll memo input */}
+              <div className="mt-6">
+                <label className="block text-xs font-medium text-white/40 mb-1.5">
+                  Payroll Label <span className="text-white/20">(optional)</span>
+                </label>
+                <input
+                  type="text"
+                  value={memo}
+                  onChange={(e) => setMemo(e.target.value.slice(0, 100))}
+                  disabled={isSending}
+                  placeholder="e.g. July Salary, Freelancer Batch, Marketing Team"
+                  maxLength={100}
+                  className={
+                    "w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-3.5 py-2.5 " +
+                    "text-sm text-white placeholder:text-white/20 " +
+                    "focus:outline-none focus:border-violet-500/50 focus:bg-white/[0.05] " +
+                    "transition-all duration-200 " +
+                    (isSending ? "opacity-50 cursor-not-allowed" : "")
+                  }
+                />
+                <p className="mt-1.5 text-[11px] text-white/25">
+                  Stored onchain with your transaction
+                  {memo.length > 0 && (
+                    <span className="ml-2 text-white/20">{memo.length}/100</span>
+                  )}
+                </p>
+              </div>
+
               {/* Add recipient button */}
               <button
                 type="button"
                 onClick={addRecipient}
                 disabled={atMaxRecipients || isSending}
                 className={
-                  "w-full mt-3 rounded-2xl border border-dashed border-white/10 bg-white/[0.02] py-4 " +
-                  "text-sm font-medium transition-all duration-200 " +
+                  "w-full mt-3 rounded-2xl border border-dashed py-4 " +
+                  "text-sm font-medium transition-all duration-300 " +
                   (atMaxRecipients || isSending
-                    ? "text-white/15 cursor-not-allowed"
-                    : "text-white/40 hover:text-white/60 hover:border-white/20 hover:bg-white/[0.04] active:scale-[0.99]")
+                    ? "border-white/10 bg-white/[0.02] text-white/15 cursor-not-allowed"
+                    : "animate-add-btn-pulse border-violet-500/25 bg-white/[0.02] text-white/50 hover:text-violet-300 hover:bg-violet-500/[0.06] hover:border-violet-500/50 hover:shadow-[0_0_20px_rgba(124,58,237,0.15)] active:scale-[0.99]")
                 }
               >
                 {atMaxRecipients ? (
@@ -944,19 +1084,20 @@ export default function BulkPayForm() {
             </div>
 
             {/* ===================== SECTION 6 + 7: SUMMARY + SEND (sticky) ===================== */}
-            <div className="sticky bottom-0 z-30 -mx-4 mt-8 px-4 pt-6 pb-4 bg-gradient-to-t from-[#050508] via-[#050508]/95 to-transparent">
-              {/* Summary card */}
+            <div className="sticky bottom-4 z-30 mt-10">
+              {/* Summary + send card */}
               <div
                 className={
-                  "rounded-2xl border p-5 mb-4 transition-all duration-300 " +
+                  "rounded-2xl border p-5 shadow-2xl shadow-black/60 backdrop-blur-2xl transition-all duration-300 " +
                   (summaryData.isFullyAllocated && !summaryData.isOverAllocated
-                    ? "border-emerald-500/20 bg-emerald-500/[0.04]"
+                    ? "border-emerald-500/25 bg-[#0a1010]/95"
                     : summaryData.isOverAllocated
-                      ? "border-rose-500/20 bg-rose-500/[0.04]"
-                      : "border-white/10 bg-white/5 backdrop-blur-2xl")
+                      ? "border-rose-500/25 bg-[#14090d]/95"
+                      : "border-white/10 bg-[#0b0b12]/95")
                 }
               >
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-5">
+                <div className="flex flex-col lg:flex-row lg:items-center gap-5">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-5 flex-1">
                   {/* Total */}
                   <div>
                     <span className="block text-[10px] font-medium text-white/30 uppercase tracking-wider mb-1.5">
@@ -1051,11 +1192,61 @@ export default function BulkPayForm() {
                     </span>
                   </div>
                 </div>
+
+                <div className="flex flex-col gap-3 lg:w-72 lg:shrink-0">
+
+              {/* Slim gas summary bar */}
+              <div className="flex items-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 py-2.5 flex-wrap">
+                {/* Gas */}
+                <span className="text-[11px] text-white/40 whitespace-nowrap">
+                  {"Gas: "}
+                  <span key={gasUsd?.toFixed(4)} className="text-violet-300 font-medium animate-value-flash">
+                    {gasLoading ? "..." : gasUsd !== null ? "~$" + gasUsd.toFixed(4) : "—"}
+                  </span>
+                  {" USDC"}
+                </span>
+                <span className="text-white/20 text-[11px]">|</span>
+                {/* Recipients */}
+                <span className="text-[11px] text-white/40 whitespace-nowrap">
+                  {"Recipients: "}
+                  <span key={summaryData.validCount} className="text-white/60 font-medium animate-value-flash">{summaryData.validCount}</span>
+                </span>
+                <span className="text-white/20 text-[11px]">|</span>
+                {/* Total */}
+                <span className="text-[11px] text-white/40 whitespace-nowrap">
+                  {"Total: "}
+                  <span key={summaryData.total.toFixed(2)} className="text-white/70 font-medium animate-value-flash">
+                    {(selectedSymbol === "EURC" ? "€" : "$") + summaryData.total.toFixed(2)}
+                  </span>
+                  {" " + selectedSymbol}
+                </span>
+                <span className="text-white/20 text-[11px]">|</span>
+                {/* Powered by Arc */}
+                <span className="text-[11px] text-white/20 whitespace-nowrap">Powered by Arc</span>
+                {/* Refresh — pushed to the right */}
+                <button
+                  type="button"
+                  onClick={refreshGas}
+                  title="Refresh gas estimate"
+                  className="ml-auto shrink-0 flex items-center justify-center w-5 h-5 rounded hover:bg-white/[0.06] transition-colors duration-150"
+                >
+                  <svg
+                    width="10"
+                    height="10"
+                    viewBox="0 0 12 12"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className={gasLoading ? "animate-spin text-violet-400" : "text-white/30"}
+                  >
+                    <path d="M10.5 6A4.5 4.5 0 1 1 6 1.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+                    <path d="M6 1.5L8 3.5M6 1.5L8 0" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
               </div>
 
               {/* Error display */}
               {status === "error" && error ? (
-                <div className="mb-4 rounded-xl border border-rose-500/20 bg-rose-500/[0.06] px-4 py-3.5">
+                <div className="rounded-xl border border-rose-500/20 bg-rose-500/[0.06] px-4 py-3.5">
                   <div className="flex items-start gap-3">
                     <svg
                       className="mt-0.5 shrink-0"
@@ -1085,11 +1276,7 @@ export default function BulkPayForm() {
                         Transaction Failed
                       </p>
                       <p className="text-xs text-rose-400/70 mt-0.5 leading-relaxed">
-                        {typeof error === "string"
-                          ? error
-                          : error instanceof Error
-                            ? error.message
-                            : "An unexpected error occurred. Please try again."}
+                        {error}
                       </p>
                     </div>
                   </div>
@@ -1101,9 +1288,9 @@ export default function BulkPayForm() {
                 type="submit"
                 disabled={!canSend}
                 className={
-                  "w-full rounded-2xl px-6 py-4 text-base font-semibold transition-all duration-300 active:scale-[0.98] " +
+                  "w-full rounded-xl px-6 py-3.5 text-sm font-semibold transition-all duration-300 active:scale-[0.98] " +
                   (canSend
-                    ? "bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-[0_0_30px_rgba(124,58,237,0.3)] hover:shadow-[0_0_40px_rgba(124,58,237,0.45)] hover:scale-[1.01]"
+                    ? "animate-send-pulse bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-500 hover:to-indigo-500 hover:scale-[1.01]"
                     : "bg-white/[0.06] text-white/20 cursor-not-allowed")
                 }
               >
@@ -1164,6 +1351,9 @@ export default function BulkPayForm() {
                   </span>
                 )}
               </button>
+                </div>
+                </div>
+              </div>
             </div>
           </form>
         </div>
