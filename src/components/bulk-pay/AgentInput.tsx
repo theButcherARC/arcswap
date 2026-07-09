@@ -61,7 +61,7 @@ export default function AgentInput({ onParsed }: AgentInputProps) {
           <p className="text-xs text-gray-400">Describe your payment in plain English</p>
         </div>
         <span className="ml-auto text-xs bg-violet-500/20 text-violet-300 px-2 py-0.5 rounded-full">
-          Powered by Gemini
+          AI powered
         </span>
       </div>
 
