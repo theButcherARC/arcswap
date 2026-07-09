@@ -6,7 +6,6 @@ const PARTNERS = [
   { name: "Circle",      dot: "#34d399",  border: "rgba(52,211,153,0.22)",  pillBg: "rgba(52,211,153,0.06)"  },
   { name: "Arc Network", dot: "#a78bfa",  border: "rgba(167,139,250,0.22)", pillBg: "rgba(167,139,250,0.06)" },
   { name: "USDC",        dot: "#34d399",  border: "rgba(52,211,153,0.18)",  pillBg: "rgba(52,211,153,0.05)"  },
-  { name: "EURC",        dot: "#60a5fa",  border: "rgba(96,165,250,0.18)",  pillBg: "rgba(96,165,250,0.05)"  },
   { name: "MetaMask",    dot: "#f6851b",  border: "rgba(246,133,27,0.22)",  pillBg: "rgba(246,133,27,0.06)"  },
 ];
 
@@ -31,6 +30,14 @@ export default function PoweredBySection() {
       <section className="relative z-10 mb-32 px-4">
         <div className="mx-auto max-w-5xl">
 
+          {/* Heading */}
+          <h2 className="text-center text-4xl md:text-5xl font-bold text-white tracking-tight text-balance mb-14">
+            Built on the best{" "}
+            <span className="bg-gradient-to-r from-violet-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
+              infrastructure in web3
+            </span>
+          </h2>
+
           {/* Badge */}
           <div className="flex justify-center mb-6">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.03] px-5 py-1.5">
@@ -40,14 +47,6 @@ export default function PoweredBySection() {
               </span>
             </div>
           </div>
-
-          {/* Heading */}
-          <h2 className="text-center text-4xl md:text-5xl font-bold text-white tracking-tight text-balance mb-14">
-            Built on the best{" "}
-            <span className="bg-gradient-to-r from-violet-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
-              infrastructure in web3
-            </span>
-          </h2>
 
           {/* Scrolling pill marquee */}
           <div className="relative overflow-hidden">
