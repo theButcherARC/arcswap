@@ -534,7 +534,7 @@ export default function BulkPayForm() {
           tokenSymbol={selectedSymbol}
         />
       ) : (
-        <div className="mx-auto max-w-4xl">
+        <div className="mx-auto max-w-4xl [&>form]:rounded-3xl [&>form]:shadow-[0_0_80px_rgba(124,58,237,0.08),0_0_160px_rgba(99,102,241,0.04)]">
           {/* ===================== SECTION 1: PAGE HEADER ===================== */}
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
             <div>
@@ -554,10 +554,10 @@ export default function BulkPayForm() {
                   type="button"
                   onClick={() => setSelectedSymbol("USDC")}
                   className={
-                    "flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-semibold transition-all duration-200 border " +
+                    "flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-semibold transition-all duration-200 border active:scale-95 " +
                     (selectedSymbol === "USDC"
-                      ? "bg-violet-600/20 border-violet-500/50 text-violet-300 shadow-[0_0_12px_rgba(124,58,237,0.25)]"
-                      : "bg-white/[0.03] border-white/[0.08] text-white/40 hover:text-white/60 hover:border-white/20")
+                      ? "animate-pill-active bg-violet-600/25 border-violet-500/60 text-violet-300 shadow-[0_0_16px_rgba(124,58,237,0.35)]"
+                      : "bg-white/[0.03] border-white/[0.08] text-white/40 hover:text-white/70 hover:border-violet-500/30 hover:bg-violet-500/[0.06]")
                   }
                 >
                   <span>$</span>
@@ -567,10 +567,10 @@ export default function BulkPayForm() {
                   type="button"
                   onClick={() => setSelectedSymbol("EURC")}
                   className={
-                    "flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-semibold transition-all duration-200 border " +
+                    "flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-semibold transition-all duration-200 border active:scale-95 " +
                     (selectedSymbol === "EURC"
-                      ? "bg-violet-600/20 border-violet-500/50 text-violet-300 shadow-[0_0_12px_rgba(124,58,237,0.25)]"
-                      : "bg-white/[0.03] border-white/[0.08] text-white/40 hover:text-white/60 hover:border-white/20")
+                      ? "animate-pill-active bg-violet-600/25 border-violet-500/60 text-violet-300 shadow-[0_0_16px_rgba(124,58,237,0.35)]"
+                      : "bg-white/[0.03] border-white/[0.08] text-white/40 hover:text-white/70 hover:border-violet-500/30 hover:bg-violet-500/[0.06]")
                   }
                 >
                   {selectedSymbol === "EURC" && <span>€</span>}
@@ -630,7 +630,14 @@ export default function BulkPayForm() {
 
           <form onSubmit={handleSubmit}>
             {/* ===================== SECTION 2: AI AGENT ===================== */}
-            <div className="mb-8 rounded-2xl border border-violet-500/20 bg-white/5 backdrop-blur-2xl p-6 shadow-[0_0_30px_rgba(124,58,237,0.1)]">
+            <div className="mb-8 relative rounded-2xl p-[1px] shadow-[0_0_40px_rgba(124,58,237,0.12)]"
+              style={{
+                background: "linear-gradient(135deg, rgba(124,58,237,0.35) 0%, rgba(99,102,241,0.15) 35%, rgba(139,92,246,0.08) 60%, rgba(124,58,237,0.3) 100%)",
+                backgroundSize: "300% 300%",
+                animation: "gradient-border-flow 5s ease infinite",
+              }}
+            >
+            <div className="rounded-2xl bg-[#0c0c16]/95 backdrop-blur-2xl p-6">
               {/* Agent header */}
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
@@ -849,6 +856,7 @@ export default function BulkPayForm() {
                 </div>
               ) : null}
             </div>
+            </div>
 
             {/* ===================== SECTION 3: INPUT MODE TOGGLE ===================== */}
             <div className="flex items-center justify-between mb-6">
@@ -1021,11 +1029,11 @@ export default function BulkPayForm() {
                 onClick={addRecipient}
                 disabled={atMaxRecipients || isSending}
                 className={
-                  "w-full mt-3 rounded-2xl border border-dashed border-white/10 bg-white/[0.02] py-4 " +
-                  "text-sm font-medium transition-all duration-200 " +
+                  "w-full mt-3 rounded-2xl border border-dashed py-4 " +
+                  "text-sm font-medium transition-all duration-300 " +
                   (atMaxRecipients || isSending
-                    ? "text-white/15 cursor-not-allowed"
-                    : "text-white/40 hover:text-white/60 hover:border-white/20 hover:bg-white/[0.04] active:scale-[0.99]")
+                    ? "border-white/10 bg-white/[0.02] text-white/15 cursor-not-allowed"
+                    : "animate-add-btn-pulse border-violet-500/25 bg-white/[0.02] text-white/50 hover:text-violet-300 hover:bg-violet-500/[0.06] hover:border-violet-500/50 hover:shadow-[0_0_20px_rgba(124,58,237,0.15)] active:scale-[0.99]")
                 }
               >
                 {atMaxRecipients ? (
@@ -1192,7 +1200,7 @@ export default function BulkPayForm() {
                 {/* Gas */}
                 <span className="text-[11px] text-white/40 whitespace-nowrap">
                   {"Gas: "}
-                  <span className="text-violet-300 font-medium">
+                  <span key={gasUsd?.toFixed(4)} className="text-violet-300 font-medium animate-value-flash">
                     {gasLoading ? "..." : gasUsd !== null ? "~$" + gasUsd.toFixed(4) : "—"}
                   </span>
                   {" USDC"}
@@ -1201,13 +1209,13 @@ export default function BulkPayForm() {
                 {/* Recipients */}
                 <span className="text-[11px] text-white/40 whitespace-nowrap">
                   {"Recipients: "}
-                  <span className="text-white/60 font-medium">{summaryData.validCount}</span>
+                  <span key={summaryData.validCount} className="text-white/60 font-medium animate-value-flash">{summaryData.validCount}</span>
                 </span>
                 <span className="text-white/20 text-[11px]">|</span>
                 {/* Total */}
                 <span className="text-[11px] text-white/40 whitespace-nowrap">
                   {"Total: "}
-                  <span className="text-white/70 font-medium">
+                  <span key={summaryData.total.toFixed(2)} className="text-white/70 font-medium animate-value-flash">
                     {(selectedSymbol === "EURC" ? "€" : "$") + summaryData.total.toFixed(2)}
                   </span>
                   {" " + selectedSymbol}
@@ -1282,7 +1290,7 @@ export default function BulkPayForm() {
                 className={
                   "w-full rounded-xl px-6 py-3.5 text-sm font-semibold transition-all duration-300 active:scale-[0.98] " +
                   (canSend
-                    ? "bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-[0_0_30px_rgba(124,58,237,0.3)] hover:shadow-[0_0_40px_rgba(124,58,237,0.45)] hover:scale-[1.01]"
+                    ? "animate-send-pulse bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-500 hover:to-indigo-500 hover:scale-[1.01]"
                     : "bg-white/[0.06] text-white/20 cursor-not-allowed")
                 }
               >
