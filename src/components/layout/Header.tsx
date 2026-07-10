@@ -29,6 +29,7 @@ export function Header() {
               style={{ objectFit: 'contain' }}
               className="group-hover:scale-105 transition-all duration-300 drop-shadow-[0_0_8px_rgba(139,92,246,0.4)] group-hover:drop-shadow-[0_0_14px_rgba(139,92,246,0.7)]"
               priority
+              unoptimized
             />
             <span className="hidden sm:inline font-semibold text-lg tracking-tight">
               <span className="text-white">Vibe</span><span className="animate-gradient-x bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">Flow</span>
