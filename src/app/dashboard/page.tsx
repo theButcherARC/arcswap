@@ -13,16 +13,6 @@ import {
   YAxis,
 } from "recharts";
 
-interface TokenTx {
-  hash: string;
-  timeStamp: string;
-  from: string;
-  to: string;
-  value: string;
-  tokenSymbol?: string;
-  tokenDecimal?: string;
-}
-
 interface Recipient {
   name: string;
   address: string;
@@ -54,114 +44,69 @@ function formatUsdc(amount: number): string {
   });
 }
 
-const MULTICALL_CONTRACT = "0x522fAf9A91c41c443c66765030741e4AaCe147D0";
+const USDC_ADDRESS = "0x3600000000000000000000000000000000000000";
+const ARCSCAN_V2 = "https://testnet.arcscan.app/api/v2";
 
-interface NormalTx {
-  hash: string;
-  to: string;
+interface V2Transfer {
+  transaction_hash: string;
+  timestamp: string;
+  from: { hash: string };
+  to: { hash: string };
+  total: { value: string; decimals: string };
 }
 
 async function fetchBulkPays(wallet: string): Promise<BulkPay[]> {
-  if (!wallet) {
-    return [];
-  }
+  if (!wallet) return [];
 
   const lower = wallet.toLowerCase();
-  const multicallLower = MULTICALL_CONTRACT.toLowerCase();
-  const base =
-    "https://testnet.arcscan.app/api?module=account&address=" +
+  const url =
+    ARCSCAN_V2 +
+    "/addresses/" +
     wallet +
-    "&sort=desc";
+    "/token-transfers?token=" +
+    USDC_ADDRESS +
+    "&limit=50";
 
-  // Fetch normal txns + token transfers in parallel
-  const [txlistRes, tokentxRes] = await Promise.all([
-    fetch(base + "&action=txlist"),
-    fetch(base + "&action=tokentx"),
-  ]);
-
-  if (!txlistRes.ok || !tokentxRes.ok) {
-    throw new Error(
-      `ArcScan API error: txlist ${txlistRes.status}, tokentx ${tokentxRes.status}`
-    );
+  const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error("ArcScan v2 API error: " + res.status);
   }
 
-  const txlistJson = await txlistRes.json();
-  const tokentxJson = await tokentxRes.json();
-  console.log(
-    "[v0] ArcScan response - txlist items:",
-    txlistJson?.result?.length ?? 0,
-    "token transfers:",
-    tokentxJson?.result?.length ?? 0
-  );
+  const json = await res.json();
+  const transfers: V2Transfer[] = Array.isArray(json?.items) ? json.items : [];
 
-  const normalTxs: NormalTx[] = Array.isArray(txlistJson?.result)
-    ? txlistJson.result
-    : [];
-  const allTokenTxs: TokenTx[] = Array.isArray(tokentxJson?.result)
-    ? tokentxJson.result
-    : [];
+  // Group all transfers by transaction hash
+  const groups = new Map<string, V2Transfer[]>();
+  for (const tx of transfers) {
+    if (!tx?.transaction_hash || !tx?.timestamp) continue;
+    const txHash = tx.transaction_hash.toLowerCase();
+    const fromLower = tx?.from?.hash?.toLowerCase() ?? "";
+    const toLower = tx?.to?.hash?.toLowerCase() ?? "";
 
-  // --- Build set of hashes from txns where wallet called Multicall3From ---
-  const multicallHashes = new Set(
-    normalTxs
-      .filter((t) => t?.to?.toLowerCase() === multicallLower)
-      .map((t) => t.hash.toLowerCase())
-  );
-
-  console.log("[v0] Multicall hashes found:", multicallHashes.size);
-
-  // --- Group all USDC token transfers by tx hash ---
-  // Include transfer if:
-  //   A) hash is a known Multicall3From tx (from===wallet OR from===multicall, recipient is not wallet)
-  //   B) OR it is a direct outgoing USDC transfer (from===wallet, to!==wallet)
-  // No amount filter. No date filter.
-  const groups = new Map<string, TokenTx[]>();
-
-  for (const tx of allTokenTxs) {
-    if (!tx?.hash || !tx?.timeStamp) continue;
-
-    const txHashLower = tx.hash.toLowerCase();
-    const fromLower = tx?.from?.toLowerCase() ?? "";
-    const toLower = tx?.to?.toLowerCase() ?? "";
-    const symbol = (tx.tokenSymbol ?? "").toUpperCase();
-
-    // Only USDC transfers
-    if (symbol && symbol !== "USDC") continue;
-
-    // Skip self-transfers
+    // Only outgoing transfers — wallet is sender, not recipient
+    if (fromLower !== lower) continue;
     if (toLower === lower) continue;
 
-    const isMulticallTx = multicallHashes.has(txHashLower);
-    // For multicall txns: from will often be the multicall contract itself
-    const isOutgoingViaMulticall =
-      isMulticallTx && (fromLower === lower || fromLower === multicallLower);
-    // Direct transfer: wallet is sender
-    const isDirectOutgoing = fromLower === lower;
-
-    if (isOutgoingViaMulticall || isDirectOutgoing) {
-      const existing = groups.get(txHashLower);
-      if (existing) {
-        existing.push(tx);
-      } else {
-        groups.set(txHashLower, [tx]);
-      }
+    const existing = groups.get(txHash);
+    if (existing) {
+      existing.push(tx);
+    } else {
+      groups.set(txHash, [tx]);
     }
   }
 
-  console.log("[v0] Grouped tx hashes:", groups.size);
-
   const bulkPays: BulkPay[] = [];
-  groups.forEach((transfers, hash) => {
-    const timestampMs = Number(transfers[0].timeStamp) * 1000;
-    const decimals = Number(transfers[0].tokenDecimal ?? "6") || 6;
-    const divisor = Math.pow(10, decimals);
-
-    const recipients: Recipient[] = transfers.map((t, idx) => ({
-      name: "Recipient " + (idx + 1),
-      address: t.to,
-      amount: Number(t.value) / divisor,
-    }));
-
+  groups.forEach((txTransfers, hash) => {
+    const timestampMs = new Date(txTransfers[0].timestamp).getTime();
+    const recipients: Recipient[] = txTransfers.map((t, idx) => {
+      const decimals = Number(t.total?.decimals ?? "6") || 6;
+      const divisor = Math.pow(10, decimals);
+      return {
+        name: "Recipient " + (idx + 1),
+        address: t.to.hash,
+        amount: Number(t.total?.value ?? "0") / divisor,
+      };
+    });
     const total = recipients.reduce((sum, r) => sum + r.amount, 0);
 
     bulkPays.push({
@@ -177,9 +122,8 @@ async function fetchBulkPays(wallet: string): Promise<BulkPay[]> {
     });
   });
 
-  // Sort newest first — no date filter applied
+  // Sort newest first
   bulkPays.sort((a, b) => b.timestampMs - a.timestampMs);
-  console.log("[v0] fetchBulkPays: Returning", bulkPays.length, "payments for wallet", lower);
   return bulkPays;
 }
 
@@ -225,49 +169,28 @@ export default function DashboardPage() {
 
   const swrKey = isConnected && address ? address.toLowerCase() : null;
 
-  console.log("[v0] DashboardPage: Connected:", isConnected, "Address:", swrKey);
-
   const { data: bulkPays, error, isLoading, mutate } = useSWR(swrKey, fetchBulkPays, {
     revalidateOnFocus: false,
   });
 
-  // Log any errors
-  useEffect(() => {
-    if (error) {
-      console.error("[v0] SWR error:", error);
-    }
-  }, [error]);
-
   // Auto-refresh every 30 seconds
   useEffect(() => {
     if (!isConnected || !address) return;
-
-    console.log("[v0] Starting 30-second auto-refresh interval");
-    const interval = setInterval(() => {
-      console.log("[v0] Auto-refresh triggered");
-      mutate();
-    }, 30000);
-
-    return () => {
-      console.log("[v0] Cleaning up auto-refresh interval");
-      clearInterval(interval);
-    };
+    const interval = setInterval(() => { mutate(); }, 30000);
+    return () => clearInterval(interval);
   }, [isConnected, address, mutate]);
 
-  // Manual sync handler - force fresh fetch from API bypassing cache
+  // Manual sync — directly calls API then updates SWR cache
   async function handleSync() {
     setSyncLoading(true);
     setSyncError(null);
-    console.log("[v0] Manual sync triggered for wallet:", swrKey);
     try {
       const freshData = await fetchBulkPays(swrKey ?? "");
-      console.log("[v0] Sync successful, updating cache with", freshData.length, "items");
       mutate(freshData, false);
       setSyncUpdated(true);
       setTimeout(() => setSyncUpdated(false), 3000);
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : "Unknown error";
-      console.error("[v0] Sync failed:", errorMsg);
       setSyncError(errorMsg);
       setTimeout(() => setSyncError(null), 4000);
     }
@@ -279,11 +202,7 @@ export default function DashboardPage() {
   const volumeData = buildVolumeData(payments);
 
   const totalVolume = payments.reduce((sum, bp) => sum + bp.total, 0);
-
-  // Count unique recipient addresses across all payments
-  const uniqueRecipients = new Set(
-    payments.flatMap((bp) => bp.recipients.map((r) => r.address.toLowerCase()))
-  );
+  const totalRecipients = payments.reduce((sum, bp) => sum + bp.recipients.length, 0);
 
   const stats = [
     {
@@ -303,8 +222,8 @@ export default function DashboardPage() {
     },
     {
       label: "Total Recipients",
-      value: String(uniqueRecipients.size),
-      sub: "unique addresses",
+      value: String(totalRecipients),
+      sub: "all payments",
     },
   ];
 
