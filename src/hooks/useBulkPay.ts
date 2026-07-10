@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { useAccount, usePublicClient, useWriteContract } from "wagmi";
-import { encodeFunctionData } from "viem";
+import { encodeFunctionData, keccak256, toHex, toBytes } from "viem";
 import { useArcNetwork } from "./useArcNetwork";
 import { getErrorMessage, isUserRejection, APP_ERRORS } from "@/utils/errors";
 import { BULK_PAY_MAX_RECIPIENTS } from "@/constants/tokens";
@@ -16,12 +16,19 @@ import {
 import type { BulkPayParams, BulkPayStatus } from "@/types/bulkPay";
 
 const MEMO_CONTRACT_ADDRESS = "0x5294E9927c3306DcBaDb03fe70b92e01cCede505" as const;
+
+// Memo contract wraps Multicall3From calls
 const MEMO_ABI = [
   {
-    name: "sendMemo",
     type: "function",
+    name: "memo",
     stateMutability: "nonpayable",
-    inputs: [{ name: "memo", type: "string" }],
+    inputs: [
+      { name: "target", type: "address" },
+      { name: "data", type: "bytes" },
+      { name: "memoId", type: "bytes32" },
+      { name: "memoData", type: "bytes" },
+    ],
     outputs: [],
   },
 ] as const;
@@ -54,19 +61,8 @@ export function useBulkPay() {
         const instructions = buildTransfers(params);
         const transferCalls = buildMulticallCalls(instructions);
 
-        const memoCall = params.memo && params.memo.trim().length > 0
-          ? [{
-              target: MEMO_CONTRACT_ADDRESS,
-              allowFailure: false,
-              callData: encodeFunctionData({
-                abi: MEMO_ABI,
-                functionName: "sendMemo",
-                args: [params.memo.trim()],
-              }),
-            }]
-          : [];
-
-        const calls = [...memoCall, ...transferCalls];
+        const memoString = params.memo?.trim() || "";
+        const hasMemo = memoString.length > 0;
 
         // Simulate before MetaMask popup
         if (publicClient) {
@@ -75,27 +71,54 @@ export function useBulkPay() {
             address: MULTICALL3_FROM_ADDRESS,
             abi: MULTICALL3_FROM_ABI,
             functionName: "aggregate3",
-            args: [calls],
+            args: [transferCalls],
           });
 
           const results = simulation.result as { success: boolean; returnData: `0x${string}` }[];
-          const memoOffset = memoCall.length;
-          const failedIdx = results.findIndex((r, i) => i >= memoOffset && !r.success);
+          const failedIdx = results.findIndex((r) => !r.success);
           if (failedIdx !== -1) {
             throw new Error(
-              `Transfer to ${params.recipients[failedIdx - memoOffset]?.address} would fail. Check balance and addresses.`
+              `Transfer to ${params.recipients[failedIdx]?.address} would fail. Check balance and addresses.`
             );
           }
         }
 
-        // One MetaMask popup
+        // One MetaMask popup - either call Memo (wrapping Multicall3From) or Multicall3From directly
         setBulkStatus("sending");
-        const hash = await writeContractAsync({
-          address: MULTICALL3_FROM_ADDRESS,
-          abi: MULTICALL3_FROM_ABI,
-          functionName: "aggregate3",
-          args: [calls],
-        });
+        let hash: `0x${string}`;
+
+        if (hasMemo) {
+          // Encode the Multicall3From.aggregate3(transferCalls) call
+          const multicallData = encodeFunctionData({
+            abi: MULTICALL3_FROM_ABI,
+            functionName: "aggregate3",
+            args: [transferCalls],
+          });
+
+          // Create memoId from keccak256 hash of memo string
+          const memoId = keccak256(toBytes(memoString));
+
+          // Call Memo contract which wraps the Multicall3From call
+          hash = await writeContractAsync({
+            address: MEMO_CONTRACT_ADDRESS,
+            abi: MEMO_ABI,
+            functionName: "memo",
+            args: [
+              MULTICALL3_FROM_ADDRESS,
+              multicallData,
+              memoId,
+              toHex(memoString),
+            ],
+          });
+        } else {
+          // No memo - call Multicall3From directly
+          hash = await writeContractAsync({
+            address: MULTICALL3_FROM_ADDRESS,
+            abi: MULTICALL3_FROM_ABI,
+            functionName: "aggregate3",
+            args: [transferCalls],
+          });
+        }
 
         // Call onSubmit callback exactly when transaction is submitted
         const submitTimestamp = Date.now();
