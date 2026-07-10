@@ -475,7 +475,7 @@ export default function VibeFlowLanding() {
             <div>
               <h4 className="text-xs font-semibold text-white/60 tracking-wider uppercase mb-4">Connect</h4>
               <ul className="space-y-3">
-                <li><a href="https://x.com/The_Last_Dip" target="_blank" rel="noopener noreferrer" className="text-sm text-white/30 hover:text-white/70 transition-colors duration-200">@The_Last_Dip</a></li>
+                <li><a href="https://x.com/The_Last_Dip" target="_blank" rel="noopener noreferrer" className="text-sm text-white/30 hover:text-white/70 transition-colors duration-200">Butcher (Haroon)</a></li>
               </ul>
             </div>
           </div>
