@@ -427,7 +427,7 @@ export default function VibeFlowLanding() {
       {/* ==================== FOOTER ==================== */}
       <footer className="relative z-10 border-t border-white/[0.06]">
         <div className="mx-auto max-w-6xl px-4 py-16 sm:py-20">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-16">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-10 mb-16">
             <div className="col-span-2 md:col-span-1">
               <Link href={ROUTES.HOME} className="inline-flex items-center gap-2.5 mb-5">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -452,8 +452,6 @@ export default function VibeFlowLanding() {
                 <li><Link href={ROUTES.BULK_PAY} className="text-sm text-white/30 hover:text-white/70 transition-colors duration-200">Bulk Payments</Link></li>
                 <li><Link href={ROUTES.DASHBOARD} className="text-sm text-white/30 hover:text-white/70 transition-colors duration-200">Dashboard</Link></li>
                 <li><Link href={ROUTES.SOCIAL_PROFILE} className="text-sm text-white/30 hover:text-white/70 transition-colors duration-200">Social Pay</Link></li>
-                <li><Link href="/roadmap" className="text-sm text-white/30 hover:text-white/70 transition-colors duration-200">Roadmap</Link></li>
-                <li><Link href="/architecture" className="text-sm text-white/30 hover:text-white/70 transition-colors duration-200">Architecture</Link></li>
               </ul>
             </div>
 
@@ -462,6 +460,15 @@ export default function VibeFlowLanding() {
               <ul className="space-y-3">
                 <li><a href="https://arc.network" target="_blank" rel="noopener noreferrer" className="text-sm text-white/30 hover:text-white/70 transition-colors duration-200">Arc Blockchain</a></li>
                 <li><a href="https://circle.com" target="_blank" rel="noopener noreferrer" className="text-sm text-white/30 hover:text-white/70 transition-colors duration-200">Circle USDC</a></li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="text-xs font-semibold text-white/60 tracking-wider uppercase mb-4">Resources</h4>
+              <ul className="space-y-3">
+                <li><Link href="/architecture" className="text-sm text-white/30 hover:text-white/70 transition-colors duration-200">Architecture</Link></li>
+                <li><Link href="/roadmap" className="text-sm text-white/30 hover:text-white/70 transition-colors duration-200">Roadmap</Link></li>
+                <li><a href="https://github.com/theButcherARC/arcswap" target="_blank" rel="noopener noreferrer" className="text-sm text-white/30 hover:text-white/70 transition-colors duration-200">GitHub</a></li>
               </ul>
             </div>
 
