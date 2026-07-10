@@ -24,8 +24,9 @@ export function Header() {
             <Image
               src="/logo.png"
               alt="VibeFlow"
-              width={34}
-              height={34}
+              width={40}
+              height={40}
+              style={{ objectFit: 'contain' }}
               className="group-hover:scale-105 transition-all duration-300 drop-shadow-[0_0_8px_rgba(139,92,246,0.4)] group-hover:drop-shadow-[0_0_14px_rgba(139,92,246,0.7)]"
               priority
             />
