@@ -26,10 +26,12 @@ export function Header() {
               alt="VibeFlow"
               width={34}
               height={34}
-              className="rounded-[10px] shadow-lg shadow-violet-500/25 group-hover:shadow-violet-500/50 group-hover:scale-105 transition-all duration-300"
+              className="group-hover:scale-105 transition-all duration-300 drop-shadow-[0_0_8px_rgba(139,92,246,0.4)] group-hover:drop-shadow-[0_0_14px_rgba(139,92,246,0.7)]"
               priority
             />
-            <span className="hidden sm:inline text-white font-semibold text-lg tracking-tight group-hover:text-violet-300 transition-colors duration-300">VibeFlow</span>
+            <span className="hidden sm:inline font-semibold text-lg tracking-tight">
+              <span className="text-white">Vibe</span><span className="animate-gradient-x bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">Flow</span>
+            </span>
           </Link>
 
           {/* Nav Links */}
