@@ -63,69 +63,92 @@ interface NormalTx {
 
 async function fetchBulkPays(wallet: string): Promise<BulkPay[]> {
   if (!wallet) {
-    console.log("[v0] fetchBulkPays: No wallet address provided");
     return [];
   }
 
   const lower = wallet.toLowerCase();
+  const multicallLower = MULTICALL_CONTRACT.toLowerCase();
   const base =
     "https://testnet.arcscan.app/api?module=account&address=" +
     wallet +
     "&sort=desc";
 
-  console.log("[v0] fetchBulkPays: Starting fetch for wallet", lower);
-
-  // 1) normal txns to identify which hashes went through the bulk-pay contract
-  // 2) token transfers to read the real USDC amounts per recipient
+  // Fetch normal txns + token transfers in parallel
   const [txlistRes, tokentxRes] = await Promise.all([
     fetch(base + "&action=txlist"),
     fetch(base + "&action=tokentx"),
   ]);
 
   if (!txlistRes.ok || !tokentxRes.ok) {
-    const error = `ArcScan API error: txlist ${txlistRes.status}, tokentx ${tokentxRes.status}`;
-    console.error("[v0]", error);
-    throw new Error(error);
+    throw new Error(
+      `ArcScan API error: txlist ${txlistRes.status}, tokentx ${tokentxRes.status}`
+    );
   }
 
   const txlistJson = await txlistRes.json();
   const tokentxJson = await tokentxRes.json();
-  console.log("[v0] ArcScan response - txlist items:", txlistJson?.result?.length || 0, "token transfers:", tokentxJson?.result?.length || 0);
+  console.log(
+    "[v0] ArcScan response - txlist items:",
+    txlistJson?.result?.length ?? 0,
+    "token transfers:",
+    tokentxJson?.result?.length ?? 0
+  );
 
   const normalTxs: NormalTx[] = Array.isArray(txlistJson?.result)
     ? txlistJson.result
     : [];
-  const list: TokenTx[] = Array.isArray(tokentxJson?.result)
+  const allTokenTxs: TokenTx[] = Array.isArray(tokentxJson?.result)
     ? tokentxJson.result
     : [];
 
-  // Only transactions routed through the Multicall3From (bulk-pay) contract
-  const bulkPayHashes = new Set(
+  // --- Build set of hashes from txns where wallet called Multicall3From ---
+  const multicallHashes = new Set(
     normalTxs
-      .filter((t) => t?.to?.toLowerCase() === MULTICALL_CONTRACT.toLowerCase())
-      .map((t) => t.hash)
+      .filter((t) => t?.to?.toLowerCase() === multicallLower)
+      .map((t) => t.hash.toLowerCase())
   );
 
-  // Keep only outgoing USDC transfers that belong to a real bulk payment
-  const outgoing = list.filter(
-    (tx) =>
-      tx?.hash &&
-      tx?.timeStamp &&
-      bulkPayHashes.has(tx.hash) &&
-      tx?.from?.toLowerCase() === lower &&
-      (tx.tokenSymbol ? tx.tokenSymbol.toUpperCase() === "USDC" : true)
-  );
+  console.log("[v0] Multicall hashes found:", multicallHashes.size);
 
-  // Group transfers by transaction hash — one hash = one bulk payment
+  // --- Group all USDC token transfers by tx hash ---
+  // Include transfer if:
+  //   A) hash is a known Multicall3From tx (from===wallet OR from===multicall, recipient is not wallet)
+  //   B) OR it is a direct outgoing USDC transfer (from===wallet, to!==wallet)
+  // No amount filter. No date filter.
   const groups = new Map<string, TokenTx[]>();
-  for (const tx of outgoing) {
-    const existing = groups.get(tx.hash);
-    if (existing) {
-      existing.push(tx);
-    } else {
-      groups.set(tx.hash, [tx]);
+
+  for (const tx of allTokenTxs) {
+    if (!tx?.hash || !tx?.timeStamp) continue;
+
+    const txHashLower = tx.hash.toLowerCase();
+    const fromLower = tx?.from?.toLowerCase() ?? "";
+    const toLower = tx?.to?.toLowerCase() ?? "";
+    const symbol = (tx.tokenSymbol ?? "").toUpperCase();
+
+    // Only USDC transfers
+    if (symbol && symbol !== "USDC") continue;
+
+    // Skip self-transfers
+    if (toLower === lower) continue;
+
+    const isMulticallTx = multicallHashes.has(txHashLower);
+    // For multicall txns: from will often be the multicall contract itself
+    const isOutgoingViaMulticall =
+      isMulticallTx && (fromLower === lower || fromLower === multicallLower);
+    // Direct transfer: wallet is sender
+    const isDirectOutgoing = fromLower === lower;
+
+    if (isOutgoingViaMulticall || isDirectOutgoing) {
+      const existing = groups.get(txHashLower);
+      if (existing) {
+        existing.push(tx);
+      } else {
+        groups.set(txHashLower, [tx]);
+      }
     }
   }
+
+  console.log("[v0] Grouped tx hashes:", groups.size);
 
   const bulkPays: BulkPay[] = [];
   groups.forEach((transfers, hash) => {
@@ -133,11 +156,12 @@ async function fetchBulkPays(wallet: string): Promise<BulkPay[]> {
     const decimals = Number(transfers[0].tokenDecimal ?? "6") || 6;
     const divisor = Math.pow(10, decimals);
 
-    const recipients: Recipient[] = transfers.map((t, index) => ({
-      name: "Recipient " + (index + 1),
+    const recipients: Recipient[] = transfers.map((t, idx) => ({
+      name: "Recipient " + (idx + 1),
       address: t.to,
       amount: Number(t.value) / divisor,
     }));
+
     const total = recipients.reduce((sum, r) => sum + r.amount, 0);
 
     bulkPays.push({
@@ -153,8 +177,9 @@ async function fetchBulkPays(wallet: string): Promise<BulkPay[]> {
     });
   });
 
+  // Sort newest first — no date filter applied
   bulkPays.sort((a, b) => b.timestampMs - a.timestampMs);
-  console.log("[v0] fetchBulkPays: Returning", bulkPays.length, "bulk payments for wallet", lower);
+  console.log("[v0] fetchBulkPays: Returning", bulkPays.length, "payments for wallet", lower);
   return bulkPays;
 }
 
@@ -254,9 +279,10 @@ export default function DashboardPage() {
   const volumeData = buildVolumeData(payments);
 
   const totalVolume = payments.reduce((sum, bp) => sum + bp.total, 0);
-  const totalRecipients = payments.reduce(
-    (sum, bp) => sum + bp.recipients.length,
-    0
+
+  // Count unique recipient addresses across all payments
+  const uniqueRecipients = new Set(
+    payments.flatMap((bp) => bp.recipients.map((r) => r.address.toLowerCase()))
   );
 
   const stats = [
@@ -277,8 +303,8 @@ export default function DashboardPage() {
     },
     {
       label: "Total Recipients",
-      value: String(totalRecipients),
-      sub: "all payments",
+      value: String(uniqueRecipients.size),
+      sub: "unique addresses",
     },
   ];
 
