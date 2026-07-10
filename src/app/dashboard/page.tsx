@@ -62,11 +62,18 @@ interface NormalTx {
 }
 
 async function fetchBulkPays(wallet: string): Promise<BulkPay[]> {
+  if (!wallet) {
+    console.log("[v0] fetchBulkPays: No wallet address provided");
+    return [];
+  }
+
   const lower = wallet.toLowerCase();
   const base =
     "https://testnet.arcscan.app/api?module=account&address=" +
     wallet +
     "&sort=desc";
+
+  console.log("[v0] fetchBulkPays: Starting fetch for wallet", lower);
 
   // 1) normal txns to identify which hashes went through the bulk-pay contract
   // 2) token transfers to read the real USDC amounts per recipient
@@ -74,11 +81,16 @@ async function fetchBulkPays(wallet: string): Promise<BulkPay[]> {
     fetch(base + "&action=txlist"),
     fetch(base + "&action=tokentx"),
   ]);
+
   if (!txlistRes.ok || !tokentxRes.ok) {
-    throw new Error("Failed to fetch data from ArcScan");
+    const error = `ArcScan API error: txlist ${txlistRes.status}, tokentx ${tokentxRes.status}`;
+    console.error("[v0]", error);
+    throw new Error(error);
   }
+
   const txlistJson = await txlistRes.json();
   const tokentxJson = await tokentxRes.json();
+  console.log("[v0] ArcScan response - txlist items:", txlistJson?.result?.length || 0, "token transfers:", tokentxJson?.result?.length || 0);
 
   const normalTxs: NormalTx[] = Array.isArray(txlistJson?.result)
     ? txlistJson.result
@@ -142,6 +154,7 @@ async function fetchBulkPays(wallet: string): Promise<BulkPay[]> {
   });
 
   bulkPays.sort((a, b) => b.timestampMs - a.timestampMs);
+  console.log("[v0] fetchBulkPays: Returning", bulkPays.length, "bulk payments for wallet", lower);
   return bulkPays;
 }
 
@@ -183,36 +196,57 @@ export default function DashboardPage() {
   const { address, isConnected } = useAccount();
   const [syncLoading, setSyncLoading] = useState(false);
   const [syncUpdated, setSyncUpdated] = useState(false);
+  const [syncError, setSyncError] = useState<string | null>(null);
 
   const swrKey = isConnected && address ? address.toLowerCase() : null;
+
+  console.log("[v0] DashboardPage: Connected:", isConnected, "Address:", swrKey);
 
   const { data: bulkPays, error, isLoading, mutate } = useSWR(swrKey, fetchBulkPays, {
     revalidateOnFocus: false,
   });
 
+  // Log any errors
+  useEffect(() => {
+    if (error) {
+      console.error("[v0] SWR error:", error);
+    }
+  }, [error]);
+
   // Auto-refresh every 30 seconds
   useEffect(() => {
     if (!isConnected || !address) return;
 
+    console.log("[v0] Starting 30-second auto-refresh interval");
     const interval = setInterval(() => {
+      console.log("[v0] Auto-refresh triggered");
       mutate();
     }, 30000);
 
-    return () => clearInterval(interval);
+    return () => {
+      console.log("[v0] Cleaning up auto-refresh interval");
+      clearInterval(interval);
+    };
   }, [isConnected, address, mutate]);
 
-  // Manual sync handler - force fresh fetch from API
+  // Manual sync handler - force fresh fetch from API bypassing cache
   async function handleSync() {
     setSyncLoading(true);
+    setSyncError(null);
+    console.log("[v0] Manual sync triggered for wallet:", swrKey);
     try {
       const freshData = await fetchBulkPays(swrKey ?? "");
-      mutate(freshData);
+      console.log("[v0] Sync successful, updating cache with", freshData.length, "items");
+      mutate(freshData, false);
+      setSyncUpdated(true);
+      setTimeout(() => setSyncUpdated(false), 3000);
     } catch (err) {
-      console.error("[v0] Sync failed:", err);
+      const errorMsg = err instanceof Error ? err.message : "Unknown error";
+      console.error("[v0] Sync failed:", errorMsg);
+      setSyncError(errorMsg);
+      setTimeout(() => setSyncError(null), 4000);
     }
     setSyncLoading(false);
-    setSyncUpdated(true);
-    setTimeout(() => setSyncUpdated(false), 3000);
   }
 
   const payments = bulkPays ?? [];
@@ -294,7 +328,12 @@ export default function DashboardPage() {
                 </svg>
                 <span>Sync</span>
               </button>
-              {syncUpdated && (
+              {syncError && (
+                <div className="text-xs text-red-400 animate-pulse max-w-xs truncate">
+                  Error: {syncError}
+                </div>
+              )}
+              {syncUpdated && !syncError && (
                 <div className="text-xs text-emerald-400 animate-pulse">
                   Updated just now
                 </div>
@@ -305,6 +344,24 @@ export default function DashboardPage() {
             Payment history and analytics
           </p>
         </header>
+
+        {error && (
+          <section
+            aria-label="Data fetch error"
+            className="animate-fade-in-up rounded-2xl border border-red-500/20 bg-red-500/[0.08] px-6 py-4 backdrop-blur-2xl"
+          >
+            <div className="flex items-start gap-3">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="flex-shrink-0 text-red-400 mt-0.5" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+                <path d="M12 8v4M12 16h.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+              <div>
+                <p className="text-sm font-medium text-red-300">Failed to load dashboard data</p>
+                <p className="mt-1 text-xs text-red-300/70">{error instanceof Error ? error.message : "An error occurred while fetching your transaction history"}</p>
+              </div>
+            </div>
+          </section>
+        )}
 
         {!isConnected ? (
           <section
