@@ -188,8 +188,6 @@ export default function DashboardPage() {
 
   const { data: bulkPays, error, isLoading, mutate } = useSWR(swrKey, fetchBulkPays, {
     revalidateOnFocus: false,
-    revalidateIfStale: true,
-    dedupingInterval: 0,
   });
 
   // Auto-refresh every 30 seconds
@@ -206,7 +204,12 @@ export default function DashboardPage() {
   // Manual sync handler - force fresh fetch from API
   async function handleSync() {
     setSyncLoading(true);
-    await mutate(fetchBulkPays(swrKey ?? ""), true);
+    try {
+      const freshData = await fetchBulkPays(swrKey ?? "");
+      mutate(freshData);
+    } catch (err) {
+      console.error("[v0] Sync failed:", err);
+    }
     setSyncLoading(false);
     setSyncUpdated(true);
     setTimeout(() => setSyncUpdated(false), 3000);
