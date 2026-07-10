@@ -44,7 +44,6 @@ function formatUsdc(amount: number): string {
   });
 }
 
-const USDC_ADDRESS = "0x3600000000000000000000000000000000000000";
 const ARCSCAN_V2 = "https://testnet.arcscan.app/api/v2";
 
 interface V2Transfer {
@@ -53,22 +52,21 @@ interface V2Transfer {
   from: { hash: string };
   to: { hash: string };
   total: { value: string; decimals: string };
+  token: { symbol: string };
 }
 
-const USDC_DECIMALS = 6;
-const USDC_DIVISOR = Math.pow(10, USDC_DECIMALS);
+const USDC_DIVISOR = Math.pow(10, 6);
 
 async function fetchBulkPays(wallet: string): Promise<BulkPay[]> {
   if (!wallet) return [];
 
   const lower = wallet.toLowerCase();
+  // filter=from returns only outgoing transfers — no token/limit/sort params (422 on those)
   const url =
     ARCSCAN_V2 +
     "/addresses/" +
     wallet +
-    "/token-transfers?token=" +
-    USDC_ADDRESS +
-    "&limit=50&sort=desc";
+    "/token-transfers?filter=from";
 
   const res = await fetch(url, { cache: "no-store" });
   if (!res.ok) {
@@ -78,14 +76,19 @@ async function fetchBulkPays(wallet: string): Promise<BulkPay[]> {
   const json = await res.json();
   const transfers: V2Transfer[] = Array.isArray(json?.items) ? json.items : [];
 
-  // Group outgoing transfers by transaction hash
+  // Group USDC outgoing transfers by transaction hash
   const groups = new Map<string, V2Transfer[]>();
   for (const tx of transfers) {
     if (!tx?.transaction_hash || !tx?.timestamp) continue;
+
+    // Only USDC
+    const symbol = (tx?.token?.symbol ?? "").toUpperCase();
+    if (symbol && symbol !== "USDC") continue;
+
     const fromLower = tx?.from?.hash?.toLowerCase() ?? "";
     const toLower = tx?.to?.hash?.toLowerCase() ?? "";
 
-    // Only outgoing — wallet is sender, skip self-transfers
+    // Double-check outgoing, skip self-transfers
     if (fromLower !== lower) continue;
     if (toLower === lower) continue;
 
