@@ -188,6 +188,8 @@ export default function DashboardPage() {
 
   const { data: bulkPays, error, isLoading, mutate } = useSWR(swrKey, fetchBulkPays, {
     revalidateOnFocus: false,
+    revalidateIfStale: true,
+    dedupingInterval: 0,
   });
 
   // Auto-refresh every 30 seconds
@@ -201,10 +203,10 @@ export default function DashboardPage() {
     return () => clearInterval(interval);
   }, [isConnected, address, mutate]);
 
-  // Manual sync handler
+  // Manual sync handler - force fresh fetch from API
   async function handleSync() {
     setSyncLoading(true);
-    await mutate();
+    await mutate(fetchBulkPays(swrKey ?? ""), true);
     setSyncLoading(false);
     setSyncUpdated(true);
     setTimeout(() => setSyncUpdated(false), 3000);
