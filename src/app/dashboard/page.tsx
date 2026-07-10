@@ -55,6 +55,9 @@ interface V2Transfer {
   total: { value: string; decimals: string };
 }
 
+const USDC_DECIMALS = 6;
+const USDC_DIVISOR = Math.pow(10, USDC_DECIMALS);
+
 async function fetchBulkPays(wallet: string): Promise<BulkPay[]> {
   if (!wallet) return [];
 
@@ -65,9 +68,9 @@ async function fetchBulkPays(wallet: string): Promise<BulkPay[]> {
     wallet +
     "/token-transfers?token=" +
     USDC_ADDRESS +
-    "&limit=50";
+    "&limit=50&sort=desc";
 
-  const res = await fetch(url);
+  const res = await fetch(url, { cache: "no-store" });
   if (!res.ok) {
     throw new Error("ArcScan v2 API error: " + res.status);
   }
@@ -75,18 +78,18 @@ async function fetchBulkPays(wallet: string): Promise<BulkPay[]> {
   const json = await res.json();
   const transfers: V2Transfer[] = Array.isArray(json?.items) ? json.items : [];
 
-  // Group all transfers by transaction hash
+  // Group outgoing transfers by transaction hash
   const groups = new Map<string, V2Transfer[]>();
   for (const tx of transfers) {
     if (!tx?.transaction_hash || !tx?.timestamp) continue;
-    const txHash = tx.transaction_hash.toLowerCase();
     const fromLower = tx?.from?.hash?.toLowerCase() ?? "";
     const toLower = tx?.to?.hash?.toLowerCase() ?? "";
 
-    // Only outgoing transfers — wallet is sender, not recipient
+    // Only outgoing — wallet is sender, skip self-transfers
     if (fromLower !== lower) continue;
     if (toLower === lower) continue;
 
+    const txHash = tx.transaction_hash.toLowerCase();
     const existing = groups.get(txHash);
     if (existing) {
       existing.push(tx);
@@ -98,15 +101,12 @@ async function fetchBulkPays(wallet: string): Promise<BulkPay[]> {
   const bulkPays: BulkPay[] = [];
   groups.forEach((txTransfers, hash) => {
     const timestampMs = new Date(txTransfers[0].timestamp).getTime();
-    const recipients: Recipient[] = txTransfers.map((t, idx) => {
-      const decimals = Number(t.total?.decimals ?? "6") || 6;
-      const divisor = Math.pow(10, decimals);
-      return {
-        name: "Recipient " + (idx + 1),
-        address: t.to.hash,
-        amount: Number(t.total?.value ?? "0") / divisor,
-      };
-    });
+    const recipients: Recipient[] = txTransfers.map((t, idx) => ({
+      name: "Recipient " + (idx + 1),
+      address: t.to.hash,
+      // Always divide by 10^6 for USDC — v2 total.value is in base units
+      amount: Number(t.total?.value ?? "0") / USDC_DIVISOR,
+    }));
     const total = recipients.reduce((sum, r) => sum + r.amount, 0);
 
     bulkPays.push({
