@@ -2,6 +2,7 @@
 
 import { useAccount } from "wagmi";
 import useSWR from "swr";
+import { useEffect, useState } from "react";
 import {
   Bar,
   BarChart,
@@ -180,12 +181,34 @@ function buildVolumeData(
 
 export default function DashboardPage() {
   const { address, isConnected } = useAccount();
+  const [syncLoading, setSyncLoading] = useState(false);
+  const [syncUpdated, setSyncUpdated] = useState(false);
 
   const swrKey = isConnected && address ? address.toLowerCase() : null;
 
-  const { data: bulkPays, error, isLoading } = useSWR(swrKey, fetchBulkPays, {
+  const { data: bulkPays, error, isLoading, mutate } = useSWR(swrKey, fetchBulkPays, {
     revalidateOnFocus: false,
   });
+
+  // Auto-refresh every 30 seconds
+  useEffect(() => {
+    if (!isConnected || !address) return;
+
+    const interval = setInterval(() => {
+      mutate();
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, [isConnected, address, mutate]);
+
+  // Manual sync handler
+  async function handleSync() {
+    setSyncLoading(true);
+    await mutate();
+    setSyncLoading(false);
+    setSyncUpdated(true);
+    setTimeout(() => setSyncUpdated(false), 3000);
+  }
 
   const payments = bulkPays ?? [];
   const lastBulkPay = payments[0] ?? null;
@@ -229,9 +252,50 @@ export default function DashboardPage() {
       <div className="relative mx-auto flex w-full max-w-6xl flex-col gap-8">
         {/* Header */}
         <header className="animate-fade-in-up flex flex-col gap-2">
-          <h1 className="text-balance bg-gradient-to-r from-violet-400 via-[#7c3aed] to-violet-600 bg-clip-text text-3xl font-bold tracking-tight text-transparent sm:text-4xl">
-            Dashboard
-          </h1>
+          <div className="flex items-center justify-between gap-3">
+            <h1 className="text-balance bg-gradient-to-r from-violet-400 via-[#7c3aed] to-violet-600 bg-clip-text text-3xl font-bold tracking-tight text-transparent sm:text-4xl">
+              Dashboard
+            </h1>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleSync}
+                disabled={syncLoading || isLoading}
+                className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-xs font-medium text-gray-300 transition-all hover:border-white/20 hover:bg-white/[0.05] disabled:opacity-50 disabled:cursor-not-allowed"
+                aria-label="Refresh dashboard data"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className={syncLoading ? "animate-spin" : ""}
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M23 4v6h-6M1 20v-6h6"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M3.51 9a9 9 0 0 1 14.85-3.36M20.49 15a9 9 0 0 1-14.85 3.36"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                <span>Sync</span>
+              </button>
+              {syncUpdated && (
+                <div className="text-xs text-emerald-400 animate-pulse">
+                  Updated just now
+                </div>
+              )}
+            </div>
+          </div>
           <p className="text-sm text-gray-400 sm:text-base">
             Payment history and analytics
           </p>
