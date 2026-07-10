@@ -147,7 +147,7 @@ export default function VibeFlowLanding() {
           </div>
 
           <div className="grid gap-6 md:grid-cols-3 mb-6">
-            <div className="animate-fade-in-up delay-100 group relative rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-8 transition-all duration-500 hover:border-violet-500/20 hover:bg-white/[0.05]">
+            <div className="animate-fade-in-up delay-100 group relative rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(0,0,0,0.4)] hover:border-violet-500/20 hover:bg-white/[0.05]">
               <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-violet-600/[0.06] to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none" />
               <div className="relative">
                 <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-violet-500/20 bg-violet-500/[0.08]">
@@ -172,7 +172,7 @@ export default function VibeFlowLanding() {
               </div>
             </div>
 
-            <div className="animate-fade-in-up delay-200 group relative rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-8 transition-all duration-500 hover:border-indigo-500/20 hover:bg-white/[0.05]">
+            <div className="animate-fade-in-up delay-200 group relative rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(0,0,0,0.4)] hover:border-indigo-500/20 hover:bg-white/[0.05]">
               <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-indigo-600/[0.06] to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none" />
               <div className="relative">
                 <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-indigo-500/20 bg-indigo-500/[0.08]">
@@ -196,7 +196,7 @@ export default function VibeFlowLanding() {
               </div>
             </div>
 
-            <div className="animate-fade-in-up delay-300 group relative rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-8 transition-all duration-500 hover:border-cyan-500/20 hover:bg-white/[0.05]">
+            <div className="animate-fade-in-up delay-300 group relative rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(0,0,0,0.4)] hover:border-cyan-500/20 hover:bg-white/[0.05]">
               <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-cyan-600/[0.06] to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none" />
               <div className="relative">
                 <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-cyan-500/20 bg-cyan-500/[0.08]">
@@ -223,7 +223,7 @@ export default function VibeFlowLanding() {
 
           <div className="grid gap-6 md:grid-cols-3">
             {/* USDC + EURC */}
-            <div className="animate-fade-in-up delay-100 group relative rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-8 transition-all duration-500 hover:border-emerald-500/20 hover:bg-white/[0.05]">
+            <div className="animate-fade-in-up delay-100 group relative rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(0,0,0,0.4)] hover:border-emerald-500/20 hover:bg-white/[0.05]">
               <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-emerald-600/[0.06] to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none" />
               <div className="relative">
                 <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-emerald-500/20 bg-emerald-500/[0.08]">
@@ -245,7 +245,7 @@ export default function VibeFlowLanding() {
             </div>
 
             {/* Onchain Memo Labels */}
-            <div className="animate-fade-in-up delay-200 group relative rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-8 transition-all duration-500 hover:border-amber-500/20 hover:bg-white/[0.05]">
+            <div className="animate-fade-in-up delay-200 group relative rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(0,0,0,0.4)] hover:border-amber-500/20 hover:bg-white/[0.05]">
               <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-amber-600/[0.06] to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none" />
               <div className="relative">
                 <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-amber-500/20 bg-amber-500/[0.08]">
@@ -267,7 +267,7 @@ export default function VibeFlowLanding() {
             </div>
 
             {/* Social Pay */}
-            <div className="animate-fade-in-up delay-300 group relative rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-8 transition-all duration-500 hover:border-sky-500/20 hover:bg-white/[0.05]">
+            <div className="animate-fade-in-up delay-300 group relative rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(0,0,0,0.4)] hover:border-sky-500/20 hover:bg-white/[0.05]">
               <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-sky-600/[0.06] to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none" />
               <div className="relative">
                 <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-sky-500/20 bg-sky-500/[0.08]">
@@ -430,9 +430,8 @@ export default function VibeFlowLanding() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-16">
             <div className="col-span-2 md:col-span-1">
               <Link href={ROUTES.HOME} className="inline-flex items-center gap-2.5 mb-5">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-violet-600 to-indigo-600">
-                  <span className="text-white font-bold text-sm">V</span>
-                </div>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/logo.png" alt="VibeFlow" width={32} height={32} className="rounded-lg shadow-md shadow-violet-500/20" />
                 <span className="text-lg font-semibold text-white tracking-tight">VibeFlow</span>
               </Link>
               <p className="text-sm text-white/30 leading-relaxed max-w-xs mb-6">

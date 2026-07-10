@@ -221,11 +221,15 @@ export default function DashboardPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-[#050508] px-4 pb-16 pt-28 sm:px-6 lg:px-8">
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-8">
+    <main className="relative min-h-screen overflow-hidden bg-[#050508] px-4 pb-16 pt-28 sm:px-6 lg:px-8">
+      {/* Ambient background depth */}
+      <div className="pointer-events-none absolute top-0 left-1/4 h-[400px] w-[500px] rounded-full bg-violet-600/[0.05] blur-[130px]" />
+      <div className="pointer-events-none absolute bottom-1/4 right-0 h-[350px] w-[400px] rounded-full bg-indigo-600/[0.04] blur-[120px]" />
+
+      <div className="relative mx-auto flex w-full max-w-6xl flex-col gap-8">
         {/* Header */}
-        <header className="flex flex-col gap-2">
-          <h1 className="text-balance bg-gradient-to-r from-violet-400 via-[#7c3aed] to-violet-600 bg-clip-text text-3xl font-bold text-transparent sm:text-4xl">
+        <header className="animate-fade-in-up flex flex-col gap-2">
+          <h1 className="text-balance bg-gradient-to-r from-violet-400 via-[#7c3aed] to-violet-600 bg-clip-text text-3xl font-bold tracking-tight text-transparent sm:text-4xl">
             Dashboard
           </h1>
           <p className="text-sm text-gray-400 sm:text-base">
@@ -236,8 +240,15 @@ export default function DashboardPage() {
         {!isConnected ? (
           <section
             aria-label="Wallet connection required"
-            className="rounded-2xl border border-white/10 bg-white/5 px-6 py-16 text-center backdrop-blur-2xl"
+            className="animate-fade-in-up delay-100 rounded-2xl border border-white/10 bg-white/5 px-6 py-16 text-center backdrop-blur-2xl"
           >
+            <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-violet-500/20 bg-violet-500/[0.08]">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M3 5v14a2 2 0 0 0 2 2h16v-5" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M18 12a2 2 0 0 0 0 4h4v-4h-4z" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
             <p className="text-base text-gray-300 sm:text-lg">
               Connect wallet to see your transactions
             </p>
@@ -248,19 +259,23 @@ export default function DashboardPage() {
         ) : (
           <>
             {/* Stats */}
-            <section aria-label="Key statistics">
+            <section aria-label="Key statistics" className="animate-fade-in-up delay-100">
               <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
                 {stats.map((stat) => (
                   <div
                     key={stat.label}
-                    className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-2xl"
+                    className="hover-lift rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.06] to-white/[0.02] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-2xl"
                   >
                     <p className="text-xs font-medium uppercase tracking-wider text-gray-400">
                       {stat.label}
                     </p>
-                    <p className="mt-2 text-2xl font-semibold text-white sm:text-3xl">
-                      {isLoading ? "—" : stat.value}
-                    </p>
+                    {isLoading ? (
+                      <div className="skeleton mt-3 h-8 w-24" aria-hidden="true" />
+                    ) : (
+                      <p className="mt-2 text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+                        {stat.value}
+                      </p>
+                    )}
                     <p className="mt-1 text-xs text-gray-500">{stat.sub}</p>
                   </div>
                 ))}
@@ -270,7 +285,7 @@ export default function DashboardPage() {
             {/* Volume chart */}
             <section
               aria-label="Volume over the last 7 days"
-              className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-2xl sm:p-6"
+              className="animate-fade-in-up delay-200 rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.05] to-white/[0.02] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-2xl sm:p-6"
             >
               <div className="mb-6 flex items-center justify-between">
                 <h2 className="text-base font-semibold text-white sm:text-lg">
@@ -328,7 +343,7 @@ export default function DashboardPage() {
             {/* Last bulk payment breakdown */}
             <section
               aria-label="Last bulk payment"
-              className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-2xl"
+              className="animate-fade-in-up delay-300 rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.05] to-white/[0.02] shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-2xl"
             >
               <div className="flex flex-col gap-2 border-b border-white/10 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
                 <div>
@@ -355,8 +370,10 @@ export default function DashboardPage() {
               </div>
 
               {isLoading ? (
-                <div className="px-6 py-12 text-center text-sm text-gray-400">
-                  Loading payment history...
+                <div className="flex flex-col gap-3 px-6 py-8" aria-label="Loading payment history">
+                  <div className="skeleton h-10 w-full" />
+                  <div className="skeleton h-10 w-full" />
+                  <div className="skeleton h-10 w-2/3" />
                 </div>
               ) : error ? (
                 <div className="px-6 py-12 text-center text-sm text-rose-400">

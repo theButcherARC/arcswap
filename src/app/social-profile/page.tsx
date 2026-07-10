@@ -97,22 +97,26 @@ export default function SocialProfilePage() {
   const username = (session?.user as { username?: string } | undefined)?.username ?? null
 
   return (
-    <main className="min-h-screen bg-[#050508] px-4 pb-16 pt-28 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-lg">
+    <main className="relative min-h-screen overflow-hidden bg-[#050508] px-4 pb-16 pt-28 sm:px-6 lg:px-8">
+      {/* Ambient background depth */}
+      <div className="pointer-events-none absolute top-10 left-1/3 h-[350px] w-[450px] rounded-full bg-violet-600/[0.06] blur-[130px]" />
+      <div className="pointer-events-none absolute bottom-1/3 right-1/4 h-[300px] w-[350px] rounded-full bg-indigo-600/[0.04] blur-[110px]" />
+
+      <div className="relative mx-auto max-w-lg">
         {/* Header */}
-        <div className="mb-10">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-violet-400 to-violet-600 bg-clip-text text-transparent text-balance">
+        <div className="animate-fade-in-up mb-10">
+          <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-violet-400 to-violet-600 bg-clip-text text-transparent text-balance">
             Social Profile
           </h1>
-          <p className="mt-2 text-sm text-white/50">
+          <p className="mt-2 text-sm text-white/50 leading-relaxed">
             Link your X account to your wallet so others can pay you by handle.
           </p>
         </div>
 
-        <div className="space-y-4">
+        <div className="flex flex-col gap-4">
 
           {/* Step 1 — X Login */}
-          <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-2xl p-6">
+          <div className="animate-fade-in-up delay-100 rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.06] to-white/[0.02] shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-2xl p-6 transition-colors duration-300 hover:border-white/[0.15]">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <div className={
@@ -165,7 +169,7 @@ export default function SocialProfilePage() {
           </div>
 
           {/* Step 2 — Wallet */}
-          <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-2xl p-6">
+          <div className="animate-fade-in-up delay-200 rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.06] to-white/[0.02] shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-2xl p-6 transition-colors duration-300 hover:border-white/[0.15]">
             <div className="flex items-center gap-3 mb-4">
               <div className={
                 'flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold ' +
@@ -191,7 +195,7 @@ export default function SocialProfilePage() {
           </div>
 
           {/* Step 3 — Link */}
-          <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-2xl p-6">
+          <div className="animate-fade-in-up delay-300 rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.06] to-white/[0.02] shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-2xl p-6 transition-colors duration-300 hover:border-white/[0.15]">
             <div className="flex items-center gap-3 mb-4">
               <div className={
                 'flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold ' +
@@ -220,7 +224,7 @@ export default function SocialProfilePage() {
                   className={
                     'w-full rounded-xl px-4 py-3 text-sm font-semibold transition-all ' +
                     (session?.user && isConnected
-                      ? 'bg-violet-600 hover:bg-violet-500 text-white active:scale-[0.98]'
+                      ? 'bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white shadow-lg shadow-violet-600/25 hover:shadow-violet-600/40 active:scale-[0.98]'
                       : 'bg-white/5 text-white/30 cursor-not-allowed')
                   }
                 >
