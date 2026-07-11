@@ -12,38 +12,41 @@ export default function SocialProfilePage() {
   const [message, setMessage] = useState('')
   const [linkedHandle, setLinkedHandle] = useState<string | null>(null)
   const [linkedAddress, setLinkedAddress] = useState<string | null>(null)
+  const [dbUsername, setDbUsername] = useState<string | null>(null)
+  const [fetchingUsername, setFetchingUsername] = useState(false)
 
-  // Check if already linked when session loads
+  // Fetch username from DB once session is ready (session.user.username may be empty)
   useEffect(() => {
-    if (!session?.user) return
-    
-    const handle = (session.user as { username?: string }).username ?? ''
-    if (!handle) {
-      console.log('[v0] Username not available yet in session')
-      return
-    }
+    if (!session?.user?.id) return
 
-    console.log('[v0] Found username:', handle)
-    setLinkedHandle(handle)
-
-    // Check DB to see if this handle is already linked
-    fetch('/api/social/resolve?username=' + encodeURIComponent(handle))
+    setFetchingUsername(true)
+    fetch('/api/social/me')
       .then(r => r.json())
       .then(json => {
-        if (json.address) {
-          setStatus('success')
-          setMessage('@' + handle + ' is now linked to ' + json.address.slice(0, 6) + '...' + json.address.slice(-4))
-          setLinkedAddress(json.address)
-        }
-      })
-      .catch((err) => {
-        console.log('[v0] Resolve error (not linked yet):', err)
-      })
+        const handle = json.username ?? ''
+        setDbUsername(handle || null)
+        if (handle) setLinkedHandle(handle)
 
-    if (isConnected && address) {
-      setLinkedAddress(address)
-    }
-  }, [session?.user, isConnected, address])
+        // Check if already linked in social_profiles
+        return fetch('/api/social/resolve?username=' + encodeURIComponent(handle))
+          .then(r => r.json())
+          .then(resolveJson => {
+            if (resolveJson.address) {
+              setStatus('success')
+              setMessage('@' + handle + ' is now linked to ' + resolveJson.address.slice(0, 6) + '...' + resolveJson.address.slice(-4))
+              setLinkedAddress(resolveJson.address)
+            }
+          })
+          .catch(() => {/* not linked yet */})
+      })
+      .catch(() => setDbUsername(null))
+      .finally(() => setFetchingUsername(false))
+  }, [session?.user?.id])
+
+  // Keep linked address in sync with wallet
+  useEffect(() => {
+    if (isConnected && address) setLinkedAddress(address)
+  }, [isConnected, address])
 
   async function handleLoginWithX() {
     await authClient.signIn.social({ provider: 'twitter', callbackURL: '/social-profile' })
@@ -69,8 +72,7 @@ export default function SocialProfilePage() {
       return
     }
 
-    const usernameRaw = (session.user as { username?: string }).username ?? ''
-    const username = usernameRaw.replace(/^@/, '').toLowerCase()
+    const username = (dbUsername ?? '').replace(/^@/, '').toLowerCase()
 
     if (!username) {
       setStatus('error')
@@ -102,7 +104,7 @@ export default function SocialProfilePage() {
     }
   }
 
-  const username = (session?.user as { username?: string } | undefined)?.username ?? null
+  const username = dbUsername
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#050508] px-4 pb-16 pt-28 sm:px-6 lg:px-8">
@@ -158,10 +160,14 @@ export default function SocialProfilePage() {
                 )}
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-white truncate">
-                    {username ? '@' + username : (session.user.name ?? 'Connected to X')}
+                    {fetchingUsername
+                      ? <span className="text-white/40 italic text-xs">Loading handle...</span>
+                      : username
+                        ? '@' + username
+                        : (session.user.name ?? 'Connected to X')}
                   </p>
                   <p className="text-xs text-white/40 truncate">
-                    {username ? session.user.name ?? 'X account' : 'Syncing profile...'}
+                    {session.user.name ?? 'X account'}
                   </p>
                 </div>
               </div>
