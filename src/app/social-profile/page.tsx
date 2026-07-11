@@ -12,6 +12,7 @@ export default function SocialProfilePage() {
   const [message, setMessage] = useState('')
   const [linkedHandle, setLinkedHandle] = useState<string | null>(null)
   const [linkedAddress, setLinkedAddress] = useState<string | null>(null)
+  const [manualUsername, setManualUsername] = useState('')
 
   // Check if already linked — also verify against DB on load
   useEffect(() => {
@@ -60,12 +61,13 @@ export default function SocialProfilePage() {
       return
     }
 
-    const usernameRaw = (session.user as { username?: string }).username ?? session.user.name ?? ''
+    // Try to get username from session first, fall back to manual input
+    const usernameRaw = (session.user as { username?: string }).username ?? session.user.name ?? manualUsername ?? ''
     const username = usernameRaw.replace(/^@/, '').toLowerCase()
 
     if (!username) {
       setStatus('error')
-      setMessage('Could not determine your X username. Please try logging in again.')
+      setMessage('Please enter your X handle or try logging in again.')
       return
     }
 
@@ -218,6 +220,22 @@ export default function SocialProfilePage() {
                     <p className="text-sm text-rose-400">{message}</p>
                   </div>
                 )}
+                {username === null || username === '' ? (
+                  <>
+                    <div className="mb-3">
+                      <label className="block text-xs font-medium text-white/60 mb-2">
+                        Enter your X handle manually:
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="e.g. @vibeflowArc"
+                        value={manualUsername}
+                        onChange={(e) => setManualUsername(e.target.value.replace(/^@/, ''))}
+                        className="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-sm text-white placeholder-white/40 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 outline-none transition-colors"
+                      />
+                    </div>
+                  </>
+                ) : null}
                 <button
                   onClick={handleLinkWallet}
                   disabled={status === 'linking' || !session?.user || !isConnected}
