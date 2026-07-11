@@ -158,14 +158,14 @@ export default function VibeFlowLanding() {
                 </div>
                 <h3 className="text-xl font-semibold text-white mb-3 tracking-tight">AI Payment Agent</h3>
                 <p className="text-sm text-white/40 leading-relaxed mb-6">
-                  Describe payments in plain English. Gemini AI parses your intent instantly - recipients, amounts, tokens - all auto-filled in seconds.
+                  Describe payments in plain English. VibeAI parses your intent instantly - recipients, amounts, tokens - all auto-filled in seconds.
                 </p>
                 <div className="flex items-center gap-3 pt-6 border-t border-white/[0.06]">
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-500/10">
                     <span className="text-xs font-bold text-violet-400">AI</span>
                   </div>
                   <div>
-                    <span className="text-xs font-medium text-white/60">Gemini Flash</span>
+                    <span className="text-xs font-medium text-white/60">VibeAI</span>
                     <span className="text-xs text-white/30 ml-1">powered</span>
                   </div>
                 </div>

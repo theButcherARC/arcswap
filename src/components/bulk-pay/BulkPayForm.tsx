@@ -682,7 +682,7 @@ export default function BulkPayForm() {
                 </div>
 
                 <div className="flex items-center gap-2.5">
-                  {/* Gemini badge */}
+                  {/* VibeAI badge */}
                   <div className="flex items-center gap-1.5 rounded-lg border border-violet-500/20 bg-violet-500/[0.08] px-2.5 py-1">
                     <svg
                       width="10"
@@ -697,7 +697,7 @@ export default function BulkPayForm() {
                       />
                     </svg>
                     <span className="text-[10px] font-semibold text-violet-400 uppercase tracking-wider">
-                      Gemini
+                      VibeAI
                     </span>
                   </div>
 

@@ -1,5 +1,5 @@
 // src/services/agentService.ts
-// Gemini Flash API - parses natural language into BulkPay recipient data
+// VibeAI - parses natural language into BulkPay recipient data
 
 export interface ParsedRecipient {
   name: string;
