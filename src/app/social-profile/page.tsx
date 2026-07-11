@@ -12,12 +12,18 @@ export default function SocialProfilePage() {
   const [message, setMessage] = useState('')
   const [linkedHandle, setLinkedHandle] = useState<string | null>(null)
   const [linkedAddress, setLinkedAddress] = useState<string | null>(null)
+
   // Check if already linked when session loads
   useEffect(() => {
     if (!session?.user) return
+    
     const handle = (session.user as { username?: string }).username ?? ''
-    if (!handle) return
+    if (!handle) {
+      console.log('[v0] Username not available yet in session')
+      return
+    }
 
+    console.log('[v0] Found username:', handle)
     setLinkedHandle(handle)
 
     // Check DB to see if this handle is already linked
@@ -30,12 +36,14 @@ export default function SocialProfilePage() {
           setLinkedAddress(json.address)
         }
       })
-      .catch(() => {/* not linked yet, that's fine */})
+      .catch((err) => {
+        console.log('[v0] Resolve error (not linked yet):', err)
+      })
 
     if (isConnected && address) {
       setLinkedAddress(address)
     }
-  }, [session, isConnected, address])
+  }, [session?.user, isConnected, address])
 
   async function handleLoginWithX() {
     await authClient.signIn.social({ provider: 'twitter', callbackURL: '/social-profile' })
@@ -148,15 +156,12 @@ export default function SocialProfilePage() {
                     className="h-8 w-8 rounded-full"
                   />
                 )}
-                <div>
-                  <p className="text-sm font-medium text-white">
-                    {username
-                      ? '@' + username
-                      : <span className="text-white/40 italic text-xs">Fetching handle...</span>
-                    }
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-white truncate">
+                    {username ? '@' + username : (session.user.name ?? 'Connected to X')}
                   </p>
-                  <p className="text-xs text-white/40">
-                    {session.user.name ?? 'Connected via X'}
+                  <p className="text-xs text-white/40 truncate">
+                    {username ? session.user.name ?? 'X account' : 'Syncing profile...'}
                   </p>
                 </div>
               </div>
