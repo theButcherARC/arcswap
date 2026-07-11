@@ -74,7 +74,7 @@ export default function PaymentConfirmDialog({
             {recipients.slice(0, 5).map((r, i) => (
               <div key={i} className="text-xs text-white/50 flex items-center justify-between">
                 <span className="truncate">{r.name}</span>
-                <span className="text-violet-300 ml-2">{r.amount.toFixed(2)} {symbol}</span>
+                <span className="text-violet-300 ml-2">{r.amount ? r.amount.toFixed(2) : '0.00'} {symbol}</span>
               </div>
             ))}
             {recipients.length > 5 && (

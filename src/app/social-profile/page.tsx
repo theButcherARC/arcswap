@@ -1,6 +1,6 @@
 'use client'
 
-import { useSession } from '@/lib/auth-client'
+import { authClient } from '@/lib/auth-client'
 import { useAccount } from 'wagmi'
 import { useState, useEffect } from 'react'
 import { toast } from 'sonner'
