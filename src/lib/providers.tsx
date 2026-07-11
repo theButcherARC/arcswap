@@ -2,7 +2,6 @@
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { WagmiProvider } from "wagmi";
-import { Toaster } from "sonner";
 import { wagmiConfig } from "./wagmi";
 
 /**
@@ -34,13 +33,6 @@ export function Providers({ children }: ProvidersProps) {
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
         {children}
-        <Toaster
-          position="bottom-right"
-          theme="dark"
-          richColors
-          closeButton
-          expand
-        />
       </QueryClientProvider>
     </WagmiProvider>
   );

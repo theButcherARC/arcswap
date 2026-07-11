@@ -12,27 +12,12 @@ export default function SocialProfilePage() {
   const [message, setMessage] = useState('')
   const [linkedHandle, setLinkedHandle] = useState<string | null>(null)
   const [linkedAddress, setLinkedAddress] = useState<string | null>(null)
-  const [syncedUsername, setSyncedUsername] = useState<string | null>(null)
-
-  // Auto-sync username from Twitter API if session has empty username
+  // Check if already linked when session loads
   useEffect(() => {
     if (!session?.user) return
     const handle = (session.user as { username?: string }).username ?? ''
+    if (!handle) return
 
-    if (!handle) {
-      // Session username is empty — call server to fetch it from Twitter API
-      fetch('/api/social/sync-username', { method: 'POST' })
-        .then(r => r.json())
-        .then(json => {
-          if (json.username) {
-            setSyncedUsername(json.username)
-          }
-        })
-        .catch(() => {/* silent fail */})
-      return
-    }
-
-    setSyncedUsername(handle)
     setLinkedHandle(handle)
 
     // Check DB to see if this handle is already linked
@@ -76,8 +61,7 @@ export default function SocialProfilePage() {
       return
     }
 
-    // Use synced username (auto-fetched from Twitter API on mount)
-    const usernameRaw = syncedUsername ?? (session.user as { username?: string }).username ?? ''
+    const usernameRaw = (session.user as { username?: string }).username ?? ''
     const username = usernameRaw.replace(/^@/, '').toLowerCase()
 
     if (!username) {
@@ -110,8 +94,7 @@ export default function SocialProfilePage() {
     }
   }
 
-  // Use syncedUsername (fetched from Twitter API) or fall back to session username
-  const username = syncedUsername ?? (session?.user as { username?: string } | undefined)?.username ?? null
+  const username = (session?.user as { username?: string } | undefined)?.username ?? null
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#050508] px-4 pb-16 pt-28 sm:px-6 lg:px-8">
