@@ -5,7 +5,6 @@ import { useAccount, usePublicClient, useWriteContract } from "wagmi";
 import { encodeFunctionData, keccak256, toHex, toBytes } from "viem";
 import { useArcNetwork } from "./useArcNetwork";
 import { getErrorMessage, isUserRejection, APP_ERRORS } from "@/utils/errors";
-import { toast as sonnerToast } from "sonner";
 import { BULK_PAY_MAX_RECIPIENTS } from "@/constants/tokens";
 import {
   buildTransfers,
@@ -47,31 +46,7 @@ export function useBulkPay() {
   const executeBulkPay = useCallback(
     async (params: BulkPayParams & { memo?: string }, onSubmit?: (timestamp: number) => void) => {
       if (!address) { setError(APP_ERRORS.WALLET_NOT_CONNECTED); return; }
-      if (!isCorrectNetwork) {
-        // Auto-prompt to switch to Arc testnet instead of just erroring
-        const toastId = sonnerToast.loading("Switching to Arc Testnet...");
-        try {
-          // This will show MetaMask's switch chain dialog
-          const result = await new Promise<void>((resolve, reject) => {
-            window.ethereum?.request({
-              method: "wallet_switchEthereumChain",
-              params: [{ chainId: "0xc8d" }], // Arc testnet chain ID in hex
-            }).then(() => resolve()).catch(reject);
-          });
-          // Give MetaMask a moment to update internal state
-          await new Promise(r => setTimeout(r, 1000));
-          sonnerToast.dismiss(toastId);
-        } catch (err: any) {
-          sonnerToast.dismiss(toastId);
-          if (err.code === 4902) {
-            // Chain not added to MetaMask — this shouldn't happen on Arc testnet but handle it
-            sonnerToast.error("Arc Testnet not found", { description: "Please add Arc Testnet to MetaMask first." });
-          }
-          setError("Chain switch failed. Please switch to Arc Testnet manually.");
-          return;
-        }
-        return; // Let the user retry after switching
-      }
+      if (!isCorrectNetwork) { setError(APP_ERRORS.WRONG_NETWORK); return; }
       if (params.recipients.length === 0) { setError("Add at least one recipient."); return; }
       if (params.recipients.length > BULK_PAY_MAX_RECIPIENTS) {
         setError(`Maximum ${BULK_PAY_MAX_RECIPIENTS} recipients allowed.`);
@@ -173,12 +148,9 @@ export function useBulkPay() {
 
         console.log("[v0] Transaction confirmed, setting status to success");
         setBulkStatus("success");
-        sonnerToast.success("Payment sent!", { description: `Transaction: ${hash.slice(0, 10)}...` });
       } catch (err) {
-        const errorMsg = isUserRejection(err) ? APP_ERRORS.TX_REJECTED : getErrorMessage(err);
-        setError(errorMsg);
+        setError(isUserRejection(err) ? APP_ERRORS.TX_REJECTED : getErrorMessage(err));
         setBulkStatus("error");
-        sonnerToast.error("Payment failed", { description: errorMsg });
       }
     },
     [address, isCorrectNetwork, publicClient, writeContractAsync],

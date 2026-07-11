@@ -12,7 +12,6 @@ import { TOKENS, BULK_PAY_MAX_RECIPIENTS } from "@/constants/tokens";
 import { parsePaymentInstruction } from "@/services/agentService";
 import BulkPaySuccess from "./BulkPaySuccess";
 import RecipientRow from "./RecipientRow";
-import PaymentConfirmDialog from "./PaymentConfirmDialog";
 import type { ParsedBulkPay } from "@/services/agentService";
 import type { Recipient, InputMode } from "@/types/bulkPay";
 
@@ -219,8 +218,6 @@ export default function BulkPayForm() {
   const [agentResult, setAgentResult] = useState<ParsedBulkPay | null>(null);
 
   const [memo, setMemo] = useState("");
-  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-  const [pendingPayload, setPendingPayload] = useState<any>(null);
 
   const { executeBulkPay, status, txHash, error, reset } = useBulkPay();
 
@@ -514,31 +511,15 @@ export default function BulkPayForm() {
         };
       });
 
-      // Store payload and show confirmation dialog
-      setPendingPayload({
+      await executeBulkPay({
         totalAmount: totalAmountRaw,
         token,
         recipients: transfers,
         memo: memo.trim() || undefined,
       });
-      setShowConfirmDialog(true);
     },
-    [canSend, recipients, inputMode, totalAmountInput, token]
+    [canSend, recipients, inputMode, totalAmountInput, token, executeBulkPay]
   );
-
-  // Handler for dialog confirmation
-  const handleConfirmPayment = async () => {
-    if (!pendingPayload) return;
-    setShowConfirmDialog(false);
-    await executeBulkPay(pendingPayload);
-    setPendingPayload(null);
-  };
-
-  // Handler for dialog cancel
-  const handleCancelPayment = () => {
-    setShowConfirmDialog(false);
-    setPendingPayload(null);
-  };
 
   const atMaxRecipients = recipients.length >= BULK_PAY_MAX_RECIPIENTS;
 
@@ -547,19 +528,6 @@ export default function BulkPayForm() {
   /* ================================================================ */
   return (
     <div className="min-h-screen bg-[#050508] pt-24 pb-12 px-4">
-      {/* Payment Confirmation Dialog */}
-      {pendingPayload && (
-        <PaymentConfirmDialog
-          isOpen={showConfirmDialog}
-          recipients={pendingPayload.recipients}
-          totalAmount={Number(pendingPayload.totalAmount) / Math.pow(10, pendingPayload.token.decimals)}
-          symbol={selectedSymbol}
-          gasEstimate={gasUsd || 0}
-          onConfirm={handleConfirmPayment}
-          onCancel={handleCancelPayment}
-        />
-      )}
-
       {status === "success" ? (
         <BulkPaySuccess
           txHash={txHash || ""}
