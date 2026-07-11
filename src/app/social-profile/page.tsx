@@ -12,25 +12,41 @@ export default function SocialProfilePage() {
   const [message, setMessage] = useState('')
   const [linkedHandle, setLinkedHandle] = useState<string | null>(null)
   const [linkedAddress, setLinkedAddress] = useState<string | null>(null)
+  const [syncedUsername, setSyncedUsername] = useState<string | null>(null)
 
-  // Check if already linked — also verify against DB on load
+  // Auto-sync username from Twitter API if session has empty username
   useEffect(() => {
     if (!session?.user) return
     const handle = (session.user as { username?: string }).username ?? ''
-    if (handle) {
-      setLinkedHandle(handle)
-      // Check DB to see if this handle is already linked
-      fetch('/api/social/resolve?username=' + encodeURIComponent(handle))
+
+    if (!handle) {
+      // Session username is empty — call server to fetch it from Twitter API
+      fetch('/api/social/sync-username', { method: 'POST' })
         .then(r => r.json())
         .then(json => {
-          if (json.address) {
-            setStatus('success')
-            setMessage('@' + handle + ' is now linked to ' + json.address.slice(0, 6) + '...' + json.address.slice(-4))
-            setLinkedAddress(json.address)
+          if (json.username) {
+            setSyncedUsername(json.username)
           }
         })
-        .catch(() => {/* not linked yet, that's fine */})
+        .catch(() => {/* silent fail */})
+      return
     }
+
+    setSyncedUsername(handle)
+    setLinkedHandle(handle)
+
+    // Check DB to see if this handle is already linked
+    fetch('/api/social/resolve?username=' + encodeURIComponent(handle))
+      .then(r => r.json())
+      .then(json => {
+        if (json.address) {
+          setStatus('success')
+          setMessage('@' + handle + ' is now linked to ' + json.address.slice(0, 6) + '...' + json.address.slice(-4))
+          setLinkedAddress(json.address)
+        }
+      })
+      .catch(() => {/* not linked yet, that's fine */})
+
     if (isConnected && address) {
       setLinkedAddress(address)
     }
@@ -60,13 +76,13 @@ export default function SocialProfilePage() {
       return
     }
 
-    // Get username from session (X OAuth auto-fetched)
-    const usernameRaw = (session.user as { username?: string }).username ?? ''
+    // Use synced username (auto-fetched from Twitter API on mount)
+    const usernameRaw = syncedUsername ?? (session.user as { username?: string }).username ?? ''
     const username = usernameRaw.replace(/^@/, '').toLowerCase()
 
     if (!username) {
       setStatus('error')
-      setMessage('Could not fetch your X username. Please try logging in again.')
+      setMessage('Could not fetch your X username. Please logout and login again.')
       return
     }
 
@@ -93,9 +109,8 @@ export default function SocialProfilePage() {
     }
   }
 
-  // Twitter username comes from session.user.username (the handle, e.g. "The_Last_Dip")
-  // session.user.name is the display name (e.g. "Butcher") - we never want to use that as handle
-  const username = (session?.user as { username?: string } | undefined)?.username ?? null
+  // Use syncedUsername (fetched from Twitter API) or fall back to session username
+  const username = syncedUsername ?? (session?.user as { username?: string } | undefined)?.username ?? null
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#050508] px-4 pb-16 pt-28 sm:px-6 lg:px-8">
@@ -151,9 +166,14 @@ export default function SocialProfilePage() {
                 )}
                 <div>
                   <p className="text-sm font-medium text-white">
-                    {'@' + (username ?? session.user.name)}
+                    {username
+                      ? '@' + username
+                      : <span className="text-white/40 italic text-xs">Fetching handle...</span>
+                    }
                   </p>
-                  <p className="text-xs text-white/40">Connected via X</p>
+                  <p className="text-xs text-white/40">
+                    {session.user.name ?? 'Connected via X'}
+                  </p>
                 </div>
               </div>
             ) : (
