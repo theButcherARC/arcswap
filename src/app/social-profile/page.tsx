@@ -20,15 +20,21 @@ export default function SocialProfilePage() {
     if (!session?.user?.id) return
 
     setFetchingUsername(true)
-    fetch('/api/social/me')
-      .then(r => r.json())
+    setMessage('')
+    fetch('/api/social/me', { cache: 'no-store' })
+      .then(async response => {
+        const json = await response.json()
+        if (!response.ok) throw new Error(json.error ?? 'Could not load your X profile.')
+        return json
+      })
       .then(json => {
-        const handle = json.username ?? ''
-        setDbUsername(handle || null)
-        if (handle) setLinkedHandle(handle)
+        const handle = String(json.username ?? '').replace(/^@/, '').trim().toLowerCase()
+        if (!handle) throw new Error('X username was not returned. Please reconnect X.')
 
-        // Check if already linked in social_profiles
-        return fetch('/api/social/resolve?username=' + encodeURIComponent(handle))
+        setDbUsername(handle)
+        setLinkedHandle(handle)
+
+        return fetch('/api/social/resolve?username=' + encodeURIComponent(handle), { cache: 'no-store' })
           .then(r => r.json())
           .then(resolveJson => {
             if (resolveJson.address) {
@@ -37,9 +43,13 @@ export default function SocialProfilePage() {
               setLinkedAddress(resolveJson.address)
             }
           })
-          .catch(() => {/* not linked yet */})
+          .catch(() => {/* A new handle is expected to be unresolved. */})
       })
-      .catch(() => setDbUsername(null))
+      .catch(error => {
+        setDbUsername(null)
+        setStatus('error')
+        setMessage(error instanceof Error ? error.message : 'Could not load your X profile.')
+      })
       .finally(() => setFetchingUsername(false))
   }, [session?.user?.id])
 
@@ -72,12 +82,27 @@ export default function SocialProfilePage() {
       return
     }
 
-    const username = (dbUsername ?? '').replace(/^@/, '').toLowerCase()
+    let username = (dbUsername ?? '').replace(/^@/, '').trim().toLowerCase()
 
     if (!username) {
-      setStatus('error')
-      setMessage('Could not fetch your X username. Please logout and login again.')
-      return
+      setStatus('linking')
+      setMessage('Verifying your X handle...')
+
+      try {
+        const profileResponse = await fetch('/api/social/me', { cache: 'no-store' })
+        const profile = await profileResponse.json()
+        if (!profileResponse.ok) throw new Error(profile.error ?? 'Could not verify your X profile.')
+
+        username = String(profile.username ?? '').replace(/^@/, '').trim().toLowerCase()
+        if (!username) throw new Error('X username was not returned. Please reconnect X.')
+
+        setDbUsername(username)
+        setLinkedHandle(username)
+      } catch (error) {
+        setStatus('error')
+        setMessage(error instanceof Error ? error.message : 'Could not verify your X profile.')
+        return
+      }
     }
 
     setStatus('linking')
@@ -242,10 +267,10 @@ export default function SocialProfilePage() {
                 )}
                 <button
                   onClick={handleLinkWallet}
-                  disabled={status === 'linking' || !session?.user || !isConnected}
+                  disabled={status === 'linking' || fetchingUsername || !session?.user || !isConnected}
                   className={
                     'w-full rounded-xl px-4 py-3 text-sm font-semibold transition-all flex items-center justify-center gap-2 ' +
-                    (session?.user && isConnected
+                    (session?.user && isConnected && !fetchingUsername
                       ? 'bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white shadow-lg shadow-violet-600/25 hover:shadow-violet-600/40 active:scale-[0.98]'
                       : 'bg-white/5 text-white/30 cursor-not-allowed')
                   }
