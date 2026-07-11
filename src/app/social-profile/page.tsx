@@ -1,8 +1,9 @@
 'use client'
 
-import { authClient } from '@/lib/auth-client'
+import { useSession } from '@/lib/auth-client'
 import { useAccount } from 'wagmi'
 import { useState, useEffect } from 'react'
+import { toast } from '@/lib/toast'
 
 export default function SocialProfilePage() {
   const { address, isConnected } = useAccount()
@@ -102,10 +103,14 @@ export default function SocialProfilePage() {
       setStatus('success')
       setLinkedHandle(username)
       setLinkedAddress(address)
-      setMessage('@' + username + ' is now linked to ' + address.slice(0, 6) + '...' + address.slice(-4))
+      const message = '@' + username + ' is now linked to ' + address.slice(0, 6) + '...' + address.slice(-4)
+      setMessage(message)
+      toast.success('Linked successfully', message)
     } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : 'Unexpected error'
       setStatus('error')
-      setMessage(err instanceof Error ? err.message : 'Unexpected error')
+      setMessage(errorMsg)
+      toast.error('Link failed', errorMsg)
     }
   }
 
@@ -249,12 +254,23 @@ export default function SocialProfilePage() {
                   onClick={handleLinkWallet}
                   disabled={status === 'linking' || !session?.user || !isConnected}
                   className={
-                    'w-full rounded-xl px-4 py-3 text-sm font-semibold transition-all ' +
+                    'w-full rounded-xl px-4 py-3 text-sm font-semibold transition-all flex items-center justify-center gap-2 ' +
                     (session?.user && isConnected
                       ? 'bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white shadow-lg shadow-violet-600/25 hover:shadow-violet-600/40 active:scale-[0.98]'
                       : 'bg-white/5 text-white/30 cursor-not-allowed')
                   }
                 >
+                  {status === 'linking' && (
+                    <svg
+                      className="animate-spin w-4 h-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" strokeOpacity="0.2" />
+                      <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                    </svg>
+                  )}
                   {status === 'linking' ? 'Linking...' : username ? `Link @${username} to Wallet` : 'Link X Handle to This Wallet'}
                 </button>
                 <p className="mt-2 text-xs text-white/30 text-center">
