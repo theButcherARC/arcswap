@@ -55,13 +55,32 @@ interface V2Transfer {
   token: { symbol: string };
 }
 
-const USDC_DIVISOR = Math.pow(10, 6);
+/**
+ * Parse a token amount from ArcScan v2.
+ * The API's `total` field can return the value in one of two ways:
+ *   1. As a raw integer string with decimals="6"  → divide by 10^decimals
+ *   2. As an already-divided decimal string with decimals="0" or missing
+ *      → use as-is
+ * We detect which form by checking whether the parsed value is unrealistically
+ * large (> 1,000,000) for a typical USDC transfer, meaning it is still in
+ * base units, OR by using the `decimals` field from the response directly.
+ */
+function parseTokenAmount(value: string, decimalsStr: string): number {
+  const raw = parseFloat(value ?? "0");
+  if (isNaN(raw)) return 0;
+  const dec = parseInt(decimalsStr ?? "0", 10);
+  if (dec > 0) {
+    // Value is in base units (e.g. 1000000 for 1 USDC) — divide
+    return raw / Math.pow(10, dec);
+  }
+  // Value is already in human-readable form (e.g. "1.00")
+  return raw;
+}
 
 async function fetchBulkPays(wallet: string): Promise<BulkPay[]> {
   if (!wallet) return [];
 
   const lower = wallet.toLowerCase();
-  // filter=from returns only outgoing transfers — no token/limit/sort params (422 on those)
   const url =
     ARCSCAN_V2 +
     "/addresses/" +
@@ -107,8 +126,7 @@ async function fetchBulkPays(wallet: string): Promise<BulkPay[]> {
     const recipients: Recipient[] = txTransfers.map((t, idx) => ({
       name: "Recipient " + (idx + 1),
       address: t.to.hash,
-      // Always divide by 10^6 for USDC — v2 total.value is in base units
-      amount: Number(t.total?.value ?? "0") / USDC_DIVISOR,
+      amount: parseTokenAmount(t.total?.value ?? "0", t.total?.decimals ?? "0"),
     }));
     const total = recipients.reduce((sum, r) => sum + r.amount, 0);
 
