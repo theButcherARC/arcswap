@@ -655,21 +655,66 @@ export default function BulkPayForm() {
               {/* Agent header */}
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 shadow-lg shadow-violet-600/25">
+                  {/* Animated VibeAI logo mark */}
+                  <div className="relative flex h-9 w-9 items-center justify-center rounded-xl overflow-hidden"
+                    style={{ background: "linear-gradient(135deg, #5b21b6 0%, #4f46e5 100%)" }}
+                  >
+                    {/* Rotating ring */}
                     <svg
-                      width="18"
-                      height="18"
-                      viewBox="0 0 18 18"
+                      className="absolute inset-0 w-full h-full animate-spin"
+                      viewBox="0 0 36 36"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
+                      style={{ animationDuration: "4s" }}
                     >
-                      <path
-                        d="M9 2L11 6.5L16 7.5L12.5 11L13.5 16L9 13.5L4.5 16L5.5 11L2 7.5L7 6.5L9 2Z"
-                        stroke="white"
+                      <circle
+                        cx="18" cy="18" r="14"
+                        stroke="rgba(167,139,250,0.35)"
                         strokeWidth="1.5"
-                        strokeLinejoin="round"
+                        strokeDasharray="22 66"
+                        strokeLinecap="round"
                       />
                     </svg>
+                    {/* Counter-rotating inner ring */}
+                    <svg
+                      className="absolute inset-0 w-full h-full animate-spin"
+                      viewBox="0 0 36 36"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      style={{ animationDuration: "2.5s", animationDirection: "reverse" }}
+                    >
+                      <circle
+                        cx="18" cy="18" r="9"
+                        stroke="rgba(196,181,253,0.4)"
+                        strokeWidth="1"
+                        strokeDasharray="10 48"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                    {/* V mark — VibeFlow brand initial */}
+                    <svg
+                      width="14" height="14"
+                      viewBox="0 0 14 14"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="relative z-10"
+                    >
+                      <path
+                        d="M2 2.5L7 11.5L12 2.5"
+                        stroke="white"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <circle cx="7" cy="7" r="1.5" fill="rgba(196,181,253,0.8)" />
+                    </svg>
+                    {/* Pulse glow */}
+                    <div
+                      className="absolute inset-0 rounded-xl animate-pulse"
+                      style={{
+                        background: "radial-gradient(circle at center, rgba(139,92,246,0.4) 0%, transparent 70%)",
+                      }}
+                    />
                   </div>
                   <div>
                     <h2 className="text-sm font-semibold text-white">
