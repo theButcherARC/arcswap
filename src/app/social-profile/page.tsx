@@ -12,7 +12,6 @@ export default function SocialProfilePage() {
   const [message, setMessage] = useState('')
   const [linkedHandle, setLinkedHandle] = useState<string | null>(null)
   const [linkedAddress, setLinkedAddress] = useState<string | null>(null)
-  const [manualUsername, setManualUsername] = useState('')
 
   // Check if already linked — also verify against DB on load
   useEffect(() => {
@@ -61,13 +60,13 @@ export default function SocialProfilePage() {
       return
     }
 
-    // Try to get username from session first, fall back to manual input
-    const usernameRaw = (session.user as { username?: string }).username ?? session.user.name ?? manualUsername ?? ''
+    // Get username from session (X OAuth auto-fetched)
+    const usernameRaw = (session.user as { username?: string }).username ?? ''
     const username = usernameRaw.replace(/^@/, '').toLowerCase()
 
     if (!username) {
       setStatus('error')
-      setMessage('Please enter your X handle or try logging in again.')
+      setMessage('Could not fetch your X username. Please try logging in again.')
       return
     }
 
@@ -220,22 +219,12 @@ export default function SocialProfilePage() {
                     <p className="text-sm text-rose-400">{message}</p>
                   </div>
                 )}
-                {username === null || username === '' ? (
-                  <>
-                    <div className="mb-3">
-                      <label className="block text-xs font-medium text-white/60 mb-2">
-                        Enter your X handle manually:
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="e.g. @vibeflowArc"
-                        value={manualUsername}
-                        onChange={(e) => setManualUsername(e.target.value.replace(/^@/, ''))}
-                        className="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-sm text-white placeholder-white/40 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 outline-none transition-colors"
-                      />
-                    </div>
-                  </>
-                ) : null}
+                {username && (
+                  <div className="mb-4 rounded-xl border border-violet-500/20 bg-violet-500/10 px-4 py-3">
+                    <p className="text-xs text-white/60 mb-1">Your X Handle (Auto-detected)</p>
+                    <p className="text-sm font-medium text-violet-300">@{username}</p>
+                  </div>
+                )}
                 <button
                   onClick={handleLinkWallet}
                   disabled={status === 'linking' || !session?.user || !isConnected}
@@ -246,7 +235,7 @@ export default function SocialProfilePage() {
                       : 'bg-white/5 text-white/30 cursor-not-allowed')
                   }
                 >
-                  {status === 'linking' ? 'Linking...' : 'Link My X Handle to This Wallet'}
+                  {status === 'linking' ? 'Linking...' : username ? `Link @${username} to Wallet` : 'Link X Handle to This Wallet'}
                 </button>
                 <p className="mt-2 text-xs text-white/30 text-center">
                   Complete steps 1 and 2 first
