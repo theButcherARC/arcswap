@@ -296,16 +296,16 @@ export default function DashboardPage() {
         {error && (
           <section
             aria-label="Data fetch error"
-            className="animate-fade-in-up rounded-2xl border border-red-500/20 bg-red-500/[0.08] px-6 py-4 backdrop-blur-2xl"
+            className="animate-fade-in-up rounded-2xl border border-rose-500/30 bg-gradient-to-r from-rose-500/[0.1] to-pink-500/[0.08] px-5 sm:px-6 py-4 backdrop-blur-2xl shadow-lg shadow-rose-600/10"
           >
             <div className="flex items-start gap-3">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="flex-shrink-0 text-red-400 mt-0.5" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="flex-shrink-0 text-rose-400 mt-0.5" aria-hidden="true">
                 <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
                 <path d="M12 8v4M12 16h.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
               </svg>
-              <div>
-                <p className="text-sm font-medium text-red-300">Failed to load dashboard data</p>
-                <p className="mt-1 text-xs text-red-300/70">{error instanceof Error ? error.message : "An error occurred while fetching your transaction history"}</p>
+              <div className="flex-1">
+                <p className="text-sm font-medium text-rose-300">Failed to load dashboard data</p>
+                <p className="mt-1 text-xs text-rose-300/70">{error instanceof Error ? error.message : "An error occurred while fetching your transaction history"}</p>
               </div>
             </div>
           </section>
@@ -314,27 +314,30 @@ export default function DashboardPage() {
         {!isConnected ? (
           <section
             aria-label="Wallet connection required"
-            className="animate-fade-in-up delay-100 rounded-2xl border border-white/10 bg-white/5 px-6 py-16 text-center backdrop-blur-2xl"
+            className="animate-fade-in-up delay-100 rounded-2xl border border-violet-500/20 bg-gradient-to-b from-violet-500/[0.08] to-indigo-500/[0.05] px-6 sm:px-8 py-16 sm:py-20 text-center backdrop-blur-2xl"
           >
-            <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-violet-500/20 bg-violet-500/[0.08]">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M3 5v14a2 2 0 0 0 2 2h16v-5" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M18 12a2 2 0 0 0 0 4h4v-4h-4z" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-violet-400/30 bg-violet-500/[0.12] shadow-lg shadow-violet-600/20">
+              <svg className="animate-pulse" width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4" stroke="#a78bfa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M3 5v14a2 2 0 0 0 2 2h16v-5" stroke="#a78bfa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M18 12a2 2 0 0 0 0 4h4v-4h-4z" stroke="#a78bfa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </div>
-            <p className="text-base text-gray-300 sm:text-lg">
-              Connect wallet to see your transactions
+            <h2 className="text-lg sm:text-xl font-semibold text-white">
+              Connect your wallet
+            </h2>
+            <p className="mt-2 text-sm text-gray-300 max-w-sm mx-auto">
+              View your payment history and transaction analytics by connecting your wallet
             </p>
-            <p className="mt-2 text-sm text-gray-500">
-              Use the Connect Wallet button in the top right to get started.
+            <p className="mt-4 text-xs text-gray-500">
+              Look for the "Connect Wallet" button in the top right corner
             </p>
           </section>
         ) : (
           <>
             {/* Stats */}
             <section aria-label="Key statistics" className="animate-fade-in-up delay-100">
-              <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4 lg:gap-4">
                 {stats.map((stat) => (
                   <div
                     key={stat.label}
@@ -454,8 +457,18 @@ export default function DashboardPage() {
                   Failed to load data from ArcScan. Please try again later.
                 </div>
               ) : !lastBulkPay ? (
-                <div className="px-6 py-12 text-center text-sm text-gray-400">
-                  No bulk payments found for this wallet.
+                <div className="px-6 sm:px-8 py-16 text-center">
+                  <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-violet-500/20 to-indigo-500/20 border border-violet-400/30">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z" fill="#a78bfa"/>
+                    </svg>
+                  </div>
+                  <p className="text-sm font-medium text-gray-300">
+                    No bulk payments yet
+                  </p>
+                  <p className="mt-1 text-xs text-gray-500">
+                    Create your first bulk payment to get started
+                  </p>
                 </div>
               ) : (
                 <div className="overflow-x-auto">

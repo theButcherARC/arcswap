@@ -3,7 +3,7 @@
 import { useSession } from '@/lib/auth-client'
 import { useAccount } from 'wagmi'
 import { useState, useEffect } from 'react'
-import { toast } from '@/lib/toast'
+import { toast } from 'sonner'
 
 export default function SocialProfilePage() {
   const { address, isConnected } = useAccount()
@@ -105,12 +105,12 @@ export default function SocialProfilePage() {
       setLinkedAddress(address)
       const message = '@' + username + ' is now linked to ' + address.slice(0, 6) + '...' + address.slice(-4)
       setMessage(message)
-      toast.success('Linked successfully', message)
+      toast.success('Linked successfully', { description: message })
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : 'Unexpected error'
       setStatus('error')
       setMessage(errorMsg)
-      toast.error('Link failed', errorMsg)
+      toast.error('Link failed', { description: errorMsg })
     }
   }
 

@@ -5,7 +5,7 @@ import { useAccount, usePublicClient, useWriteContract } from "wagmi";
 import { encodeFunctionData, keccak256, toHex, toBytes } from "viem";
 import { useArcNetwork } from "./useArcNetwork";
 import { getErrorMessage, isUserRejection, APP_ERRORS } from "@/utils/errors";
-import { toast } from "@/lib/toast";
+import { toast as sonnerToast } from "sonner";
 import { BULK_PAY_MAX_RECIPIENTS } from "@/constants/tokens";
 import {
   buildTransfers,
@@ -49,7 +49,7 @@ export function useBulkPay() {
       if (!address) { setError(APP_ERRORS.WALLET_NOT_CONNECTED); return; }
       if (!isCorrectNetwork) {
         // Auto-prompt to switch to Arc testnet instead of just erroring
-        toast.loading("Switching to Arc Testnet...");
+        const toastId = sonnerToast.loading("Switching to Arc Testnet...");
         try {
           // This will show MetaMask's switch chain dialog
           const result = await new Promise<void>((resolve, reject) => {
@@ -60,12 +60,12 @@ export function useBulkPay() {
           });
           // Give MetaMask a moment to update internal state
           await new Promise(r => setTimeout(r, 1000));
-          toast.dismiss();
+          sonnerToast.dismiss(toastId);
         } catch (err: any) {
-          toast.dismiss();
+          sonnerToast.dismiss(toastId);
           if (err.code === 4902) {
             // Chain not added to MetaMask — this shouldn't happen on Arc testnet but handle it
-            toast.error("Arc Testnet not found", "Please add Arc Testnet to MetaMask first.");
+            sonnerToast.error("Arc Testnet not found", { description: "Please add Arc Testnet to MetaMask first." });
           }
           setError("Chain switch failed. Please switch to Arc Testnet manually.");
           return;
@@ -173,12 +173,12 @@ export function useBulkPay() {
 
         console.log("[v0] Transaction confirmed, setting status to success");
         setBulkStatus("success");
-        toast.success("Payment sent!", `Transaction: ${hash.slice(0, 10)}...`);
+        sonnerToast.success("Payment sent!", { description: `Transaction: ${hash.slice(0, 10)}...` });
       } catch (err) {
         const errorMsg = isUserRejection(err) ? APP_ERRORS.TX_REJECTED : getErrorMessage(err);
         setError(errorMsg);
         setBulkStatus("error");
-        toast.error("Payment failed", errorMsg);
+        sonnerToast.error("Payment failed", { description: errorMsg });
       }
     },
     [address, isCorrectNetwork, publicClient, writeContractAsync],
