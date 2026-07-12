@@ -19,17 +19,20 @@ const SYSTEM_PROMPT = `You are a payment parser for VibeFlow, a USDC batch payme
 Parse natural language payment instructions into structured JSON.
 
 Rules:
-- Extract recipient name, wallet address (0x...), and amount in USDC
+- Extract recipient name, identifier (wallet address 0x..., X handle @username, or VibeID VIBE-XXXXX), and amount in USDC
 - If a percentage is given and total amount is mentioned, calculate individual amounts
 - Token defaults to "USDC" unless EURC or cirBTC is explicitly mentioned
-- Wallet addresses must start with 0x and be 42 characters
+- Identifiers can be:
+  * Wallet addresses starting with 0x (42 chars)
+  * X/Twitter handles starting with @ (e.g. @alice)
+  * VibeID starting with VIBE- (e.g. VIBE-ABC123)
 - If amounts are given as percentages, calculate from total
 - Return ONLY valid JSON, no markdown, no explanation
 
 Output format:
 {
   "recipients": [
-    { "name": "string", "address": "0x...", "amount": "string" }
+    { "name": "string", "address": "0x... or @handle or VIBE-XXXXX", "amount": "string" }
   ],
   "token": "USDC",
   "totalAmount": "string"
