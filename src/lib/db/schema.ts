@@ -14,6 +14,7 @@ export const user = pgTable('user', {
   emailVerified: boolean('emailVerified').notNull().default(false),
   image:         text('image'),
   username:      text('username'),
+  vibeId:        text('vibeId').unique(),
   createdAt:     timestamp('createdAt').notNull().defaultNow(),
   updatedAt:     timestamp('updatedAt').notNull().defaultNow(),
 })

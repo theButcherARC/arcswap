@@ -1,7 +1,8 @@
 import { auth } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { account, user as userTable } from '@/lib/db/schema'
-import { and, eq } from 'drizzle-orm'
+import { generateVibeId } from '@/utils/vibeId'
+import { and, eq, ne } from 'drizzle-orm'
 import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
 
@@ -21,7 +22,7 @@ export async function GET() {
   }
 
   const [dbUser] = await db
-    .select({ username: userTable.username, name: userTable.name, image: userTable.image })
+    .select({ username: userTable.username, name: userTable.name, image: userTable.image, vibeId: userTable.vibeId })
     .from(userTable)
     .where(eq(userTable.id, session.user.id))
     .limit(1)
@@ -30,11 +31,29 @@ export async function GET() {
     return NextResponse.json({ error: 'User not found' }, { status: 404 })
   }
 
+  // Assign a unique VibeID if missing
+  let vibeId = dbUser.vibeId
+  if (!vibeId) {
+    let candidate = ''
+    for (let attempt = 0; attempt < 10; attempt++) {
+      candidate = generateVibeId()
+      const collision = await db
+        .select({ id: userTable.id })
+        .from(userTable)
+        .where(and(eq(userTable.vibeId, candidate), ne(userTable.id, session.user.id)))
+        .limit(1)
+      if (collision.length === 0) break
+    }
+    vibeId = candidate
+    await db.update(userTable).set({ vibeId, updatedAt: new Date() }).where(eq(userTable.id, session.user.id))
+  }
+
   if (dbUser.username?.trim()) {
     return NextResponse.json({
       username: dbUser.username.trim(),
       name: dbUser.name ?? '',
       image: dbUser.image ?? '',
+      vibeId,
     })
   }
 
@@ -85,5 +104,5 @@ export async function GET() {
     .set({ username, name, image, updatedAt: new Date() })
     .where(eq(userTable.id, session.user.id))
 
-  return NextResponse.json({ username, name, image })
+  return NextResponse.json({ username, name, image, vibeId })
 }
