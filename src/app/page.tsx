@@ -266,23 +266,22 @@ export default function VibeFlowLanding() {
               </div>
             </div>
 
-            {/* Social Pay */}
-            <div className="animate-fade-in-up delay-300 group relative rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(0,0,0,0.4)] hover:border-sky-500/20 hover:bg-white/[0.05]">
-              <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-sky-600/[0.06] to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none" />
+            {/* VibeID */}
+            <div className="animate-fade-in-up delay-300 group relative rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(0,0,0,0.4)] hover:border-fuchsia-500/20 hover:bg-white/[0.05]">
+              <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-fuchsia-600/[0.06] to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none" />
               <div className="relative">
-                <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-sky-500/20 bg-sky-500/[0.08]">
+                <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-fuchsia-500/20 bg-fuchsia-500/[0.08]">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="12" cy="8" r="4" stroke="#0ea5e9" strokeWidth="2"/>
-                    <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#0ea5e9" strokeWidth="2" strokeLinecap="round"/>
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z" fill="#d946ef"/>
                   </svg>
                 </div>
-                <h3 className="text-xl font-semibold text-white mb-3 tracking-tight">Social Pay</h3>
+                <h3 className="text-xl font-semibold text-white mb-3 tracking-tight">Unique VibeID</h3>
                 <p className="text-sm text-white/40 leading-relaxed mb-6">
-                  Pay anyone by their X/Twitter @handle. No wallet address needed — just @username.
+                  Get a permanent, unique identifier like VIBE-XXXXX. Pay anyone by their X handle, wallet address, or VibeID.
                 </p>
                 <div className="flex items-center gap-3 pt-6 border-t border-white/[0.06]">
-                  <div className="flex h-8 items-center justify-center rounded-lg bg-sky-500/10 px-2.5">
-                    <span className="text-xs font-bold text-sky-400">@handle payments</span>
+                  <div className="flex h-8 items-center justify-center rounded-lg bg-fuchsia-500/10 px-2.5">
+                    <span className="text-xs font-bold text-fuchsia-400">@handle or VIBE-ID</span>
                   </div>
                 </div>
               </div>

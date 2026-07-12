@@ -131,10 +131,10 @@ export default function SocialProfilePage() {
         {/* Page header */}
         <div className="mb-10">
           <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-violet-400 to-violet-600 bg-clip-text text-transparent text-balance">
-            Social Profile
+            VibeID Profile
           </h1>
           <p className="mt-2 text-sm text-white/50 leading-relaxed">
-            Link your X account to your wallet. Others can pay you by handle or VibeID.
+            Get your unique VibeID. Link X account. Get paid by anyone with just an identifier.
           </p>
         </div>
 
