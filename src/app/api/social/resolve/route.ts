@@ -11,16 +11,19 @@ export async function GET(req: NextRequest) {
 
   const clean = identifier.replace(/^@/, '').trim()
 
-  // 1. Try VibeID resolution (VIBE-XXXXXX → wallet via social_profiles userId)
+  // 1. Try VibeID resolution (VIBE-XXXXXX → wallet via user table or social_profiles)
   if (/^VIBE-/i.test(clean)) {
     const vibeId = clean.toUpperCase()
+    
+    // Look up user by VibeID (case-insensitive exact match)
     const userRows = await db
       .select({ id: userTable.id, vibeId: userTable.vibeId })
       .from(userTable)
-      .where(ilike(userTable.vibeId, vibeId))
+      .where(eq(userTable.vibeId, vibeId))
       .limit(1)
 
-    if (userRows.length > 0) {
+    if (userRows.length > 0 && userRows[0].vibeId) {
+      // User has this VibeID — find their wallet from social_profiles
       const profileRows = await db
         .select()
         .from(socialProfiles)
@@ -34,9 +37,12 @@ export async function GET(req: NextRequest) {
           address:  profileRows[0].walletAddress,
           verified: profileRows[0].verified,
         })
+      } else {
+        // User has VibeID but no profile yet — return error with helpful message
+        return NextResponse.json({ error: 'VibeID found but no wallet linked yet' }, { status: 404 })
       }
     }
-    return NextResponse.json({ error: 'not_registered' }, { status: 404 })
+    return NextResponse.json({ error: 'VibeID not found' }, { status: 404 })
   }
 
   // 2. Try X username resolution

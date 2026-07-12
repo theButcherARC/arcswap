@@ -9,22 +9,27 @@ const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
 /** Resolve identifier (0x, @handle, or VIBE-ID) to wallet address */
 async function resolveIdentifier(identifier: string): Promise<string | null> {
   const trimmed = identifier.trim();
+  console.log("[v0] Resolving identifier:", trimmed);
   
   // Already a wallet address
   if (/^0x[a-fA-F0-9]{40}$/.test(trimmed)) {
+    console.log("[v0] Already a wallet address:", trimmed);
     return trimmed;
   }
   
   // VibeID or X handle — resolve via /api/social/resolve
   if (/^(VIBE-|@)/i.test(trimmed)) {
     try {
-      const res = await fetch(
-        `${process.env.NEXTAUTH_URL || "http://localhost:3000"}/api/social/resolve?username=${encodeURIComponent(trimmed)}`,
-        { cache: "no-store" }
-      );
-      if (res.ok) {
-        const data = await res.json();
-        return data.address || null;
+      const url = `${process.env.NEXTAUTH_URL || "http://localhost:3000"}/api/social/resolve?username=${encodeURIComponent(trimmed)}`;
+      console.log("[v0] Fetching resolve endpoint:", url);
+      const res = await fetch(url, { cache: "no-store" });
+      const data = await res.json();
+      console.log("[v0] Resolve response:", { status: res.status, data });
+      if (res.ok && data.address) {
+        console.log("[v0] Resolved to address:", data.address);
+        return data.address;
+      } else {
+        console.log("[v0] Resolve failed:", data.error || "No address returned");
       }
     } catch (e) {
       console.error("[v0] Resolve identifier error:", e);
@@ -32,6 +37,7 @@ async function resolveIdentifier(identifier: string): Promise<string | null> {
     return null;
   }
   
+  console.log("[v0] Identifier does not match any pattern");
   return null;
 }
 
