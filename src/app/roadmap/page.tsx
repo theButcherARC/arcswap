@@ -14,7 +14,7 @@ const phases = [
       'Zero approval flow via Multicall3From',
       'Onchain Memo labels for payroll batching',
       'Real-time transaction dashboard',
-      'Social Pay via X/Twitter @handle',
+      'Unique VibeID + Social Pay via @handle, VibeID, or wallet address',
     ],
   },
   {
