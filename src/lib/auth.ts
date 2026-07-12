@@ -35,16 +35,49 @@ export const auth = betterAuth({
     twitter: {
       clientId:     process.env.TWITTER_CLIENT_ID!,
       clientSecret: process.env.TWITTER_CLIENT_SECRET!,
+      // Twitter OAuth v2 returns profile in various shapes — handle all of them
+      mapProfileToUser: (profile: Record<string, unknown>) => {
+        // Twitter API v2 wraps user object under 'data'
+        const data = (profile.data ?? profile) as Record<string, unknown>
+
+        // username is the @handle (screen_name equivalent in v2)
+        const username =
+          (data.username as string) ??
+          (profile.username as string) ??
+          (profile.screen_name as string) ??
+          ''
+
+        const name =
+          (data.name as string) ??
+          (profile.name as string) ??
+          ''
+
+        // profile_image_url is Twitter v2 field; remove _normal suffix for higher res
+        const rawImage =
+          (data.profile_image_url as string) ??
+          (profile.profile_image_url as string) ??
+          (profile.image as string) ??
+          ''
+        const image = rawImage.replace('_normal.', '_400x400.')
+
+        return { name, image, username }
+      },
     },
   },
-  ...(process.env.NODE_ENV === 'development'
-    ? {
-        advanced: {
-          defaultCookieAttributes: {
-            sameSite: 'none' as const,
-            secure: true,
-          },
-        },
-      }
-    : {}),
+  user: {
+    additionalFields: {
+      username: {
+        type: 'string',
+        required: false,
+        defaultValue: '',
+        input: false,
+      },
+    },
+  },
+  advanced: {
+    defaultCookieAttributes: {
+      sameSite: 'none' as const,
+      secure: true,
+    },
+  },
 })

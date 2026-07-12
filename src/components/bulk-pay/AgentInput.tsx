@@ -11,9 +11,9 @@ interface AgentInputProps {
 }
 
 const EXAMPLES = [
-  "Pay Alice 0x1234...abcd 500 USDC and Bob 0xabcd...1234 300 USDC",
-  "Send 1000 USDC total - 60% to 0xAAA...111 (Alice) and 40% to 0xBBB...222 (Bob)",
-  "Pay my team: 0x111...aaa gets 250, 0x222...bbb gets 250, 0x333...ccc gets 500 USDC",
+  "Pay Alice 500 USDC at @alice and Bob 300 USDC at @bob",
+  "Send 100 USDC to VIBE-ABC123",
+  "Pay my team: @alice gets 250, @bob gets 250, VIBE-XYZ789 gets 500 USDC",
 ];
 
 export default function AgentInput({ onParsed }: AgentInputProps) {
@@ -61,7 +61,7 @@ export default function AgentInput({ onParsed }: AgentInputProps) {
           <p className="text-xs text-gray-400">Describe your payment in plain English</p>
         </div>
         <span className="ml-auto text-xs bg-violet-500/20 text-violet-300 px-2 py-0.5 rounded-full">
-          Powered by Gemini
+          AI powered
         </span>
       </div>
 
@@ -69,7 +69,7 @@ export default function AgentInput({ onParsed }: AgentInputProps) {
       <textarea
         value={instruction}
         onChange={(e) => setInstruction(e.target.value)}
-        placeholder="e.g. Pay Alice 500 USDC at 0x1234...abcd and Bob 300 USDC at 0xabcd...1234"
+        placeholder="e.g. Pay Alice 500 USDC at @alice, Bob 300 at VIBE-ABC123, or Carol 200 at 0x1234...abcd"
         rows={3}
         className="w-full rounded-lg bg-surface border border-white/10 text-white placeholder-gray-500 text-sm p-3 resize-none focus:outline-none focus:border-violet-500/50 transition-colors"
       />

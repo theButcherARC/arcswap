@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useCallback, useEffect, useRef } from "react";
+import Link from "next/link";
 import { parseUnits, createPublicClient, http } from "viem";
 import type { Address } from "viem";
 import { useBulkPay } from "@/hooks/useBulkPay";
@@ -534,9 +535,9 @@ export default function BulkPayForm() {
           tokenSymbol={selectedSymbol}
         />
       ) : (
-        <div className="mx-auto max-w-4xl [&>form]:rounded-3xl [&>form]:shadow-[0_0_80px_rgba(124,58,237,0.08),0_0_160px_rgba(99,102,241,0.04)]">
+        <div className="mx-auto max-w-4xl px-2 sm:px-4 [&>form]:rounded-2xl sm:[&>form]:rounded-3xl [&>form]:shadow-[0_0_80px_rgba(124,58,237,0.08),0_0_160px_rgba(99,102,241,0.04)]">
           {/* ===================== SECTION 1: PAGE HEADER ===================== */}
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 sm:gap-4 mb-6 sm:mb-10">
             <div>
               <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">
                 <span className="bg-gradient-to-r from-violet-400 to-indigo-400 bg-clip-text text-transparent">
@@ -579,6 +580,19 @@ export default function BulkPayForm() {
               </div>
             </div>
             <div className="flex items-center gap-3">
+              {/* Quick Pay / CSV Upload tabs */}
+              <div className="flex items-center rounded-xl border border-white/10 bg-white/[0.03] p-1 gap-1">
+                <span className="rounded-lg px-3.5 py-1.5 text-xs font-semibold text-white bg-white/[0.08] border border-white/10">
+                  Quick Pay
+                </span>
+                <Link
+                  href="/bulk-pay/upload"
+                  className="rounded-lg px-3.5 py-1.5 text-xs font-medium text-white/40 hover:text-white/70 hover:bg-white/[0.05] transition-all duration-200"
+                >
+                  CSV Upload
+                </Link>
+              </div>
+
               {/* Recipient counter badge */}
               <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] backdrop-blur-xl px-3.5 py-2">
                 <svg
@@ -641,21 +655,66 @@ export default function BulkPayForm() {
               {/* Agent header */}
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 shadow-lg shadow-violet-600/25">
+                  {/* Animated VibeAI logo mark */}
+                  <div className="relative flex h-9 w-9 items-center justify-center rounded-xl overflow-hidden"
+                    style={{ background: "linear-gradient(135deg, #5b21b6 0%, #4f46e5 100%)" }}
+                  >
+                    {/* Rotating ring */}
                     <svg
-                      width="18"
-                      height="18"
-                      viewBox="0 0 18 18"
+                      className="absolute inset-0 w-full h-full animate-spin"
+                      viewBox="0 0 36 36"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
+                      style={{ animationDuration: "4s" }}
                     >
-                      <path
-                        d="M9 2L11 6.5L16 7.5L12.5 11L13.5 16L9 13.5L4.5 16L5.5 11L2 7.5L7 6.5L9 2Z"
-                        stroke="white"
+                      <circle
+                        cx="18" cy="18" r="14"
+                        stroke="rgba(167,139,250,0.35)"
                         strokeWidth="1.5"
-                        strokeLinejoin="round"
+                        strokeDasharray="22 66"
+                        strokeLinecap="round"
                       />
                     </svg>
+                    {/* Counter-rotating inner ring */}
+                    <svg
+                      className="absolute inset-0 w-full h-full animate-spin"
+                      viewBox="0 0 36 36"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      style={{ animationDuration: "2.5s", animationDirection: "reverse" }}
+                    >
+                      <circle
+                        cx="18" cy="18" r="9"
+                        stroke="rgba(196,181,253,0.4)"
+                        strokeWidth="1"
+                        strokeDasharray="10 48"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                    {/* V mark — VibeFlow brand initial */}
+                    <svg
+                      width="14" height="14"
+                      viewBox="0 0 14 14"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="relative z-10"
+                    >
+                      <path
+                        d="M2 2.5L7 11.5L12 2.5"
+                        stroke="white"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <circle cx="7" cy="7" r="1.5" fill="rgba(196,181,253,0.8)" />
+                    </svg>
+                    {/* Pulse glow */}
+                    <div
+                      className="absolute inset-0 rounded-xl animate-pulse"
+                      style={{
+                        background: "radial-gradient(circle at center, rgba(139,92,246,0.4) 0%, transparent 70%)",
+                      }}
+                    />
                   </div>
                   <div>
                     <h2 className="text-sm font-semibold text-white">
@@ -668,7 +727,7 @@ export default function BulkPayForm() {
                 </div>
 
                 <div className="flex items-center gap-2.5">
-                  {/* Gemini badge */}
+                  {/* VibeAI badge */}
                   <div className="flex items-center gap-1.5 rounded-lg border border-violet-500/20 bg-violet-500/[0.08] px-2.5 py-1">
                     <svg
                       width="10"
@@ -683,7 +742,7 @@ export default function BulkPayForm() {
                       />
                     </svg>
                     <span className="text-[10px] font-semibold text-violet-400 uppercase tracking-wider">
-                      Gemini
+                      VibeAI
                     </span>
                   </div>
 
@@ -1195,55 +1254,6 @@ export default function BulkPayForm() {
 
                 <div className="flex flex-col gap-3 lg:w-72 lg:shrink-0">
 
-              {/* Slim gas summary bar */}
-              <div className="flex items-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 py-2.5 flex-wrap">
-                {/* Gas */}
-                <span className="text-[11px] text-white/40 whitespace-nowrap">
-                  {"Gas: "}
-                  <span key={gasUsd?.toFixed(4)} className="text-violet-300 font-medium animate-value-flash">
-                    {gasLoading ? "..." : gasUsd !== null ? "~$" + gasUsd.toFixed(4) : "—"}
-                  </span>
-                  {" USDC"}
-                </span>
-                <span className="text-white/20 text-[11px]">|</span>
-                {/* Recipients */}
-                <span className="text-[11px] text-white/40 whitespace-nowrap">
-                  {"Recipients: "}
-                  <span key={summaryData.validCount} className="text-white/60 font-medium animate-value-flash">{summaryData.validCount}</span>
-                </span>
-                <span className="text-white/20 text-[11px]">|</span>
-                {/* Total */}
-                <span className="text-[11px] text-white/40 whitespace-nowrap">
-                  {"Total: "}
-                  <span key={summaryData.total.toFixed(2)} className="text-white/70 font-medium animate-value-flash">
-                    {(selectedSymbol === "EURC" ? "€" : "$") + summaryData.total.toFixed(2)}
-                  </span>
-                  {" " + selectedSymbol}
-                </span>
-                <span className="text-white/20 text-[11px]">|</span>
-                {/* Powered by Arc */}
-                <span className="text-[11px] text-white/20 whitespace-nowrap">Powered by Arc</span>
-                {/* Refresh — pushed to the right */}
-                <button
-                  type="button"
-                  onClick={refreshGas}
-                  title="Refresh gas estimate"
-                  className="ml-auto shrink-0 flex items-center justify-center w-5 h-5 rounded hover:bg-white/[0.06] transition-colors duration-150"
-                >
-                  <svg
-                    width="10"
-                    height="10"
-                    viewBox="0 0 12 12"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className={gasLoading ? "animate-spin text-violet-400" : "text-white/30"}
-                  >
-                    <path d="M10.5 6A4.5 4.5 0 1 1 6 1.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-                    <path d="M6 1.5L8 3.5M6 1.5L8 0" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </button>
-              </div>
-
               {/* Error display */}
               {status === "error" && error ? (
                 <div className="rounded-xl border border-rose-500/20 bg-rose-500/[0.06] px-4 py-3.5">
@@ -1282,6 +1292,57 @@ export default function BulkPayForm() {
                   </div>
                 </div>
               ) : null}
+
+              {/* Stats bar */}
+              <div className="flex items-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 py-2.5 flex-wrap text-xs">
+                {/* Gas */}
+                <span className="text-white/40 whitespace-nowrap">
+                  {"Gas: "}
+                  <span key={gasUsd?.toFixed(4)} className="text-violet-300 font-medium animate-value-flash">
+                    {gasLoading ? "..." : gasUsd !== null ? "~$" + gasUsd.toFixed(4) : "—"}
+                  </span>
+                  {" USDC"}
+                </span>
+                <span className="text-white/20">|</span>
+                {/* Recipients */}
+                <span className="text-white/40 whitespace-nowrap">
+                  {"Recipients: "}
+                  <span key={summaryData.validCount} className="text-white/60 font-medium animate-value-flash">
+                    {summaryData.validCount}
+                  </span>
+                </span>
+                <span className="text-white/20">|</span>
+                {/* Total */}
+                <span className="text-white/40 whitespace-nowrap">
+                  {"Total: "}
+                  <span key={summaryData.total.toFixed(2)} className="text-white/70 font-medium animate-value-flash">
+                    {(selectedSymbol === "EURC" ? "€" : "$") + summaryData.total.toFixed(2)}
+                  </span>
+                  {" " + selectedSymbol}
+                </span>
+                <span className="text-white/20">|</span>
+                {/* Powered by Arc */}
+                <span className="text-white/20 whitespace-nowrap">Powered by Arc</span>
+                {/* Refresh — pushed to the right */}
+                <button
+                  type="button"
+                  onClick={refreshGas}
+                  title="Refresh gas estimate"
+                  className="ml-auto shrink-0 flex items-center justify-center w-5 h-5 rounded hover:bg-white/[0.06] transition-colors duration-150"
+                >
+                  <svg
+                    width="10"
+                    height="10"
+                    viewBox="0 0 12 12"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className={gasLoading ? "animate-spin text-violet-400" : "text-white/30"}
+                  >
+                    <path d="M10.5 6A4.5 4.5 0 1 1 6 1.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+                    <path d="M6 1.5L8 3.5M6 1.5L8 0" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
+              </div>
 
               {/* Send button */}
               <button

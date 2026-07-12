@@ -1,6 +1,7 @@
 "use client";
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { ConnectButton } from '@/components/wallet/ConnectButton';
 import { ROUTES } from '@/constants/routes';
@@ -8,33 +9,43 @@ import { ROUTES } from '@/constants/routes';
 const NAV_LINKS = [
   { label: 'Bulk Pay', href: ROUTES.BULK_PAY },
   { label: 'Dashboard', href: ROUTES.DASHBOARD },
-  { label: 'Social', href: ROUTES.SOCIAL_PROFILE },
+  { label: 'VibeID', href: ROUTES.SOCIAL_PROFILE },
 ];
 
 export function Header() {
   const pathname = usePathname();
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-xl border-b border-white/10">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-black/30 backdrop-blur-2xl border-b border-white/[0.08] shadow-[0_1px_0_rgba(255,255,255,0.04),0_8px_32px_rgba(0,0,0,0.3)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href={ROUTES.HOME} className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-violet-600 to-indigo-600 flex items-center justify-center">
-              <span className="text-white font-bold text-lg">V</span>
-            </div>
-            <span className="hidden sm:inline text-white font-semibold text-lg">VibeFlow</span>
+          <Link href={ROUTES.HOME} className="flex items-center gap-2.5 group">
+            <Image
+              src="/logo.png"
+              alt="VibeFlow"
+              width={40}
+              height={40}
+              style={{ objectFit: 'contain' }}
+              className="group-hover:scale-105 transition-all duration-300 drop-shadow-[0_0_8px_rgba(139,92,246,0.4)] group-hover:drop-shadow-[0_0_14px_rgba(139,92,246,0.7)]"
+              priority
+              unoptimized
+            />
+            <span className="hidden sm:inline font-semibold text-lg tracking-tight">
+              <span className="text-white">Vibe</span><span className="animate-gradient-x bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">Flow</span>
+            </span>
           </Link>
 
           {/* Nav Links */}
-          <nav className="flex items-center gap-1">
+          <nav className="flex items-center gap-0.5 rounded-full border border-white/[0.06] bg-white/[0.03] p-1">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
+                aria-current={pathname === link.href ? 'page' : undefined}
                 className={pathname === link.href
-                  ? 'whitespace-nowrap px-3 sm:px-4 py-2 rounded-lg bg-white/10 text-white text-sm font-medium transition-colors'
-                  : 'whitespace-nowrap px-3 sm:px-4 py-2 rounded-lg text-gray-400 hover:text-white text-sm font-medium transition-colors'
+                  ? 'whitespace-nowrap px-3 sm:px-4 py-1.5 rounded-full bg-white/10 text-white text-sm font-medium shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] transition-all duration-200'
+                  : 'whitespace-nowrap px-3 sm:px-4 py-1.5 rounded-full text-gray-400 hover:text-white hover:bg-white/[0.05] text-sm font-medium transition-all duration-200'
                 }
               >
                 {link.label}

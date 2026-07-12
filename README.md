@@ -4,7 +4,7 @@
 
 > Send thousands of USDC/EURC payments in a single transaction. Built for payroll, rewards, vendor payouts, and mass disbursements — powered by Arc's sub-second finality and Circle stablecoins.
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-arcswap--lac.vercel.app-6d28d9?style=for-the-badge&logo=vercel)](https://arcswap-lac.vercel.app)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-vibeflow.vercel.app-6d28d9?style=for-the-badge&logo=vercel)](https://vibeflow.vercel.app)
 [![Built on Arc](https://img.shields.io/badge/Built%20on-Arc%20Testnet-0ea5e9?style=for-the-badge)](https://arc.network)
 [![Powered by Circle](https://img.shields.io/badge/Powered%20by-Circle%20USDC-00ac6b?style=for-the-badge)](https://circle.com)
 [![Hackathon](https://img.shields.io/badge/Hackathon-Stablecoins%20Commerce%20Stack-f59e0b?style=for-the-badge)](https://arc.network)
@@ -108,8 +108,8 @@ Standard `Multicall3` changes `msg.sender` to the contract itself, breaking ERC-
 ### 1. Clone and install
 
 ```bash
-git clone https://github.com/theButcherARC/arcswap.git
-cd arcswap
+git clone https://github.com/theButcherARC/VibeFlow.git
+cd VibeFlow
 pnpm install
 ```
 
@@ -233,8 +233,8 @@ On Arc, **gas is paid in USDC**. This collapses the operational complexity to ze
 | **Track 4** — Developer Tooling | Build developer-facing primitives | Gas estimator hook, `useBulkPay` with memo offset handling, reusable payroll components |
 
 **Submitted by:** theButcherARC  
-**Live URL:** [https://arcswap-lac.vercel.app](https://arcswap-lac.vercel.app)  
-**Repository:** [https://github.com/theButcherARC/arcswap](https://github.com/theButcherARC/arcswap)
+**Live URL:** [https://vibeflow.vercel.app](https://vibeflow.vercel.app)  
+**Repository:** [https://github.com/theButcherARC/VibeFlow](https://github.com/theButcherARC/VibeFlow)
 
 ---
 

@@ -1,5 +1,5 @@
 // src/services/agentService.ts
-// Gemini Flash API - parses natural language into BulkPay recipient data
+// VibeAI - parses natural language into BulkPay recipient data
 
 export interface ParsedRecipient {
   name: string;
@@ -16,14 +16,21 @@ export interface ParsedBulkPay {
 
 const SYSTEM_PROMPT = `You are a payment parser for VibeFlow, a USDC batch payment platform on Arc blockchain.
 
-Parse natural language payment instructions into structured JSON.
+Parse natural language payment instructions, CSV data, or structured lists into JSON recipient data.
 
-Rules:
-- Extract recipient name, wallet address (0x...), and amount in USDC
+Parsing Rules:
+- Extract recipient name, identifier (wallet address 0x..., X handle @username, or VibeID VIBE-XXXXX), and amount in USDC
+- Handle multiple formats: natural language ("Pay Alice 100 to @bob"), CSV rows, or multi-line lists
+- CSV Format: name, address, amount OR name, address (with default amount)
+- Multi-line Format: Each line is "name, address, amount" or "name - address - amount"
 - If a percentage is given and total amount is mentioned, calculate individual amounts
 - Token defaults to "USDC" unless EURC or cirBTC is explicitly mentioned
-- Wallet addresses must start with 0x and be 42 characters
+- Identifiers can be:
+  * Wallet addresses: 0x followed by 40 hex characters
+  * X/Twitter handles: @ followed by username (e.g. @alice)
+  * VibeID: VIBE- followed by alphanumerics (e.g. VIBE-ABC123)
 - If amounts are given as percentages, calculate from total
+- If "each" is specified with an amount, apply that amount to all recipients
 - Return ONLY valid JSON, no markdown, no explanation
 
 Output format:

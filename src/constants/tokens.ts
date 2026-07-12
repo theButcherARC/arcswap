@@ -52,4 +52,4 @@ export const TOKENS: Record<string, Token> = {
 export const TOKEN_LIST: Token[] = [TOKENS.USDC, TOKENS.EURC, TOKENS.cirBTC, TOKENS.VIBE];
 
 /** Maximum recipients allowed in a single bulk pay operation */
-export const BULK_PAY_MAX_RECIPIENTS = 10;
+export const BULK_PAY_MAX_RECIPIENTS = 100;

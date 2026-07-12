@@ -147,7 +147,7 @@ export default function VibeFlowLanding() {
           </div>
 
           <div className="grid gap-6 md:grid-cols-3 mb-6">
-            <div className="animate-fade-in-up delay-100 group relative rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-8 transition-all duration-500 hover:border-violet-500/20 hover:bg-white/[0.05]">
+            <div className="animate-fade-in-up delay-100 group relative rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(0,0,0,0.4)] hover:border-violet-500/20 hover:bg-white/[0.05]">
               <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-violet-600/[0.06] to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none" />
               <div className="relative">
                 <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-violet-500/20 bg-violet-500/[0.08]">
@@ -158,21 +158,21 @@ export default function VibeFlowLanding() {
                 </div>
                 <h3 className="text-xl font-semibold text-white mb-3 tracking-tight">AI Payment Agent</h3>
                 <p className="text-sm text-white/40 leading-relaxed mb-6">
-                  Describe payments in plain English. Gemini AI parses your intent instantly - recipients, amounts, tokens - all auto-filled in seconds.
+                  Describe payments in plain English. VibeAI parses your intent instantly - recipients, amounts, tokens - all auto-filled in seconds.
                 </p>
                 <div className="flex items-center gap-3 pt-6 border-t border-white/[0.06]">
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-500/10">
                     <span className="text-xs font-bold text-violet-400">AI</span>
                   </div>
                   <div>
-                    <span className="text-xs font-medium text-white/60">Gemini Flash</span>
+                    <span className="text-xs font-medium text-white/60">VibeAI</span>
                     <span className="text-xs text-white/30 ml-1">powered</span>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="animate-fade-in-up delay-200 group relative rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-8 transition-all duration-500 hover:border-indigo-500/20 hover:bg-white/[0.05]">
+            <div className="animate-fade-in-up delay-200 group relative rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(0,0,0,0.4)] hover:border-indigo-500/20 hover:bg-white/[0.05]">
               <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-indigo-600/[0.06] to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none" />
               <div className="relative">
                 <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-indigo-500/20 bg-indigo-500/[0.08]">
@@ -196,7 +196,7 @@ export default function VibeFlowLanding() {
               </div>
             </div>
 
-            <div className="animate-fade-in-up delay-300 group relative rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-8 transition-all duration-500 hover:border-cyan-500/20 hover:bg-white/[0.05]">
+            <div className="animate-fade-in-up delay-300 group relative rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(0,0,0,0.4)] hover:border-cyan-500/20 hover:bg-white/[0.05]">
               <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-cyan-600/[0.06] to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none" />
               <div className="relative">
                 <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-cyan-500/20 bg-cyan-500/[0.08]">
@@ -223,7 +223,7 @@ export default function VibeFlowLanding() {
 
           <div className="grid gap-6 md:grid-cols-3">
             {/* USDC + EURC */}
-            <div className="animate-fade-in-up delay-100 group relative rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-8 transition-all duration-500 hover:border-emerald-500/20 hover:bg-white/[0.05]">
+            <div className="animate-fade-in-up delay-100 group relative rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(0,0,0,0.4)] hover:border-emerald-500/20 hover:bg-white/[0.05]">
               <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-emerald-600/[0.06] to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none" />
               <div className="relative">
                 <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-emerald-500/20 bg-emerald-500/[0.08]">
@@ -245,7 +245,7 @@ export default function VibeFlowLanding() {
             </div>
 
             {/* Onchain Memo Labels */}
-            <div className="animate-fade-in-up delay-200 group relative rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-8 transition-all duration-500 hover:border-amber-500/20 hover:bg-white/[0.05]">
+            <div className="animate-fade-in-up delay-200 group relative rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(0,0,0,0.4)] hover:border-amber-500/20 hover:bg-white/[0.05]">
               <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-amber-600/[0.06] to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none" />
               <div className="relative">
                 <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-amber-500/20 bg-amber-500/[0.08]">
@@ -266,23 +266,22 @@ export default function VibeFlowLanding() {
               </div>
             </div>
 
-            {/* Social Pay */}
-            <div className="animate-fade-in-up delay-300 group relative rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-8 transition-all duration-500 hover:border-sky-500/20 hover:bg-white/[0.05]">
-              <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-sky-600/[0.06] to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none" />
+            {/* VibeID */}
+            <div className="animate-fade-in-up delay-300 group relative rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(0,0,0,0.4)] hover:border-fuchsia-500/20 hover:bg-white/[0.05]">
+              <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-fuchsia-600/[0.06] to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none" />
               <div className="relative">
-                <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-sky-500/20 bg-sky-500/[0.08]">
+                <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-fuchsia-500/20 bg-fuchsia-500/[0.08]">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="12" cy="8" r="4" stroke="#0ea5e9" strokeWidth="2"/>
-                    <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#0ea5e9" strokeWidth="2" strokeLinecap="round"/>
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z" fill="#d946ef"/>
                   </svg>
                 </div>
-                <h3 className="text-xl font-semibold text-white mb-3 tracking-tight">Social Pay</h3>
+                <h3 className="text-xl font-semibold text-white mb-3 tracking-tight">Unique VibeID</h3>
                 <p className="text-sm text-white/40 leading-relaxed mb-6">
-                  Pay anyone by their X/Twitter @handle. No wallet address needed — just @username.
+                  Get a permanent, unique identifier like VIBE-XXXXX. Pay anyone by their X handle, wallet address, or VibeID.
                 </p>
                 <div className="flex items-center gap-3 pt-6 border-t border-white/[0.06]">
-                  <div className="flex h-8 items-center justify-center rounded-lg bg-sky-500/10 px-2.5">
-                    <span className="text-xs font-bold text-sky-400">@handle payments</span>
+                  <div className="flex h-8 items-center justify-center rounded-lg bg-fuchsia-500/10 px-2.5">
+                    <span className="text-xs font-bold text-fuchsia-400">@handle or VIBE-ID</span>
                   </div>
                 </div>
               </div>
@@ -427,12 +426,11 @@ export default function VibeFlowLanding() {
       {/* ==================== FOOTER ==================== */}
       <footer className="relative z-10 border-t border-white/[0.06]">
         <div className="mx-auto max-w-6xl px-4 py-16 sm:py-20">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-16">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-10 mb-16">
             <div className="col-span-2 md:col-span-1">
               <Link href={ROUTES.HOME} className="inline-flex items-center gap-2.5 mb-5">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-violet-600 to-indigo-600">
-                  <span className="text-white font-bold text-sm">V</span>
-                </div>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/logo.png" alt="VibeFlow" width={32} height={32} className="rounded-lg shadow-md shadow-violet-500/20" />
                 <span className="text-lg font-semibold text-white tracking-tight">VibeFlow</span>
               </Link>
               <p className="text-sm text-white/30 leading-relaxed max-w-xs mb-6">
@@ -453,8 +451,6 @@ export default function VibeFlowLanding() {
                 <li><Link href={ROUTES.BULK_PAY} className="text-sm text-white/30 hover:text-white/70 transition-colors duration-200">Bulk Payments</Link></li>
                 <li><Link href={ROUTES.DASHBOARD} className="text-sm text-white/30 hover:text-white/70 transition-colors duration-200">Dashboard</Link></li>
                 <li><Link href={ROUTES.SOCIAL_PROFILE} className="text-sm text-white/30 hover:text-white/70 transition-colors duration-200">Social Pay</Link></li>
-                <li><Link href="/roadmap" className="text-sm text-white/30 hover:text-white/70 transition-colors duration-200">Roadmap</Link></li>
-                <li><Link href="/architecture" className="text-sm text-white/30 hover:text-white/70 transition-colors duration-200">Architecture</Link></li>
               </ul>
             </div>
 
@@ -467,9 +463,18 @@ export default function VibeFlowLanding() {
             </div>
 
             <div>
+              <h4 className="text-xs font-semibold text-white/60 tracking-wider uppercase mb-4">Resources</h4>
+              <ul className="space-y-3">
+                <li><Link href="/architecture" className="text-sm text-white/30 hover:text-white/70 transition-colors duration-200">Architecture</Link></li>
+                <li><Link href="/roadmap" className="text-sm text-white/30 hover:text-white/70 transition-colors duration-200">Roadmap</Link></li>
+                <li><a href="https://github.com/theButcherARC/arcswap" target="_blank" rel="noopener noreferrer" className="text-sm text-white/30 hover:text-white/70 transition-colors duration-200">GitHub</a></li>
+              </ul>
+            </div>
+
+            <div>
               <h4 className="text-xs font-semibold text-white/60 tracking-wider uppercase mb-4">Connect</h4>
               <ul className="space-y-3">
-                <li><a href="https://x.com/The_Last_Dip" target="_blank" rel="noopener noreferrer" className="text-sm text-white/30 hover:text-white/70 transition-colors duration-200">@The_Last_Dip</a></li>
+                <li><a href="https://x.com/The_Last_Dip" target="_blank" rel="noopener noreferrer" className="text-sm text-white/30 hover:text-white/70 transition-colors duration-200">Butcher (Haroon)</a></li>
               </ul>
             </div>
           </div>

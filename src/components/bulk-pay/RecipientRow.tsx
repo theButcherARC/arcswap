@@ -35,22 +35,27 @@ export default function RecipientRow({
   const [handleText, setHandleText] = useState('');
   const resolveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const isHandleInput = (val: string) => val.trimStart().startsWith('@');
+  const isHandleInput = (val: string) => val.trimStart().startsWith('@') || /^VIBE-/i.test(val.trim());
 
   async function resolveHandle(raw: string) {
-    const username = raw.replace(/^@/, '').trim();
-    if (!username) return;
+    const trimmed = raw.trim();
+    const isVibeId = /^VIBE-/i.test(trimmed);
+    const identifier = isVibeId ? trimmed : trimmed.replace(/^@/, '');
+    if (!identifier) return;
     setHandleState('resolving');
     try {
-      const res = await fetch('/api/social/resolve?username=' + encodeURIComponent(username));
+      const res = await fetch('/api/social/resolve?username=' + encodeURIComponent(identifier));
       const json = await res.json();
       if (res.ok && json.address) {
+        const label = isVibeId
+          ? (json.vibeId ?? identifier) + ' \u2192 ' + json.address.slice(0, 6) + '...' + json.address.slice(-4)
+          : '@' + json.username + ' \u2192 ' + json.address.slice(0, 6) + '...' + json.address.slice(-4);
         setHandleState('resolved');
-        setHandleText('@' + json.username + ' \u2192 ' + json.address.slice(0, 6) + '...' + json.address.slice(-4));
+        setHandleText(label);
         onAddressChange(recipient.id, json.address);
       } else {
         setHandleState('not_found');
-        setHandleText('@' + username + ' is not registered');
+        setHandleText((isVibeId ? identifier : '@' + identifier) + ' is not registered');
       }
     } catch {
       setHandleState('error');
@@ -151,7 +156,7 @@ export default function RecipientRow({
         {/* Address input */}
         <div className="min-w-[180px] flex-[1.5]">
           <label className="block text-[10px] font-medium text-white/30 uppercase tracking-wider mb-1.5">
-            Address or @username
+            Address, @username, or VIBE-ID
           </label>
           <div className="relative">
             <input
@@ -159,7 +164,7 @@ export default function RecipientRow({
               value={recipient.address}
               onChange={(e) => handleAddressInput(e.target.value)}
               disabled={isDisabled}
-              placeholder="0x... or @username"
+              placeholder="0x..., @username, or VIBE-XXXXXX"
               className={addressClasses + " pr-9"}
             />
             {addressValid && (
