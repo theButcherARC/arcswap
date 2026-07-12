@@ -7,29 +7,22 @@ import { SYSTEM_PROMPT } from "@/services/agentService";
 const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
 
 /** Resolve identifier (0x, @handle, or VIBE-ID) to wallet address */
-async function resolveIdentifier(identifier: string): Promise<string | null> {
+async function resolveIdentifier(identifier: string, baseUrl: string): Promise<string | null> {
   const trimmed = identifier.trim();
-  console.log("[v0] Resolving identifier:", trimmed);
   
   // Already a wallet address
   if (/^0x[a-fA-F0-9]{40}$/.test(trimmed)) {
-    console.log("[v0] Already a wallet address:", trimmed);
     return trimmed;
   }
   
   // VibeID or X handle — resolve via /api/social/resolve
   if (/^(VIBE-|@)/i.test(trimmed)) {
     try {
-      const url = `${process.env.NEXTAUTH_URL || "http://localhost:3000"}/api/social/resolve?username=${encodeURIComponent(trimmed)}`;
-      console.log("[v0] Fetching resolve endpoint:", url);
+      const url = `${baseUrl}/api/social/resolve?username=${encodeURIComponent(trimmed)}`;
       const res = await fetch(url, { cache: "no-store" });
       const data = await res.json();
-      console.log("[v0] Resolve response:", { status: res.status, data });
       if (res.ok && data.address) {
-        console.log("[v0] Resolved to address:", data.address);
         return data.address;
-      } else {
-        console.log("[v0] Resolve failed:", data.error || "No address returned");
       }
     } catch (e) {
       console.error("[v0] Resolve identifier error:", e);
@@ -37,7 +30,6 @@ async function resolveIdentifier(identifier: string): Promise<string | null> {
     return null;
   }
   
-  console.log("[v0] Identifier does not match any pattern");
   return null;
 }
 
@@ -51,6 +43,9 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
+
+    // Get base URL for internal API calls
+    const baseUrl = req.nextUrl.origin;
 
     const apiKey = process.env.GROQ_API_KEY;
     if (!apiKey) {
@@ -120,7 +115,7 @@ export async function POST(req: NextRequest) {
     if (parsed.recipients && Array.isArray(parsed.recipients)) {
       const resolved = [];
       for (const recipient of parsed.recipients) {
-        const walletAddress = await resolveIdentifier(recipient.address);
+        const walletAddress = await resolveIdentifier(recipient.address, baseUrl);
         if (!walletAddress) {
           return NextResponse.json(
             {
