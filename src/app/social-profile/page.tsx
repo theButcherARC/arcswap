@@ -130,8 +130,8 @@ export default function SocialProfilePage() {
       <div className="relative mx-auto max-w-lg">
         {/* Page header */}
         <div className="mb-10">
-          <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-violet-400 to-violet-600 bg-clip-text text-transparent text-balance">
-            VibeID Profile
+          <h1 className="text-3xl font-bold tracking-tight text-balance">
+            <span className="animate-gradient-x bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">Vibe</span><span className="text-white">ID Profile</span>
           </h1>
           <p className="mt-2 text-sm text-white/50 leading-relaxed">
             Get your unique VibeID. Link X account. Get paid by anyone with just an identifier.
