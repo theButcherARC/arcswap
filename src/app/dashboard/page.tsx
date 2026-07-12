@@ -81,19 +81,39 @@ async function fetchBulkPays(wallet: string): Promise<BulkPay[]> {
   if (!wallet) return [];
 
   const lower = wallet.toLowerCase();
-  const url =
-    ARCSCAN_V2 +
-    "/addresses/" +
-    wallet +
-    "/token-transfers?filter=from";
 
-  const res = await fetch(url, { cache: "no-store" });
-  if (!res.ok) {
-    throw new Error("ArcScan v2 API error: " + res.status);
+  // Fetch ALL pages from ArcScan so volume is never under-counted
+  const transfers: V2Transfer[] = [];
+  let nextPageParams: string | null = null;
+  let pagesFetched = 0;
+  const MAX_PAGES = 20; // safety cap
+
+  while (pagesFetched < MAX_PAGES) {
+    const baseUrl: string =
+      ARCSCAN_V2 +
+      "/addresses/" +
+      wallet +
+      "/token-transfers?filter=from";
+    const url: string = nextPageParams
+      ? baseUrl + "&" + nextPageParams
+      : baseUrl;
+
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) throw new Error("ArcScan v2 API error: " + res.status);
+
+    const json = await res.json();
+    const items: V2Transfer[] = Array.isArray(json?.items) ? json.items : [];
+    transfers.push(...items);
+    pagesFetched++;
+
+    // ArcScan paginates via next_page_params — stop if no more pages
+    const next = json?.next_page_params;
+    if (!next || Object.keys(next).length === 0) break;
+    // Serialize next_page_params as query string
+    nextPageParams = new URLSearchParams(
+      Object.entries(next).map(([k, v]) => [k, String(v)])
+    ).toString();
   }
-
-  const json = await res.json();
-  const transfers: V2Transfer[] = Array.isArray(json?.items) ? json.items : [];
 
   // Group USDC outgoing transfers by transaction hash
   const groups = new Map<string, V2Transfer[]>();
