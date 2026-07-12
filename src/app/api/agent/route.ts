@@ -33,61 +33,89 @@ async function resolveIdentifier(identifier: string, baseUrl: string): Promise<s
   return null;
 }
 
-/** Try to parse CSV/multi-line format directly */
+/** Parse CSV/multi-line format with support for split amounts */
 function tryParseCSV(input: string): { recipients: any[]; token: string; totalAmount: string } | null {
-  const lines = input.trim().split('\n').filter(l => l.trim());
+  const text = input.trim();
   
-  // Detect if this looks like CSV: multiple lines with addresses
-  const hasMultipleLines = lines.length > 1;
-  const looksLikeCSV = lines.some(line => /0x[a-fA-F0-9]{40}|@\w+|VIBE-\w+/.test(line));
+  // Check for "split X$" or "split X USDC" at end
+  const splitMatch = text.match(/split\s+([\d.]+)\s*(?:USDC|\$)?(?:\s|$)/i);
+  const splitAmount = splitMatch ? parseFloat(splitMatch[1]) : null;
   
-  if (!hasMultipleLines || !looksLikeCSV) {
-    return null;
-  }
+  // Remove split instruction from text
+  const cleanText = text.replace(/split\s+[\d.]+\s*(?:USDC|\$)?/i, '').trim();
+  
+  // Split into lines and filter
+  const lines = cleanText.split('\n').map(l => l.trim()).filter(l => l && !l.match(/^\s*$/));
+  
+  if (lines.length === 0) return null;
   
   const recipients = [];
-  let totalAmount = "0";
   
   for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed) continue;
+    // Skip if line doesn't contain an address/handle/vibeID
+    if (!/0x[a-fA-F0-9]{40}|@\w+|VIBE-\w+/i.test(line)) continue;
     
-    // Parse: "Name, 0x... , amount" OR "Name, 0x..." OR "0x..., amount"
-    const parts = trimmed.split(',').map(p => p.trim()).filter(p => p);
+    // Parse line: extract name, address, and optional amount
+    // Patterns: "Name,0x...", "Name,0x...,amount", "0x...,amount", etc.
+    const parts = line.split(',').map(p => p.trim()).filter(p => p);
     
     if (parts.length < 2) continue;
     
-    // Find the address/identifier (0x, @, or VIBE-)
-    const addrIdx = parts.findIndex(p => /^(0x[a-fA-F0-9]{40}|@\w+|VIBE-\w+)$/.test(p));
+    // Find address (0x, @, VIBE-)
+    const addrIdx = parts.findIndex(p => /^(0x[a-fA-F0-9]{40}|@\w+|VIBE-\w+)$/i.test(p));
     if (addrIdx === -1) continue;
     
     const address = parts[addrIdx];
-    const name = parts[0];
     
-    // Look for amount - could be "$X", "X USDC", or just "X"
-    let amount = "0";
+    // Extract name (usually first part)
+    let name = parts[0];
+    if (addrIdx === 0) {
+      name = parts.length > 1 ? parts[1] : "Recipient";
+    }
+    
+    // Extract amount from remaining parts (skip name and address)
+    let amount = null;
     for (let i = 0; i < parts.length; i++) {
       if (i !== addrIdx && i !== 0) {
-        const amountMatch = parts[i].match(/[\d.]+/);
-        if (amountMatch) {
-          amount = amountMatch[0];
+        const numMatch = parts[i].match(/[\d.]+/);
+        if (numMatch) {
+          amount = numMatch[0];
           break;
         }
       }
     }
     
-    recipients.push({ name, address, amount });
+    // If no amount found in this line, use split amount (will distribute later)
+    if (!amount && !splitAmount) {
+      amount = "0";
+    } else if (!amount && splitAmount) {
+      amount = null; // Mark for later distribution
+    }
+    
+    recipients.push({ name: name.substring(0, 50), address, amount });
   }
   
-  if (recipients.length === 0) {
-    return null;
+  if (recipients.length === 0) return null;
+  
+  // If split amount exists, distribute it evenly among recipients with no amount
+  let totalAmount = 0;
+  if (splitAmount) {
+    const amountPerRecipient = splitAmount / recipients.length;
+    for (const r of recipients) {
+      if (r.amount === null) {
+        r.amount = amountPerRecipient.toString();
+      }
+      totalAmount += parseFloat(r.amount || "0");
+    }
+  } else {
+    totalAmount = recipients.reduce((sum, r) => sum + (parseFloat(r.amount || "0") || 0), 0);
   }
   
-  // Calculate total
-  const total = recipients.reduce((sum, r) => sum + (parseFloat(r.amount) || 0), 0);
-  totalAmount = total.toString();
-  
-  return { recipients, token: "USDC", totalAmount };
+  return {
+    recipients,
+    token: "USDC",
+    totalAmount: totalAmount.toString(),
+  };
 }
 
 export async function POST(req: NextRequest) {
