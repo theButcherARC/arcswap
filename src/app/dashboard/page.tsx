@@ -44,7 +44,7 @@ function formatUsdc(amount: number): string {
   });
 }
 
-const ARCSCAN_V2 = "https://testnet.arcscan.app/api/v2";
+  const ARCSCAN_V2 = "https://explorer.arc.io/api/v2";
 
 interface V2Transfer {
   transaction_hash: string;
@@ -474,7 +474,7 @@ export default function DashboardPage() {
                 </div>
                 {lastBulkPay ? (
                   <a
-                    href={"https://testnet.arcscan.app/tx/" + lastBulkPay.hash}
+                    href={"https://explorer.arc.io/tx/" + lastBulkPay.hash}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="font-mono text-xs text-violet-400 transition-colors hover:text-violet-300 hover:underline"
@@ -545,7 +545,7 @@ export default function DashboardPage() {
                           <td className="whitespace-nowrap px-5 py-4 sm:px-6">
                             <a
                               href={
-                                "https://testnet.arcscan.app/address/" +
+                                "https://explorer.arc.io/address/" +
                                 r.address
                               }
                               target="_blank"

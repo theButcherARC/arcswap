@@ -319,7 +319,7 @@ export default function VibeFlowLanding() {
                   <div className="h-px flex-1 bg-gradient-to-r from-violet-500/20 to-transparent" />
                 </div>
                 <h3 className="text-xl font-semibold text-white mb-3 tracking-tight">Connect Wallet</h3>
-                <p className="text-sm text-white/40 leading-relaxed mb-5">Link MetaMask with USDC on Arc. NetworkGuard auto-switches to Arc Testnet.</p>
+                <p className="text-sm text-white/40 leading-relaxed mb-5">Link MetaMask with USDC on Arc. NetworkGuard auto-switches to Arc Mainnet.</p>
                 <div className="space-y-2.5">
                   <div className="flex items-center gap-2.5">
                     <div className="h-1 w-1 rounded-full bg-violet-400" />

@@ -9,6 +9,7 @@ import { toChecksumAddress } from "@/utils/address";
 import { isValidAddress } from "@/utils/address";
 import { parseTokenAmount } from "@/utils/format";
 import { TOKENS, BULK_PAY_MAX_RECIPIENTS } from "@/constants/tokens";
+import { DEFAULT_CHAIN } from "@/constants/chains";
 import { parsePaymentInstruction } from "@/services/agentService";
 import BulkPaySuccess from "./BulkPaySuccess";
 import RecipientRow from "./RecipientRow";
@@ -20,13 +21,8 @@ import type { Recipient, InputMode } from "@/types/bulkPay";
 /* --------------------------------------------------------------- */
 
 const arcPublicClient = createPublicClient({
-  chain: {
-    id: 5042002,
-    name: "Arc Testnet",
-    nativeCurrency: { name: "USD Coin", symbol: "USDC", decimals: 6 },
-    rpcUrls: { default: { http: ["https://rpc.testnet.arc.network"] } },
-  } as any,
-  transport: http("https://rpc.testnet.arc.network"),
+  chain: DEFAULT_CHAIN,
+  transport: http(DEFAULT_CHAIN.rpcUrls.default.http[0]),
 });
 
 const GAS_PER_RECIPIENT = 50_000n;

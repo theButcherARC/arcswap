@@ -7,6 +7,8 @@
     "test": "hardhat test",
     "deploy:testnet": "hardhat run scripts/deploy.ts --network arcTestnet",
     "deploy:disperse": "hardhat run scripts/deployDisperse.ts --network arcTestnet",
+    "deploy:mainnet": "hardhat run scripts/deploy.ts --network arc",
+    "deploy:disperse:mainnet": "hardhat run scripts/deployDisperse.ts --network arc",
     "clean": "hardhat clean"
   },
   "devDependencies": {

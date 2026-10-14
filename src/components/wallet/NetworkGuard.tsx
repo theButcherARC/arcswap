@@ -10,7 +10,7 @@ interface NetworkGuardProps {
 }
 
 /**
- * Wraps pages that require a connected wallet on Arc Testnet.
+ * Wraps pages that require a connected wallet on Arc.
  *
  * - Not connected → prompt to connect
  * - Wrong network → prompt to switch

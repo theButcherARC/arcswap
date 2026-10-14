@@ -534,7 +534,7 @@ export default function CSVUploadForm() {
                 onClick={switchToArcNetwork}
                 className="w-full mb-4 rounded-xl border border-amber-500/25 bg-amber-500/[0.06] px-4 py-3 text-xs font-semibold text-amber-400 hover:bg-amber-500/10 transition-all duration-200"
               >
-                Switch to Arc Testnet
+                Switch to Arc
               </button>
             )}
 
