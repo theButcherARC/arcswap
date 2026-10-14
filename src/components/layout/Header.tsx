@@ -16,9 +16,9 @@ export function Header() {
   const pathname = usePathname();
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b border-[var(--line)] bg-[rgba(6,6,9,0.7)] backdrop-blur-2xl">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+    <header className="fixed top-0 left-0 right-0 z-50 border-b border-[var(--line)] bg-[rgba(11,13,22,0.86)] backdrop-blur-2xl">
+      <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
+        <div className="flex h-[72px] items-center justify-between gap-6">
           {/* Logo */}
           <Link href={ROUTES.HOME} className="flex items-center gap-2.5 group">
             <Image
@@ -37,15 +37,15 @@ export function Header() {
           </Link>
 
           {/* Nav Links */}
-          <nav className="flex items-center border border-[var(--line)] bg-[var(--glass)] p-1" aria-label="Main navigation">
+          <nav className="hidden items-center gap-1 rounded-xl border border-[var(--line)] bg-[var(--glass)] p-1 md:flex" aria-label="Main navigation">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 aria-current={pathname === link.href ? 'page' : undefined}
                 className={pathname === link.href
-                  ? 'whitespace-nowrap px-3 sm:px-4 py-1.5 bg-[var(--fg)] text-[var(--bg)] text-sm font-medium transition-all duration-200'
-                  : 'whitespace-nowrap px-3 sm:px-4 py-1.5 text-[var(--fg-muted)] hover:text-[var(--fg)] hover:bg-[var(--glass-strong)] text-sm font-medium transition-all duration-200'
+                  ? 'whitespace-nowrap rounded-lg bg-[var(--accent)] px-3.5 py-2 text-sm font-medium text-white shadow-[0_8px_24px_rgba(139,124,246,0.22)] transition-all duration-200'
+                  : 'whitespace-nowrap rounded-lg px-3.5 py-2 text-sm font-medium text-[var(--fg-muted)] transition-all duration-200 hover:bg-[var(--glass-strong)] hover:text-[var(--fg)]'
                 }
               >
                 {link.label}
