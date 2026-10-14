@@ -487,12 +487,12 @@ button:focus-visible {
 /* Add recipient button border pulse */
 @keyframes add-btn-pulse {
   0%, 100% {
-    border-color: rgba(124, 58, 237, 0.25);
+    border-color: rgba(139, 92, 246, 0.25);
     box-shadow: none;
   }
   50% {
-    border-color: rgba(124, 58, 237, 0.5);
-    box-shadow: 0 0 16px rgba(124, 58, 237, 0.15);
+    border-color: rgba(139, 92, 246, 0.5);
+    box-shadow: none;
   }
 }
 

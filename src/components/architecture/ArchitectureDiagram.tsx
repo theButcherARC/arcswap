@@ -15,13 +15,11 @@ const LAYERS = [
     bgColor: "rgba(148,163,184,0.04)",
     nodes: [
       {
-        icon: "👤",
         title: "Team Lead / Operator",
         subtitle: "Connects MetaMask",
         tags: ["MetaMask", "Arc"],
       },
       {
-        icon: "📋",
         title: "Recipient List",
         subtitle: "Manual or CSV",
         tags: ["Up to 100 addresses"],
@@ -36,19 +34,16 @@ const LAYERS = [
     bgColor: "rgba(139,92,246,0.04)",
     nodes: [
       {
-        icon: "⬡",
         title: "Next.js 14",
         subtitle: "App Router, SSR",
         tags: ["TypeScript", "Tailwind CSS"],
       },
       {
-        icon: "◈",
         title: "Wagmi v2 + Viem",
         subtitle: "Wallet & chain interaction",
         tags: ["useWriteContract", "simulateContract"],
       },
       {
-        icon: "◉",
         title: "BulkPayForm",
         subtitle: "Token select, recipients, memo",
         tags: ["USDC / EURC", "Gas Estimator"],
@@ -63,13 +58,11 @@ const LAYERS = [
     bgColor: "rgba(6,182,212,0.04)",
     nodes: [
       {
-        icon: "◆",
         title: "Groq LLM",
-        subtitle: "llama-3.3-70b-versatile",
+        subtitle: "gpt-oss-120b",
         tags: ["500 req/day free"],
       },
       {
-        icon: "◇",
         title: "Natural Language Parser",
         subtitle: '"pay Alice $50, Bob $100"',
         tags: ["JSON output", "Structured extraction"],
@@ -84,25 +77,21 @@ const LAYERS = [
     bgColor: "rgba(52,211,153,0.04)",
     nodes: [
       {
-        icon: "⬡",
         title: "Arc",
         subtitle: "Chain ID: 5042",
         tags: ["Sub-second finality", "Gas in USDC"],
       },
       {
-        icon: "◈",
         title: "Multicall3From",
         subtitle: "0x522f...47D0",
         tags: ["Preserves msg.sender", "Atomic batch"],
       },
       {
-        icon: "◉",
         title: "Memo Contract",
         subtitle: "0x5294...505",
         tags: ["sendMemo(string)", "Onchain label"],
       },
       {
-        icon: "◆",
         title: "USDC / EURC",
         subtitle: "Circle stablecoins",
         tags: ["6 decimals", "ERC-20"],
@@ -117,13 +106,11 @@ const LAYERS = [
     bgColor: "rgba(251,191,36,0.04)",
     nodes: [
       {
-        icon: "◉",
         title: "100+ Recipients",
         subtitle: "Receive USDC/EURC",
         tags: ["All wallets funded atomically"],
       },
       {
-        icon: "◈",
         title: "Arc Explorer Confirmation",
         subtitle: "explorer.arc.io",
         tags: ["Settled in < 1s"],
@@ -144,7 +131,6 @@ const ARROW_LABELS = [
 /* ------------------------------------------------------------------ */
 
 function NodeCard({
-  icon,
   title,
   subtitle,
   tags,
@@ -154,7 +140,6 @@ function NodeCard({
   visible,
   delay,
 }: {
-  icon: string;
   title: string;
   subtitle: string;
   tags: string[];
@@ -173,15 +158,14 @@ function NodeCard({
         transform: visible ? "translateY(0)" : "translateY(12px)",
         transition: `opacity 0.5s ease ${delay}ms, transform 0.5s ease ${delay}ms`,
       }}
-      className="rounded-xl px-4 py-3 backdrop-blur-xl flex-1 min-w-0"
+      className="px-4 py-3 backdrop-blur-xl flex-1 min-w-0"
     >
       <div className="flex items-start gap-2.5 mb-2">
         <span
-          className="text-base leading-none mt-0.5 opacity-70"
+          className="mt-1.5 h-2 w-2 shrink-0 border"
+          style={{ borderColor: accentColor }}
           aria-hidden="true"
-        >
-          {icon}
-        </span>
+        />
         <div className="min-w-0">
           <p className="text-sm font-semibold text-white/90 leading-tight">
             {title}
@@ -196,7 +180,7 @@ function NodeCard({
           <span
             key={tag}
             style={{ color: accentColor, borderColor: borderColor }}
-            className="text-[10px] font-medium px-2 py-0.5 rounded-full border bg-white/[0.03]"
+            className="text-[10px] font-medium px-2 py-0.5 border bg-white/[0.03]"
           >
             {tag}
           </span>
@@ -247,15 +231,15 @@ function AnimatedArrow({
     >
       {/* Label */}
       <span
-        className="text-[10px] font-medium px-2 py-0.5 rounded-full border border-white/[0.08] bg-white/[0.03] text-white/30"
+        className="text-[10px] font-medium px-2 py-0.5 border border-white/[0.08] bg-white/[0.03] text-white/30"
       >
         {label}
       </span>
 
       {/* Animated line + arrow */}
-      <div className="relative w-0.5 h-10 bg-white/[0.06] overflow-hidden rounded-full">
+      <div className="relative w-0.5 h-10 bg-white/[0.06] overflow-hidden ">
         <div
-          className="absolute top-0 left-0 w-full rounded-full"
+          className="absolute top-0 left-0 w-full "
           style={{
             height: `${progress * 100}%`,
             background: `linear-gradient(to bottom, ${accentFrom}, ${accentTo})`,
@@ -307,7 +291,7 @@ function LayerBlock({
         transform: visible ? "translateX(0)" : "translateX(-8px)",
         transition: `opacity 0.5s ease ${baseDelay}ms, transform 0.5s ease ${baseDelay}ms`,
       }}
-      className="rounded-2xl border p-4 backdrop-blur-xl"
+      className="border p-4 backdrop-blur-xl"
     >
       {/* Layer label */}
       <p
@@ -360,26 +344,8 @@ export default function ArchitectureDiagram() {
   return (
     <div
       ref={ref}
-      className="relative rounded-3xl overflow-hidden border border-white/[0.06] bg-[#050508]"
+      className="relative overflow-hidden border border-white/[0.06] bg-[var(--bg)]"
     >
-      {/* Ambient glow orbs */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -top-40 -left-40 w-96 h-96 rounded-full opacity-20"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(139,92,246,0.4) 0%, transparent 70%)",
-        }}
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -bottom-40 -right-40 w-96 h-96 rounded-full opacity-15"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(52,211,153,0.4) 0%, transparent 70%)",
-        }}
-      />
-
       {/* Header */}
       <div className="px-8 pt-8 pb-2 flex items-center justify-between">
         <div>
@@ -389,11 +355,11 @@ export default function ArchitectureDiagram() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <span className="flex items-center gap-1.5 text-[11px] font-medium text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 rounded-full px-3 py-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="flex items-center gap-1.5 text-[11px] font-medium text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 px-3 py-1">
+            <span className="w-1.5 h-1.5 bg-emerald-400 animate-pulse" />
             Arc Mainnet
           </span>
-          <span className="text-[11px] font-medium text-violet-400 bg-violet-400/10 border border-violet-400/20 rounded-full px-3 py-1">
+          <span className="text-[11px] font-medium text-violet-400 bg-violet-400/10 border border-violet-400/20 px-3 py-1">
             Circle USDC / EURC
           </span>
         </div>
@@ -429,7 +395,7 @@ export default function ArchitectureDiagram() {
           { label: "Finality", value: "< 1 second" },
           { label: "Max recipients", value: "100+ per tx" },
           { label: "Gas token", value: "USDC" },
-          { label: "AI model", value: "llama-3.3-70b" },
+          { label: "AI model", value: "gpt-oss-120b" },
           { label: "Contract calls", value: "1 popup, N transfers" },
         ].map((stat) => (
           <div key={stat.label} className="flex flex-col">

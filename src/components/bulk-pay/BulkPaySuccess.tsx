@@ -16,7 +16,7 @@ export default function BulkPaySuccess({ txHash, onReset, tokenSymbol = "USDC" }
     <div className="min-h-screen bg-[#050508] flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-lg">
         {/* Success card */}
-        <div className="rounded-3xl border border-emerald-500/20 bg-white/5 backdrop-blur-2xl p-8 sm:p-10 text-center shadow-[0_0_60px_rgba(16,185,129,0.08)]">
+        <div className="border border-emerald-500/20 bg-white/5 backdrop-blur-2xl p-8 sm:p-10 text-center shadow-[0_0_60px_rgba(16,185,129,0.08)]">
           {/* Animated checkmark circle */}
           <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full border-2 border-emerald-500/30 bg-emerald-500/[0.08]">
             <svg
@@ -67,7 +67,7 @@ export default function BulkPaySuccess({ txHash, onReset, tokenSymbol = "USDC" }
           </p>
 
           {/* Transaction hash */}
-          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 mb-6">
+          <div className="border border-white/10 bg-white/[0.03] p-4 mb-6">
             <span className="block text-[10px] font-medium text-white/30 uppercase tracking-wider mb-2">
               Transaction Hash
             </span>
@@ -83,13 +83,13 @@ export default function BulkPaySuccess({ txHash, onReset, tokenSymbol = "USDC" }
 
           {/* Info rows */}
           <div className="grid grid-cols-2 gap-3 mb-8">
-            <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5">
+            <div className="border border-white/[0.06] bg-white/[0.02] p-3.5">
               <span className="block text-[10px] text-white/25 uppercase tracking-wider mb-1">
                 Network
               </span>
               <span className="text-sm font-medium text-white/70">Arc</span>
             </div>
-            <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5">
+            <div className="border border-white/[0.06] bg-white/[0.02] p-3.5">
               <span className="block text-[10px] text-white/25 uppercase tracking-wider mb-1">
                 Asset
               </span>
@@ -103,7 +103,7 @@ export default function BulkPaySuccess({ txHash, onReset, tokenSymbol = "USDC" }
               href={explorerUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-5 py-3.5 text-sm font-medium text-white/70 hover:text-white hover:border-white/20 hover:bg-white/[0.08] transition-all duration-200"
+              className="flex-1 inline-flex items-center justify-center gap-2 border border-white/10 bg-white/[0.04] px-5 py-3.5 text-sm font-medium text-white/70 hover:text-white hover:border-white/20 hover:bg-white/[0.08] transition-all duration-200"
             >
               <svg
                 width="16"
@@ -125,7 +125,7 @@ export default function BulkPaySuccess({ txHash, onReset, tokenSymbol = "USDC" }
             <button
               type="button"
               onClick={onReset}
-              className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 px-5 py-3.5 text-sm font-semibold text-white shadow-lg shadow-violet-600/25 hover:shadow-violet-600/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+              className="flex-1 inline-flex items-center justify-center gap-2 bg-[var(--fg)] text-[var(--bg)] px-5 py-3.5 text-sm font-semibold text-white transition-all duration-200"
             >
               <svg
                 width="16"
