@@ -1,11 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Reduce webpack memory footprint — Vercel hobby builders (2 cores / 8 GB)
-  // were OOM-ing during compilation of the heavy wagmi/viem dependency tree.
-  experimental: {
-    webpackMemoryOptimizations: true,
-  },
-
   webpack: (config) => {
     config.externals.push("pino-pretty", "lokijs", "encoding");
     return config;

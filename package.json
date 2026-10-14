@@ -43,5 +43,13 @@
     "tailwindcss": "^3.4.4",
     "typescript": "^5.4.5"
   },
-  "packageManager": "pnpm@10.34.3"
+  "packageManager": "pnpm@10.34.3",
+  "overrides": {
+    "@coinbase/cdp-sdk": "1.51.2"
+  },
+  "pnpm": {
+    "overrides": {
+      "@coinbase/cdp-sdk": "1.51.2"
+    }
+  }
 }
