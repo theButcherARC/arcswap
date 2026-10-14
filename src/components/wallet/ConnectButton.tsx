@@ -45,9 +45,9 @@ export function ConnectButton() {
   return (
     <button
       onClick={() => disconnect()}
-      className="flex items-center gap-2 rounded-xl border border-surface-200 bg-surface-50 px-3 py-1.5 text-sm font-medium text-surface-800 hover:bg-surface-100 transition-colors"
+      className="flex items-center gap-2 border border-[var(--line)] bg-[var(--glass)] px-3.5 py-1.5 text-xs font-medium text-[var(--fg)] hover:bg-[var(--glass-strong)] transition-colors"
     >
-      <span className="h-2 w-2 rounded-full bg-green-500" aria-hidden="true" />
+      <span className="h-1.5 w-1.5 bg-emerald-400" aria-hidden="true" />
       {truncateAddress(address ?? "")}
     </button>
   );

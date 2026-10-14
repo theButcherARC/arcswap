@@ -11,19 +11,19 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<Variant, string> = {
   primary:
-    "bg-gradient-to-r from-arc-500 to-arc-600 text-white hover:from-arc-600 hover:to-arc-700 disabled:from-arc-200 disabled:to-arc-200 shadow-premium focus-visible:ring-arc-300",
+    "bg-[var(--fg)] text-[var(--bg)] hover:opacity-85 disabled:opacity-30 focus-visible:ring-[var(--fg)]",
   secondary:
-    "bg-surface-50 text-arc-900 border border-surface-100 hover:bg-surface-100 disabled:opacity-50",
+    "border border-[var(--line)] bg-[var(--glass)] text-[var(--fg)] hover:bg-[var(--glass-strong)] disabled:opacity-50",
   ghost:
-    "text-surface-300 hover:bg-surface-50 hover:text-arc-700 disabled:opacity-40",
+    "text-[var(--fg-muted)] hover:text-[var(--fg)] hover:bg-[var(--glass)] disabled:opacity-40",
   danger:
-    "bg-gradient-to-r from-rose-500 to-rose-600 text-white hover:from-rose-600 hover:to-rose-700 disabled:opacity-50",
+    "border border-rose-500/40 bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 disabled:opacity-50",
 };
 
 const sizeClasses: Record<Size, string> = {
-  sm: "px-3 py-1.5 text-sm rounded-xl",
-  md: "px-4 py-2.5 text-sm rounded-xl",
-  lg: "px-6 py-3.5 text-base rounded-2xl",
+  sm: "px-3.5 py-1.5 text-xs",
+  md: "px-5 py-2.5 text-sm",
+  lg: "px-6 py-3.5 text-sm",
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(

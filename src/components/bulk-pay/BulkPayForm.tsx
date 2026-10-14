@@ -102,7 +102,7 @@ function AgentPreview({
   onDiscard: () => void;
 }) {
   return (
-    <div className="mt-4 rounded-2xl border border-emerald-500/20 bg-emerald-500/[0.04] p-5">
+    <div className="mt-4 border border-emerald-500/20 bg-emerald-500/[0.04] p-5">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2.5">
           <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -115,14 +115,14 @@ function AgentPreview({
           <button
             type="button"
             onClick={onDiscard}
-            className="px-3.5 py-1.5 text-xs font-medium text-white/50 hover:text-white/70 rounded-lg border border-white/10 hover:border-white/20 bg-white/[0.03] transition-all duration-200 active:scale-95"
+            className="px-3.5 py-1.5 text-xs font-medium text-white/50 hover:text-white/70 border border-white/10 hover:border-white/20 bg-white/[0.03] transition-all duration-200 active:scale-95"
           >
             Discard
           </button>
           <button
             type="button"
             onClick={onApply}
-            className="px-4 py-1.5 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-500 rounded-lg shadow-lg shadow-emerald-600/20 transition-all duration-200 active:scale-95"
+            className="px-4 py-1.5 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-500 shadow-lg shadow-emerald-600/20 transition-all duration-200 active:scale-95"
           >
             Apply All
           </button>
@@ -132,7 +132,7 @@ function AgentPreview({
         {result.recipients.map((r, i) => (
           <div
             key={"ai-preview-" + i}
-            className="flex items-center gap-3 rounded-xl bg-white/[0.03] border border-white/[0.06] px-4 py-3"
+            className="flex items-center gap-3 bg-white/[0.03] border border-white/[0.06] px-4 py-3"
           >
             <span className="text-[11px] text-white/20 font-mono w-5 shrink-0">
               {i + 1}.
@@ -533,8 +533,8 @@ export default function BulkPayForm() {
       ) : (
         <div className="mx-auto max-w-4xl px-2 sm:px-4 [&>form]:border [&>form]:border-[var(--line)] [&>form]:shadow-[0_24px_64px_rgba(0,0,0,0.5)]">
           {/* ===================== SECTION 1: PAGE HEADER ===================== */}
-          <div className="rule-tick mb-6 pt-4 sm:mb-10">
-            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 sm:gap-4">
+          <div className="rule-tick mb-8 pt-4 sm:mb-10">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <span className="mono-label mb-2 block">SYS.PAY / BATCH.TRANSFER</span>
                 <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-[var(--fg)]">
@@ -545,203 +545,91 @@ export default function BulkPayForm() {
                     ? "Send USDC to your entire team in one transaction"
                     : "Send EURC to your entire team in one transaction"}
                 </p>
-                {/* Token selector pills */}
-                <div className="flex items-center gap-2 mt-4">
-                <button
-                  type="button"
-                  onClick={() => setSelectedSymbol("USDC")}
-                  className={
-                    "flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-semibold transition-all duration-200 border active:scale-95 " +
-                    (selectedSymbol === "USDC"
-                      ? "animate-pill-active bg-violet-600/25 border-violet-500/60 text-violet-300 shadow-[0_0_16px_rgba(124,58,237,0.35)]"
-                      : "bg-white/[0.03] border-white/[0.08] text-white/40 hover:text-white/70 hover:border-violet-500/30 hover:bg-violet-500/[0.06]")
-                  }
-                >
-                  <span>$</span>
-                  <span>USDC</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setSelectedSymbol("EURC")}
-                  className={
-                    "flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-semibold transition-all duration-200 border active:scale-95 " +
-                    (selectedSymbol === "EURC"
-                      ? "animate-pill-active bg-violet-600/25 border-violet-500/60 text-violet-300 shadow-[0_0_16px_rgba(124,58,237,0.35)]"
-                      : "bg-white/[0.03] border-white/[0.08] text-white/40 hover:text-white/70 hover:border-violet-500/30 hover:bg-violet-500/[0.06]")
-                  }
-                >
-                  {selectedSymbol === "EURC" && <span>€</span>}
-                  <span>EURC</span>
-                </button>
-                </div>
               </div>
-            </div>
-            <div className="flex items-center gap-3">
-              {/* Quick Pay / CSV Upload tabs */}
-              <div className="flex items-center rounded-xl border border-white/10 bg-white/[0.03] p-1 gap-1">
-                <span className="rounded-lg px-3.5 py-1.5 text-xs font-semibold text-white bg-white/[0.08] border border-white/10">
-                  Quick Pay
-                </span>
+
+              {/* Single quiet control row: token switch + CSV link */}
+              <div className="flex items-center gap-4">
+                <div
+                  className="flex items-center border border-[var(--line)] bg-[var(--glass)] p-0.5"
+                  role="group"
+                  aria-label="Select token"
+                >
+                  <button
+                    type="button"
+                    onClick={() => setSelectedSymbol("USDC")}
+                    aria-pressed={selectedSymbol === "USDC"}
+                    className={
+                      "px-3.5 py-1.5 text-xs font-semibold transition-colors duration-200 " +
+                      (selectedSymbol === "USDC"
+                        ? "bg-[var(--fg)] text-[var(--bg)]"
+                        : "text-[var(--fg-muted)] hover:text-[var(--fg)]")
+                    }
+                  >
+                    USDC
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedSymbol("EURC")}
+                    aria-pressed={selectedSymbol === "EURC"}
+                    className={
+                      "px-3.5 py-1.5 text-xs font-semibold transition-colors duration-200 " +
+                      (selectedSymbol === "EURC"
+                        ? "bg-[var(--fg)] text-[var(--bg)]"
+                        : "text-[var(--fg-muted)] hover:text-[var(--fg)]")
+                    }
+                  >
+                    EURC
+                  </button>
+                </div>
                 <Link
                   href="/bulk-pay/upload"
-                  className="rounded-lg px-3.5 py-1.5 text-xs font-medium text-white/40 hover:text-white/70 hover:bg-white/[0.05] transition-all duration-200"
+                  className="mono-label transition-colors duration-200 hover:!text-[var(--fg)]"
                 >
-                  CSV Upload
+                  CSV Upload →
                 </Link>
-              </div>
-
-              {/* Recipient counter badge */}
-              <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] backdrop-blur-xl px-3.5 py-2">
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 14 14"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <circle
-                    cx="7"
-                    cy="5"
-                    r="2.5"
-                    stroke="currentColor"
-                    strokeWidth="1.2"
-                    className="text-white/40"
-                  />
-                  <path
-                    d="M2 12.5C2 10.29 4.24 8.5 7 8.5C9.76 8.5 12 10.29 12 12.5"
-                    stroke="currentColor"
-                    strokeWidth="1.2"
-                    strokeLinecap="round"
-                    className="text-white/40"
-                  />
-                </svg>
-                <span className="text-xs font-medium text-white/60">
-                  {summaryData.validCount}/{recipients.length}
-                </span>
-              </div>
-
-              {/* Token display */}
-              <div className="flex items-center gap-2.5 rounded-xl border border-white/10 bg-white/[0.03] backdrop-blur-xl px-3.5 py-2">
-                <div className="h-7 w-7 rounded-full bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-violet-600/20">
-                  <span className="text-white text-[10px] font-bold">
-                    {selectedSymbol === "EURC" ? "€" : "$"}
-                  </span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-sm font-semibold text-white leading-none">
-                    {selectedSymbol}
-                  </span>
-                  <span className="text-[10px] text-white/30 mt-0.5">
-                    Arc Network
-                  </span>
-                </div>
               </div>
             </div>
           </div>
 
           <form onSubmit={handleSubmit}>
             {/* ===================== SECTION 2: AI AGENT ===================== */}
-            <div className="mb-8 relative glass-panel-strong">
+            <div className="mb-8 relative glass-panel">
             <div className="p-6">
-              {/* Agent header */}
+              {/* Agent header — minimal */}
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  {/* Animated VibeAI logo mark */}
-                  <div className="relative flex h-9 w-9 items-center justify-center rounded-xl overflow-hidden"
-                    style={{ background: "linear-gradient(135deg, #5b21b6 0%, #4f46e5 100%)" }}
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 14 14"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
                   >
-                    {/* Rotating ring */}
-                    <svg
-                      className="absolute inset-0 w-full h-full animate-spin"
-                      viewBox="0 0 36 36"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      style={{ animationDuration: "4s" }}
-                    >
-                      <circle
-                        cx="18" cy="18" r="14"
-                        stroke="rgba(167,139,250,0.35)"
-                        strokeWidth="1.5"
-                        strokeDasharray="22 66"
-                        strokeLinecap="round"
-                      />
-                    </svg>
-                    {/* Counter-rotating inner ring */}
-                    <svg
-                      className="absolute inset-0 w-full h-full animate-spin"
-                      viewBox="0 0 36 36"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      style={{ animationDuration: "2.5s", animationDirection: "reverse" }}
-                    >
-                      <circle
-                        cx="18" cy="18" r="9"
-                        stroke="rgba(196,181,253,0.4)"
-                        strokeWidth="1"
-                        strokeDasharray="10 48"
-                        strokeLinecap="round"
-                      />
-                    </svg>
-                    {/* V mark — VibeFlow brand initial */}
-                    <svg
-                      width="14" height="14"
-                      viewBox="0 0 14 14"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="relative z-10"
-                    >
-                      <path
-                        d="M2 2.5L7 11.5L12 2.5"
-                        stroke="white"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <circle cx="7" cy="7" r="1.5" fill="rgba(196,181,253,0.8)" />
-                    </svg>
-                    {/* Pulse glow */}
-                    <div
-                      className="absolute inset-0 rounded-xl animate-pulse"
-                      style={{
-                        background: "radial-gradient(circle at center, rgba(139,92,246,0.4) 0%, transparent 70%)",
-                      }}
+                    <path
+                      d="M2 2.5L7 11.5L12 2.5"
+                      stroke="var(--accent)"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
-                  </div>
+                  </svg>
                   <div>
-                    <h2 className="text-sm font-semibold text-white">
+                    <h2 className="text-sm font-semibold text-[var(--fg)]">
                       AI Payment Agent
                     </h2>
-                    <p className="text-[11px] text-white/30">
+                    <p className="mono-label mt-0.5">
                       Describe payments in natural language
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2.5">
-                  {/* VibeAI badge */}
-                  <div className="flex items-center gap-1.5 rounded-lg border border-violet-500/20 bg-violet-500/[0.08] px-2.5 py-1">
-                    <svg
-                      width="10"
-                      height="10"
-                      viewBox="0 0 10 10"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M5 0.5L6.25 3.75L9.5 5L6.25 6.25L5 9.5L3.75 6.25L0.5 5L3.75 3.75L5 0.5Z"
-                        fill="#8b5cf6"
-                      />
-                    </svg>
-                    <span className="text-[10px] font-semibold text-violet-400 uppercase tracking-wider">
-                      VibeAI
-                    </span>
-                  </div>
-
                   {/* Collapse toggle */}
                   <button
                     type="button"
                     onClick={() => setShowAgent((prev) => !prev)}
-                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/[0.03] text-white/40 hover:text-white/60 hover:border-white/20 transition-all duration-200"
+                    className="btn-brutal flex h-8 w-8 items-center justify-center text-[var(--fg-muted)] hover:text-[var(--fg)] transition-colors duration-200"
                     aria-label={showAgent ? "Collapse agent" : "Expand agent"}
                   >
                     <svg
@@ -779,7 +667,7 @@ export default function BulkPayForm() {
                     disabled={agentLoading}
                     placeholder="Pay Alice 500 USDC at 0x... and Bob 300 USDC at 0x..."
                     rows={3}
-                    className="w-full rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 px-4 py-3 text-sm focus:outline-none focus:border-violet-500/50 transition-all duration-200 hover:border-white/20 hover:bg-white/[0.08] resize-none disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="w-full bg-white/5 border border-white/10 text-white placeholder-white/30 px-4 py-3 text-sm focus:outline-none focus:border-violet-500/50 transition-all duration-200 hover:border-white/20 hover:bg-white/[0.08] resize-none disabled:opacity-40 disabled:cursor-not-allowed"
                   />
 
                   {/* Example chips */}
@@ -790,7 +678,7 @@ export default function BulkPayForm() {
                         type="button"
                         onClick={() => handleExampleClick(prompt)}
                         disabled={agentLoading}
-                        className="text-[11px] text-white/35 hover:text-white/60 border border-white/[0.06] hover:border-white/[0.15] bg-white/[0.02] hover:bg-white/[0.05] rounded-lg px-3 py-1.5 transition-all duration-200 truncate max-w-[260px] disabled:opacity-40 disabled:cursor-not-allowed"
+                        className="text-[11px] text-white/35 hover:text-white/60 border border-white/[0.06] hover:border-white/[0.15] bg-white/[0.02] hover:bg-white/[0.05] px-3 py-1.5 transition-all duration-200 truncate max-w-[260px] disabled:opacity-40 disabled:cursor-not-allowed"
                       >
                         {prompt.slice(0, 50)}
                         {prompt.length > 50 ? "..." : ""}
@@ -804,10 +692,10 @@ export default function BulkPayForm() {
                     onClick={handleParseAgent}
                     disabled={agentLoading || !agentInput.trim()}
                     className={
-                      "w-full mt-4 rounded-xl px-6 py-3.5 text-sm font-semibold transition-all duration-200 active:scale-[0.98] " +
+                      "w-full mt-4 px-6 py-3.5 text-sm font-semibold transition-all duration-200 " +
                       (agentLoading || !agentInput.trim()
                         ? "bg-white/[0.06] text-white/25 cursor-not-allowed"
-                        : "bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-600/25 hover:shadow-violet-600/40 hover:scale-[1.01]")
+                        : "bg-[var(--fg)] text-[var(--bg)]")
                     }
                   >
                     {agentLoading ? (
@@ -863,7 +751,7 @@ export default function BulkPayForm() {
 
                   {/* Error state */}
                   {agentError && !agentLoading ? (
-                    <div className="mt-4 rounded-xl border border-rose-500/20 bg-rose-500/[0.06] px-4 py-3">
+                    <div className="mt-4 border border-rose-500/20 bg-rose-500/[0.06] px-4 py-3">
                       <div className="flex items-start gap-2.5">
                         <svg
                           className="mt-0.5 shrink-0"
@@ -909,20 +797,25 @@ export default function BulkPayForm() {
             </div>
 
             {/* ===================== SECTION 3: INPUT MODE TOGGLE ===================== */}
-            <div className="flex items-center justify-between mb-6">
-              <span className="text-xs font-medium text-white/40 uppercase tracking-wider">
+            <div className="flex items-center justify-between mb-6 px-6">
+              <span className="mono-label">
                 Distribution Mode
               </span>
-              <div className="inline-flex rounded-xl bg-white/[0.04] border border-white/[0.08] p-1">
+              <div
+                className="flex items-center border border-[var(--line)] bg-[var(--glass)] p-0.5"
+                role="group"
+                aria-label="Distribution mode"
+              >
                 <button
                   type="button"
                   onClick={() => setInputMode("percentage")}
                   disabled={isSending}
+                  aria-pressed={inputMode === "percentage"}
                   className={
-                    "px-5 py-2 rounded-lg text-sm font-medium transition-all duration-200 " +
+                    "px-4 py-1.5 text-xs font-semibold transition-colors duration-200 " +
                     (inputMode === "percentage"
-                      ? "bg-violet-600 text-white shadow-lg shadow-violet-600/30"
-                      : "text-white/60 hover:text-white hover:bg-white/[0.04]")
+                      ? "bg-[var(--fg)] text-[var(--bg)]"
+                      : "text-[var(--fg-muted)] hover:text-[var(--fg)]")
                   }
                 >
                   % Split
@@ -931,11 +824,12 @@ export default function BulkPayForm() {
                   type="button"
                   onClick={() => setInputMode("amount")}
                   disabled={isSending}
+                  aria-pressed={inputMode === "amount"}
                   className={
-                    "px-5 py-2 rounded-lg text-sm font-medium transition-all duration-200 " +
+                    "px-4 py-1.5 text-xs font-semibold transition-colors duration-200 " +
                     (inputMode === "amount"
-                      ? "bg-violet-600 text-white shadow-lg shadow-violet-600/30"
-                      : "text-white/60 hover:text-white hover:bg-white/[0.04]")
+                      ? "bg-[var(--fg)] text-[var(--bg)]"
+                      : "text-[var(--fg-muted)] hover:text-[var(--fg)]")
                   }
                 >
                   $ Amount
@@ -960,10 +854,10 @@ export default function BulkPayForm() {
                       onChange={(e) => setTotalAmountInput(e.target.value)}
                       disabled={isSending}
                       placeholder="0.00"
-                      className="w-full rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/20 pl-9 pr-4 py-4 text-xl font-semibold focus:outline-none focus:border-violet-500/50 transition-all duration-200 hover:border-white/20 hover:bg-white/[0.08] disabled:opacity-40 disabled:cursor-not-allowed"
+                      className="w-full bg-white/5 border border-white/10 text-white placeholder-white/20 pl-9 pr-4 py-4 text-xl font-semibold focus:outline-none focus:border-violet-500/50 transition-all duration-200 hover:border-white/20 hover:bg-white/[0.08] disabled:opacity-40 disabled:cursor-not-allowed"
                     />
                   </div>
-                  <div className="flex items-center rounded-xl border border-white/10 bg-white/[0.03] px-4 shrink-0">
+                  <div className="flex items-center border border-white/10 bg-white/[0.03] px-4 shrink-0">
                     <span className="text-sm font-semibold text-white/70">
                       USDC
                     </span>
@@ -1058,7 +952,7 @@ export default function BulkPayForm() {
                   placeholder="e.g. July Salary, Freelancer Batch, Marketing Team"
                   maxLength={100}
                   className={
-                    "w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-3.5 py-2.5 " +
+                    "w-full border border-white/[0.08] bg-white/[0.03] px-3.5 py-2.5 " +
                     "text-sm text-white placeholder:text-white/20 " +
                     "focus:outline-none focus:border-violet-500/50 focus:bg-white/[0.05] " +
                     "transition-all duration-200 " +
@@ -1079,11 +973,11 @@ export default function BulkPayForm() {
                 onClick={addRecipient}
                 disabled={atMaxRecipients || isSending}
                 className={
-                  "w-full mt-3 rounded-2xl border border-dashed py-4 " +
+                  "w-full mt-3 border border-dashed py-4 " +
                   "text-sm font-medium transition-all duration-300 " +
                   (atMaxRecipients || isSending
                     ? "border-white/10 bg-white/[0.02] text-white/15 cursor-not-allowed"
-                    : "animate-add-btn-pulse border-violet-500/25 bg-white/[0.02] text-white/50 hover:text-violet-300 hover:bg-violet-500/[0.06] hover:border-violet-500/50 hover:shadow-[0_0_20px_rgba(124,58,237,0.15)] active:scale-[0.99]")
+                    : "animate-add-btn-pulse border-violet-500/25 bg-white/[0.02] text-white/50 hover:text-violet-300 hover:bg-violet-500/[0.06] hover:border-violet-500/50 active:scale-[0.99]")
                 }
               >
                 {atMaxRecipients ? (
@@ -1133,12 +1027,12 @@ export default function BulkPayForm() {
               </button>
             </div>
 
-            {/* ===================== SECTION 6 + 7: SUMMARY + SEND (sticky) ===================== */}
-            <div className="sticky bottom-4 z-30 mt-10">
+            {/* ===================== SECTION 6 + 7: SUMMARY + SEND ===================== */}
+            <div className="mt-10">
               {/* Summary + send card */}
               <div
                 className={
-                  "rounded-2xl border p-5 shadow-2xl shadow-black/60 backdrop-blur-2xl transition-all duration-300 " +
+                  "border p-5 shadow-2xl shadow-black/60 backdrop-blur-2xl transition-all duration-300 " +
                   (summaryData.isFullyAllocated && !summaryData.isOverAllocated
                     ? "border-emerald-500/25 bg-[#0a1010]/95"
                     : summaryData.isOverAllocated
@@ -1150,7 +1044,7 @@ export default function BulkPayForm() {
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-5 flex-1">
                   {/* Total */}
                   <div>
-                    <span className="block text-[10px] font-medium text-white/30 uppercase tracking-wider mb-1.5">
+                    <span className="mono-label block mb-1.5">
                       Total
                     </span>
                     <span className="text-sm font-semibold text-white">
@@ -1167,7 +1061,7 @@ export default function BulkPayForm() {
 
                   {/* Valid Recipients */}
                   <div>
-                    <span className="block text-[10px] font-medium text-white/30 uppercase tracking-wider mb-1.5">
+                    <span className="mono-label block mb-1.5">
                       Valid Recipients
                     </span>
                     <span className="text-sm font-semibold text-white">
@@ -1180,7 +1074,7 @@ export default function BulkPayForm() {
 
                   {/* Protocol Fee */}
                   <div>
-                    <span className="block text-[10px] font-medium text-white/30 uppercase tracking-wider mb-1.5">
+                    <span className="mono-label block mb-1.5">
                       Protocol Fee
                     </span>
                     <span className="text-sm font-semibold text-white/60">
@@ -1193,7 +1087,7 @@ export default function BulkPayForm() {
 
                   {/* Allocated */}
                   <div>
-                    <span className="block text-[10px] font-medium text-white/30 uppercase tracking-wider mb-1.5">
+                    <span className="mono-label block mb-1.5">
                       {inputMode === "percentage" ? "Allocated" : "Sum"}
                     </span>
                     <span
@@ -1247,7 +1141,7 @@ export default function BulkPayForm() {
 
               {/* Error display */}
               {status === "error" && error ? (
-                <div className="rounded-xl border border-rose-500/20 bg-rose-500/[0.06] px-4 py-3.5">
+                <div className="border border-rose-500/20 bg-rose-500/[0.06] px-4 py-3.5">
                   <div className="flex items-start gap-3">
                     <svg
                       className="mt-0.5 shrink-0"
@@ -1285,7 +1179,7 @@ export default function BulkPayForm() {
               ) : null}
 
               {/* Stats bar */}
-              <div className="flex items-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 py-2.5 flex-wrap text-xs">
+              <div className="flex items-center gap-2 border border-white/[0.06] bg-white/[0.03] px-3 py-2.5 flex-wrap text-xs">
                 {/* Gas */}
                 <span className="text-white/40 whitespace-nowrap">
                   {"Gas: "}
@@ -1340,7 +1234,7 @@ export default function BulkPayForm() {
                 type="submit"
                 disabled={!canSend}
                 className={
-                  "w-full rounded-xl px-6 py-3.5 text-sm font-semibold transition-all duration-300 active:scale-[0.98] " +
+                  "w-full px-6 py-3.5 text-sm font-semibold transition-all duration-300 " +
                   (canSend
                     ? "bg-[var(--fg)] text-[var(--bg)] hover:opacity-85"
                     : "bg-white/[0.06] text-white/20 cursor-not-allowed")
@@ -1376,30 +1270,39 @@ export default function BulkPayForm() {
                       : "Confirm in MetaMask..."}
                   </span>
                 ) : (
-                  <span className="flex items-center justify-center gap-2.5">
-                    <svg
-                      width="18"
-                      height="18"
-                      viewBox="0 0 18 18"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M3 9H15"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                      />
-                      <path
-                        d="M10 4L15 9L10 14"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                    Send {summaryData.validCount} Payment
-                    {summaryData.validCount !== 1 ? "s" : ""}
+                  <span className="flex flex-col items-center justify-center leading-tight">
+                    <span className="flex items-center gap-2.5">
+                      <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 18 18"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M3 9H15"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                        />
+                        <path
+                          d="M10 4L15 9L10 14"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                      Send {summaryData.validCount} payment
+                      {summaryData.validCount !== 1 ? "s" : ""}
+                    </span>
+                    <span className="text-xs font-normal opacity-60 mt-0.5">
+                      {(selectedSymbol === "EURC" ? "€" : "$") +
+                        (inputMode === "amount"
+                          ? summaryData.total.toFixed(2)
+                          : (parseFloat(totalAmountInput) || 0).toFixed(2))}{" "}
+                      {selectedSymbol}
+                    </span>
                   </span>
                 )}
               </button>

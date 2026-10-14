@@ -50,17 +50,17 @@ export default function AgentInput({ onParsed }: AgentInputProps) {
   };
 
   return (
-    <div className="rounded-xl border border-violet-500/20 bg-surface-secondary p-5 space-y-4">
+    <div className="border border-violet-500/20 bg-[var(--glass)] p-5 space-y-4">
       {/* Header */}
       <div className="flex items-center gap-2">
-        <div className="w-7 h-7 rounded-lg bg-violet-500/20 flex items-center justify-center">
+        <div className="w-7 h-7 bg-[var(--accent-soft)] flex items-center justify-center">
           <span className="text-violet-400 text-sm">AI</span>
         </div>
         <div>
           <p className="text-sm font-semibold text-white">AI Payment Agent</p>
           <p className="text-xs text-gray-400">Describe your payment in plain English</p>
         </div>
-        <span className="ml-auto text-xs bg-violet-500/20 text-violet-300 px-2 py-0.5 rounded-full">
+        <span className="ml-auto text-xs bg-[var(--accent-soft)] text-[var(--accent)] px-2 py-0.5 rounded-full">
           AI powered
         </span>
       </div>
@@ -71,7 +71,7 @@ export default function AgentInput({ onParsed }: AgentInputProps) {
         onChange={(e) => setInstruction(e.target.value)}
         placeholder="e.g. Pay Alice 500 USDC at @alice, Bob 300 at VIBE-ABC123, or Carol 200 at 0x1234...abcd"
         rows={3}
-        className="w-full rounded-lg bg-surface border border-white/10 text-white placeholder-gray-500 text-sm p-3 resize-none focus:outline-none focus:border-violet-500/50 transition-colors"
+        className="w-full bg-surface border border-white/10 text-white placeholder-gray-500 text-sm p-3 resize-none focus:outline-none focus:border-violet-500/50 transition-colors"
       />
 
       {/* Examples */}
@@ -94,21 +94,21 @@ export default function AgentInput({ onParsed }: AgentInputProps) {
       <button
         onClick={handleParse}
         disabled={loading || !instruction.trim()}
-        className="w-full py-2.5 rounded-lg bg-violet-600 hover:bg-violet-500 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-semibold transition-colors"
+        className="w-full py-2.5 bg-[var(--fg)] text-[var(--bg)] hover:opacity-85 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-semibold transition-colors"
       >
         {loading ? "Parsing..." : "Parse with AI"}
       </button>
 
       {/* Error */}
       {error && (
-        <div className="rounded-lg bg-red-500/10 border border-red-500/20 p-3">
+        <div className="bg-red-500/10 border border-red-500/20 p-3">
           <p className="text-xs text-red-400">{error}</p>
         </div>
       )}
 
       {/* Success preview */}
       {lastParsed && lastParsed.recipients.length > 0 && (
-        <div className="rounded-lg bg-green-500/10 border border-green-500/20 p-3 space-y-1">
+        <div className="bg-green-500/10 border border-green-500/20 p-3 space-y-1">
           <p className="text-xs font-semibold text-green-400">
             Parsed - {lastParsed.recipients.length} recipient{lastParsed.recipients.length > 1 ? "s" : ""} - filling form below
           </p>
