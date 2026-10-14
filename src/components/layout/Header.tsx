@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { ConnectButton } from '@/components/wallet/ConnectButton';
+import { NetworkSwitcher } from '@/components/wallet/NetworkSwitcher';
 import { ROUTES } from '@/constants/routes';
 
 const NAV_LINKS = [
@@ -54,7 +55,8 @@ export function Header() {
           </nav>
 
           {/* Right Side */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <NetworkSwitcher />
             <a
               href="https://x.com/The_Last_Dip"
               target="_blank"
