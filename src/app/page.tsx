@@ -27,8 +27,8 @@ export default function VibeFlowLanding() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-75" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-cyan-400" />
             </span>
-            <span className="text-xs font-medium text-white/70 tracking-wide uppercase">
-              Powered by Arc Blockchain
+                        <span className="text-xs font-medium text-white/70 tracking-wide uppercase">
+              Built with Arc Studio · Powered by Arc Blockchain
             </span>
           </div>
 
@@ -480,9 +480,11 @@ export default function VibeFlowLanding() {
           </div>
 
           <div className="pt-8 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-xs text-white/20">2026 VibeFlow. Built on Arc by Butcher.</p>
+                        <p className="text-xs text-white/20">2026 VibeFlow. Built with Arc Studio by Butcher.</p>
             <div className="flex items-center gap-2 text-xs text-white/20">
               <span>Powered by</span>
+              <span className="font-medium text-white/40">Arc Studio</span>
+              <span>+</span>
               <span className="font-medium text-white/40">Arc</span>
               <span>+</span>
               <span className="font-medium text-white/40">Circle USDC</span>
