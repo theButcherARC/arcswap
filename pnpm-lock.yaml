@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  '@coinbase/cdp-sdk': 1.51.2
+
 importers:
 
   .:
