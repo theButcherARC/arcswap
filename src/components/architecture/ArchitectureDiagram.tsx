@@ -65,7 +65,7 @@ const LAYERS = [
       {
         icon: "◆",
         title: "Groq LLM",
-        subtitle: "llama-3.3-70b-versatile",
+        subtitle: "gpt-oss-120b",
         tags: ["500 req/day free"],
       },
       {
@@ -429,7 +429,7 @@ export default function ArchitectureDiagram() {
           { label: "Finality", value: "< 1 second" },
           { label: "Max recipients", value: "100+ per tx" },
           { label: "Gas token", value: "USDC" },
-          { label: "AI model", value: "llama-3.3-70b" },
+          { label: "AI model", value: "gpt-oss-120b" },
           { label: "Contract calls", value: "1 popup, N transfers" },
         ].map((stat) => (
           <div key={stat.label} className="flex flex-col">
