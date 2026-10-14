@@ -9,7 +9,7 @@ const phases = [
     borderColor: 'border-emerald-500/30',
     glowColor: 'shadow-[0_0_30px_rgba(16,185,129,0.2)]',
     items: [
-      'Batch USDC/EURC payments on Arc Testnet',
+      'Batch USDC/EURC payments on Arc Mainnet',
       'AI-powered natural language payment parsing (Groq)',
       'Zero approval flow via Multicall3From',
       'Onchain Memo labels for payroll batching',

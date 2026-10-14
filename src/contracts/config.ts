@@ -1,28 +1,41 @@
-import { arcTestnet } from "@/constants/chains";
+import { arc, arcTestnet } from "@/constants/chains";
 import type { Address } from "viem";
 
 /**
  * Contract address registry, keyed by chain ID.
  *
- * Arc Testnet (5042002):
+ * Arc Mainnet (5042):
  *   USDC     — 0x3600000000000000000000000000000000000000 (native precompile, hardcoded)
- *   EURC     — from NEXT_PUBLIC_EURC_ADDRESS
+ *   EURC     — from NEXT_PUBLIC_EURC_ADDRESS, defaults to Circle's mainnet address
  *   VIBE     — from NEXT_PUBLIC_VIBE_TOKEN_ADDRESS (deploy first via /contracts)
+ *   Disperse — from NEXT_PUBLIC_DISPERSE_ADDRESS (deploy first via /contracts)
+ *
+ * Arc Testnet (5042002): same env vars, used as a fallback / dev network.
  */
 
 interface ContractAddresses {
   usdc: Address;
   eurc: Address;
   vibeToken: Address;
+  disperse: Address;
 }
+
+const arcAddresses: ContractAddresses = {
+  usdc:       "0x3600000000000000000000000000000000000000", // Arc native USDC precompile
+  eurc:       (process.env.NEXT_PUBLIC_EURC_ADDRESS        ?? "0xbEf5f6d51CB62b58e6A8f77868681825C6fe21c1") as Address,
+  vibeToken:  (process.env.NEXT_PUBLIC_VIBE_TOKEN_ADDRESS  ?? "") as Address,
+  disperse:   (process.env.NEXT_PUBLIC_DISPERSE_ADDRESS    ?? "") as Address,
+};
 
 const arcTestnetAddresses: ContractAddresses = {
   usdc:       "0x3600000000000000000000000000000000000000", // Arc native USDC precompile
   eurc:       (process.env.NEXT_PUBLIC_EURC_ADDRESS        ?? "") as Address,
   vibeToken:  (process.env.NEXT_PUBLIC_VIBE_TOKEN_ADDRESS  ?? "") as Address,
+  disperse:   (process.env.NEXT_PUBLIC_DISPERSE_ADDRESS    ?? "") as Address,
 };
 
 export const CONTRACT_ADDRESSES: Record<number, ContractAddresses> = {
+  [arc.id]: arcAddresses,
   [arcTestnet.id]: arcTestnetAddresses,
 };
 

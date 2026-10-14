@@ -18,7 +18,7 @@ const LAYERS = [
         icon: "👤",
         title: "Team Lead / Operator",
         subtitle: "Connects MetaMask",
-        tags: ["MetaMask", "Arc Testnet"],
+        tags: ["MetaMask", "Arc"],
       },
       {
         icon: "📋",
@@ -85,8 +85,8 @@ const LAYERS = [
     nodes: [
       {
         icon: "⬡",
-        title: "Arc Testnet",
-        subtitle: "Chain ID: 5042002",
+        title: "Arc",
+        subtitle: "Chain ID: 5042",
         tags: ["Sub-second finality", "Gas in USDC"],
       },
       {
@@ -124,8 +124,8 @@ const LAYERS = [
       },
       {
         icon: "◈",
-        title: "ArcScan Confirmation",
-        subtitle: "testnet.arcscan.app",
+        title: "Arc Explorer Confirmation",
+        subtitle: "explorer.arc.io",
         tags: ["Settled in < 1s"],
       },
     ],
@@ -391,7 +391,7 @@ export default function ArchitectureDiagram() {
         <div className="flex items-center gap-2">
           <span className="flex items-center gap-1.5 text-[11px] font-medium text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 rounded-full px-3 py-1">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            Arc Testnet
+            Arc Mainnet
           </span>
           <span className="text-[11px] font-medium text-violet-400 bg-violet-400/10 border border-violet-400/20 rounded-full px-3 py-1">
             Circle USDC / EURC

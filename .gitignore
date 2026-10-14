@@ -26,3 +26,5 @@ contracts/typechain-types/
 *.log
 
 .vercel
+tsconfig.tsbuildinfo
+--full-page

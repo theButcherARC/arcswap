@@ -24,7 +24,7 @@ export function isUserRejection(error: unknown): boolean {
 
 /** Well-known VibeFlow error messages shown in the UI */
 export const APP_ERRORS = {
-  WRONG_NETWORK:        "Please switch to Arc Testnet to continue.",
+  WRONG_NETWORK:        "Please switch to Arc to continue.",
   WALLET_NOT_CONNECTED: "Connect your wallet to continue.",
   INSUFFICIENT_BALANCE: "Insufficient token balance.",
   APPROVAL_REQUIRED:    "Token approval required before proceeding.",

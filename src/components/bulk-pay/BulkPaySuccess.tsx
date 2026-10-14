@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { DEFAULT_CHAIN } from "@/constants/chains";
 
 interface BulkPaySuccessProps {
   txHash: string;
@@ -9,7 +10,7 @@ interface BulkPaySuccessProps {
 }
 
 export default function BulkPaySuccess({ txHash, onReset, tokenSymbol = "USDC" }: BulkPaySuccessProps) {
-  const explorerUrl = "https://testnet.arcscan.app/tx/" + txHash;
+  const explorerUrl = `${DEFAULT_CHAIN.blockExplorers.default.url}/tx/${txHash}`;
 
   return (
     <div className="min-h-screen bg-[#050508] flex items-center justify-center px-4 py-12">
@@ -119,7 +120,7 @@ export default function BulkPaySuccess({ txHash, onReset, tokenSymbol = "USDC" }
                   strokeLinejoin="round"
                 />
               </svg>
-              View on ArcScan
+              View on Arc Explorer
             </a>
             <button
               type="button"
