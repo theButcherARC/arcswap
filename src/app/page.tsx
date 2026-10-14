@@ -105,22 +105,19 @@ export default function VibeFlowLanding() {
           <div className="animate-fade-in-up delay-200 rounded-3xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl p-2">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-px rounded-2xl overflow-hidden bg-white/[0.05]">
               <div className="flex flex-col items-center justify-center bg-[#0a0a10] px-6 py-8 sm:py-10">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-violet-400 to-violet-300 bg-clip-text text-transparent">$50M+</span>
-                  <span className="inline-flex items-center rounded-full border border-violet-500/25 bg-violet-500/[0.08] px-2 py-0.5 text-[9px] font-semibold text-violet-400 uppercase tracking-wider">Vision</span>
-                </div>
-                <span className="text-xs sm:text-sm text-white/40 font-medium tracking-wide">Volume Vision</span>
+                <span className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-violet-400 to-violet-300 bg-clip-text text-transparent mb-1">1</span>
+                <span className="text-xs sm:text-sm text-white/40 font-medium tracking-wide">Signature Per Batch</span>
               </div>
               <div className="flex flex-col items-center justify-center bg-[#0a0a10] px-6 py-8 sm:py-10">
-                <span className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-indigo-400 to-indigo-300 bg-clip-text text-transparent mb-1">10K+</span>
-                <span className="text-xs sm:text-sm text-white/40 font-medium tracking-wide">Transactions</span>
+                <span className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-indigo-400 to-indigo-300 bg-clip-text text-transparent mb-1">0</span>
+                <span className="text-xs sm:text-sm text-white/40 font-medium tracking-wide">Token Approvals Needed</span>
               </div>
               <div className="flex flex-col items-center justify-center bg-[#0a0a10] px-6 py-8 sm:py-10">
                 <span className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-cyan-400 to-cyan-300 bg-clip-text text-transparent mb-1">{"<1s"}</span>
                 <span className="text-xs sm:text-sm text-white/40 font-medium tracking-wide">Arc Finality</span>
               </div>
               <div className="flex flex-col items-center justify-center bg-[#0a0a10] px-6 py-8 sm:py-10">
-                <span className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-violet-400 to-cyan-300 bg-clip-text text-transparent mb-1">100+</span>
+                <span className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-violet-400 to-cyan-300 bg-clip-text text-transparent mb-1">100</span>
                 <span className="text-xs sm:text-sm text-white/40 font-medium tracking-wide">Recipients Per Tx</span>
               </div>
             </div>
