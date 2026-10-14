@@ -39,7 +39,7 @@ export function NetworkGuard({ children }: NetworkGuardProps) {
         <Card className="max-w-sm w-full text-center">
           <p className="mb-1 font-semibold text-surface-800">Wrong Network</p>
           <p className="mb-5 text-sm text-surface-200">
-            VibeFlow requires {requiredChainName}.
+            VibeFlow requires Arc Mainnet or Arc Testnet.
           </p>
           <Button
             onClick={switchToArc}

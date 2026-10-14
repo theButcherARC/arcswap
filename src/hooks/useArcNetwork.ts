@@ -1,7 +1,7 @@
 "use client";
 
 import { useChainId, useSwitchChain } from "wagmi";
-import { DEFAULT_CHAIN } from "@/constants/chains";
+import { arc, arcTestnet } from "@/constants/chains";
 
 /**
  * Provides the current chain state and a helper to switch to Arc Mainnet.
@@ -13,10 +13,10 @@ export function useArcNetwork() {
   const chainId = useChainId();
   const { switchChain, isPending: isSwitching } = useSwitchChain();
 
-  const isCorrectNetwork = chainId === DEFAULT_CHAIN.id;
+  const isCorrectNetwork = chainId === arc.id || chainId === arcTestnet.id;
 
   function switchToArc() {
-    switchChain({ chainId: DEFAULT_CHAIN.id });
+    switchChain({ chainId: arc.id });
   }
 
   return {
@@ -24,7 +24,7 @@ export function useArcNetwork() {
     isCorrectNetwork,
     isSwitching,
     switchToArc,
-    requiredChainId: DEFAULT_CHAIN.id,
-    requiredChainName: DEFAULT_CHAIN.name,
+    requiredChainId: arc.id,
+    requiredChainName: arc.name,
   };
 }
