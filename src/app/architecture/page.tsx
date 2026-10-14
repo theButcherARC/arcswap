@@ -5,12 +5,14 @@ import Link from "next/link";
 
 export default function ArchitecturePage() {
   return (
-    <main className="min-h-screen bg-[#050508] px-4 py-24">
+    <main className="relative min-h-screen overflow-hidden bg-[var(--bg)] px-5 py-24 sm:px-8">
+      <div className="grid-lines pointer-events-none absolute inset-0 opacity-30" aria-hidden="true" />
+
       {/* Back link */}
-      <div className="max-w-4xl mx-auto mb-8">
+      <div className="relative mx-auto mb-8 max-w-4xl">
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 text-sm text-white/30 hover:text-white/60 transition-colors duration-200"
+          className="mono-label inline-flex items-center gap-1.5 transition-colors duration-200 hover:!text-[var(--fg)]"
         >
           <svg
             width="14"
@@ -32,14 +34,14 @@ export default function ArchitecturePage() {
       </div>
 
       {/* Diagram */}
-      <div className="max-w-4xl mx-auto">
+      <div className="relative mx-auto max-w-4xl">
         <ArchitectureDiagram />
       </div>
 
       {/* Caption for README embed */}
-      <div className="max-w-4xl mx-auto mt-6 text-center">
-        <p className="text-xs text-white/20">
-          VibeFlow architecture — Hackathon submission for Stablecoins Commerce Stack Challenge
+      <div className="relative mx-auto mt-6 max-w-4xl text-center">
+        <p className="mono-label">
+          VibeFlow architecture — Built with Arc Studio on Arc Blockchain
         </p>
       </div>
     </main>

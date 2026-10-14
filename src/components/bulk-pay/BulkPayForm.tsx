@@ -523,7 +523,7 @@ export default function BulkPayForm() {
   /*  RENDER - single return, ternary for success state               */
   /* ================================================================ */
   return (
-    <div className="min-h-screen bg-[#050508] pt-24 pb-12 px-4">
+    <div className="relative min-h-screen bg-[var(--bg)] pt-24 pb-12 px-4">
       {status === "success" ? (
         <BulkPaySuccess
           txHash={txHash || ""}
@@ -531,22 +531,22 @@ export default function BulkPayForm() {
           tokenSymbol={selectedSymbol}
         />
       ) : (
-        <div className="mx-auto max-w-4xl px-2 sm:px-4 [&>form]:rounded-2xl sm:[&>form]:rounded-3xl [&>form]:shadow-[0_0_80px_rgba(124,58,237,0.08),0_0_160px_rgba(99,102,241,0.04)]">
+        <div className="mx-auto max-w-4xl px-2 sm:px-4 [&>form]:border [&>form]:border-[var(--line)] [&>form]:shadow-[0_24px_64px_rgba(0,0,0,0.5)]">
           {/* ===================== SECTION 1: PAGE HEADER ===================== */}
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 sm:gap-4 mb-6 sm:mb-10">
-            <div>
-              <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">
-                <span className="bg-gradient-to-r from-violet-400 to-indigo-400 bg-clip-text text-transparent">
+          <div className="rule-tick mb-6 pt-4 sm:mb-10">
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 sm:gap-4">
+              <div>
+                <span className="mono-label mb-2 block">SYS.PAY / BATCH.TRANSFER</span>
+                <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-[var(--fg)]">
                   Bulk Pay
-                </span>
-              </h1>
-              <p className="text-sm text-white/40 mt-2 max-w-md">
-                {selectedSymbol === "USDC"
-                  ? "Send USDC to your entire team in one transaction"
-                  : "Send EURC to your entire team in one transaction"}
-              </p>
-              {/* Token selector pills */}
-              <div className="flex items-center gap-2 mt-4">
+                </h1>
+                <p className="text-sm text-[var(--fg-muted)] mt-2 max-w-md">
+                  {selectedSymbol === "USDC"
+                    ? "Send USDC to your entire team in one transaction"
+                    : "Send EURC to your entire team in one transaction"}
+                </p>
+                {/* Token selector pills */}
+                <div className="flex items-center gap-2 mt-4">
                 <button
                   type="button"
                   onClick={() => setSelectedSymbol("USDC")}
@@ -573,6 +573,7 @@ export default function BulkPayForm() {
                   {selectedSymbol === "EURC" && <span>€</span>}
                   <span>EURC</span>
                 </button>
+                </div>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -640,14 +641,8 @@ export default function BulkPayForm() {
 
           <form onSubmit={handleSubmit}>
             {/* ===================== SECTION 2: AI AGENT ===================== */}
-            <div className="mb-8 relative rounded-2xl p-[1px] shadow-[0_0_40px_rgba(124,58,237,0.12)]"
-              style={{
-                background: "linear-gradient(135deg, rgba(124,58,237,0.35) 0%, rgba(99,102,241,0.15) 35%, rgba(139,92,246,0.08) 60%, rgba(124,58,237,0.3) 100%)",
-                backgroundSize: "300% 300%",
-                animation: "gradient-border-flow 5s ease infinite",
-              }}
-            >
-            <div className="rounded-2xl bg-[#0c0c16]/95 backdrop-blur-2xl p-6">
+            <div className="mb-8 relative glass-panel-strong">
+            <div className="p-6">
               {/* Agent header */}
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
@@ -950,7 +945,7 @@ export default function BulkPayForm() {
 
             {/* ===================== SECTION 4: TOTAL AMOUNT (percentage mode) ===================== */}
             {inputMode === "percentage" ? (
-              <div className="mb-8 rounded-2xl bg-white/5 backdrop-blur-2xl border border-white/10 p-6">
+              <div className="mb-8 glass-panel p-6">
                 <label className="block text-xs font-medium text-white/40 uppercase tracking-wider mb-2.5">
                   Total Amount to Distribute
                 </label>
@@ -1347,7 +1342,7 @@ export default function BulkPayForm() {
                 className={
                   "w-full rounded-xl px-6 py-3.5 text-sm font-semibold transition-all duration-300 active:scale-[0.98] " +
                   (canSend
-                    ? "animate-send-pulse bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-500 hover:to-indigo-500 hover:scale-[1.01]"
+                    ? "bg-[var(--fg)] text-[var(--bg)] hover:opacity-85"
                     : "bg-white/[0.06] text-white/20 cursor-not-allowed")
                 }
               >
