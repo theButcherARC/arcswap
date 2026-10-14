@@ -278,7 +278,7 @@ export default function DashboardPage() {
         {/* Header */}
         <header className="animate-fade-in-up flex flex-col gap-2">
           <div className="flex items-center justify-between gap-3">
-            <h1 className="text-balance bg-gradient-to-r from-violet-400 via-[#7c3aed] to-violet-600 bg-clip-text text-3xl font-bold tracking-tight text-transparent sm:text-4xl">
+            <h1 className="text-balance text-3xl font-bold tracking-tight text-[var(--fg)] sm:text-4xl">
               Dashboard
             </h1>
             <div className="flex items-center gap-2">
@@ -334,7 +334,7 @@ export default function DashboardPage() {
         {error && (
           <section
             aria-label="Data fetch error"
-            className="animate-fade-in-up rounded-2xl border border-rose-500/30 bg-gradient-to-r from-rose-500/[0.1] to-pink-500/[0.08] px-5 sm:px-6 py-4 backdrop-blur-2xl shadow-lg shadow-rose-600/10"
+            className="animate-fade-in-up glass-panel border-[rgba(244,63,94,0.3)] px-5 sm:px-6 py-4"
           >
             <div className="flex items-start gap-3">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="flex-shrink-0 text-rose-400 mt-0.5" aria-hidden="true">
@@ -352,23 +352,23 @@ export default function DashboardPage() {
         {!isConnected ? (
           <section
             aria-label="Wallet connection required"
-            className="animate-fade-in-up delay-100 rounded-2xl border border-violet-500/20 bg-gradient-to-b from-violet-500/[0.08] to-indigo-500/[0.05] px-6 sm:px-8 py-16 sm:py-20 text-center backdrop-blur-2xl"
+            className="animate-fade-in-up delay-100 glass-panel px-6 sm:px-8 py-16 sm:py-20 text-center"
           >
-            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-violet-400/30 bg-violet-500/[0.12] shadow-lg shadow-violet-600/20">
+            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center border border-[var(--line-strong)] bg-[var(--accent-soft)]">
               <svg className="animate-pulse" width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4" stroke="#a78bfa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M3 5v14a2 2 0 0 0 2 2h16v-5" stroke="#a78bfa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M18 12a2 2 0 0 0 0 4h4v-4h-4z" stroke="#a78bfa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M3 5v14a2 2 0 0 0 2 2h16v-5" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M18 12a2 2 0 0 0 0 4h4v-4h-4z" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </div>
-            <h2 className="text-lg sm:text-xl font-semibold text-white">
+            <h2 className="text-lg sm:text-xl font-semibold text-[var(--fg)]">
               Connect your wallet
             </h2>
-            <p className="mt-2 text-sm text-gray-300 max-w-sm mx-auto">
+            <p className="mt-2 text-sm text-[var(--fg-muted)] max-w-sm mx-auto">
               View your payment history and transaction analytics by connecting your wallet
             </p>
-            <p className="mt-4 text-xs text-gray-500">
-              Look for the "Connect Wallet" button in the top right corner
+            <p className="mono-label mt-4">
+              Look for the &quot;Connect Wallet&quot; button in the top right corner
             </p>
           </section>
         ) : (
@@ -379,19 +379,19 @@ export default function DashboardPage() {
                 {stats.map((stat) => (
                   <div
                     key={stat.label}
-                    className="hover-lift rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.06] to-white/[0.02] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-2xl"
+                    className="glass-panel p-5"
                   >
-                    <p className="text-xs font-medium uppercase tracking-wider text-gray-400">
+                    <p className="mono-label">
                       {stat.label}
                     </p>
                     {isLoading ? (
                       <div className="skeleton mt-3 h-8 w-24" aria-hidden="true" />
                     ) : (
-                      <p className="mt-2 text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+                      <p className="mt-2 text-2xl font-semibold tracking-tight text-[var(--fg)] sm:text-3xl">
                         {stat.value}
                       </p>
                     )}
-                    <p className="mt-1 text-xs text-gray-500">{stat.sub}</p>
+                    <p className="mono-label mt-2">{stat.sub}</p>
                   </div>
                 ))}
               </div>
@@ -400,13 +400,13 @@ export default function DashboardPage() {
             {/* Volume chart */}
             <section
               aria-label="Volume over the last 7 days"
-              className="animate-fade-in-up delay-200 rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.05] to-white/[0.02] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-2xl sm:p-6"
+              className="animate-fade-in-up delay-200 glass-panel p-5 sm:p-6"
             >
               <div className="mb-6 flex items-center justify-between">
-                <h2 className="text-base font-semibold text-white sm:text-lg">
+                <h2 className="text-base font-semibold text-[var(--fg)] sm:text-lg">
                   Volume — Last 7 Days
                 </h2>
-                <span className="text-xs text-gray-500">USDC</span>
+                <span className="mono-label">USDC</span>
               </div>
               <div className="h-64 w-full sm:h-72">
                 <ResponsiveContainer width="100%" height="100%">
@@ -446,8 +446,8 @@ export default function DashboardPage() {
                     <Bar
                       dataKey="volume"
                       name="Volume"
-                      fill="#7c3aed"
-                      radius={[6, 6, 0, 0]}
+                      fill="var(--accent)"
+                      radius={[0, 0, 0, 0]}
                       maxBarSize={48}
                     />
                   </BarChart>
@@ -458,15 +458,15 @@ export default function DashboardPage() {
             {/* Last bulk payment breakdown */}
             <section
               aria-label="Last bulk payment"
-              className="animate-fade-in-up delay-300 rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.05] to-white/[0.02] shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-2xl"
+              className="animate-fade-in-up delay-300 glass-panel"
             >
-              <div className="flex flex-col gap-2 border-b border-white/10 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+              <div className="flex flex-col gap-2 border-b border-[var(--line)] px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
                 <div>
-                  <h2 className="text-base font-semibold text-white sm:text-lg">
+                  <h2 className="text-base font-semibold text-[var(--fg)] sm:text-lg">
                     Last Bulk Payment
                   </h2>
                   {lastBulkPay ? (
-                    <p className="mt-0.5 text-xs text-gray-500">
+                    <p className="mono-label mt-0.5">
                       {lastBulkPay.date} · {lastBulkPay.recipients.length}{" "}
                       recipients · {formatUsdc(lastBulkPay.total)} USDC
                     </p>
@@ -477,7 +477,7 @@ export default function DashboardPage() {
                     href={"https://explorer.arc.io/tx/" + lastBulkPay.hash}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-mono text-xs text-violet-400 transition-colors hover:text-violet-300 hover:underline"
+                    className="font-mono text-xs text-[var(--data)] transition-colors hover:underline"
                   >
                     {truncateHash(lastBulkPay.hash)}
                   </a>
