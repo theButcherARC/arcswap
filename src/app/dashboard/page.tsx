@@ -269,10 +269,8 @@ export default function DashboardPage() {
   ];
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#050508] px-4 pb-16 pt-28 sm:px-6 lg:px-8">
-      {/* Ambient background depth */}
-      <div className="pointer-events-none absolute top-0 left-1/4 h-[400px] w-[500px] rounded-full bg-violet-600/[0.05] blur-[130px]" />
-      <div className="pointer-events-none absolute bottom-1/4 right-0 h-[350px] w-[400px] rounded-full bg-indigo-600/[0.04] blur-[120px]" />
+    <main className="relative min-h-screen overflow-hidden bg-[var(--bg)] px-4 pb-16 pt-28 sm:px-6 lg:px-8">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(circle_at_50%_0%,rgba(139,124,246,0.12),transparent_65%)]" />
 
       <div className="relative mx-auto flex w-full max-w-6xl flex-col gap-8">
         {/* Header */}
@@ -379,7 +377,7 @@ export default function DashboardPage() {
                 {stats.map((stat) => (
                   <div
                     key={stat.label}
-                    className="glass-panel p-5"
+                    className="glass-panel p-5 shadow-[0_12px_32px_rgba(0,0,0,0.16)]"
                   >
                     <p className="mono-label">
                       {stat.label}
@@ -433,9 +431,9 @@ export default function DashboardPage() {
                       axisLine={false}
                     />
                     <Tooltip
-                      cursor={{ fill: "rgba(124,58,237,0.08)" }}
+                      cursor={{ fill: "rgba(139,124,246,0.12)" }}
                       contentStyle={{
-                        backgroundColor: "#0b0b12",
+                        backgroundColor: "#151a2b",
                         border: "1px solid rgba(255,255,255,0.1)",
                         borderRadius: "12px",
                         color: "#ffffff",

@@ -523,7 +523,7 @@ export default function BulkPayForm() {
   /*  RENDER - single return, ternary for success state               */
   /* ================================================================ */
   return (
-    <div className="relative min-h-screen bg-[var(--bg)] pt-24 pb-12 px-4">
+    <div className="relative min-h-screen bg-[var(--bg)] pt-24 pb-16 px-4">
       {status === "success" ? (
         <BulkPaySuccess
           txHash={txHash || ""}
@@ -531,9 +531,9 @@ export default function BulkPayForm() {
           tokenSymbol={selectedSymbol}
         />
       ) : (
-        <div className="mx-auto max-w-4xl px-2 sm:px-4 [&>form]:border [&>form]:border-[var(--line)] [&>form]:shadow-[0_24px_64px_rgba(0,0,0,0.5)]">
+        <div className="mx-auto max-w-5xl px-2 sm:px-4"> 
           {/* ===================== SECTION 1: PAGE HEADER ===================== */}
-          <div className="rule-tick mb-8 pt-4 sm:mb-10">
+          <div className="rule-tick mb-7 pt-5 sm:mb-8">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <span className="mono-label mb-2 block">SYS.PAY / BATCH.TRANSFER</span>
@@ -550,7 +550,7 @@ export default function BulkPayForm() {
               {/* Single quiet control row: token switch + CSV link */}
               <div className="flex items-center gap-4">
                 <div
-                  className="flex items-center border border-[var(--line)] bg-[var(--glass)] p-0.5"
+className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--glass)] p-1"
                   role="group"
                   aria-label="Select token"
                 >
@@ -593,8 +593,8 @@ export default function BulkPayForm() {
 
           <form onSubmit={handleSubmit}>
             {/* ===================== SECTION 2: AI AGENT ===================== */}
-            <div className="mb-8 relative glass-panel">
-            <div className="p-6">
+            <div className="relative mb-7 border-y border-[var(--line)]">
+            <div className="p-5 sm:p-6">
               {/* Agent header — minimal */}
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
@@ -667,7 +667,7 @@ export default function BulkPayForm() {
                     disabled={agentLoading}
                     placeholder="Pay Alice 500 USDC at 0x... and Bob 300 USDC at 0x..."
                     rows={3}
-                    className="w-full bg-white/5 border border-white/10 text-white placeholder-white/30 px-4 py-3 text-sm focus:outline-none focus:border-violet-500/50 transition-all duration-200 hover:border-white/20 hover:bg-white/[0.08] resize-none disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="w-full min-h-24 border border-[var(--line)] bg-transparent px-4 py-3 text-sm leading-relaxed text-white placeholder:text-white/25 focus:outline-none focus:border-[var(--fg-muted)] transition-colors resize-none disabled:opacity-40 disabled:cursor-not-allowed"
                   />
 
                   {/* Example chips */}
@@ -1032,7 +1032,7 @@ export default function BulkPayForm() {
               {/* Summary + send card */}
               <div
                 className={
-                  "border p-5 shadow-2xl shadow-black/60 backdrop-blur-2xl transition-all duration-300 " +
+                  "border p-5 transition-colors duration-300 " +
                   (summaryData.isFullyAllocated && !summaryData.isOverAllocated
                     ? "border-emerald-500/25 bg-[#0a1010]/95"
                     : summaryData.isOverAllocated
