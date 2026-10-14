@@ -377,7 +377,7 @@ export default function DashboardPage() {
                 {stats.map((stat) => (
                   <div
                     key={stat.label}
-                    className="glass-panel p-5"
+                    className="glass-panel p-5 shadow-[0_12px_32px_rgba(0,0,0,0.16)]"
                   >
                     <p className="mono-label">
                       {stat.label}
@@ -431,9 +431,9 @@ export default function DashboardPage() {
                       axisLine={false}
                     />
                     <Tooltip
-                      cursor={{ fill: "rgba(124,58,237,0.08)" }}
+                      cursor={{ fill: "rgba(139,124,246,0.12)" }}
                       contentStyle={{
-                        backgroundColor: "#0b0b12",
+                        backgroundColor: "#151a2b",
                         border: "1px solid rgba(255,255,255,0.1)",
                         borderRadius: "12px",
                         color: "#ffffff",

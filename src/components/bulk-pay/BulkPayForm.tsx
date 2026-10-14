@@ -550,7 +550,7 @@ export default function BulkPayForm() {
               {/* Single quiet control row: token switch + CSV link */}
               <div className="flex items-center gap-4">
                 <div
-                  className="flex items-center border border-[var(--line)] bg-[var(--glass)] p-0.5"
+className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--glass)] p-1"
                   role="group"
                   aria-label="Select token"
                 >
