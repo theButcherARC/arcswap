@@ -9,7 +9,7 @@ VibeFlow is agentic payroll infrastructure on Arc: describe a payment run in nat
 ## 2. What it uses Arc for
 
 - **Native USDC as gas and settlement** — the entire payment flow runs on Circle stablecoins; operators never touch a volatile gas token.
-- **Multicall3From** — Arc's custom batch primitive preserves `msg.sender`, enabling zero-approval, single-signature bulk transfers to 100+ recipients.
+- **Multicall3From** — a custom batch contract deployed on Arc that preserves `msg.sender`, enabling zero-approval, single-signature bulk transfers to 100+ recipients.
 - **Sub-second finality** — payroll batches confirm in under a second, making the UX feel like a web2 payroll tool.
 - **On-chain memos** — payroll labels ("July Salary") are stored permanently on Arc via the Memo contract.
 - **Arc explorer API** — the dashboard reads transaction history and balances directly from the chain's explorer.
@@ -40,7 +40,21 @@ Record with OBS (free) or Loom at 1080p. Do one real take end-to-end before the 
 3. **On-chain payroll memos** — permanent, queryable payment labels; useful for accounting and compliance.
 4. **Zero-approval UX** — Multicall3From means one signature for the entire batch.
 
-## 6. Status checklist
+## 6. Brief compliance map (from the official Arc Microgrants page)
+
+| Brief requirement | Status |
+|---|---|
+| Live deployment on Arc mainnet, openable link | App is live on Vercel; mainnet contract deploy pending (below) |
+| Public repo | https://github.com/theButcherARC/arcswap |
+| Short description + what it uses Arc for | Sections 1–2 above, ready to paste |
+| Public builder profile (GitHub / X / Farcaster) | Pending — add link in section 3 |
+| Wallet that can receive USDC on Arc | Pending — add address in section 3 |
+| Not testnet-only | App code defaults to Arc Mainnet (chain 5042); contracts must be deployed to match |
+| One submission per project | Submit once, after the pending items are done |
+
+Note from the brief: "Program dates and microgrant counts may be adjusted" and "If your project is further along than this program is built for, submit anyway and we will point you toward the right one." The stated Oct 14 deadline has passed, but the brief itself invites out-of-window submissions — worth submitting once mainnet-ready, and asking the Arc team about the next batch.
+
+## 7. Status checklist
 
 - [x] Live deployment on Vercel
 - [x] Public GitHub repo
