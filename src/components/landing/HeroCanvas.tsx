@@ -8,9 +8,9 @@ const CONNECTION_DISTANCE = 4.5;
 const MAX_CONNECTIONS = 6000;
 const SPHERE_RADIUS = 14;
 const COLORS = [
-  new THREE.Color("#7c3aed"),
-  new THREE.Color("#4f46e5"),
-  new THREE.Color("#06b6d4"),
+  new THREE.Color("#ffffff"),
+  new THREE.Color("#a3a3a3"),
+  new THREE.Color("#737373"),
 ];
 
 export default function HeroCanvas() {
@@ -165,9 +165,9 @@ export default function HeroCanvas() {
     const glowCtx = glowCanvas.getContext("2d");
     if (glowCtx) {
       const gradient = glowCtx.createRadialGradient(128, 128, 0, 128, 128, 128);
-      gradient.addColorStop(0, "rgba(124, 58, 237, 0.15)");
-      gradient.addColorStop(0.3, "rgba(79, 70, 229, 0.08)");
-      gradient.addColorStop(0.6, "rgba(6, 182, 212, 0.03)");
+      gradient.addColorStop(0, "rgba(255, 255, 255, 0.12)");
+      gradient.addColorStop(0.3, "rgba(255, 255, 255, 0.06)");
+      gradient.addColorStop(0.6, "rgba(255, 255, 255, 0.02)");
       gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
       glowCtx.fillStyle = gradient;
       glowCtx.fillRect(0, 0, 256, 256);
