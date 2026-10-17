@@ -265,7 +265,7 @@ export default function VibeFlowLanding() {
                 Ready to streamline your mass payments?
               </h2>
               <p className="mx-auto mb-10 max-w-lg text-base leading-relaxed text-[var(--fg-muted)]">
-                Join the teams already moving USDC through VibeFlow. Get started in under five minutes.
+                Start moving USDC through VibeFlow. Get started in under five minutes.
               </p>
               <Link
                 href={ROUTES.BULK_PAY}
