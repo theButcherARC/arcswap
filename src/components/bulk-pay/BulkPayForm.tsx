@@ -4,6 +4,8 @@ import React, { useState, useMemo, useCallback, useEffect, useRef } from "react"
 import Link from "next/link";
 import { parseUnits, createPublicClient, http } from "viem";
 import type { Address } from "viem";
+import { useAccount } from "wagmi";
+import { ConnectButton } from "@/components/wallet/ConnectButton";
 import { useBulkPay } from "@/hooks/useBulkPay";
 import { toChecksumAddress } from "@/utils/address";
 import { isValidAddress } from "@/utils/address";
@@ -518,6 +520,7 @@ export default function BulkPayForm() {
   );
 
   const atMaxRecipients = recipients.length >= BULK_PAY_MAX_RECIPIENTS;
+  const { isConnected } = useAccount();
 
   /* ================================================================ */
   /*  RENDER - single return, ternary for success state               */
@@ -583,19 +586,34 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                 </div>
                 <Link
                   href="/bulk-pay/upload"
-                  className="mono-label transition-colors duration-200 hover:!text-[var(--fg)]"
+                  title="Upload a CSV file with recipients and amounts"
+                  className="inline-flex items-center gap-1.5 border border-[var(--line)] bg-[var(--glass)] px-3.5 py-1.5 text-xs font-semibold text-[var(--fg-muted)] transition-colors duration-200 hover:text-[var(--fg)] hover:border-[var(--fg-muted)]"
                 >
-                  CSV Upload →
+                  CSV Upload
+                  <span aria-hidden="true">→</span>
                 </Link>
               </div>
             </div>
           </div>
 
+          {/* Wallet requirement banner (shown until connected) */}
+          {!isConnected ? (
+            <div className="mb-7 flex flex-col gap-3 border border-violet-500/25 bg-violet-500/[0.06] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-sm text-white/70">
+                <span className="font-semibold text-white">Connect your wallet to send.</span>{" "}
+                MetaMask on Arc Mainnet is required before you can submit a batch.
+              </p>
+              <div className="shrink-0">
+                <ConnectButton />
+              </div>
+            </div>
+          ) : null}
+
           <form onSubmit={handleSubmit}>
             {/* ===================== SECTION 2: AI AGENT ===================== */}
             <div className="relative mb-7 border-y border-[var(--line)]">
             <div className="p-5 sm:p-6">
-              {/* Agent header — minimal */}
+              {/* Agent header - minimal */}
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
                   <svg
@@ -685,6 +703,10 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                       </button>
                     ))}
                   </div>
+
+                  <p className="mt-3 text-[11px] leading-relaxed text-white/25">
+                    The AI fills the form below from your text. Nothing is sent until you review and sign.
+                  </p>
 
                   {/* Parse button */}
                   <button
@@ -1025,6 +1047,25 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                   </span>
                 )}
               </button>
+              {inputMode === "percentage" ? (
+                <div className="mt-3 flex items-center justify-between border border-white/[0.06] bg-white/[0.02] px-4 py-2.5">
+                  <span className="text-[11px] text-white/35">
+                    Total allocated (must equal 100%)
+                  </span>
+                  <span
+                    className={
+                      "text-sm font-semibold " +
+                      (summaryData.isFullyAllocated && !summaryData.isOverAllocated
+                        ? "text-emerald-400"
+                        : summaryData.isOverAllocated
+                          ? "text-rose-400"
+                          : "text-white/60")
+                    }
+                  >
+                    {summaryData.allocatedLabel}
+                  </span>
+                </div>
+              ) : null}
             </div>
 
             {/* ===================== SECTION 6 + 7: SUMMARY + SEND ===================== */}
@@ -1063,6 +1104,9 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                   <div>
                     <span className="mono-label block mb-1.5">
                       Valid Recipients
+                    </span>
+                    <span className="block text-[10px] text-white/25 mb-1">
+                      Needs a valid address and an amount above $0
                     </span>
                     <span className="text-sm font-semibold text-white">
                       {summaryData.validCount}
@@ -1184,7 +1228,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                 <span className="text-white/40 whitespace-nowrap">
                   {"Gas: "}
                   <span key={gasUsd?.toFixed(4)} className="text-violet-300 font-medium animate-value-flash">
-                    {gasLoading ? "..." : gasUsd !== null ? "~$" + gasUsd.toFixed(4) : "—"}
+                    {gasLoading ? "..." : gasUsd !== null ? "~$" + gasUsd.toFixed(4) : "-"}
                   </span>
                   {" USDC"}
                 </span>
@@ -1208,7 +1252,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                 <span className="text-white/20">|</span>
                 {/* Powered by Arc */}
                 <span className="text-white/20 whitespace-nowrap">Powered by Arc</span>
-                {/* Refresh — pushed to the right */}
+                {/* Refresh - pushed to the right */}
                 <button
                   type="button"
                   onClick={refreshGas}
