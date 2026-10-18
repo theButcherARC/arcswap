@@ -104,7 +104,7 @@ export default function AdminSocialPage() {
       <div className="mx-auto max-w-3xl">
         <div className="mb-10">
           <h1 className="text-3xl font-bold bg-gradient-to-r from-violet-400 to-violet-600 bg-clip-text text-transparent">
-            Admin — Social Profiles
+            Admin - Social Profiles
           </h1>
           <p className="mt-2 text-sm text-white/50">
             Manually add or remove X handle &rarr; wallet address mappings.

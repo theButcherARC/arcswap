@@ -1,6 +1,7 @@
 "use client";
 
 import { useAccount } from "wagmi";
+import { ConnectButton } from "@/components/wallet/ConnectButton";
 import useSWR from "swr";
 import { useEffect, useState } from "react";
 import {
@@ -70,7 +71,7 @@ function parseTokenAmount(value: string, decimalsStr: string): number {
   if (isNaN(raw)) return 0;
   const dec = parseInt(decimalsStr ?? "0", 10);
   if (dec > 0) {
-    // Value is in base units (e.g. 1000000 for 1 USDC) — divide
+    // Value is in base units (e.g. 1000000 for 1 USDC) - divide
     return raw / Math.pow(10, dec);
   }
   // Value is already in human-readable form (e.g. "1.00")
@@ -106,7 +107,7 @@ async function fetchBulkPays(wallet: string): Promise<BulkPay[]> {
     transfers.push(...items);
     pagesFetched++;
 
-    // ArcScan paginates via next_page_params — stop if no more pages
+    // ArcScan paginates via next_page_params - stop if no more pages
     const next = json?.next_page_params;
     if (!next || Object.keys(next).length === 0) break;
     // Serialize next_page_params as query string
@@ -221,7 +222,7 @@ export default function DashboardPage() {
     return () => clearInterval(interval);
   }, [isConnected, address, mutate]);
 
-  // Manual sync — directly calls API then updates SWR cache
+  // Manual sync - directly calls API then updates SWR cache
   async function handleSync() {
     setSyncLoading(true);
     setSyncError(null);
@@ -282,7 +283,8 @@ export default function DashboardPage() {
             <div className="flex items-center gap-2">
               <button
                 onClick={handleSync}
-                disabled={syncLoading || isLoading}
+                disabled={syncLoading || isLoading || !isConnected}
+                title={!isConnected ? "Connect your wallet to sync" : "Refresh dashboard data"}
                 className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-xs font-medium text-gray-300 transition-all hover:border-white/20 hover:bg-white/[0.05] disabled:opacity-50 disabled:cursor-not-allowed"
                 aria-label="Refresh dashboard data"
               >
@@ -365,9 +367,9 @@ export default function DashboardPage() {
             <p className="mt-2 text-sm text-[var(--fg-muted)] max-w-sm mx-auto">
               View your payment history and transaction analytics by connecting your wallet
             </p>
-            <p className="mono-label mt-4">
-              Look for the &quot;Connect Wallet&quot; button in the top right corner
-            </p>
+            <div className="mt-6 flex justify-center">
+              <ConnectButton />
+            </div>
           </section>
         ) : (
           <>
@@ -402,7 +404,7 @@ export default function DashboardPage() {
             >
               <div className="mb-6 flex items-center justify-between">
                 <h2 className="text-base font-semibold text-[var(--fg)] sm:text-lg">
-                  Volume — Last 7 Days
+                  Volume - Last 7 Days
                 </h2>
                 <span className="mono-label">USDC</span>
               </div>

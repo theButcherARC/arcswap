@@ -8,13 +8,14 @@ const HeroCanvas = dynamic(() => import("@/components/landing/HeroCanvas"), {
 const PoweredBySection = dynamic(() => import("@/components/landing/PoweredBySection"), {
   ssr: false,
 });
+import FaqSection from "@/components/landing/FaqSection";
 
 const FEATURES = [
   {
     fig: "FIG 01",
     sys: "SYS.PARSE",
     title: "AI Payment Agent",
-    body: "Describe payments in plain English. VibeAI parses your intent instantly — recipients, amounts, tokens — all auto-filled in seconds.",
+    body: "Describe payments in plain English. VibeAI parses your intent instantly: recipients, amounts, tokens, all auto-filled in seconds.",
     tag: "VibeAI",
     accent: "accent" as const,
   },
@@ -22,7 +23,7 @@ const FEATURES = [
     fig: "FIG 02",
     sys: "SYS.BATCH",
     title: "Zero Approval Flow",
-    body: "Multicall3From preserves msg.sender throughout the batch. No ERC20 approve step needed — your USDC moves in one click.",
+    body: "Multicall3From preserves msg.sender throughout the batch. No ERC20 approve step needed, your USDC moves in one click.",
     tag: "0 approvals",
     accent: "data" as const,
   },
@@ -30,8 +31,8 @@ const FEATURES = [
     fig: "FIG 03",
     sys: "SYS.PERKS",
     title: "VIBE Token Perks",
-    body: "CSV upload, payroll templates, and 50% fee discount for VIBE holders. Power users save more with every batch.",
-    tag: "50% discount",
+    body: "CSV upload, payroll templates, and a 50% fee discount for VIBE holders (coming soon).",
+    tag: "Coming soon",
     accent: "accent" as const,
   },
   {
@@ -71,7 +72,7 @@ const STEPS = [
     fig: "STEP 02",
     title: "Describe Payment",
     body: "Use AI or manual entry to define recipients and amounts. AI auto-fills the entire form.",
-    points: ["Natural language input", "Percentage splits", "Up to 10 recipients (free)"],
+    points: ["Natural language input", "Percentage splits", "Up to 100 recipients per batch"],
   },
   {
     fig: "STEP 03",
@@ -83,7 +84,7 @@ const STEPS = [
 
 const STATS = [
   { value: "1", label: "Signature Per Batch" },
-  { value: "0", label: "Token Approvals Needed" },
+  { value: "Zero", label: "Token Approvals Needed" },
   { value: "<1s", label: "Arc Finality" },
   { value: "100", label: "Recipients Per Tx" },
 ];
@@ -149,7 +150,7 @@ export default function VibeFlowLanding() {
               </div>
             </div>
 
-            {/* Spec column — brutalist metadata */}
+            {/* Spec column: brutalist metadata */}
             <div className="animate-fade-in-up delay-500 hidden lg:col-span-3 lg:block">
               <div className="space-y-0 border-l border-[var(--line)] pl-6">
                 {[
@@ -254,6 +255,9 @@ export default function VibeFlowLanding() {
         </div>
       </section>
 
+      {/* ==================== FAQ ==================== */}
+      <FaqSection />
+
       {/* ==================== CTA ==================== */}
       <section className="relative z-10 px-5 mb-32 sm:px-8">
         <div className="mx-auto max-w-4xl">
@@ -308,7 +312,7 @@ export default function VibeFlowLanding() {
               <ul className="space-y-3">
                 <li><Link href={ROUTES.BULK_PAY} className="text-sm text-[var(--fg-faint)] transition-colors duration-200 hover:text-[var(--fg)]">Bulk Payments</Link></li>
                 <li><Link href={ROUTES.DASHBOARD} className="text-sm text-[var(--fg-faint)] transition-colors duration-200 hover:text-[var(--fg)]">Dashboard</Link></li>
-                <li><Link href={ROUTES.SOCIAL_PROFILE} className="text-sm text-[var(--fg-faint)] transition-colors duration-200 hover:text-[var(--fg)]">Social Pay</Link></li>
+                <li><Link href={ROUTES.SOCIAL_PROFILE} className="text-sm text-[var(--fg-faint)] transition-colors duration-200 hover:text-[var(--fg)]">VibeID</Link></li>
               </ul>
             </div>
 

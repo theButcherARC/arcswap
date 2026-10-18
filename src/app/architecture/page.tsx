@@ -41,7 +41,7 @@ export default function ArchitecturePage() {
       {/* Caption for README embed */}
       <div className="relative mx-auto mt-6 max-w-4xl text-center">
         <p className="mono-label">
-          VibeFlow architecture — Built with Arc Studio on Arc Blockchain
+          VibeFlow architecture - Built with Arc Studio on Arc Blockchain
         </p>
       </div>
     </main>

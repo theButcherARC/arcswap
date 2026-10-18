@@ -5,10 +5,10 @@ import type { Address } from "viem";
  * Contract address registry, keyed by chain ID.
  *
  * Arc Mainnet (5042):
- *   USDC     — 0x3600000000000000000000000000000000000000 (native precompile, hardcoded)
- *   EURC     — from NEXT_PUBLIC_EURC_ADDRESS, defaults to Circle's mainnet address
- *   VIBE     — from NEXT_PUBLIC_VIBE_TOKEN_ADDRESS (deploy first via /contracts)
- *   Disperse — from NEXT_PUBLIC_DISPERSE_ADDRESS (deploy first via /contracts)
+ *   USDC     - 0x3600000000000000000000000000000000000000 (native precompile, hardcoded)
+ *   EURC     - from NEXT_PUBLIC_EURC_ADDRESS, defaults to Circle's mainnet address
+ *   VIBE     - from NEXT_PUBLIC_VIBE_TOKEN_ADDRESS (deploy first via /contracts)
+ *   Disperse - from NEXT_PUBLIC_DISPERSE_ADDRESS (deploy first via /contracts)
  *
  * Arc Testnet (5042002): same env vars, used as a fallback / dev network.
  */
@@ -41,7 +41,7 @@ export const CONTRACT_ADDRESSES: Record<number, ContractAddresses> = {
 
 /**
  * Retrieve contract addresses for the given chain.
- * Throws if the chain is not supported — guard with useArcNetwork first.
+ * Throws if the chain is not supported - guard with useArcNetwork first.
  */
 export function getContractAddresses(chainId: number): ContractAddresses {
   const addresses = CONTRACT_ADDRESSES[chainId];
