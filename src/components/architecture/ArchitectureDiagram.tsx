@@ -351,7 +351,7 @@ export default function ArchitectureDiagram() {
         <div>
           <h2 className="text-xl font-bold text-white">System Architecture</h2>
           <p className="text-sm text-white/30 mt-0.5">
-            VibeFlow — Programmable Payroll on Arc
+            VibeFlow - Programmable Payroll on Arc
           </p>
         </div>
         <div className="flex items-center gap-2">

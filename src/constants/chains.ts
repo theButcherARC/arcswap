@@ -6,7 +6,7 @@ import { defineChain } from "viem";
  * Chain ID:        5042
  * RPC:             https://rpc.mainnet.arc.io
  * Explorer:        https://explorer.arc.io
- * Native token:    USDC (18 decimals at the EVM/gas level) — Arc L1 uses native USDC as gas asset
+ * Native token:    USDC (18 decimals at the EVM/gas level) - Arc L1 uses native USDC as gas asset
  * USDC ERC-20:     0x3600000000000000000000000000000000000000 (precompile, 6 decimals)
  */
 export const arc = defineChain({

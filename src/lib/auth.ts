@@ -35,7 +35,7 @@ export const auth = betterAuth({
     twitter: {
       clientId:     process.env.TWITTER_CLIENT_ID!,
       clientSecret: process.env.TWITTER_CLIENT_SECRET!,
-      // Twitter OAuth v2 returns profile in various shapes — handle all of them
+      // Twitter OAuth v2 returns profile in various shapes - handle all of them
       mapProfileToUser: (profile: Record<string, unknown>) => {
         // Twitter API v2 wraps user object under 'data'
         const data = (profile.data ?? profile) as Record<string, unknown>

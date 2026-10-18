@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  // Internal admin area — never index.
+  // Internal admin area - never index.
   robots: {
     index: false,
     follow: false,

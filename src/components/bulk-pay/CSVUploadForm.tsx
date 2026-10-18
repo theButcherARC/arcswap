@@ -34,7 +34,7 @@ function validateRow(
   rowIndex: number,
 ): { ok: true; row: ParsedRow } | { ok: false; error: ParseError } {
   if (raw.length < 2) {
-    return { ok: false, error: { row: rowIndex, message: "Fewer than 2 columns — expected name, address, amount" } };
+    return { ok: false, error: { row: rowIndex, message: "Fewer than 2 columns - expected name, address, amount" } };
   }
 
   // Support both 2-column (address, amount) and 3-column (name, address, amount)
@@ -395,11 +395,11 @@ export default function CSVUploadForm() {
                   <textarea
                     value={pasteContent}
                     onChange={handlePaste}
-                    placeholder="Paste CSV content here — name, address, amount per line"
+                    placeholder="Paste CSV content here - name, address, amount per line"
                     className="w-full h-48 bg-white/[0.03] border border-white/10 text-white placeholder-white/30 px-4 py-3 text-sm focus:outline-none focus:border-violet-500/50 focus:bg-white/[0.08] focus:shadow-[0_0_0_3px_rgba(124,58,237,0.12)] transition-all duration-200 font-mono hover:border-white/20 hover:bg-white/[0.07] resize-none"
                   />
                   <p className="text-[11px] text-white/25 leading-relaxed">
-                    Format: <span className="font-mono text-white/35">name, address, amount</span> or <span className="font-mono text-white/35">address, amount</span> — one row per line, no header required
+                    Format: <span className="font-mono text-white/35">name, address, amount</span> or <span className="font-mono text-white/35">address, amount</span> - one row per line, no header required
                   </p>
                 </div>
               </>
@@ -486,7 +486,7 @@ export default function CSVUploadForm() {
                   >
                     {showAll
                       ? "Show less"
-                      : `…and ${rows.length - PREVIEW_LIMIT} more row${rows.length - PREVIEW_LIMIT !== 1 ? "s" : ""} — click to expand`}
+                      : `…and ${rows.length - PREVIEW_LIMIT} more row${rows.length - PREVIEW_LIMIT !== 1 ? "s" : ""} - click to expand`}
                   </button>
                 )}
               </div>

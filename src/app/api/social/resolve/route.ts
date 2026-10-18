@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
       .limit(1)
 
     if (userRows.length > 0 && userRows[0].vibeId) {
-      // User has this VibeID — find their wallet from social_profiles
+      // User has this VibeID - find their wallet from social_profiles
       const profileRows = await db
         .select()
         .from(socialProfiles)
@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
           verified: profileRows[0].verified,
         })
       } else {
-        // User has VibeID but no profile yet — return error with helpful message
+        // User has VibeID but no profile yet - return error with helpful message
         return NextResponse.json({ error: 'VibeID found but no wallet linked yet' }, { status: 404 })
       }
     }

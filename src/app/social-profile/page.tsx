@@ -329,7 +329,7 @@ export default function SocialProfilePage() {
               {profile?.vibeId && (
                 <> or <span className="text-violet-400 font-mono">{profile.vibeId}</span></>
               )}{' '}
-              in the Bulk Pay recipient field — your wallet address will auto-fill.
+              in the Bulk Pay recipient field - your wallet address will auto-fill.
             </p>
           </div>
 

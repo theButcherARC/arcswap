@@ -1,6 +1,6 @@
 /**
  * Centralised route definitions.
- * Import from here — never hardcode paths in components.
+ * Import from here - never hardcode paths in components.
  */
 export const ROUTES = {
   HOME: "/",

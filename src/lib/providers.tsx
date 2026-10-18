@@ -7,7 +7,7 @@ import { wagmiConfig } from "./wagmi";
 /**
  * Providers tree for the entire application.
  *
- * Keeps app/layout.tsx clean — only one import needed there.
+ * Keeps app/layout.tsx clean - only one import needed there.
  * Order matters: WagmiProvider must wrap QueryClientProvider.
  *
  * The QueryClient is instantiated once per module load (singleton pattern
@@ -17,7 +17,7 @@ import { wagmiConfig } from "./wagmi";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      // Disable automatic background refetching for on-chain data —
+      // Disable automatic background refetching for on-chain data -
       // wagmi manages its own staleness for contract reads.
       staleTime: 1000 * 30, // 30 seconds
     },

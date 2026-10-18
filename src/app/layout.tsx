@@ -17,7 +17,7 @@ const mono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' });
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'VibeFlow — USDC Batch Payments on Arc',
+    default: 'VibeFlow - USDC Batch Payments on Arc',
     template: '%s | VibeFlow',
   },
   description: SITE_DESCRIPTION,
@@ -34,20 +34,20 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: '/',
     siteName: SITE_NAME,
-    title: 'VibeFlow — USDC Batch Payments on Arc',
+    title: 'VibeFlow - USDC Batch Payments on Arc',
     description: SITE_DESCRIPTION,
     images: [
       {
         url: '/opengraph-image',
         width: 1200,
         height: 630,
-        alt: `${SITE_NAME} — ${SITE_TAGLINE}`,
+        alt: `${SITE_NAME} - ${SITE_TAGLINE}`,
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'VibeFlow — USDC Batch Payments on Arc',
+    title: 'VibeFlow - USDC Batch Payments on Arc',
     description: SITE_DESCRIPTION,
     images: ['/opengraph-image'],
   },

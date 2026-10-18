@@ -15,7 +15,7 @@ async function resolveIdentifier(identifier: string, baseUrl: string): Promise<s
     return trimmed;
   }
   
-  // VibeID or X handle — resolve via /api/social/resolve
+  // VibeID or X handle - resolve via /api/social/resolve
   if (/^(VIBE-|@)/i.test(trimmed)) {
     try {
       const url = `${baseUrl}/api/social/resolve?username=${encodeURIComponent(trimmed)}`;
