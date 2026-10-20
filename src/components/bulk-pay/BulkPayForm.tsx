@@ -7,6 +7,7 @@ import type { Address } from "viem";
 import { useAccount } from "wagmi";
 import { ConnectButton } from "@/components/wallet/ConnectButton";
 import { useBulkPay } from "@/hooks/useBulkPay";
+import { authClient } from "@/lib/auth-client";
 import { toChecksumAddress } from "@/utils/address";
 import { isValidAddress } from "@/utils/address";
 import { parseTokenAmount } from "@/utils/format";
@@ -218,6 +219,12 @@ export default function BulkPayForm() {
   const [memo, setMemo] = useState("");
   const [showReview, setShowReview] = useState(false);
   const reviewRef = useRef<HTMLDivElement>(null);
+  const { data: session } = authClient.useSession();
+  const [scheduleDate, setScheduleDate] = useState("");
+  const [scheduleSaving, setScheduleSaving] = useState(false);
+  const [scheduleMsg, setScheduleMsg] = useState("");
+  const [scheduleError, setScheduleError] = useState("");
+  const [loadedScheduleId, setLoadedScheduleId] = useState<string | null>(null);
 
   const { executeBulkPay, status, txHash, error, reset } = useBulkPay();
 
@@ -229,6 +236,55 @@ export default function BulkPayForm() {
       reviewRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   }, [showReview]);
+
+  /* ---- Load a scheduled batch when opened from the dashboard ---- */
+  useEffect(() => {
+    const id = new URLSearchParams(window.location.search).get("schedule");
+    if (!id) return;
+    (async () => {
+      try {
+        const res = await fetch("/api/scheduled-batches");
+        if (!res.ok) return;
+        const data = await res.json();
+        const item = (data.schedules || []).find(
+          (s: { id: string }) => s.id === id,
+        );
+        if (!item || item.status !== "pending") return;
+        const loaded = item.recipients as {
+          name: string;
+          address: string;
+          amount: number;
+        }[];
+        if (!Array.isArray(loaded) || loaded.length === 0) return;
+        setRecipients(
+          loaded.map((r) => ({
+            ...createRecipient(),
+            name: r.name || "",
+            address: r.address as Recipient["address"],
+            amount: r.amount,
+            amountInput: String(r.amount),
+          })),
+        );
+        setInputMode("amount");
+        setSelectedSymbol(item.tokenSymbol === "EURC" ? "EURC" : "USDC");
+        if (item.memo) setMemo(item.memo);
+        setLoadedScheduleId(item.id);
+      } catch {
+        // A schedule that fails to load just leaves the empty form
+      }
+    })();
+  }, []);
+
+  /* ---- Mark a loaded schedule as sent once its payment succeeds ---- */
+  useEffect(() => {
+    if (status !== "success" || !loadedScheduleId) return;
+    fetch("/api/scheduled-batches/" + loadedScheduleId, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: "sent", txHash: txHash || undefined }),
+    }).catch(() => {});
+    setLoadedScheduleId(null);
+  }, [status, loadedScheduleId, txHash]);
 
   /* ---- Total amount for hint calculations ---- */
   const totalAmountForHint = useMemo(() => {
@@ -552,6 +608,49 @@ export default function BulkPayForm() {
     },
     [canSend, recipients, inputMode, totalAmountInput, token, executeBulkPay, showReview]
   );
+
+  /* ---- Save this batch as a scheduled payment ---- */
+  const handleSaveSchedule = useCallback(async () => {
+    setScheduleMsg("");
+    setScheduleError("");
+    if (!scheduleDate) {
+      setScheduleError("Pick a date and time first.");
+      return;
+    }
+    if (reviewRecipients.length === 0) {
+      setScheduleError("Add at least one valid recipient first.");
+      return;
+    }
+    setScheduleSaving(true);
+    try {
+      const res = await fetch("/api/scheduled-batches", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          tokenSymbol: selectedSymbol,
+          recipients: reviewRecipients.map((r) => ({
+            name: r.name || "",
+            address: r.address,
+            amount: Number(r.displayAmount.toFixed(2)),
+          })),
+          memo: memo.trim() || undefined,
+          scheduledFor: new Date(scheduleDate).toISOString(),
+        }),
+      });
+      const data = await res.json().catch(() => null);
+      if (!res.ok) {
+        throw new Error(data?.error || "Could not save the schedule.");
+      }
+      setScheduleMsg(
+        "Saved. Find it on your dashboard under Scheduled payments.",
+      );
+    } catch (err) {
+      setScheduleError(
+        err instanceof Error ? err.message : "Could not save the schedule.",
+      );
+    }
+    setScheduleSaving(false);
+  }, [scheduleDate, reviewRecipients, selectedSymbol, memo]);
 
   const atMaxRecipients = recipients.length >= BULK_PAY_MAX_RECIPIENTS;
   const { isConnected } = useAccount();
@@ -1236,6 +1335,56 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     a valid address cannot be detected. Make sure each address
                     belongs to the right person.
                   </p>
+                </div>
+
+                {/* Schedule for later */}
+                <div className="mt-5 border-t border-white/[0.06] pt-4">
+                  <span className="mono-label block mb-2">
+                    Or save it for later
+                  </span>
+                  {session?.user ? (
+                    <>
+                      <p className="text-xs text-white/40 leading-relaxed">
+                        Scheduling saves this batch to your dashboard.
+                        VibeFlow cannot send it on its own, because only your
+                        wallet can sign. When the date arrives, open it from
+                        your dashboard, review and sign in one click.
+                      </p>
+                      <div className="mt-3 flex flex-col gap-3 sm:flex-row">
+                        <input
+                          type="datetime-local"
+                          value={scheduleDate}
+                          onChange={(e) => setScheduleDate(e.target.value)}
+                          className="border border-white/[0.08] bg-white/[0.03] px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-violet-500/50 [color-scheme:dark]"
+                        />
+                        <button
+                          type="button"
+                          onClick={handleSaveSchedule}
+                          disabled={scheduleSaving || !scheduleDate}
+                          className="border border-violet-400/30 bg-violet-500/[0.08] px-4 py-2.5 text-sm font-medium text-violet-200 transition-colors hover:bg-violet-500/[0.15] disabled:cursor-not-allowed disabled:opacity-40"
+                        >
+                          {scheduleSaving
+                            ? "Saving..."
+                            : "Save scheduled payment"}
+                        </button>
+                      </div>
+                      {scheduleMsg ? (
+                        <p className="mt-2 text-xs text-emerald-300/80">
+                          {scheduleMsg}
+                        </p>
+                      ) : null}
+                      {scheduleError ? (
+                        <p className="mt-2 text-xs text-rose-300/80">
+                          {scheduleError}
+                        </p>
+                      ) : null}
+                    </>
+                  ) : (
+                    <p className="text-xs text-white/40 leading-relaxed">
+                      Sign in with your account to save this batch as a
+                      scheduled payment and find it later on your dashboard.
+                    </p>
+                  )}
                 </div>
 
                 <button

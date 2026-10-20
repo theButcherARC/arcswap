@@ -68,3 +68,19 @@ export const socialProfiles = pgTable('social_profiles', {
   createdAt:     timestamp('createdAt').notNull().defaultNow(),
   updatedAt:     timestamp('updatedAt').notNull().defaultNow(),
 })
+
+// ── Scheduled payments table ───────────────────────────────────────────────
+
+export const scheduledBatches = pgTable('scheduled_batches', {
+  id:           text('id').primaryKey(),
+  userId:       text('userId').notNull().references(() => user.id),
+  tokenSymbol:  text('tokenSymbol').notNull(),              // USDC or EURC
+  totalAmount:  text('totalAmount').notNull(),              // total as decimal string
+  recipients:   text('recipients').notNull(),               // JSON: [{ name, address, amount }]
+  memo:         text('memo'),
+  scheduledFor: timestamp('scheduledFor').notNull(),
+  status:       text('status').notNull().default('pending'), // pending | sent | cancelled
+  txHash:       text('txHash'),
+  createdAt:    timestamp('createdAt').notNull().defaultNow(),
+  updatedAt:    timestamp('updatedAt').notNull().defaultNow(),
+})
