@@ -852,6 +852,33 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
             </div>
             </div>
 
+            {/* ===================== HOW IT WORKS ===================== */}
+            <div className="mb-6 grid grid-cols-1 sm:grid-cols-3 gap-3 px-6">
+              <div className="border border-white/[0.06] bg-white/[0.02] px-4 py-3.5">
+                <span className="mono-label block mb-1.5">Step 1</span>
+                <p className="text-sm font-medium text-white">Add recipients</p>
+                <p className="text-[11px] text-white/35 leading-relaxed mt-1">
+                  Name, wallet address and amount for each person. An address
+                  starts with 0x and is 42 characters long.
+                </p>
+              </div>
+              <div className="border border-white/[0.06] bg-white/[0.02] px-4 py-3.5">
+                <span className="mono-label block mb-1.5">Step 2</span>
+                <p className="text-sm font-medium text-white">Review the batch</p>
+                <p className="text-[11px] text-white/35 leading-relaxed mt-1">
+                  You see the full list, the total and the fee before anything
+                  is sent.
+                </p>
+              </div>
+              <div className="border border-white/[0.06] bg-white/[0.02] px-4 py-3.5">
+                <span className="mono-label block mb-1.5">Step 3</span>
+                <p className="text-sm font-medium text-white">Sign once</p>
+                <p className="text-[11px] text-white/35 leading-relaxed mt-1">
+                  One signature in your wallet pays everyone together.
+                </p>
+              </div>
+            </div>
+
             {/* ===================== SECTION 3: INPUT MODE TOGGLE ===================== */}
             <div className="flex items-center justify-between mb-6 px-6">
               <span className="mono-label">
@@ -892,6 +919,13 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                 </button>
               </div>
             </div>
+
+            {/* Mode hint in plain words */}
+            <p className="px-6 -mt-3 mb-6 text-[11px] text-white/30 leading-relaxed">
+              {inputMode === "percentage"
+                ? "Split mode: enter one total below, then give each person a percentage of it. The percentages must add up to 100%."
+                : "Amount mode: type the exact amount each person should receive."}
+            </p>
 
             {/* ===================== SECTION 4: TOTAL AMOUNT (percentage mode) ===================== */}
             {inputMode === "percentage" ? (
@@ -955,6 +989,11 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
 
             {/* ===================== SECTION 5: RECIPIENTS ===================== */}
             <div className="mb-6">
+              <p className="px-4 mb-3 text-[11px] text-white/30 leading-relaxed">
+                Paste each person&apos;s wallet address (it starts with 0x).
+                If they have a VibeID, you can type their @handle instead and
+                the address fills in for you.
+              </p>
               {/* Column headers */}
               <div className="flex items-center gap-3 px-4 mb-3">
                 <div className="w-7 shrink-0" />
