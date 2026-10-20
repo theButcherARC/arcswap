@@ -216,10 +216,19 @@ export default function BulkPayForm() {
   const [agentResult, setAgentResult] = useState<ParsedBulkPay | null>(null);
 
   const [memo, setMemo] = useState("");
+  const [showReview, setShowReview] = useState(false);
+  const reviewRef = useRef<HTMLDivElement>(null);
 
   const { executeBulkPay, status, txHash, error, reset } = useBulkPay();
 
   const isSending = status === "preparing" || status === "sending";
+
+  /* ---- Scroll the review step into view when it opens ---- */
+  useEffect(() => {
+    if (showReview) {
+      reviewRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [showReview]);
 
   /* ---- Total amount for hint calculations ---- */
   const totalAmountForHint = useMemo(() => {
@@ -280,6 +289,25 @@ export default function BulkPayForm() {
       isFullyAllocated,
       isOverAllocated,
     };
+  }, [recipients, inputMode, totalAmountInput]);
+
+  /* ---- Recipients that will actually be paid (valid rows only) ---- */
+  const reviewRecipients = useMemo(() => {
+    return recipients
+      .filter((r) => {
+        const addrOk = isValidAddress(r.address);
+        if (inputMode === "amount") {
+          return addrOk && r.amount !== null && r.amount > 0;
+        }
+        return addrOk && r.percentage !== null && r.percentage > 0;
+      })
+      .map((r) => ({
+        ...r,
+        displayAmount:
+          inputMode === "amount"
+            ? r.amount || 0
+            : ((parseFloat(totalAmountInput) || 0) * (r.percentage || 0)) / 100,
+      }));
   }, [recipients, inputMode, totalAmountInput]);
 
   /* ---- Gas estimate ---- */
@@ -446,6 +474,12 @@ export default function BulkPayForm() {
       e.preventDefault();
       if (!canSend) return;
 
+      /* ---- First submit only opens the review step ---- */
+      if (!showReview) {
+        setShowReview(true);
+        return;
+      }
+
       const validRecipients = recipients.filter((r) => {
         const addrOk = isValidAddress(r.address);
         if (inputMode === "amount") {
@@ -516,7 +550,7 @@ export default function BulkPayForm() {
         memo: memo.trim() || undefined,
       });
     },
-    [canSend, recipients, inputMode, totalAmountInput, token, executeBulkPay]
+    [canSend, recipients, inputMode, totalAmountInput, token, executeBulkPay, showReview]
   );
 
   const atMaxRecipients = recipients.length >= BULK_PAY_MAX_RECIPIENTS;
@@ -1068,6 +1102,113 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
               ) : null}
             </div>
 
+            {/* ===================== REVIEW STEP ===================== */}
+            {showReview ? (
+              <div
+                ref={reviewRef}
+                className="mt-10 border border-violet-400/25 bg-[#0d0b16]/95 p-5"
+              >
+                <span className="mono-label block mb-2">
+                  SYS.REVIEW / BEFORE YOU SIGN
+                </span>
+                <h2 className="text-lg font-semibold text-white">
+                  Review this batch
+                </h2>
+                <p className="text-xs text-white/40 mt-1 leading-relaxed">
+                  Check every recipient and amount. Nothing has been sent yet.
+                </p>
+
+                <div className="mt-4 divide-y divide-white/[0.06] border border-white/[0.06]">
+                  {reviewRecipients.map((r) => (
+                    <div
+                      key={r.id}
+                      className="flex items-center justify-between gap-4 px-3.5 py-2.5"
+                    >
+                      <div className="min-w-0">
+                        <p className="text-sm text-white truncate">
+                          {r.name || "Recipient"}
+                        </p>
+                        <p className="text-[11px] text-white/35 font-mono">
+                          {r.address
+                            ? r.address.slice(0, 6) +
+                              "..." +
+                              r.address.slice(-4)
+                            : "No address"}
+                        </p>
+                      </div>
+                      <span className="text-sm font-semibold text-white whitespace-nowrap">
+                        {(selectedSymbol === "EURC" ? "€" : "$") +
+                          r.displayAmount.toFixed(2)}
+                        <span className="text-white/30 font-normal ml-1">
+                          {selectedSymbol}
+                        </span>
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                {summaryData.count > summaryData.validCount ? (
+                  <p className="mt-3 text-xs text-amber-300/80 leading-relaxed">
+                    {summaryData.count - summaryData.validCount} of your rows
+                    are not in this list. A row is only paid when it has a valid
+                    address and an amount above $0. Go back and fix a row if
+                    someone is missing.
+                  </p>
+                ) : null}
+
+                <div className="mt-4 grid grid-cols-3 gap-4 border border-white/[0.06] bg-white/[0.02] px-3.5 py-3">
+                  <div>
+                    <span className="mono-label block mb-1">Total</span>
+                    <span className="text-sm font-semibold text-white">
+                      {(selectedSymbol === "EURC" ? "€" : "$") +
+                        summaryData.total.toFixed(2)}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="mono-label block mb-1">Fee (0.2%)</span>
+                    <span className="text-sm font-semibold text-white/70">
+                      {"$" + summaryData.fee.toFixed(2)}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="mono-label block mb-1">Gas est.</span>
+                    <span className="text-sm font-semibold text-white/70">
+                      {gasLoading
+                        ? "..."
+                        : gasUsd !== null
+                          ? "~$" + gasUsd.toFixed(4)
+                          : "-"}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="mt-4 space-y-1.5 text-xs text-white/45 leading-relaxed">
+                  <p>
+                    Before your wallet opens, this exact batch is simulated
+                    onchain. If any payment would fail, nothing is sent and the
+                    error names the address that caused it.
+                  </p>
+                  <p>
+                    Payments are all or nothing: if one transfer fails onchain,
+                    the whole batch reverts and no one gets a partial payment.
+                  </p>
+                  <p>
+                    One check only you can do: a mistyped address that is still
+                    a valid address cannot be detected. Make sure each address
+                    belongs to the right person.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setShowReview(false)}
+                  className="mt-4 text-xs text-white/40 underline underline-offset-4 hover:text-white/70 transition-colors"
+                >
+                  Back to edit
+                </button>
+              </div>
+            ) : null}
+
             {/* ===================== SECTION 6 + 7: SUMMARY + SEND ===================== */}
             <div className="mt-10">
               {/* Summary + send card */}
@@ -1310,7 +1451,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                       />
                     </svg>
                     {status === "preparing"
-                      ? "Preparing Transaction..."
+                      ? "Simulating batch..."
                       : "Confirm in MetaMask..."}
                   </span>
                 ) : (
@@ -1337,8 +1478,12 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                           strokeLinejoin="round"
                         />
                       </svg>
-                      Send {summaryData.validCount} payment
-                      {summaryData.validCount !== 1 ? "s" : ""}
+                      {showReview
+                        ? "Confirm and sign"
+                        : "Send " +
+                          summaryData.validCount +
+                          " payment" +
+                          (summaryData.validCount !== 1 ? "s" : "")}
                     </span>
                     <span className="text-xs font-normal opacity-60 mt-0.5">
                       {(selectedSymbol === "EURC" ? "€" : "$") +
