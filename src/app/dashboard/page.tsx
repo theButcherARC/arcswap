@@ -2,6 +2,7 @@
 
 import { useAccount } from "wagmi";
 import { ConnectButton } from "@/components/wallet/ConnectButton";
+import { ScheduledPayments } from "@/components/dashboard/ScheduledPayments";
 import useSWR from "swr";
 import { useEffect, useState } from "react";
 import {
@@ -330,6 +331,8 @@ export default function DashboardPage() {
             Payment history and analytics
           </p>
         </header>
+
+        <ScheduledPayments />
 
         {error && (
           <section
