@@ -123,11 +123,11 @@ export default function SocialProfilePage() {
   const canLink = xConnected && walletConnected && !fetchingProfile && status !== 'linking'
 
   return (
-    <main className="relative min-h-screen bg-[var(--bg)] px-4 pb-16 pt-28 sm:px-6 lg:px-8">
+    <main className="relative min-h-screen bg-[var(--bg)] px-4 pb-16 pt-24 sm:px-6 lg:px-8">
       <div className="relative mx-auto max-w-lg">
         {/* Page header */}
         <div className="mb-10">
-          <h1 className="text-3xl font-bold tracking-tight text-balance">
+          <h1 className="text-2xl font-bold tracking-tight text-balance">
             <span className="text-[var(--fg)]">VibeID</span>
           </h1>
           <p className="mt-2 text-sm text-white/50 leading-relaxed">
