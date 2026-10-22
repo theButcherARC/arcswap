@@ -100,10 +100,10 @@ export default function AdminSocialPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#050508] px-4 pb-16 pt-28 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-[#050508] px-4 pb-16 pt-10 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-3xl">
         <div className="mb-10">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-violet-400 to-violet-600 bg-clip-text text-transparent">
+          <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
             Admin - Social Profiles
           </h1>
           <p className="mt-2 text-sm text-white/50">

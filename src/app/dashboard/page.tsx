@@ -2,7 +2,6 @@
 
 import { useAccount } from "wagmi";
 import { ConnectButton } from "@/components/wallet/ConnectButton";
-import { ScheduledPayments } from "@/components/dashboard/ScheduledPayments";
 import useSWR from "swr";
 import { useEffect, useState } from "react";
 import {
@@ -271,7 +270,7 @@ export default function DashboardPage() {
   ];
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[var(--bg)] px-4 pb-16 pt-24 sm:px-6 lg:px-8">
+    <main className="relative min-h-screen overflow-hidden bg-[var(--bg)] px-4 pb-16 pt-10 sm:px-6 lg:px-8">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(circle_at_50%_0%,rgba(139,124,246,0.12),transparent_65%)]" />
 
       <div className="relative mx-auto flex w-full max-w-5xl flex-col gap-6">
@@ -331,8 +330,6 @@ export default function DashboardPage() {
             Payment history and analytics
           </p>
         </header>
-
-        <ScheduledPayments />
 
         {error && (
           <section

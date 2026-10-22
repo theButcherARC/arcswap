@@ -5,8 +5,13 @@
 export const ROUTES = {
   HOME: "/",
   BULK_PAY: "/bulk-pay",
+  BULK_PAY_UPLOAD: "/bulk-pay/upload",
+  SCHEDULED: "/scheduled",
   DASHBOARD: "/dashboard",
   SOCIAL_PROFILE: "/social-profile",
+  ROADMAP: "/roadmap",
+  ARCHITECTURE: "/architecture",
+  ADMIN_SOCIAL: "/admin/social",
 } as const;
 
 export type AppRoute = (typeof ROUTES)[keyof typeof ROUTES];

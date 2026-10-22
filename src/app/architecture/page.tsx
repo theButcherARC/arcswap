@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function ArchitecturePage() {
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[var(--bg)] px-5 py-24 sm:px-8">
+    <main className="relative min-h-screen overflow-hidden bg-[var(--bg)] px-5 py-10 sm:px-8">
       <div className="grid-lines pointer-events-none absolute inset-0 opacity-30" aria-hidden="true" />
 
       {/* Back link */}

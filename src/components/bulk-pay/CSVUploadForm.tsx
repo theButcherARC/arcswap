@@ -218,7 +218,7 @@ export default function CSVUploadForm() {
   // ── Render ────────────────────────────────────────────────────────────────
 
   return (
-    <div className="min-h-screen bg-[var(--bg)] text-white px-4 sm:px-6 lg:px-8 pt-28 pb-12">
+    <div className="min-h-screen bg-[var(--bg)] text-white px-4 sm:px-6 lg:px-8 pt-10 pb-12">
       <div className="mx-auto max-w-3xl">
 
         {/* ── Header ─────────────────────────────────────────────────────── */}
