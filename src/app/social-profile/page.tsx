@@ -123,7 +123,7 @@ export default function SocialProfilePage() {
   const canLink = xConnected && walletConnected && !fetchingProfile && status !== 'linking'
 
   return (
-    <main className="relative min-h-screen bg-[var(--bg)] px-4 pb-16 pt-24 sm:px-6 lg:px-8">
+    <main className="relative min-h-screen bg-[var(--bg)] px-4 pb-16 pt-10 sm:px-6 lg:px-8">
       <div className="relative mx-auto max-w-lg">
         {/* Page header */}
         <div className="mb-10">

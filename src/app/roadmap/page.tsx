@@ -96,7 +96,7 @@ const phases = [
 
 export default function RoadmapPage() {
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[var(--bg)] px-5 pb-32 pt-24 sm:px-8">
+    <main className="relative min-h-screen overflow-hidden bg-[var(--bg)] px-5 pb-32 pt-10 sm:px-8">
       <div className="grid-lines pointer-events-none absolute inset-0 opacity-30" aria-hidden="true" />
 
       <div className="relative mx-auto max-w-4xl">
