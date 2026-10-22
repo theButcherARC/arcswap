@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
-import { Header } from '@/components/layout/Header';
+import { Chrome } from '@/components/layout/Chrome';
 import { Providers } from '@/lib/providers';
 import {
   SITE_URL,
@@ -138,8 +138,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <Providers>
-          <Header />
-          {children}
+          <Chrome>{children}</Chrome>
         </Providers>
       </body>
     </html>
