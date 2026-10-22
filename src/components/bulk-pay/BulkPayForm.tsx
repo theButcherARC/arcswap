@@ -660,7 +660,7 @@ export default function BulkPayForm() {
   /*  RENDER - single return, ternary for success state               */
   /* ================================================================ */
   return (
-    <div className="relative min-h-screen bg-[var(--bg)] pt-20 pb-16 px-4">
+    <div className="relative min-h-screen bg-[var(--bg)] pt-10 pb-16 px-4">
       {status === "success" ? (
         <BulkPaySuccess
           txHash={txHash || ""}
