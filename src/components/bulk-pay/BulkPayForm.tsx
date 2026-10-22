@@ -210,7 +210,7 @@ export default function BulkPayForm() {
 
   const token = HARDCODED_TOKENS[selectedSymbol];
   const [recipients, setRecipients] = useState<Recipient[]>([createRecipient()]);
-  const [showAgent, setShowAgent] = useState(true);
+  const [showAgent, setShowAgent] = useState(false);
   const [agentInput, setAgentInput] = useState("");
   const [agentLoading, setAgentLoading] = useState(false);
   const [agentError, setAgentError] = useState("");
@@ -218,6 +218,7 @@ export default function BulkPayForm() {
 
   const [memo, setMemo] = useState("");
   const [showReview, setShowReview] = useState(false);
+  const [showMemo, setShowMemo] = useState(false);
   const reviewRef = useRef<HTMLDivElement>(null);
   const { data: session } = authClient.useSession();
   const [scheduleDate, setScheduleDate] = useState("");
@@ -659,7 +660,7 @@ export default function BulkPayForm() {
   /*  RENDER - single return, ternary for success state               */
   /* ================================================================ */
   return (
-    <div className="relative min-h-screen bg-[var(--bg)] pt-24 pb-16 px-4">
+    <div className="relative min-h-screen bg-[var(--bg)] pt-20 pb-16 px-4">
       {status === "success" ? (
         <BulkPaySuccess
           txHash={txHash || ""}
@@ -667,13 +668,13 @@ export default function BulkPayForm() {
           tokenSymbol={selectedSymbol}
         />
       ) : (
-        <div className="mx-auto max-w-5xl px-2 sm:px-4"> 
+        <div className="mx-auto max-w-3xl px-2 sm:px-4">
           {/* ===================== SECTION 1: PAGE HEADER ===================== */}
           <div className="rule-tick mb-7 pt-5 sm:mb-8">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <span className="mono-label mb-2 block">SYS.PAY / BATCH.TRANSFER</span>
-                <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-[var(--fg)]">
+                <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--fg)]">
                   Bulk Pay
                 </h1>
                 <p className="text-sm text-[var(--fg-muted)] mt-2 max-w-md">
@@ -951,33 +952,6 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
             </div>
             </div>
 
-            {/* ===================== HOW IT WORKS ===================== */}
-            <div className="mb-6 grid grid-cols-1 sm:grid-cols-3 gap-3 px-6">
-              <div className="border border-white/[0.06] bg-white/[0.02] px-4 py-3.5">
-                <span className="mono-label block mb-1.5">Step 1</span>
-                <p className="text-sm font-medium text-white">Add recipients</p>
-                <p className="text-[11px] text-white/35 leading-relaxed mt-1">
-                  Name, wallet address and amount for each person. An address
-                  starts with 0x and is 42 characters long.
-                </p>
-              </div>
-              <div className="border border-white/[0.06] bg-white/[0.02] px-4 py-3.5">
-                <span className="mono-label block mb-1.5">Step 2</span>
-                <p className="text-sm font-medium text-white">Review the batch</p>
-                <p className="text-[11px] text-white/35 leading-relaxed mt-1">
-                  You see the full list, the total and the fee before anything
-                  is sent.
-                </p>
-              </div>
-              <div className="border border-white/[0.06] bg-white/[0.02] px-4 py-3.5">
-                <span className="mono-label block mb-1.5">Step 3</span>
-                <p className="text-sm font-medium text-white">Sign once</p>
-                <p className="text-[11px] text-white/35 leading-relaxed mt-1">
-                  One signature in your wallet pays everyone together.
-                </p>
-              </div>
-            </div>
-
             {/* ===================== SECTION 3: INPUT MODE TOGGLE ===================== */}
             <div className="flex items-center justify-between mb-6 px-6">
               <span className="mono-label">
@@ -1133,7 +1107,16 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                 ))}
               </div>
 
-              {/* Payroll memo input */}
+              {/* Payroll memo input - collapsed until asked for */}
+              {!showMemo && memo.length === 0 ? (
+                <button
+                  type="button"
+                  onClick={() => setShowMemo(true)}
+                  className="mt-5 text-xs text-white/35 underline-offset-4 transition-colors hover:text-white/70 hover:underline"
+                >
+                  + Add a payroll label (optional)
+                </button>
+              ) : (
               <div className="mt-6">
                 <label className="block text-xs font-medium text-white/40 mb-1.5">
                   Payroll Label <span className="text-white/20">(optional)</span>
@@ -1160,6 +1143,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                   )}
                 </p>
               </div>
+              )}
 
               {/* Add recipient button */}
               <button
@@ -1410,8 +1394,8 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                       : "border-white/10 bg-[#0b0b12]/95")
                 }
               >
-                <div className="flex flex-col lg:flex-row lg:items-center gap-5">
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-5 flex-1">
+                <div className="flex flex-col gap-5">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-5">
                   {/* Total */}
                   <div>
                     <span className="mono-label block mb-1.5">
@@ -1510,7 +1494,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-3 lg:w-72 lg:shrink-0">
+                <div className="flex flex-col gap-3 border-t border-white/[0.06] pt-5">
 
               {/* Error display */}
               {status === "error" && error ? (
@@ -1551,42 +1535,22 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                 </div>
               ) : null}
 
-              {/* Stats bar */}
-              <div className="flex items-center gap-2 border border-white/[0.06] bg-white/[0.03] px-3 py-2.5 flex-wrap text-xs">
-                {/* Gas */}
-                <span className="text-white/40 whitespace-nowrap">
-                  {"Gas: "}
-                  <span key={gasUsd?.toFixed(4)} className="text-violet-300 font-medium animate-value-flash">
+              {/* Gas line */}
+              <div className="flex items-center gap-2 text-[11px] text-white/35">
+                <span>
+                  Gas{" "}
+                  <span key={gasUsd?.toFixed(4)} className="font-medium text-violet-300 animate-value-flash">
                     {gasLoading ? "..." : gasUsd !== null ? "~$" + gasUsd.toFixed(4) : "-"}
-                  </span>
-                  {" USDC"}
+                  </span>{" "}
+                  USDC
                 </span>
-                <span className="text-white/20">|</span>
-                {/* Recipients */}
-                <span className="text-white/40 whitespace-nowrap">
-                  {"Recipients: "}
-                  <span key={summaryData.validCount} className="text-white/60 font-medium animate-value-flash">
-                    {summaryData.validCount}
-                  </span>
-                </span>
-                <span className="text-white/20">|</span>
-                {/* Total */}
-                <span className="text-white/40 whitespace-nowrap">
-                  {"Total: "}
-                  <span key={summaryData.total.toFixed(2)} className="text-white/70 font-medium animate-value-flash">
-                    {(selectedSymbol === "EURC" ? "€" : "$") + summaryData.total.toFixed(2)}
-                  </span>
-                  {" " + selectedSymbol}
-                </span>
-                <span className="text-white/20">|</span>
-                {/* Powered by Arc */}
-                <span className="text-white/20 whitespace-nowrap">Powered by Arc</span>
-                {/* Refresh - pushed to the right */}
+                <span className="text-white/15">·</span>
+                <span>Powered by Arc</span>
                 <button
                   type="button"
                   onClick={refreshGas}
                   title="Refresh gas estimate"
-                  className="ml-auto shrink-0 flex items-center justify-center w-5 h-5 rounded hover:bg-white/[0.06] transition-colors duration-150"
+                  className="ml-auto flex h-5 w-5 shrink-0 items-center justify-center rounded hover:bg-white/[0.06] transition-colors duration-150"
                 >
                   <svg
                     width="10"
@@ -1688,6 +1652,25 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
               </div>
             </div>
           </form>
+
+          {/* How it works - quiet footer strip */}
+          <div className="mt-14 border-t border-white/[0.06] pt-6">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+              {[
+                ["01", "Add recipients", "Name, wallet address (0x, 42 characters) and amount for each person."],
+                ["02", "Review the batch", "Check the full list, the total and the fee before anything is sent."],
+                ["03", "Sign once", "One signature in your wallet pays everyone together."],
+              ].map(([step, title, body]) => (
+                <div key={step} className="flex gap-3">
+                  <span className="mono-label !text-[var(--accent)]">{step}</span>
+                  <div>
+                    <p className="text-sm font-medium text-white">{title}</p>
+                    <p className="mt-0.5 text-[11px] leading-relaxed text-white/35">{body}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       )}
     </div>
