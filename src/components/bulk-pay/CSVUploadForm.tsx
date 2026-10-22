@@ -219,12 +219,12 @@ export default function CSVUploadForm() {
 
   return (
     <div className="min-h-screen bg-[var(--bg)] text-white px-4 sm:px-6 lg:px-8 pt-28 pb-12">
-      <div className="mx-auto max-w-4xl">
+      <div className="mx-auto max-w-3xl">
 
         {/* ── Header ─────────────────────────────────────────────────────── */}
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
           <div>
-            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
               <span className="text-[var(--fg)]">
                 CSV Upload
               </span>

@@ -96,15 +96,15 @@ const phases = [
 
 export default function RoadmapPage() {
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[var(--bg)] px-5 pb-32 pt-28 sm:px-8">
+    <main className="relative min-h-screen overflow-hidden bg-[var(--bg)] px-5 pb-32 pt-24 sm:px-8">
       <div className="grid-lines pointer-events-none absolute inset-0 opacity-30" aria-hidden="true" />
 
-      <div className="relative mx-auto max-w-6xl">
+      <div className="relative mx-auto max-w-4xl">
         {/* Header */}
-        <header className="animate-fade-in-up mb-16">
+        <header className="animate-fade-in-up mb-10">
           <div className="rule-tick pt-4">
             <div className="flex items-baseline justify-between">
-              <h1 className="text-balance max-w-3xl text-4xl font-bold tracking-[-0.03em] text-[var(--fg)] sm:text-5xl md:text-6xl">
+              <h1 className="text-balance max-w-3xl text-3xl font-bold tracking-[-0.03em] text-[var(--fg)] sm:text-4xl">
                 VibeFlow Roadmap.
               </h1>
               <span className="mono-label hidden md:inline">SYS.ROADMAP / 07 PHASES</span>
@@ -121,7 +121,7 @@ export default function RoadmapPage() {
                 <div className="flex items-baseline gap-5">
                   <span className="font-mono text-2xl font-bold text-[var(--fg-faint)]">{String(phase.phase).padStart(2, '0')}</span>
                   <div>
-                    <h3 className="text-2xl font-bold tracking-tight text-[var(--fg)] sm:text-3xl">{phase.title}</h3>
+                    <h3 className="text-xl font-bold tracking-tight text-[var(--fg)] sm:text-2xl">{phase.title}</h3>
                     <p className="mono-label mt-1">Phase {phase.phase}</p>
                   </div>
                 </div>

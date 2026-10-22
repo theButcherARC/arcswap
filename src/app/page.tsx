@@ -93,7 +93,7 @@ export default function VibeFlowLanding() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-[var(--bg)] text-[var(--fg)]">
       {/* Exposed brutalist grid backdrop */}
-      <div className="grid-lines pointer-events-none absolute inset-0 opacity-40" aria-hidden="true" />
+      <div className="grid-lines pointer-events-none absolute inset-0 opacity-25" aria-hidden="true" />
 
       {/* ==================== HERO ==================== */}
       <section className="relative flex min-h-screen flex-col justify-center px-5 pt-28 pb-20 sm:px-8">
@@ -277,7 +277,7 @@ export default function VibeFlowLanding() {
       {/* ==================== STATS ==================== */}
       <section className="relative z-10 px-5 mb-28 sm:px-8">
         <div className="mx-auto max-w-6xl">
-          <div className="animate-fade-in-up delay-200 overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--glass)] grid grid-cols-2 gap-px md:grid-cols-4 shadow-[0_20px_60px_rgba(0,0,0,0.22)]">
+          <div className="animate-fade-in-up delay-200 overflow-hidden border border-[var(--line)] bg-[var(--line)] grid grid-cols-2 gap-px md:grid-cols-4">
             {STATS.map((s) => (
               <div key={s.label} className="flex flex-col items-start justify-center bg-[var(--bg-raised)] px-6 py-10 sm:px-8">
                 <span className="text-4xl font-bold tracking-tight text-[var(--fg)] sm:text-5xl">{s.value}</span>
@@ -300,7 +300,7 @@ export default function VibeFlowLanding() {
             </div>
           </div>
 
-          <div className="grid gap-px overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--line)] md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-px overflow-hidden border border-[var(--line)] bg-[var(--line)] md:grid-cols-2 lg:grid-cols-3">
             {FEATURES.map((f) => (
               <div key={f.fig} className="group relative bg-[var(--bg-raised)] p-8 transition-colors duration-300 hover:bg-[var(--glass-strong)]">
                 <div className="mb-10 flex items-center justify-between">
