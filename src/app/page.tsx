@@ -108,6 +108,17 @@ export default function VibeFlowLanding() {
 
           <div className="grid gap-10 lg:grid-cols-12 lg:items-end">
             <div className="lg:col-span-9">
+              <Link
+                href={ROUTES.BULK_PAY}
+                className="animate-fade-in-up group mb-4 flex w-fit items-center gap-2.5 border border-[var(--accent)]/40 bg-[var(--accent-soft)] px-4 py-2 backdrop-blur-xl transition-colors duration-200 hover:border-[var(--accent)]"
+              >
+                <span className="mono-label !text-[var(--accent)]">New</span>
+                <span className="mono-label !text-[var(--fg-muted)]">Scheduled payments are live</span>
+                <svg className="text-[var(--accent)] transition-transform duration-300 group-hover:translate-x-0.5" width="12" height="12" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 9H15M15 9L10 4M15 9L10 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </Link>
+
               <div className="animate-fade-in-up mb-8 inline-flex items-center gap-2.5 border border-[var(--line)] bg-[var(--glass)] px-4 py-2 backdrop-blur-xl">
                 <span className="relative flex h-1.5 w-1.5">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--data)] opacity-75" />
@@ -131,7 +142,7 @@ export default function VibeFlowLanding() {
               <div className="animate-fade-in-up delay-300 mt-10 flex flex-col gap-3 sm:flex-row">
                 <Link
                   href={ROUTES.BULK_PAY}
-                  className="group inline-flex items-center justify-center gap-2.5 bg-[var(--fg)] px-8 py-4 text-base font-semibold text-[var(--bg)] transition-opacity duration-200 hover:opacity-85"
+                  className="group inline-flex items-center justify-center gap-2.5 bg-[var(--accent)] px-8 py-4 text-base font-semibold text-[var(--bg)] transition-opacity duration-200 hover:opacity-85"
                 >
                   Launch App
                   <svg className="transition-transform duration-300 group-hover:translate-x-0.5" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -170,6 +181,97 @@ export default function VibeFlowLanding() {
         </div>
 
         <div className="absolute bottom-0 left-0 right-0 z-10 h-24 bg-gradient-to-t from-[var(--bg)] to-transparent pointer-events-none" />
+      </section>
+
+      {/* ==================== PRODUCT PREVIEW ==================== */}
+      <section className="relative z-10 px-5 mb-28 sm:px-8" aria-label="Product preview">
+        <div className="relative mx-auto max-w-6xl">
+          {/* Accent glow behind the card */}
+          <div className="pointer-events-none absolute left-1/2 top-1/2 h-72 w-[36rem] max-w-full -translate-x-1/2 -translate-y-1/2 rounded-full bg-[var(--accent)] opacity-[0.13] blur-[110px]" aria-hidden="true" />
+
+          <div className="animate-fade-in-up delay-200 relative border border-[var(--line)] bg-[var(--bg-raised)] shadow-[0_30px_80px_rgba(0,0,0,0.35)]">
+            {/* Crosshair corner marks */}
+            <span className="mono-label absolute -top-2.5 left-4 z-10 bg-[var(--bg)] px-1 !text-[var(--fg-faint)]" aria-hidden="true">+</span>
+            <span className="mono-label absolute -top-2.5 right-4 z-10 bg-[var(--bg)] px-1 !text-[var(--fg-faint)]" aria-hidden="true">+</span>
+            <span className="mono-label absolute -bottom-2.5 left-4 z-10 bg-[var(--bg)] px-1 !text-[var(--fg-faint)]" aria-hidden="true">+</span>
+            <span className="mono-label absolute -bottom-2.5 right-4 z-10 bg-[var(--bg)] px-1 !text-[var(--fg-faint)]" aria-hidden="true">+</span>
+            {/* Card header */}
+            <div className="flex items-center justify-between border-b border-[var(--line)] px-6 py-4 sm:px-8">
+              <span className="mono-label">SYS.BATCH / JULY PAYROLL</span>
+              <span className="mono-label border border-[var(--line)] px-2.5 py-1 !text-[var(--accent)]">1 signature</span>
+            </div>
+
+            {/* Recipient rows */}
+            <div className="divide-y divide-[var(--line)] px-6 sm:px-8">
+              {[
+                ["Alice", "0x742d...bD38", "$2,500.00"],
+                ["Bob", "0x8ba1...DBA72", "$1,800.00"],
+                ["Sarah", "0xdD87...2148", "$2,200.00"],
+                ["Mike", "0x5aA2...9cE1", "$1,500.00"],
+              ].map(([name, addr, amt]) => (
+                <div key={name} className="flex items-center justify-between gap-4 py-4">
+                  <div className="flex min-w-0 items-center gap-4">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center border border-[var(--line)] bg-[var(--glass)] font-mono text-xs font-bold text-[var(--fg-muted)]">
+                      {name.slice(0, 1)}
+                    </span>
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-medium text-[var(--fg)]">{name}</p>
+                      <p className="font-mono text-[11px] text-[var(--fg-faint)]">{addr}</p>
+                    </div>
+                  </div>
+                  <span className="text-sm font-semibold text-[var(--fg)]">
+                    {amt}
+                    <span className="ml-1.5 font-normal text-[var(--fg-faint)]">USDC</span>
+                  </span>
+                </div>
+              ))}
+              <div className="py-3.5">
+                <span className="mono-label !text-[var(--fg-faint)]">+ 21 more recipients</span>
+              </div>
+            </div>
+
+            {/* Card footer */}
+            <div className="flex flex-col gap-3 border-t border-[var(--line)] px-6 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+              <div className="flex items-center gap-2.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-[var(--data)]" />
+                <span className="mono-label !text-[var(--fg-muted)]">Simulated OK · All or nothing · Settles in under 1s</span>
+              </div>
+              <div className="flex items-baseline gap-5">
+                <span className="mono-label">Fee $16.00 (0.2%)</span>
+                <span className="text-lg font-bold tracking-tight text-[var(--fg)]">
+                  $8,000.00 <span className="text-sm font-normal text-[var(--fg-faint)]">USDC</span>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Floating chips */}
+          <div className="animate-fade-in-up delay-300 absolute -top-6 right-6 hidden items-center gap-3 border border-[var(--line)] bg-[var(--glass-strong)] px-4 py-3 shadow-[0_16px_40px_rgba(0,0,0,0.4)] backdrop-blur-xl md:flex">
+            <span className="flex h-6 w-6 items-center justify-center bg-[var(--data)] text-[var(--bg)]">
+              <svg width="12" height="12" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2.5 7.5L5.5 10.5L11.5 3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </span>
+            <div>
+              <p className="text-xs font-semibold text-[var(--fg)]">Batch settled</p>
+              <p className="font-mono text-[10px] text-[var(--fg-faint)]">0.4s on Arc</p>
+            </div>
+          </div>
+          <div className="animate-fade-in-up delay-500 absolute -bottom-6 left-6 hidden items-center gap-3 border border-[var(--line)] bg-[var(--glass-strong)] px-4 py-3 shadow-[0_16px_40px_rgba(0,0,0,0.4)] backdrop-blur-xl md:flex">
+            <span className="flex h-6 w-6 items-center justify-center bg-[var(--accent)] text-[var(--bg)]">
+              <svg width="12" height="12" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="7" cy="7" r="5.5" stroke="currentColor" strokeWidth="1.6" />
+                <path d="M7 4V7.2L9.2 8.6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </span>
+            <div>
+              <p className="text-xs font-semibold text-[var(--fg)]">Scheduled</p>
+              <p className="font-mono text-[10px] text-[var(--fg-faint)]">Pays out Oct 31, 9:00 AM</p>
+            </div>
+          </div>
+
+          <p className="mono-label mt-10 text-center !text-[var(--fg-faint)]">Illustration of a VibeFlow batch</p>
+        </div>
       </section>
 
       {/* ==================== STATS ==================== */}
@@ -273,7 +375,7 @@ export default function VibeFlowLanding() {
               </p>
               <Link
                 href={ROUTES.BULK_PAY}
-                className="group inline-flex items-center gap-2.5 bg-[var(--fg)] px-10 py-4 text-base font-semibold text-[var(--bg)] transition-opacity duration-200 hover:opacity-85"
+                className="group inline-flex items-center gap-2.5 bg-[var(--accent)] px-10 py-4 text-base font-semibold text-[var(--bg)] transition-opacity duration-200 hover:opacity-85"
               >
                 Start Paying in Batches
                 <svg className="transition-transform duration-300 group-hover:translate-x-1" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -339,6 +441,16 @@ export default function VibeFlowLanding() {
                 <li><a href="https://x.com/The_Last_Dip" target="_blank" rel="noopener noreferrer" className="text-sm text-[var(--fg-faint)] transition-colors duration-200 hover:text-[var(--fg)]">Butcher (Haroon)</a></li>
               </ul>
             </div>
+          </div>
+
+          {/* Giant outlined wordmark */}
+          <div className="pointer-events-none mb-10 select-none overflow-hidden" aria-hidden="true">
+            <p
+              className="text-center text-[19vw] font-bold leading-[0.8] tracking-[-0.02em] text-transparent md:text-[12.5rem]"
+              style={{ WebkitTextStroke: "1px var(--line-strong)" }}
+            >
+              VIBEFLOW
+            </p>
           </div>
 
           <div className="flex flex-col items-center justify-between gap-4 border-t border-[var(--line)] pt-8">
