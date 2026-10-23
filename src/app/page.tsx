@@ -464,6 +464,29 @@ export default function VibeFlowLanding() {
               <span className="mono-label !text-[var(--fg-muted)]">Circle USDC</span>
             </div>
           </div>
+
+          {/* On-chain proof: contract addresses */}
+          <div className="mt-8 flex flex-col items-center justify-between gap-3 border-t border-[var(--line)] pt-6 sm:flex-row">
+            <span className="mono-label">Contracts on Arc Mainnet</span>
+            <div className="flex flex-col items-center gap-2 sm:flex-row sm:gap-6">
+              <a
+                href="https://explorer.arc.io/address/0x522fAf9A91c41c443c66765030741e4AaCe147D0"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-mono text-[11px] text-[var(--fg-faint)] transition-colors hover:text-[var(--data)]"
+              >
+                Batch 0x522f...147D0
+              </a>
+              <a
+                href="https://explorer.arc.io/address/0x5294E9927c3306DcBaDb03fe70b92e01cCede505"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-mono text-[11px] text-[var(--fg-faint)] transition-colors hover:text-[var(--data)]"
+              >
+                Memo 0x5294...e505
+              </a>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
