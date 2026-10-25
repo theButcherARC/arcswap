@@ -4,6 +4,7 @@
  */
 export const ROUTES = {
   HOME: "/",
+  VIBRAIN: "/vibrain",
   BULK_PAY: "/bulk-pay",
   BULK_PAY_UPLOAD: "/bulk-pay/upload",
   SCHEDULED: "/scheduled",

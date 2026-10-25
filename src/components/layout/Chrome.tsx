@@ -8,10 +8,8 @@ const APP_PREFIXES = [
   "/bulk-pay",
   "/dashboard",
   "/social-profile",
-  "/roadmap",
-  "/architecture",
-  "/admin",
   "/scheduled",
+  "/vibrain",
 ];
 
 export function Chrome({ children }: { children: React.ReactNode }) {
