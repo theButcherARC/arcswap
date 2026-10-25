@@ -35,6 +35,8 @@ Paying a team in crypto still means one transaction per person, one token approv
 
 ## Built with Arc Studio
 
+For this round we also built a new contract with Arc Studio itself: VibeIDRegistry, the onchain identity registry for the VibeFlow hub (it maps a unique VibeID handle to a wallet address). Arc Studio wrote the contract, ran two security reviews with zero findings, a Slither scan with zero findings, and a Forge test suite that passes 62 of 62 tests. Studio project: https://studio.arc.io/app/10877ef3-5217-451b-b888-ffc21a5846e8 ; deployed on Arc Testnet at 0x6ac5cb9a51e2d994ef564b7033525d75bbc1b488. PRESENTATION POINT: say this out loud in the demo, we had a contract built through Arc Studio for this submission, it is not a claim, the project link and the test results are the proof.
+
 VibeFlow was built with Arc Studio and is iterated in public inside Arc House, where the builder is a Tier 1 Architect. The current feature set is literally shaped by that community: Arc House members asked how failed payments are handled (shipped: simulation, named failures, all-or-nothing batches), asked for a review before signing (shipped), said onboarding confused non-technical users (shipped: plain-language steps and hints), and asked for scheduled payments (shipped). Round 1 feedback became Round 2 product.
 
 ## Proven on mainnet
@@ -71,6 +73,7 @@ Fiat on-ramp for payroll funding, recurring scheduled batches that prepare thems
 | 1:10-1:30 | Sign, then explorer page for the real batch | "One signature. Settled on Arc mainnet in under a second. Here is the real transaction." |
 | 1:30-1:50 | Scheduled payments + dashboard | "Batches can be scheduled for payday, and everything is tracked on the dashboard." |
 | 1:50-2:00 | VibeID | "And you can pay people by handle, not just addresses." |
+| 2:00-2:15 | Arc Studio project page, Contracts panel open | "For this round we built a new contract with Arc Studio itself: VibeIDRegistry, our onchain identity registry. Studio wrote it, reviewed it, and its tests pass 62 out of 62. The project link is in this submission." |
 
 ## Submission checklist
 
