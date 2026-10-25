@@ -45,8 +45,8 @@ const FEATURES = [
     fig: "FIG 05",
     sys: "SYS.SQUARE",
     title: "VibeSquare",
-    body: "The community feed where money is attached: tip a post, request a payment, split a bill, all in one tap from the content itself.",
-    tag: "Coming soon",
+    body: "The community feed where money is attached: tip any post in USDC in one tap, straight to its author. Pay requests and splits are on the way.",
+    tag: "Live now",
     accent: "accent" as const,
   },
   {
