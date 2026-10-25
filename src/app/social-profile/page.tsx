@@ -142,7 +142,7 @@ export default function SocialProfilePage() {
             <div className="flex items-center gap-3 mb-4">
               <div className={
                 'flex h-7 w-7 items-center justify-center text-xs font-bold ' +
-                (walletConnected ? 'bg-violet-600 text-white' : 'bg-white/10 text-white/50')
+                (walletConnected ? 'bg-[var(--accent)] text-white' : 'bg-white/10 text-white/50')
               }>
                 {walletConnected ? '✓' : '1'}
               </div>
@@ -151,7 +151,7 @@ export default function SocialProfilePage() {
             </div>
 
             {walletConnected ? (
-              <div className="border border-violet-500/20 bg-[var(--accent-soft)] px-4 py-3">
+              <div className="border border-[rgba(39,117,202,0.2)] bg-[var(--accent-soft)] px-4 py-3">
                 <p className="text-sm font-mono text-white break-all">{address}</p>
                 <p className="text-xs text-white/40 mt-0.5">Wallet connected</p>
               </div>
@@ -168,7 +168,7 @@ export default function SocialProfilePage() {
               <div className="flex items-center gap-3">
                 <div className={
                   'flex h-7 w-7 items-center justify-center text-xs font-bold ' +
-                  (xConnected ? 'bg-violet-600 text-white' : 'bg-white/10 text-white/50')
+                  (xConnected ? 'bg-[var(--accent)] text-white' : 'bg-white/10 text-white/50')
                 }>
                   {xConnected ? '✓' : '2'}
                 </div>
@@ -184,7 +184,7 @@ export default function SocialProfilePage() {
             {isPending ? (
               <div className="h-10 bg-white/5 animate-pulse" />
             ) : xConnected ? (
-              <div className="flex items-center gap-3 border border-violet-500/20 bg-[var(--accent-soft)] px-4 py-3">
+              <div className="flex items-center gap-3 border border-[rgba(39,117,202,0.2)] bg-[var(--accent-soft)] px-4 py-3">
                 {session!.user.image && (
                   <img src={session!.user.image} alt="X avatar" className="h-9 w-9 rounded-full shrink-0" />
                 )}
@@ -220,9 +220,9 @@ export default function SocialProfilePage() {
 
           {/* ── Section 3: VibeID ───────────────────────────────────────── */}
           {xConnected && (
-            <div className="border border-violet-500/20 bg-[var(--accent-soft)] p-6 ">
+            <div className="border border-[rgba(39,117,202,0.2)] bg-[var(--accent-soft)] p-6 ">
               <div className="flex items-center gap-3 mb-4">
-                <div className="flex h-7 w-7 items-center justify-center bg-violet-600/30 text-xs font-bold text-violet-300">
+                <div className="flex h-7 w-7 items-center justify-center bg-[var(--accent-soft)] text-xs font-bold text-[var(--data)]">
                   V
                 </div>
                 <span className="text-sm font-semibold text-white">VibeID</span>
@@ -232,9 +232,9 @@ export default function SocialProfilePage() {
               {fetchingProfile ? (
                 <div className="h-12 bg-white/5 animate-pulse" />
               ) : profile?.vibeId ? (
-                <div className="flex items-center justify-between gap-3 border border-violet-500/30 bg-[var(--accent-soft)] px-4 py-3">
+                <div className="flex items-center justify-between gap-3 border border-[rgba(39,117,202,0.3)] bg-[var(--accent-soft)] px-4 py-3">
                   <div>
-                    <p className="text-lg font-bold font-mono text-violet-300 tracking-widest">
+                    <p className="text-lg font-bold font-mono text-[var(--data)] tracking-widest">
                       {profile.vibeId}
                     </p>
                     <p className="text-xs text-white/40 mt-0.5">Permanent · Cannot be changed</p>
@@ -242,7 +242,7 @@ export default function SocialProfilePage() {
                   <button
                     onClick={copyVibeId}
                     title="Copy VibeID"
-                    className="flex h-8 w-8 shrink-0 items-center justify-center border border-violet-500/30 bg-[var(--accent-soft)] text-violet-400 hover:bg-violet-500/20 transition-colors"
+                    className="flex h-8 w-8 shrink-0 items-center justify-center border border-[rgba(39,117,202,0.3)] bg-[var(--accent-soft)] text-[var(--accent)] hover:bg-[var(--accent-soft)] transition-colors"
                   >
                     {copiedVibeId ? (
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -267,7 +267,7 @@ export default function SocialProfilePage() {
             <div className="flex items-center gap-3 mb-4">
               <div className={
                 'flex h-7 w-7 items-center justify-center text-xs font-bold ' +
-                (status === 'success' ? 'bg-violet-600 text-white' : 'bg-white/10 text-white/50')
+                (status === 'success' ? 'bg-[var(--accent)] text-white' : 'bg-white/10 text-white/50')
               }>
                 {status === 'success' ? '✓' : '3'}
               </div>
@@ -275,8 +275,8 @@ export default function SocialProfilePage() {
             </div>
 
             {status === 'success' ? (
-              <div className="border border-emerald-500/20 bg-emerald-500/10 px-4 py-3">
-                <p className="text-sm text-emerald-400 font-semibold">Linked successfully</p>
+              <div className="border border-[rgba(39,117,202,0.25)] bg-[rgba(39,117,202,0.1)] px-4 py-3">
+                <p className="text-sm text-[var(--data)] font-semibold">Linked successfully</p>
                 <p className="text-xs text-white/50 mt-0.5">{message}</p>
               </div>
             ) : (
@@ -287,16 +287,16 @@ export default function SocialProfilePage() {
                   </div>
                 )}
                 {profile?.username && (
-                  <div className="mb-4 border border-violet-500/20 bg-[var(--accent-soft)] px-4 py-3">
+                  <div className="mb-4 border border-[rgba(39,117,202,0.2)] bg-[var(--accent-soft)] px-4 py-3">
                     <p className="text-xs text-white/50 mb-1">X Handle (auto-detected)</p>
-                    <p className="text-sm font-medium text-violet-300">@{profile.username}</p>
+                    <p className="text-sm font-medium text-[var(--data)]">@{profile.username}</p>
                   </div>
                 )}
                 <button
                   onClick={handleLinkWallet}
                   disabled={!canLink}
                   className={
-                    'w-full px-4 py-3 text-sm font-semibold transition-all flex items-center justify-center gap-2 ' +
+                    'w-full px-4 py-3 text-sm font-semibold transition-colors flex items-center justify-center gap-2 ' +
                     (canLink
                       ? 'bg-[var(--fg)] text-[var(--bg)]'
                       : 'bg-white/5 text-white/30 cursor-not-allowed')
@@ -325,9 +325,9 @@ export default function SocialProfilePage() {
           <div className="border border-white/5 bg-white/[0.02] px-6 py-5">
             <p className="text-xs text-white/40 leading-relaxed">
               Once linked, anyone can pay you using{' '}
-              <span className="text-violet-400 font-mono">@{profile?.username ?? 'yourhandle'}</span>
+              <span className="text-[var(--accent)] font-mono">@{profile?.username ?? 'yourhandle'}</span>
               {profile?.vibeId && (
-                <> or <span className="text-violet-400 font-mono">{profile.vibeId}</span></>
+                <> or <span className="text-[var(--accent)] font-mono">{profile.vibeId}</span></>
               )}{' '}
               in the Bulk Pay recipient field - your wallet address will auto-fill.
             </p>

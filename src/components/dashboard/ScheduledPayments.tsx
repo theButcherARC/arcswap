@@ -88,7 +88,7 @@ export function ScheduledPayments() {
           </div>
           <Link
             href="/bulk-pay"
-            className="text-xs font-medium text-violet-300 hover:text-violet-200"
+            className="text-xs font-medium text-[var(--data)] hover:text-[var(--data)]"
           >
             New batch
           </Link>
@@ -129,7 +129,7 @@ export function ScheduledPayments() {
                   </div>
                   <div className="flex items-center gap-3 shrink-0">
                     {item.status === "sent" ? (
-                      <span className="text-[11px] font-medium text-emerald-300">
+                      <span className="text-[11px] font-medium text-[var(--data)]">
                         Sent
                       </span>
                     ) : item.status === "cancelled" ? (
@@ -149,7 +149,7 @@ export function ScheduledPayments() {
                       <>
                         <Link
                           href={"/bulk-pay?schedule=" + item.id}
-                          className="text-xs font-semibold text-violet-300 hover:text-violet-200"
+                          className="text-xs font-semibold text-[var(--data)] hover:text-[var(--data)]"
                         >
                           Review and pay
                         </Link>
