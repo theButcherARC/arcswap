@@ -6,54 +6,55 @@ const PoweredBySection = dynamic(() => import("@/components/landing/PoweredBySec
   ssr: false,
 });
 import FaqSection from "@/components/landing/FaqSection";
+import { LiveStats } from "@/components/landing/LiveStats";
 
 const FEATURES = [
   {
     fig: "FIG 01",
-    sys: "SYS.PARSE",
-    title: "AI Payment Agent",
-    body: "Describe payments in plain English. VibeAI parses your intent instantly: recipients, amounts, tokens, all auto-filled in seconds.",
-    tag: "VibeAI",
+    sys: "SYS.AGENT",
+    title: "Agentic Payments",
+    body: "Describe a payment in plain words and the agent builds it: recipients, amounts, token, ready to review. Later, hire agents inside the hub and let them pay within limits you set.",
+    tag: "Live now",
     accent: "accent" as const,
   },
   {
     fig: "FIG 02",
     sys: "SYS.BATCH",
-    title: "Zero Approval Flow",
-    body: "Multicall3From preserves msg.sender throughout the batch. No ERC20 approve step needed, your USDC moves in one click.",
-    tag: "0 approvals",
+    title: "Bulk Pay",
+    body: "Up to 100 recipients in one transaction, one signature, zero token approvals. The batch is simulated first, so a failing payment stops everything and names the address.",
+    tag: "Live now",
     accent: "data" as const,
   },
   {
     fig: "FIG 03",
-    sys: "SYS.PERKS",
-    title: "VIBE Token Perks",
-    body: "CSV upload, payroll templates, and a 50% fee discount for VIBE holders (coming soon).",
-    tag: "Coming soon",
+    sys: "SYS.SCHEDULE",
+    title: "Scheduled Payments",
+    body: "Save a batch with a date and it waits on your dashboard. When payday comes you review and sign. Non-custodial: nothing moves until you sign.",
+    tag: "Live now",
     accent: "accent" as const,
   },
   {
     fig: "FIG 04",
-    sys: "SYS.TOKENS",
-    title: "USDC + EURC",
-    body: "Pay in US dollars or Euros. Switch stablecoins with one click. Both Circle-issued, both on Arc.",
-    tag: "2 stablecoins",
+    sys: "SYS.VIBRAIN",
+    title: "Vibrain",
+    body: "Arc, live. Latest blocks, USDC transfers and the largest moves on the chain, read straight from mainnet and refreshed every few seconds. No wallet needed.",
+    tag: "Live now",
     accent: "data" as const,
   },
   {
     fig: "FIG 05",
-    sys: "SYS.MEMO",
-    title: "Onchain Memo Labels",
-    body: "Tag every payroll batch with a label stored permanently onchain. July Salary. Q3 Bonus. Contractor Batch.",
-    tag: "Memo contract",
+    sys: "SYS.SQUARE",
+    title: "VibeSquare",
+    body: "The community feed where money is attached: tip a post, request a payment, split a bill, all in one tap from the content itself.",
+    tag: "Coming soon",
     accent: "accent" as const,
   },
   {
     fig: "FIG 06",
-    sys: "SYS.IDENTITY",
-    title: "Unique VibeID",
-    body: "Get a permanent, unique identifier like VIBE-XXXXX. Pay anyone by their X handle, wallet address, or VibeID.",
-    tag: "@handle or VIBE-ID",
+    sys: "SYS.EARN",
+    title: "Earn",
+    body: "Bounties and creator gigs paid in USDC. Budgets sit in escrow you can verify on the explorer, and approval pays out instantly, not in seven days.",
+    tag: "Coming soon",
     accent: "data" as const,
   },
 ];
@@ -61,29 +62,22 @@ const FEATURES = [
 const STEPS = [
   {
     fig: "STEP 01",
-    title: "Connect Wallet",
-    body: "Link MetaMask with USDC on Arc. NetworkGuard auto-switches to Arc Mainnet.",
-    points: ["MetaMask supported", "Auto network switch", "Live balance display"],
+    title: "Connect",
+    body: "Connect any EVM wallet, or pay people by their VibeID handle instead of a raw address.",
+    points: ["Any EVM wallet", "Auto network switch", "Pay by @handle or VibeID"],
   },
   {
     fig: "STEP 02",
-    title: "Describe Payment",
-    body: "Use AI or manual entry to define recipients and amounts. AI auto-fills the entire form.",
+    title: "Add recipients",
+    body: "Type it in plain words for the agent, add rows by hand, or upload a CSV. Up to 100 people per batch.",
     points: ["Natural language input", "Percentage splits", "Up to 100 recipients per batch"],
   },
   {
     fig: "STEP 03",
-    title: "One Click Send",
-    body: "Sign once in MetaMask. Every payment settles on-chain instantly via Multicall3From.",
-    points: ["Single MetaMask popup", "Explorer tx link", "Sub-second settlement"],
+    title: "Review and send",
+    body: "See every recipient, the total and the fee in one clean summary. The batch is simulated before your wallet opens, then one signature settles everything.",
+    points: ["Review before you sign", "Simulated onchain first", "Sub-second settlement"],
   },
-];
-
-const STATS = [
-  { value: "1", label: "Signature Per Batch" },
-  { value: "Zero", label: "Token Approvals Needed" },
-  { value: "<1s", label: "Arc Finality" },
-  { value: "100", label: "Recipients Per Tx" },
 ];
 
 export default function VibeFlowLanding() {
@@ -98,18 +92,18 @@ export default function VibeFlowLanding() {
         <div className="relative z-10 mx-auto w-full max-w-6xl">
           {/* Mono metadata row */}
           <div className="animate-fade-in mb-10 flex items-center justify-between border-b border-[var(--line)] pb-3">
-            <span className="mono-label">VF.PAYROLL / ARC.CHAIN / REV 1.0</span>
+            <span className="mono-label">VF.HUB / ARC.CHAIN / REV 2.0</span>
             <span className="mono-label hidden sm:inline">SETTLEMENT: USDC.EURC</span>
           </div>
 
           <div className="grid gap-10 lg:grid-cols-12 lg:items-end">
             <div className="lg:col-span-9">
               <Link
-                href={ROUTES.BULK_PAY}
+                href={ROUTES.VIBRAIN}
                 className="animate-fade-in-up group mb-4 flex w-fit items-center gap-2.5 border border-[var(--accent)]/40 bg-[var(--accent-soft)] px-4 py-2 backdrop-blur-xl transition-colors duration-200 hover:border-[var(--accent)]"
               >
                 <span className="mono-label !text-[var(--accent)]">New</span>
-                <span className="mono-label !text-[var(--fg-muted)]">Scheduled payments are live</span>
+                <span className="mono-label !text-[var(--fg-muted)]">Vibrain is live: watch Arc move</span>
                 <svg className="text-[var(--accent)] transition-transform duration-300 group-hover:translate-x-0.5" width="12" height="12" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M3 9H15M15 9L10 4M15 9L10 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
@@ -124,15 +118,15 @@ export default function VibeFlowLanding() {
               </div>
 
               <h1 className="animate-fade-in-up delay-100 max-w-4xl text-5xl font-bold leading-[0.98] tracking-[-0.03em] sm:text-6xl md:text-7xl xl:text-8xl">
-                Batch USDC
+                The people
                 <br />
-                payments.
+                layer of <span className="text-[var(--accent)]">Arc.</span>
                 <br />
                 <span className="text-[var(--fg-faint)]">One signature.</span>
               </h1>
 
               <p className="animate-fade-in-up delay-200 mt-8 max-w-xl text-base leading-relaxed text-[var(--fg-muted)] sm:text-lg">
-                Send USDC or EURC to your entire team in one transaction. AI-powered, zero approval, settled in under a second on Arc.
+                Pay your whole team in one transaction, watch Arc move live, and earn from real work. USDC and EURC, zero approvals, settled in under a second.
               </p>
 
               <div className="animate-fade-in-up delay-300 mt-10 flex flex-col gap-3 sm:flex-row">
@@ -146,10 +140,10 @@ export default function VibeFlowLanding() {
                   </svg>
                 </Link>
                 <Link
-                  href={ROUTES.DASHBOARD}
+                  href={ROUTES.VIBRAIN}
                   className="btn-brutal inline-flex items-center justify-center gap-2.5 px-8 py-4 text-base font-medium text-[var(--fg-muted)] hover:text-[var(--fg)]"
                 >
-                  View Dashboard
+                  Watch Arc Live
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M6 4L10 8L6 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
@@ -270,19 +264,8 @@ export default function VibeFlowLanding() {
         </div>
       </section>
 
-      {/* ==================== STATS ==================== */}
-      <section className="relative z-10 px-5 mb-28 sm:px-8">
-        <div className="mx-auto max-w-6xl">
-          <div className="animate-fade-in-up delay-200 overflow-hidden border border-[var(--line)] bg-[var(--line)] grid grid-cols-2 gap-px md:grid-cols-4">
-            {STATS.map((s) => (
-              <div key={s.label} className="flex flex-col items-start justify-center bg-[var(--bg-raised)] px-6 py-10 sm:px-8">
-                <span className="text-4xl font-bold tracking-tight text-[var(--fg)] sm:text-5xl">{s.value}</span>
-                <span className="mono-label mt-3">{s.label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* ==================== LIVE STATS ==================== */}
+      <LiveStats />
 
       {/* ==================== FEATURES ==================== */}
       <section id="features" className="relative z-10 px-5 mb-32 sm:px-8">
@@ -290,7 +273,7 @@ export default function VibeFlowLanding() {
           <div className="rule-tick mb-14 pt-4">
             <div className="flex items-baseline justify-between">
               <h2 className="max-w-2xl text-3xl font-bold tracking-[-0.02em] sm:text-4xl md:text-5xl">
-                Everything you need to move money at scale.
+                One hub. Every way money moves.
               </h2>
               <span className="mono-label hidden md:inline">SYS.FEATURES / 06</span>
             </div>
