@@ -105,11 +105,11 @@ function AgentPreview({
   onDiscard: () => void;
 }) {
   return (
-    <div className="mt-4 border border-emerald-500/20 bg-emerald-500/[0.04] p-5">
+    <div className="mt-4 border border-[rgba(39,117,202,0.25)] bg-[rgba(39,117,202,0.05)] p-5">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2.5">
-          <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-          <span className="text-sm font-medium text-emerald-400">
+          <div className="h-2 w-2 rounded-full bg-[var(--accent)] animate-pulse" />
+          <span className="text-sm font-medium text-[var(--data)]">
             Parsed {result.recipients.length} recipient
             {result.recipients.length !== 1 ? "s" : ""} successfully
           </span>
@@ -118,14 +118,14 @@ function AgentPreview({
           <button
             type="button"
             onClick={onDiscard}
-            className="px-3.5 py-1.5 text-xs font-medium text-white/50 hover:text-white/70 border border-white/10 hover:border-white/20 bg-white/[0.03] transition-all duration-200 active:scale-95"
+            className="px-3.5 py-1.5 text-xs font-medium text-white/50 hover:text-white/70 border border-white/10 hover:border-white/20 bg-white/[0.03] transition-colors duration-200 active:scale-95"
           >
             Discard
           </button>
           <button
             type="button"
             onClick={onApply}
-            className="px-4 py-1.5 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-500 shadow-lg shadow-emerald-600/20 transition-all duration-200 active:scale-95"
+            className="px-4 py-1.5 text-xs font-semibold text-white bg-[var(--accent)] hover:opacity-90 transition-colors duration-200 active:scale-95"
           >
             Apply All
           </button>
@@ -148,7 +148,7 @@ function AgentPreview({
                 ? r.address.slice(0, 6) + "..." + r.address.slice(-4)
                 : "No address"}
             </span>
-            <span className="text-sm text-violet-400 font-semibold shrink-0">
+            <span className="text-sm text-[var(--accent)] font-semibold shrink-0">
               {r.amount ? "$" + r.amount : "---"}
             </span>
           </div>
@@ -732,7 +732,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
 
           {/* Wallet requirement banner (shown until connected) */}
           {!isConnected ? (
-            <div className="mb-7 flex flex-col gap-3 border border-violet-500/25 bg-violet-500/[0.06] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="mb-7 flex flex-col gap-3 border border-[rgba(39,117,202,0.3)] bg-[var(--accent-soft)] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm text-white/70">
                 <span className="font-semibold text-white">Connect your wallet to send.</span>{" "}
                 MetaMask on Arc Mainnet is required before you can submit a batch.
@@ -819,7 +819,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     disabled={agentLoading}
                     placeholder="Pay Alice 500 USDC at 0x... and Bob 300 USDC at 0x..."
                     rows={3}
-                    className="w-full min-h-24 border border-[var(--line)] bg-transparent px-4 py-3 text-sm leading-relaxed text-white placeholder:text-white/25 focus:outline-none focus:border-[var(--fg-muted)] transition-colors resize-none disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="w-full min-h-24 border border-[var(--line)] bg-transparent px-4 py-3 text-base leading-relaxed text-white placeholder:text-white/25 focus:outline-none focus:border-[var(--fg-muted)] transition-colors resize-none disabled:opacity-40 disabled:cursor-not-allowed"
                   />
 
                   {/* Example chips */}
@@ -830,7 +830,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                         type="button"
                         onClick={() => handleExampleClick(prompt)}
                         disabled={agentLoading}
-                        className="text-[11px] text-white/35 hover:text-white/60 border border-white/[0.06] hover:border-white/[0.15] bg-white/[0.02] hover:bg-white/[0.05] px-3 py-1.5 transition-all duration-200 truncate max-w-[260px] disabled:opacity-40 disabled:cursor-not-allowed"
+                        className="text-[11px] text-white/35 hover:text-white/60 border border-white/[0.06] hover:border-white/[0.15] bg-white/[0.02] hover:bg-white/[0.05] px-3 py-1.5 transition-colors duration-200 truncate max-w-[260px] disabled:opacity-40 disabled:cursor-not-allowed"
                       >
                         {prompt.slice(0, 50)}
                         {prompt.length > 50 ? "..." : ""}
@@ -848,7 +848,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     onClick={handleParseAgent}
                     disabled={agentLoading || !agentInput.trim()}
                     className={
-                      "w-full mt-4 px-6 py-3.5 text-sm font-semibold transition-all duration-200 " +
+                      "w-full mt-4 px-6 py-3.5 text-sm font-semibold transition-colors duration-200 " +
                       (agentLoading || !agentInput.trim()
                         ? "bg-white/[0.06] text-white/25 cursor-not-allowed"
                         : "bg-[var(--fg)] text-[var(--bg)]")
@@ -1017,7 +1017,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                       onChange={(e) => setTotalAmountInput(e.target.value)}
                       disabled={isSending}
                       placeholder="0.00"
-                      className="w-full bg-white/5 border border-white/10 text-white placeholder-white/20 pl-9 pr-4 py-4 text-xl font-semibold focus:outline-none focus:border-violet-500/50 transition-all duration-200 hover:border-white/20 hover:bg-white/[0.08] disabled:opacity-40 disabled:cursor-not-allowed"
+                      className="w-full bg-white/5 border border-white/10 text-white placeholder-white/20 pl-9 pr-4 py-4 text-xl font-semibold focus:outline-none focus:border-[var(--accent)] transition-colors duration-200 hover:border-white/20 hover:bg-white/[0.08] disabled:opacity-40 disabled:cursor-not-allowed"
                     />
                   </div>
                   <div className="flex items-center border border-white/10 bg-white/[0.03] px-4 shrink-0">
@@ -1130,9 +1130,9 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                   maxLength={100}
                   className={
                     "w-full border border-white/[0.08] bg-white/[0.03] px-3.5 py-2.5 " +
-                    "text-sm text-white placeholder:text-white/20 " +
-                    "focus:outline-none focus:border-violet-500/50 focus:bg-white/[0.05] " +
-                    "transition-all duration-200 " +
+                    "text-base text-white placeholder:text-white/20 " +
+                    "focus:outline-none focus:border-[var(--accent)] focus:bg-white/[0.05] " +
+                    "transition-colors duration-200 " +
                     (isSending ? "opacity-50 cursor-not-allowed" : "")
                   }
                 />
@@ -1152,10 +1152,10 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                 disabled={atMaxRecipients || isSending}
                 className={
                   "w-full mt-3 border border-dashed py-4 " +
-                  "text-sm font-medium transition-all duration-300 " +
+                  "text-sm font-medium transition-colors duration-300 " +
                   (atMaxRecipients || isSending
                     ? "border-white/10 bg-white/[0.02] text-white/15 cursor-not-allowed"
-                    : "animate-add-btn-pulse border-violet-500/25 bg-white/[0.02] text-white/50 hover:text-violet-300 hover:bg-violet-500/[0.06] hover:border-violet-500/50 active:scale-[0.99]")
+                    : "animate-add-btn-pulse border-[rgba(39,117,202,0.3)] bg-white/[0.02] text-white/50 hover:text-[var(--data)] hover:bg-[var(--accent-soft)] hover:border-[var(--accent)] active:scale-[0.99]")
                 }
               >
                 {atMaxRecipients ? (
@@ -1212,7 +1212,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     className={
                       "text-sm font-semibold " +
                       (summaryData.isFullyAllocated && !summaryData.isOverAllocated
-                        ? "text-emerald-400"
+                        ? "text-[var(--data)]"
                         : summaryData.isOverAllocated
                           ? "text-rose-400"
                           : "text-white/60")
@@ -1228,7 +1228,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
             {showReview ? (
               <div
                 ref={reviewRef}
-                className="mt-10 border border-violet-400/25 bg-[#0d0b16]/95 p-5"
+                className="mt-10 border border-[rgba(39,117,202,0.3)] bg-[#0d0b16]/95 p-5"
               >
                 <span className="mono-label block mb-2">
                   SYS.REVIEW / BEFORE YOU SIGN
@@ -1339,13 +1339,13 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                           type="datetime-local"
                           value={scheduleDate}
                           onChange={(e) => setScheduleDate(e.target.value)}
-                          className="border border-white/[0.08] bg-white/[0.03] px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-violet-500/50 [color-scheme:dark]"
+                          className="border border-white/[0.08] bg-white/[0.03] px-3.5 py-2.5 text-base text-white focus:outline-none focus:border-[var(--accent)] [color-scheme:dark]"
                         />
                         <button
                           type="button"
                           onClick={handleSaveSchedule}
                           disabled={scheduleSaving || !scheduleDate}
-                          className="border border-violet-400/30 bg-violet-500/[0.08] px-4 py-2.5 text-sm font-medium text-violet-200 transition-colors hover:bg-violet-500/[0.15] disabled:cursor-not-allowed disabled:opacity-40"
+                          className="border border-[rgba(39,117,202,0.35)] bg-[var(--accent-soft)] px-4 py-2.5 text-sm font-medium text-[var(--data)] transition-colors hover:bg-[var(--accent-soft)] disabled:cursor-not-allowed disabled:opacity-40"
                         >
                           {scheduleSaving
                             ? "Saving..."
@@ -1353,7 +1353,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                         </button>
                       </div>
                       {scheduleMsg ? (
-                        <p className="mt-2 text-xs text-emerald-300/80">
+                        <p className="mt-2 text-xs text-[var(--data)]">
                           {scheduleMsg}
                         </p>
                       ) : null}
@@ -1388,7 +1388,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                 className={
                   "border p-5 transition-colors duration-300 " +
                   (summaryData.isFullyAllocated && !summaryData.isOverAllocated
-                    ? "border-emerald-500/25 bg-[#0a1010]/95"
+                    ? "border-[rgba(39,117,202,0.3)] bg-[#0a1010]/95"
                     : summaryData.isOverAllocated
                       ? "border-rose-500/25 bg-[#14090d]/95"
                       : "border-white/10 bg-[#0b0b12]/95")
@@ -1453,7 +1453,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                         (inputMode === "percentage"
                           ? summaryData.isFullyAllocated &&
                             !summaryData.isOverAllocated
-                            ? "text-emerald-400"
+                            ? "text-[var(--data)]"
                             : summaryData.isOverAllocated
                               ? "text-rose-400"
                               : "text-white/40"
@@ -1539,7 +1539,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
               <div className="flex items-center gap-2 text-[11px] text-white/35">
                 <span>
                   Gas{" "}
-                  <span key={gasUsd?.toFixed(4)} className="font-medium text-violet-300 animate-value-flash">
+                  <span key={gasUsd?.toFixed(4)} className="font-medium text-[var(--data)] animate-value-flash">
                     {gasLoading ? "..." : gasUsd !== null ? "~$" + gasUsd.toFixed(4) : "-"}
                   </span>{" "}
                   USDC
@@ -1558,7 +1558,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     viewBox="0 0 12 12"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
-                    className={gasLoading ? "animate-spin text-violet-400" : "text-white/30"}
+                    className={gasLoading ? "animate-spin text-[var(--accent)]" : "text-white/30"}
                   >
                     <path d="M10.5 6A4.5 4.5 0 1 1 6 1.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
                     <path d="M6 1.5L8 3.5M6 1.5L8 0" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
@@ -1571,7 +1571,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                 type="submit"
                 disabled={!canSend}
                 className={
-                  "w-full px-6 py-3.5 text-sm font-semibold transition-all duration-300 " +
+                  "w-full px-6 py-3.5 text-sm font-semibold transition-colors duration-300 " +
                   (canSend
                     ? "bg-[var(--fg)] text-[var(--bg)] hover:opacity-85"
                     : "bg-white/[0.06] text-white/20 cursor-not-allowed")
