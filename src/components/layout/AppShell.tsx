@@ -39,6 +39,17 @@ const NAV_GROUPS: { group: string; items: NavItem[] }[] = [
         ),
       },
       {
+        label: "VibeSquare",
+        href: ROUTES.SQUARE,
+        icon: (
+          <svg {...iconProps}>
+            <path d="M4 4h16v16H4z" />
+            <path d="M4 12h16" />
+            <path d="M12 4v16" />
+          </svg>
+        ),
+      },
+      {
         label: "Dashboard",
         href: ROUTES.DASHBOARD,
         icon: (
