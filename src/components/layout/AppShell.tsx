@@ -30,6 +30,15 @@ const NAV_GROUPS: { group: string; items: NavItem[] }[] = [
     group: "Overview",
     items: [
       {
+        label: "Vibrain",
+        href: ROUTES.VIBRAIN,
+        icon: (
+          <svg {...iconProps}>
+            <path d="M3 12h4l3 8 4-16 3 8h4" />
+          </svg>
+        ),
+      },
+      {
         label: "Dashboard",
         href: ROUTES.DASHBOARD,
         icon: (
