@@ -97,7 +97,7 @@ export function TipButton({
           }
           setOpen(true);
         }}
-        className="rounded-full border border-[var(--line)] px-3.5 py-1.5 text-xs font-medium text-[var(--fg-muted)] transition-colors hover:border-[var(--accent)] hover:text-[var(--fg)]"
+        className="rounded-full border border-[var(--line)] px-4 py-3 text-xs font-medium text-[var(--fg-muted)] transition-colors hover:border-[var(--accent)] hover:text-[var(--fg)]"
       >
         Tip USDC
       </button>
@@ -111,7 +111,7 @@ export function TipButton({
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
           inputMode="decimal"
-          className="w-16 bg-transparent font-mono text-sm text-[var(--fg)] outline-none"
+          className="w-16 bg-transparent font-mono text-base text-[var(--fg)] outline-none"
           aria-label="Tip amount in USDC"
         />
         <span className="text-xs text-[var(--data)]">USDC</span>
