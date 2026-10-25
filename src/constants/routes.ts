@@ -5,6 +5,7 @@
 export const ROUTES = {
   HOME: "/",
   VIBRAIN: "/vibrain",
+  SQUARE: "/square",
   BULK_PAY: "/bulk-pay",
   BULK_PAY_UPLOAD: "/bulk-pay/upload",
   SCHEDULED: "/scheduled",

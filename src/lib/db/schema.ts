@@ -84,3 +84,13 @@ export const scheduledBatches = pgTable('scheduled_batches', {
   createdAt:    timestamp('createdAt').notNull().defaultNow(),
   updatedAt:    timestamp('updatedAt').notNull().defaultNow(),
 })
+
+// ── VibeSquare feed table ───────────────────────────────────────────────────
+
+export const squarePosts = pgTable('square_posts', {
+  id:            text('id').primaryKey(),
+  walletAddress: text('walletAddress').notNull(),
+  handle:        text('handle'),                            // linked X handle, when known
+  content:       text('content').notNull(),
+  createdAt:     timestamp('createdAt').notNull().defaultNow(),
+})

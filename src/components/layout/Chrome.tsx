@@ -10,6 +10,7 @@ const APP_PREFIXES = [
   "/social-profile",
   "/scheduled",
   "/vibrain",
+  "/square",
 ];
 
 export function Chrome({ children }: { children: React.ReactNode }) {
