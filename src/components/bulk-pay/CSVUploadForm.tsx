@@ -240,10 +240,10 @@ export default function CSVUploadForm() {
                   type="button"
                   onClick={() => setSelectedSymbol(sym)}
                   className={
-                    "flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold transition-all duration-200 border active:scale-95 " +
+                    "flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold transition-colors duration-200 border active:scale-95 " +
                     (selectedSymbol === sym
                       ? "bg-[var(--accent-soft)] border-[var(--accent)]/40 text-[var(--accent)]"
-                      : "bg-white/[0.03] border-white/[0.08] text-white/40 hover:text-white/70 hover:border-violet-500/30 hover:bg-violet-500/[0.06]")
+                      : "bg-white/[0.03] border-white/[0.08] text-white/40 hover:text-white/70 hover:border-[rgba(39,117,202,0.3)] hover:bg-[var(--accent-soft)]")
                   }
                 >
                   {sym === "USDC" ? "$" : "€"} {sym}
@@ -265,7 +265,7 @@ export default function CSVUploadForm() {
             <div className="flex items-center border border-white/10 bg-white/[0.03] p-1 gap-1">
               <Link
                 href="/bulk-pay"
-                className="px-3.5 py-1.5 text-xs font-medium text-white/40 hover:text-white/70 hover:bg-white/[0.05] transition-all duration-200"
+                className="px-3.5 py-1.5 text-xs font-medium text-white/40 hover:text-white/70 hover:bg-white/[0.05] transition-colors duration-200"
               >
                 Quick Pay
               </Link>
@@ -285,9 +285,9 @@ export default function CSVUploadForm() {
               type="button"
               onClick={() => setInputMode("upload")}
               className={
-                "rounded-t-2xl px-5 py-3 text-xs font-semibold transition-all duration-200 border-b-2 " +
+                "rounded-t-2xl px-5 py-3 text-xs font-semibold transition-colors duration-200 border-b-2 " +
                 (inputMode === "upload"
-                  ? "border-violet-500/60 text-white bg-white/[0.04]"
+                  ? "border-[var(--accent)] text-white bg-white/[0.04]"
                   : "border-transparent text-white/40 hover:text-white/70")
               }
             >
@@ -297,9 +297,9 @@ export default function CSVUploadForm() {
               type="button"
               onClick={() => setInputMode("paste")}
               className={
-                "rounded-t-2xl px-5 py-3 text-xs font-semibold transition-all duration-200 border-b-2 " +
+                "rounded-t-2xl px-5 py-3 text-xs font-semibold transition-colors duration-200 border-b-2 " +
                 (inputMode === "paste"
-                  ? "border-violet-500/60 text-white bg-white/[0.04]"
+                  ? "border-[var(--accent)] text-white bg-white/[0.04]"
                   : "border-transparent text-white/40 hover:text-white/70")
               }
             >
@@ -319,18 +319,18 @@ export default function CSVUploadForm() {
                   onDragLeave={() => setIsDragging(false)}
                   onDrop={handleDrop}
                   className={[
-                    "w-full border-2 border-dashed transition-all duration-300 flex flex-col items-center justify-center gap-4 py-14 px-6 cursor-pointer group",
+                    "w-full border-2 border-dashed transition-colors duration-300 flex flex-col items-center justify-center gap-4 py-14 px-6 cursor-pointer group",
                     isDragging
-                      ? "border-violet-500/60 bg-violet-500/[0.07] shadow-[0_0_30px_rgba(124,58,237,0.15)]"
+                      ? "border-[var(--accent)] bg-[var(--accent-soft)] shadow-[0_0_30px_rgba(124,58,237,0.15)]"
                       : fileName
-                        ? "border-emerald-500/40 bg-emerald-500/[0.04] hover:border-emerald-500/60"
-                        : "border-white/10 bg-white/[0.02] hover:border-violet-500/35 hover:bg-violet-500/[0.04]",
+                        ? "border-[rgba(39,117,202,0.4)] bg-[rgba(39,117,202,0.04)] hover:border-[rgba(39,117,202,0.6)]"
+                        : "border-white/10 bg-white/[0.02] hover:border-[rgba(39,117,202,0.35)] hover:bg-[var(--accent-soft)]",
                   ].join(" ")}
                 >
                   {/* Icon */}
                   <div className={[
                     "flex h-14 w-14 items-center justify-center border transition-colors duration-300",
-                    fileName ? "border-emerald-500/30 bg-emerald-500/[0.08]" : "border-white/10 bg-white/[0.04] group-hover:border-violet-500/30 group-hover:bg-violet-500/[0.06]",
+                    fileName ? "border-[rgba(39,117,202,0.3)] bg-[rgba(39,117,202,0.08)]" : "border-white/10 bg-white/[0.04] group-hover:border-[rgba(39,117,202,0.3)] group-hover:bg-[var(--accent-soft)]",
                   ].join(" ")}>
                     {fileName ? (
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -348,12 +348,12 @@ export default function CSVUploadForm() {
                   {/* Label */}
                   {fileName ? (
                     <div className="text-center">
-                      <p className="text-sm font-semibold text-emerald-400">{fileName}</p>
+                      <p className="text-sm font-semibold text-[var(--data)]">{fileName}</p>
                       <p className="text-xs text-white/35 mt-1">
                         {rows.length} valid recipient{rows.length !== 1 ? "s" : ""} loaded
                         {parseErrors.length > 0 && `, ${parseErrors.length} row${parseErrors.length !== 1 ? "s" : ""} skipped`}
                         {" · "}
-                        <span className="text-violet-400 hover:underline">Change file</span>
+                        <span className="text-[var(--accent)] hover:underline">Change file</span>
                       </p>
                     </div>
                   ) : (
@@ -396,7 +396,7 @@ export default function CSVUploadForm() {
                     value={pasteContent}
                     onChange={handlePaste}
                     placeholder="Paste CSV content here - name, address, amount per line"
-                    className="w-full h-48 bg-white/[0.03] border border-white/10 text-white placeholder-white/30 px-4 py-3 text-sm focus:outline-none focus:border-violet-500/50 focus:bg-white/[0.08] focus:shadow-[0_0_0_3px_rgba(124,58,237,0.12)] transition-all duration-200 font-mono hover:border-white/20 hover:bg-white/[0.07] resize-none"
+                    className="w-full h-48 bg-white/[0.03] border border-white/10 text-white placeholder-white/30 px-4 py-3 text-sm focus:outline-none focus:border-[var(--accent)] focus:bg-white/[0.08] focus:shadow-[0_0_0_3px_rgba(39,117,202,0.15)] transition-colors duration-200 font-mono hover:border-white/20 hover:bg-white/[0.07] resize-none"
                   />
                   <p className="text-[11px] text-white/25 leading-relaxed">
                     Format: <span className="font-mono text-white/35">name, address, amount</span> or <span className="font-mono text-white/35">address, amount</span> - one row per line, no header required
@@ -470,7 +470,7 @@ export default function CSVUploadForm() {
                       <div className="px-4 py-3 text-xs text-white/50 font-mono truncate">
                         {row.address.slice(0, 6)}…{row.address.slice(-4)}
                       </div>
-                      <div className="px-4 py-3 text-xs font-semibold text-violet-300 text-right whitespace-nowrap">
+                      <div className="px-4 py-3 text-xs font-semibold text-[var(--data)] text-right whitespace-nowrap">
                         {selectedSymbol === "USDC" ? "$" : "€"}{Number(row.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </div>
                     </div>
@@ -482,7 +482,7 @@ export default function CSVUploadForm() {
                   <button
                     type="button"
                     onClick={() => setShowAll((v) => !v)}
-                    className="w-full py-3 text-xs text-white/35 hover:text-white/60 hover:bg-white/[0.03] transition-all duration-200 border-t border-white/[0.06]"
+                    className="w-full py-3 text-xs text-white/35 hover:text-white/60 hover:bg-white/[0.03] transition-colors duration-200 border-t border-white/[0.06]"
                   >
                     {showAll
                       ? "Show less"
@@ -504,7 +504,7 @@ export default function CSVUploadForm() {
               onChange={(e) => setMemo(e.target.value)}
               maxLength={120}
               placeholder="e.g. July Salary, Q3 Bonus, Contractor Batch"
-              className="w-full bg-white/[0.04] border border-white/10 text-white placeholder-white/25 px-4 py-3 text-sm focus:outline-none focus:border-violet-500/50 focus:bg-white/[0.06] focus:shadow-[0_0_0_3px_rgba(124,58,237,0.12)] transition-all duration-200 hover:border-white/20"
+              className="w-full bg-white/[0.04] border border-white/10 text-white placeholder-white/25 px-4 py-3 text-sm focus:outline-none focus:border-[var(--accent)] focus:bg-white/[0.06] focus:shadow-[0_0_0_3px_rgba(39,117,202,0.15)] transition-colors duration-200 hover:border-white/20"
             />
             {memo.length > 0 && (
               <p className="mt-1.5 text-[11px] text-white/25 text-right">{memo.length}/120 · stored onchain</p>
@@ -532,7 +532,7 @@ export default function CSVUploadForm() {
               <button
                 type="button"
                 onClick={switchToArcNetwork}
-                className="w-full mb-4 border border-amber-500/25 bg-amber-500/[0.06] px-4 py-3 text-xs font-semibold text-amber-400 hover:bg-amber-500/10 transition-all duration-200"
+                className="w-full mb-4 border border-amber-500/25 bg-amber-500/[0.06] px-4 py-3 text-xs font-semibold text-amber-400 hover:bg-amber-500/10 transition-colors duration-200"
               >
                 Switch to Arc
               </button>
@@ -567,7 +567,7 @@ export default function CSVUploadForm() {
               onClick={handleSend}
               disabled={!canSend}
               className={
-                "w-full px-6 py-3.5 text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2.5 " +
+                "w-full px-6 py-3.5 text-sm font-semibold transition-colors duration-300 flex items-center justify-center gap-2.5 " +
                 (canSend
                   ? "animate-send-pulse bg-[var(--fg)] text-[var(--bg)]"
                   : "bg-white/[0.06] text-white/20 cursor-not-allowed")

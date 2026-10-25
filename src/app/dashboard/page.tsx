@@ -285,7 +285,7 @@ export default function DashboardPage() {
                 onClick={handleSync}
                 disabled={syncLoading || isLoading || !isConnected}
                 title={!isConnected ? "Connect your wallet to sync" : "Refresh dashboard data"}
-                className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-xs font-medium text-gray-300 transition-all hover:border-white/20 hover:bg-white/[0.05] disabled:opacity-50 disabled:cursor-not-allowed"
+                className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-xs font-medium text-gray-300 transition-colors hover:border-white/20 hover:bg-white/[0.05] disabled:opacity-50 disabled:cursor-not-allowed"
                 aria-label="Refresh dashboard data"
               >
                 <svg
@@ -320,7 +320,7 @@ export default function DashboardPage() {
                 </div>
               )}
               {syncUpdated && !syncError && (
-                <div className="text-xs text-emerald-400 animate-pulse">
+                <div className="text-xs text-[var(--data)] animate-pulse">
                   Updated just now
                 </div>
               )}
@@ -550,7 +550,7 @@ export default function DashboardPage() {
                               }
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="font-mono text-xs text-violet-400 transition-colors hover:text-violet-300 hover:underline"
+                              className="font-mono text-xs text-[var(--accent)] transition-colors hover:text-[var(--data)] hover:underline"
                             >
                               {truncateAddress(r.address)}
                             </a>
