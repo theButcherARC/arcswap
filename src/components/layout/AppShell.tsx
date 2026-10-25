@@ -30,6 +30,17 @@ const NAV_GROUPS: { group: string; items: NavItem[] }[] = [
     group: "Overview",
     items: [
       {
+        label: "Home",
+        href: ROUTES.HOME_PAGE,
+        icon: (
+          <svg {...iconProps}>
+            <path d="M3 10.5 12 3l9 7.5" />
+            <path d="M5 9.8V21h14V9.8" />
+            <path d="M9.5 21v-6h5v6" />
+          </svg>
+        ),
+      },
+      {
         label: "Vibrain",
         href: ROUTES.VIBRAIN,
         icon: (
@@ -46,6 +57,17 @@ const NAV_GROUPS: { group: string; items: NavItem[] }[] = [
             <path d="M4 4h16v16H4z" />
             <path d="M4 12h16" />
             <path d="M12 4v16" />
+          </svg>
+        ),
+      },
+      {
+        label: "Earn",
+        href: ROUTES.EARN,
+        icon: (
+          <svg {...iconProps}>
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 7v10" />
+            <path d="M15.2 9.2c-.6-.8-1.8-1.2-3.2-1.2-1.9 0-3.2 1-3.2 2.2 0 2.9 6.6 1.6 6.6 4.4 0 1.2-1.5 2.2-3.4 2.2-1.5 0-2.8-.6-3.4-1.4" />
           </svg>
         ),
       },

@@ -11,6 +11,8 @@ const APP_PREFIXES = [
   "/scheduled",
   "/vibrain",
   "/square",
+  "/home",
+  "/earn",
 ];
 
 export function Chrome({ children }: { children: React.ReactNode }) {
