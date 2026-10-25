@@ -4,7 +4,7 @@
 
 /* ============================================
    VibeFlow Design Tokens — Spatial Glass + Brutalist Grid
-   Palette (5): ink bg, glass surface, foreground, violet accent, cyan data accent
+   Palette (5): ink bg, glass surface, foreground, USDC blue accent, light blue data accent
    ============================================ */
 :root {
   --bg: #0b0d16;
@@ -16,10 +16,10 @@
   --fg: #f7f8fc;
   --fg-muted: #9ca5bd;
   --fg-faint: #65708b;
-  --accent: #8b7cf6;
-  --accent-soft: rgba(139, 124, 246, 0.16);
-  --data: #55c8ef;
-  --data-soft: rgba(85, 200, 239, 0.14);
+  --accent: #2775ca;
+  --accent-soft: rgba(39, 117, 202, 0.16);
+  --data: #6ea8ec;
+  --data-soft: rgba(110, 168, 236, 0.14);
   --success: #63d7a1;
   --radius: 16px;
 }

@@ -9,9 +9,6 @@ export const ROUTES = {
   SCHEDULED: "/scheduled",
   DASHBOARD: "/dashboard",
   SOCIAL_PROFILE: "/social-profile",
-  ROADMAP: "/roadmap",
-  ARCHITECTURE: "/architecture",
-  ADMIN_SOCIAL: "/admin/social",
 } as const;
 
 export type AppRoute = (typeof ROUTES)[keyof typeof ROUTES];
