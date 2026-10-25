@@ -2,9 +2,6 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import { ROUTES } from "@/constants/routes";
 
-const HeroCanvas = dynamic(() => import("@/components/landing/HeroCanvas"), {
-  ssr: false,
-});
 const PoweredBySection = dynamic(() => import("@/components/landing/PoweredBySection"), {
   ssr: false,
 });
@@ -97,7 +94,6 @@ export default function VibeFlowLanding() {
 
       {/* ==================== HERO ==================== */}
       <section className="relative flex min-h-screen flex-col justify-center px-5 pt-28 pb-20 sm:px-8">
-        <HeroCanvas />
 
         <div className="relative z-10 mx-auto w-full max-w-6xl">
           {/* Mono metadata row */}
@@ -429,8 +425,6 @@ export default function VibeFlowLanding() {
             <div>
               <h4 className="mono-label mb-4 !text-[var(--fg-muted)]">Resources</h4>
               <ul className="space-y-3">
-                <li><Link href="/architecture" className="text-sm text-[var(--fg-faint)] transition-colors duration-200 hover:text-[var(--fg)]">Architecture</Link></li>
-                <li><Link href="/roadmap" className="text-sm text-[var(--fg-faint)] transition-colors duration-200 hover:text-[var(--fg)]">Roadmap</Link></li>
                 <li><a href="https://github.com/theButcherARC/arcswap" target="_blank" rel="noopener noreferrer" className="text-sm text-[var(--fg-faint)] transition-colors duration-200 hover:text-[var(--fg)]">GitHub</a></li>
               </ul>
             </div>

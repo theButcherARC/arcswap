@@ -3,7 +3,7 @@ import { SITE_URL } from '@/lib/site';
 
 // Only public content pages. App routes (/dashboard, /bulk-pay, /admin)
 // are noindexed via their own layouts and stay out of the sitemap.
-const CONTENT_ROUTES = ['/', '/architecture', '/roadmap', '/social-profile'];
+const CONTENT_ROUTES = ['/', '/social-profile'];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return CONTENT_ROUTES.map((route) => ({

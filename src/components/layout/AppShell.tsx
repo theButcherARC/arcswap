@@ -95,43 +95,6 @@ const NAV_GROUPS: { group: string; items: NavItem[] }[] = [
       },
     ],
   },
-  {
-    group: "Project",
-    items: [
-      {
-        label: "Roadmap",
-        href: ROUTES.ROADMAP,
-        icon: (
-          <svg {...iconProps}>
-            <path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z" />
-            <path d="M9 4v14" />
-            <path d="M15 6v14" />
-          </svg>
-        ),
-      },
-      {
-        label: "Architecture",
-        href: ROUTES.ARCHITECTURE,
-        icon: (
-          <svg {...iconProps}>
-            <path d="M12 2l8 4.5v9L12 20l-8-4.5v-9L12 2z" />
-            <path d="M12 11 4 6.5" />
-            <path d="M12 11l8-4.5" />
-            <path d="M12 11v9" />
-          </svg>
-        ),
-      },
-      {
-        label: "Social Pay Admin",
-        href: ROUTES.ADMIN_SOCIAL,
-        icon: (
-          <svg {...iconProps}>
-            <path d="M12 22s8-3.6 8-10V5l-8-3-8 3v7c0 6.4 8 10 8 10z" />
-          </svg>
-        ),
-      },
-    ],
-  },
 ];
 
 function NavContent({ onNavigate }: { onNavigate?: () => void }) {
