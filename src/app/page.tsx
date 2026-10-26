@@ -465,24 +465,29 @@ export default function VibeFlowLanding() {
           </div>
 
           {/* On-chain proof: contract addresses */}
-          <div className="mt-8 flex flex-col items-center justify-between gap-3 border-t border-[var(--line)] pt-6 sm:flex-row">
-            <span className="mono-label">Contracts on Arc Mainnet</span>
-            <div className="flex flex-col items-center gap-2 sm:flex-row sm:gap-6">
+          <div className="mt-8 flex flex-col gap-4 border-t border-[var(--line)] pt-6">
+            <div className="flex flex-col gap-1.5">
+              <span className="mono-label">Contracts on Arc Mainnet</span>
+              <span className="text-xs text-[var(--fg-faint)]">
+                Public and verifiable on the explorer. Independent audit: not yet.
+              </span>
+            </div>
+            <div className="flex flex-col gap-2">
               <a
                 href="https://explorer.arc.io/address/0x522fAf9A91c41c443c66765030741e4AaCe147D0"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-mono text-[11px] text-[var(--fg-faint)] transition-colors hover:text-[var(--data)]"
+                className="break-all font-mono text-[11px] text-[var(--fg-faint)] transition-colors hover:text-[var(--data)]"
               >
-                Batch 0x522f...147D0
+                Batch 0x522fAf9A91c41c443c66765030741e4AaCe147D0
               </a>
               <a
                 href="https://explorer.arc.io/address/0x5294E9927c3306DcBaDb03fe70b92e01cCede505"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-mono text-[11px] text-[var(--fg-faint)] transition-colors hover:text-[var(--data)]"
+                className="break-all font-mono text-[11px] text-[var(--fg-faint)] transition-colors hover:text-[var(--data)]"
               >
-                Memo 0x5294...e505
+                Memo 0x5294E9927c3306DcBaDb03fe70b92e01cCede505
               </a>
             </div>
           </div>
