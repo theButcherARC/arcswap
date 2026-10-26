@@ -7,6 +7,7 @@ const PoweredBySection = dynamic(() => import("@/components/landing/PoweredBySec
 });
 import FaqSection from "@/components/landing/FaqSection";
 import { LiveStats } from "@/components/landing/LiveStats";
+import { TokenCoin } from "@/components/TokenCoin";
 
 const FEATURES = [
   {
@@ -149,10 +150,26 @@ export default function VibeFlowLanding() {
                   </svg>
                 </Link>
               </div>
+
+              <div className="animate-fade-in-up delay-500 mt-10 flex items-center gap-5">
+                <div className="flex items-center -space-x-2">
+                  <TokenCoin symbol="USDC" size={34} />
+                  <TokenCoin symbol="EURC" size={34} />
+                  <TokenCoin symbol="cirBTC" size={34} />
+                </div>
+                <span className="mono-label !text-[var(--fg-muted)]">Settles in USDC · EURC · cirBTC on Arc</span>
+              </div>
             </div>
 
             {/* Spec column: brutalist metadata */}
             <div className="animate-fade-in-up delay-500 hidden lg:col-span-3 lg:block">
+              <div className="mb-10 flex items-end gap-4 pl-6">
+                <TokenCoin symbol="USDC" size={104} animate />
+                <div className="flex flex-col gap-3 pb-1">
+                  <TokenCoin symbol="EURC" size={44} />
+                  <TokenCoin symbol="cirBTC" size={44} />
+                </div>
+              </div>
               <div className="space-y-0 border-l border-[var(--line)] pl-6">
                 {[
                   ["No code required"],
@@ -209,9 +226,10 @@ export default function VibeFlowLanding() {
                       <p className="font-mono text-[11px] text-[var(--fg-faint)]">{addr}</p>
                     </div>
                   </div>
-                  <span className="text-sm font-semibold text-[var(--fg)]">
+                  <span className="flex items-center gap-2 text-sm font-semibold text-[var(--fg)]">
+                    <TokenCoin symbol="USDC" size={20} />
                     {amt}
-                    <span className="ml-1.5 font-normal text-[var(--fg-faint)]">USDC</span>
+                    <span className="font-normal text-[var(--fg-faint)]">USDC</span>
                   </span>
                 </div>
               ))}
@@ -228,7 +246,8 @@ export default function VibeFlowLanding() {
               </div>
               <div className="flex items-baseline gap-5">
                 <span className="mono-label">Fee $16.00 (0.2%)</span>
-                <span className="text-lg font-bold tracking-tight text-[var(--fg)]">
+                <span className="flex items-center gap-2.5 text-lg font-bold tracking-tight text-[var(--fg)]">
+                  <TokenCoin symbol="USDC" size={26} />
                   $8,000.00 <span className="text-sm font-normal text-[var(--fg-faint)]">USDC</span>
                 </span>
               </div>
@@ -345,6 +364,9 @@ export default function VibeFlowLanding() {
           <div className="glass-panel-strong depth-glow relative overflow-hidden px-8 py-16 text-center sm:px-16 sm:py-20">
             <div className="grid-lines pointer-events-none absolute inset-0 opacity-30" aria-hidden="true" />
             <div className="relative">
+              <div className="mb-8 flex justify-center">
+                <TokenCoin symbol="USDC" size={64} animate />
+              </div>
               <span className="mono-label mb-6 block">SYS.INIT / PAYROLL.BATCH</span>
               <h2 className="mb-5 text-3xl font-bold leading-tight tracking-[-0.02em] sm:text-4xl md:text-5xl">
                 Ready to streamline your mass payments?

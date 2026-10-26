@@ -8,6 +8,7 @@ import {
 } from "wagmi";
 import { parseUnits } from "viem";
 import { TOKENS } from "@/constants/tokens";
+import { TokenCoin } from "@/components/TokenCoin";
 
 const ERC20_ABI = [
   {
@@ -75,14 +76,17 @@ export function TipButton({
 
   if (isSuccess && hash) {
     return (
-      <a
-        href={"https://explorer.arc.io/tx/" + hash}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-xs font-medium text-[var(--accent)]"
-      >
-        Tipped. View tx
-      </a>
+      <span className="inline-flex min-h-[44px] items-center gap-2">
+        <TokenCoin symbol="USDC" size={18} />
+        <a
+          href={"https://explorer.arc.io/tx/" + hash}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-xs font-medium text-[var(--accent)]"
+        >
+          Tipped. View tx
+        </a>
+      </span>
     );
   }
 
@@ -97,8 +101,9 @@ export function TipButton({
           }
           setOpen(true);
         }}
-        className="rounded-full border border-[var(--line)] px-4 py-3 text-xs font-medium text-[var(--fg-muted)] transition-colors hover:border-[var(--accent)] hover:text-[var(--fg)]"
+        className="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-[var(--line)] px-4 py-3 text-xs font-medium text-[var(--fg-muted)] transition-colors hover:border-[var(--accent)] hover:text-[var(--fg)]"
       >
+        <TokenCoin symbol="USDC" size={18} />
         Tip USDC
       </button>
     );
@@ -106,7 +111,23 @@ export function TipButton({
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <div className="flex items-center gap-1.5 rounded-full border border-[var(--line)] px-3 py-1.5">
+      <div className="flex items-center gap-1.5">
+        {["1", "5", "10"].map((preset) => (
+          <button
+            key={preset}
+            onClick={() => setAmount(preset)}
+            className={`min-h-[44px] rounded-full border px-3.5 font-mono text-xs transition-colors ${
+              amount === preset
+                ? "border-[var(--accent)] text-[var(--fg)]"
+                : "border-[var(--line)] text-[var(--fg-muted)] hover:border-[var(--accent)] hover:text-[var(--fg)]"
+            }`}
+          >
+            {preset}
+          </button>
+        ))}
+      </div>
+      <div className="flex min-h-[44px] items-center gap-2 rounded-full border border-[var(--line)] px-3">
+        <TokenCoin symbol="USDC" size={20} />
         <input
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
@@ -119,7 +140,7 @@ export function TipButton({
       <button
         onClick={send}
         disabled={isPending || confirming || !isConnected}
-        className="rounded-full bg-[var(--accent)] px-4 py-1.5 text-xs font-semibold text-white transition-opacity hover:opacity-85 disabled:cursor-not-allowed disabled:opacity-40"
+        className="inline-flex min-h-[44px] items-center rounded-full bg-[var(--accent)] px-5 text-xs font-semibold text-white transition-opacity hover:opacity-85 disabled:cursor-not-allowed disabled:opacity-40"
       >
         {isPending
           ? "Check your wallet..."
@@ -129,7 +150,7 @@ export function TipButton({
       </button>
       <button
         onClick={() => setOpen(false)}
-        className="text-xs text-[var(--fg-faint)] hover:text-[var(--fg)]"
+        className="inline-flex min-h-[44px] items-center px-2 text-xs text-[var(--fg-faint)] hover:text-[var(--fg)]"
       >
         Cancel
       </button>
