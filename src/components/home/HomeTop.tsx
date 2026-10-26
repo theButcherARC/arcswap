@@ -5,6 +5,7 @@ import { useAccount, useReadContracts } from "wagmi";
 import { formatUnits } from "viem";
 import { TOKENS } from "@/constants/tokens";
 import { ROUTES } from "@/constants/routes";
+import { TokenCoin } from "@/components/TokenCoin";
 
 const ERC20_ABI = [
   {
@@ -16,12 +17,16 @@ const ERC20_ABI = [
   },
 ] as const;
 
-function fmtBal(v: bigint | undefined, decimals: number): string {
+function fmtBal(
+  v: bigint | undefined,
+  decimals: number,
+  maxFrac = 2,
+): string {
   if (v === undefined) return "...";
   const n = Number(formatUnits(v, decimals));
   return n.toLocaleString("en-US", {
     minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+    maximumFractionDigits: maxFrac,
   });
 }
 
@@ -43,13 +48,38 @@ export function HomeTop() {
             functionName: "balanceOf",
             args: [address],
           },
+          {
+            address: TOKENS.cirBTC.address as `0x${string}`,
+            abi: ERC20_ABI,
+            functionName: "balanceOf",
+            args: [address],
+          },
         ]
       : [],
     query: { enabled: !!address, refetchInterval: 20000 },
   });
 
-  const usdc = data?.[0]?.result as bigint | undefined;
-  const eurc = data?.[1]?.result as bigint | undefined;
+  const balances = [
+    {
+      symbol: "USDC",
+      label: "USDC BALANCE",
+      value: fmtBal(data?.[0]?.result as bigint | undefined, TOKENS.USDC.decimals),
+    },
+    {
+      symbol: "EURC",
+      label: "EURC BALANCE",
+      value: fmtBal(data?.[1]?.result as bigint | undefined, TOKENS.EURC.decimals),
+    },
+    {
+      symbol: "cirBTC",
+      label: "CIRBTC BALANCE",
+      value: fmtBal(
+        data?.[2]?.result as bigint | undefined,
+        TOKENS.cirBTC.decimals,
+        6,
+      ),
+    },
+  ];
 
   return (
     <div className="mb-10">
@@ -62,20 +92,30 @@ export function HomeTop() {
         </p>
       </div>
 
-      {/* Balance strip */}
-      <div className="mb-6 grid grid-cols-2 overflow-hidden rounded-[var(--radius)] border border-[var(--line)] bg-[var(--glass)]">
-        <div className="px-5 py-4">
-          <p className="mono-label mb-1.5">USDC BALANCE</p>
-          <p className="font-mono text-xl font-semibold text-[var(--fg)]">
-            {isConnected ? fmtBal(usdc, TOKENS.USDC.decimals) : "Connect wallet"}
-          </p>
-        </div>
-        <div className="border-l border-[var(--line)] px-5 py-4">
-          <p className="mono-label mb-1.5">EURC BALANCE</p>
-          <p className="font-mono text-xl font-semibold text-[var(--fg)]">
-            {isConnected ? fmtBal(eurc, TOKENS.EURC.decimals) : "Connect wallet"}
-          </p>
-        </div>
+      {/* Balance cards: one coin per token */}
+      <div className="mb-6 grid grid-cols-1 overflow-hidden rounded-[var(--radius)] border border-[var(--line)] bg-[var(--glass)] sm:grid-cols-3">
+        {balances.map((b, i) => (
+          <div
+            key={b.symbol}
+            className={`flex items-center gap-3.5 px-5 py-4 ${
+              i > 0
+                ? "border-t border-[var(--line)] sm:border-l sm:border-t-0"
+                : ""
+            }`}
+          >
+            <TokenCoin symbol={b.symbol} size={40} />
+            <div className="min-w-0">
+              <p className="mono-label mb-1">{b.label}</p>
+              {isConnected ? (
+                <p className="truncate font-mono text-xl font-semibold text-[var(--fg)]">
+                  {b.value}
+                </p>
+              ) : (
+                <p className="text-sm text-[var(--fg-muted)]">Connect wallet</p>
+              )}
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* Quick actions */}

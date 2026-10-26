@@ -596,3 +596,17 @@ select:focus-visible {
     scroll-behavior: auto !important;
   }
 }
+
+/* ============================================
+   Token coin 3D sway (landing page only)
+   ============================================ */
+@keyframes coin-sway {
+  0%, 100% { transform: rotateY(-16deg) rotateX(5deg) translateY(0); }
+  50% { transform: rotateY(16deg) rotateX(-5deg) translateY(-10px); }
+}
+
+.coin-3d {
+  transform-style: preserve-3d;
+  animation: coin-sway 7s ease-in-out infinite;
+  filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.45));
+}
