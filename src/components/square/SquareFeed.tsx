@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAccount, useSignMessage } from "wagmi";
 import { TipButton } from "@/components/square/TipButton";
+import { SquareRequests } from "@/components/square/SquareRequests";
 
 type Post = {
   id: string;
@@ -92,8 +93,8 @@ export function SquareFeed() {
         </div>
         <p className="mt-2 text-sm text-[var(--fg-muted)]">
           The people layer talking. Posts are signed by your wallet, no gas,
-          no transaction. Tip any post in USDC, straight to its author.
-          Pay requests attach here next.
+          no transaction. Tip any post in USDC, straight to its author, and
+          settle pay requests in one tap.
         </p>
       </div>
 
@@ -133,6 +134,8 @@ export function SquareFeed() {
           <p className="mt-3 text-xs text-[var(--fg-muted)]">{note}</p>
         )}
       </div>
+
+      <SquareRequests />
 
       {/* Feed */}
       {!loaded && (
