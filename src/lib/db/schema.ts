@@ -94,3 +94,13 @@ export const squarePosts = pgTable('square_posts', {
   content:       text('content').notNull(),
   createdAt:     timestamp('createdAt').notNull().defaultNow(),
 })
+
+export const squareRequests = pgTable('square_requests', {
+  id:            text('id').primaryKey(),
+  walletAddress: text('walletAddress').notNull(),
+  handle:        text('handle'),                            // linked X handle, when known
+  amount:        text('amount').notNull(),                   // USDC amount, decimal string
+  note:          text('note').notNull(),                     // what the request is for
+  status:        text('status').notNull().default('open'),   // open | closed
+  createdAt:     timestamp('createdAt').notNull().defaultNow(),
+})
