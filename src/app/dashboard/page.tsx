@@ -271,7 +271,7 @@ export default function DashboardPage() {
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[var(--bg)] px-4 pb-16 pt-10 sm:px-6 lg:px-8">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(circle_at_50%_0%,rgba(139,124,246,0.12),transparent_65%)]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(circle_at_50%_0%,rgba(39,117,202,0.08),transparent_65%)]" />
 
       <div className="relative mx-auto flex w-full max-w-5xl flex-col gap-6">
         {/* Header */}
@@ -285,7 +285,7 @@ export default function DashboardPage() {
                 onClick={handleSync}
                 disabled={syncLoading || isLoading || !isConnected}
                 title={!isConnected ? "Connect your wallet to sync" : "Refresh dashboard data"}
-                className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-xs font-medium text-gray-300 transition-colors hover:border-white/20 hover:bg-white/[0.05] disabled:opacity-50 disabled:cursor-not-allowed"
+                className="inline-flex items-center gap-2 rounded-lg border border-[var(--line)] bg-black/[0.03] px-3 py-2 text-xs font-medium text-gray-300 transition-colors hover:border-[var(--line-strong)] hover:bg-black/[0.04] disabled:opacity-50 disabled:cursor-not-allowed"
                 aria-label="Refresh dashboard data"
               >
                 <svg
@@ -337,13 +337,13 @@ export default function DashboardPage() {
             className="animate-fade-in-up glass-panel border-[rgba(244,63,94,0.3)] px-5 sm:px-6 py-4"
           >
             <div className="flex items-start gap-3">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="flex-shrink-0 text-rose-400 mt-0.5" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="flex-shrink-0 text-rose-600 mt-0.5" aria-hidden="true">
                 <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
                 <path d="M12 8v4M12 16h.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
               </svg>
               <div className="flex-1">
-                <p className="text-sm font-medium text-rose-300">Failed to load dashboard data</p>
-                <p className="mt-1 text-xs text-rose-300/70">{error instanceof Error ? error.message : "An error occurred while fetching your transaction history"}</p>
+                <p className="text-sm font-medium text-rose-600">Failed to load dashboard data</p>
+                <p className="mt-1 text-xs text-rose-600/70">{error instanceof Error ? error.message : "An error occurred while fetching your transaction history"}</p>
               </div>
             </div>
           </section>
@@ -421,27 +421,27 @@ export default function DashboardPage() {
                     />
                     <XAxis
                       dataKey="day"
-                      stroke="rgba(255,255,255,0.35)"
+                      stroke="rgba(11,13,22,0.45)"
                       fontSize={12}
                       tickLine={false}
                       axisLine={false}
                     />
                     <YAxis
-                      stroke="rgba(255,255,255,0.35)"
+                      stroke="rgba(11,13,22,0.45)"
                       fontSize={12}
                       tickLine={false}
                       axisLine={false}
                     />
                     <Tooltip
-                      cursor={{ fill: "rgba(139,124,246,0.12)" }}
+                      cursor={{ fill: "rgba(39,117,202,0.08)" }}
                       contentStyle={{
-                        backgroundColor: "#151a2b",
-                        border: "1px solid rgba(255,255,255,0.1)",
+                        backgroundColor: "#ffffff",
+                        border: "1px solid rgba(11,13,22,0.1)",
                         borderRadius: "12px",
-                        color: "#ffffff",
+                        color: "#0b0d16",
                         fontSize: "13px",
                       }}
-                      labelStyle={{ color: "#9ca3af" }}
+                      labelStyle={{ color: "#59637a" }}
                     />
                     <Bar
                       dataKey="volume"
@@ -491,7 +491,7 @@ export default function DashboardPage() {
                   <div className="skeleton h-10 w-2/3" />
                 </div>
               ) : error ? (
-                <div className="px-6 py-12 text-center text-sm text-rose-400">
+                <div className="px-6 py-12 text-center text-sm text-rose-600">
                   Failed to load data from ArcScan. Please try again later.
                 </div>
               ) : !lastBulkPay ? (
@@ -512,7 +512,7 @@ export default function DashboardPage() {
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-sm">
                     <thead>
-                      <tr className="border-b border-white/10">
+                      <tr className="border-b border-[var(--line)]">
                         <th
                           scope="col"
                           className="px-5 py-3 text-xs font-medium uppercase tracking-wider text-gray-400 sm:px-6"
@@ -537,7 +537,7 @@ export default function DashboardPage() {
                       {lastBulkPay.recipients.map((r, index) => (
                         <tr
                           key={r.address + "-" + index}
-                          className="border-b border-white/5 transition-colors last:border-0 hover:bg-white/[0.03]"
+                          className="border-b border-[var(--line)] transition-colors last:border-0 hover:bg-black/[0.04]"
                         >
                           <td className="whitespace-nowrap px-5 py-4 text-gray-300 sm:px-6">
                             {r.name}
@@ -555,21 +555,21 @@ export default function DashboardPage() {
                               {truncateAddress(r.address)}
                             </a>
                           </td>
-                          <td className="whitespace-nowrap px-5 py-4 text-right font-medium text-white sm:px-6">
+                          <td className="whitespace-nowrap px-5 py-4 text-right font-medium text-[var(--fg)] sm:px-6">
                             {formatUsdc(r.amount)} USDC
                           </td>
                         </tr>
                       ))}
                     </tbody>
                     <tfoot>
-                      <tr className="border-t border-white/10">
+                      <tr className="border-t border-[var(--line)]">
                         <td
                           className="px-5 py-4 text-xs font-medium uppercase tracking-wider text-gray-400 sm:px-6"
                           colSpan={2}
                         >
                           Total
                         </td>
-                        <td className="whitespace-nowrap px-5 py-4 text-right text-base font-semibold text-white sm:px-6">
+                        <td className="whitespace-nowrap px-5 py-4 text-right text-base font-semibold text-[var(--fg)] sm:px-6">
                           {formatUsdc(lastBulkPay.total)} USDC
                         </td>
                       </tr>

@@ -118,7 +118,7 @@ function AgentPreview({
           <button
             type="button"
             onClick={onDiscard}
-            className="px-3.5 py-1.5 text-xs font-medium text-white/50 hover:text-white/70 border border-white/10 hover:border-white/20 bg-white/[0.03] transition-colors duration-200 active:scale-95"
+            className="px-3.5 py-1.5 text-xs font-medium text-[var(--fg-muted)] hover:text-[var(--fg)] border border-[var(--line)] hover:border-[var(--line-strong)] bg-black/[0.03] transition-colors duration-200 active:scale-95"
           >
             Discard
           </button>
@@ -135,15 +135,15 @@ function AgentPreview({
         {result.recipients.map((r, i) => (
           <div
             key={"ai-preview-" + i}
-            className="flex items-center gap-3 bg-white/[0.03] border border-white/[0.06] px-4 py-3"
+            className="flex items-center gap-3 bg-black/[0.03] border border-[var(--line)] px-4 py-3"
           >
-            <span className="text-[11px] text-white/20 font-mono w-5 shrink-0">
+            <span className="text-[11px] text-[var(--fg-faint)] font-mono w-5 shrink-0">
               {i + 1}.
             </span>
-            <span className="text-sm text-white/70 flex-1 truncate font-medium">
+            <span className="text-sm text-[var(--fg-muted)] flex-1 truncate font-medium">
               {r.name || "Unnamed"}
             </span>
-            <span className="text-[11px] text-white/25 font-mono truncate max-w-[120px]">
+            <span className="text-[11px] text-[var(--fg-faint)] font-mono truncate max-w-[120px]">
               {r.address
                 ? r.address.slice(0, 6) + "..." + r.address.slice(-4)
                 : "No address"}
@@ -188,7 +188,7 @@ function AgentSpinner() {
           strokeLinecap="round"
         />
       </svg>
-      <span className="text-sm text-white/50">Parsing your instructions...</span>
+      <span className="text-sm text-[var(--fg-muted)]">Parsing your instructions...</span>
     </div>
   );
 }
@@ -733,8 +733,8 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
           {/* Wallet requirement banner (shown until connected) */}
           {!isConnected ? (
             <div className="mb-7 flex flex-col gap-3 border border-[rgba(39,117,202,0.3)] bg-[var(--accent-soft)] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm text-white/70">
-                <span className="font-semibold text-white">Connect your wallet to send.</span>{" "}
+              <p className="text-sm text-[var(--fg-muted)]">
+                <span className="font-semibold text-[var(--fg)]">Connect your wallet to send.</span>{" "}
                 MetaMask on Arc Mainnet is required before you can submit a batch.
               </p>
               <div className="shrink-0">
@@ -819,7 +819,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     disabled={agentLoading}
                     placeholder="Pay Alice 500 USDC at 0x... and Bob 300 USDC at 0x..."
                     rows={3}
-                    className="w-full min-h-24 border border-[var(--line)] bg-transparent px-4 py-3 text-base leading-relaxed text-white placeholder:text-white/25 focus:outline-none focus:border-[var(--fg-muted)] transition-colors resize-none disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="w-full min-h-24 border border-[var(--line)] bg-transparent px-4 py-3 text-base leading-relaxed text-[var(--fg)] placeholder:text-[var(--fg-faint)] focus:outline-none focus:border-[var(--fg-muted)] transition-colors resize-none disabled:opacity-40 disabled:cursor-not-allowed"
                   />
 
                   {/* Example chips */}
@@ -830,7 +830,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                         type="button"
                         onClick={() => handleExampleClick(prompt)}
                         disabled={agentLoading}
-                        className="text-[11px] text-white/35 hover:text-white/60 border border-white/[0.06] hover:border-white/[0.15] bg-white/[0.02] hover:bg-white/[0.05] px-3 py-1.5 transition-colors duration-200 truncate max-w-[260px] disabled:opacity-40 disabled:cursor-not-allowed"
+                        className="text-[11px] text-[var(--fg-faint)] hover:text-[var(--fg)] border border-[var(--line)] hover:border-[var(--line-strong)] bg-black/[0.03] hover:bg-black/[0.04] px-3 py-1.5 transition-colors duration-200 truncate max-w-[260px] disabled:opacity-40 disabled:cursor-not-allowed"
                       >
                         {prompt.slice(0, 50)}
                         {prompt.length > 50 ? "..." : ""}
@@ -838,7 +838,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     ))}
                   </div>
 
-                  <p className="mt-3 text-[11px] leading-relaxed text-white/25">
+                  <p className="mt-3 text-[11px] leading-relaxed text-[var(--fg-faint)]">
                     The AI fills the form below from your text. Nothing is sent until you review and sign.
                   </p>
 
@@ -850,7 +850,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     className={
                       "w-full mt-4 px-6 py-3.5 text-sm font-semibold transition-colors duration-200 " +
                       (agentLoading || !agentInput.trim()
-                        ? "bg-white/[0.06] text-white/25 cursor-not-allowed"
+                        ? "bg-black/[0.04] text-[var(--fg-faint)] cursor-not-allowed"
                         : "bg-[var(--fg)] text-[var(--bg)]")
                     }
                   >
@@ -932,7 +932,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                           />
                           <circle cx="7" cy="10" r="0.75" fill="#f43f5e" />
                         </svg>
-                        <p className="text-xs text-rose-400/90 leading-relaxed">
+                        <p className="text-xs text-rose-600/90 leading-relaxed">
                           {agentError}
                         </p>
                       </div>
@@ -994,7 +994,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
             </div>
 
             {/* Mode hint in plain words */}
-            <p className="px-6 -mt-3 mb-6 text-[11px] text-white/30 leading-relaxed">
+            <p className="px-6 -mt-3 mb-6 text-[11px] text-[var(--fg-faint)] leading-relaxed">
               {inputMode === "percentage"
                 ? "Split mode: enter one total below, then give each person a percentage of it. The percentages must add up to 100%."
                 : "Amount mode: type the exact amount each person should receive."}
@@ -1003,12 +1003,12 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
             {/* ===================== SECTION 4: TOTAL AMOUNT (percentage mode) ===================== */}
             {inputMode === "percentage" ? (
               <div className="mb-8 glass-panel p-6">
-                <label className="block text-xs font-medium text-white/40 uppercase tracking-wider mb-2.5">
+                <label className="block text-xs font-medium text-[var(--fg-faint)] uppercase tracking-wider mb-2.5">
                   Total Amount to Distribute
                 </label>
                 <div className="flex items-stretch gap-3">
                   <div className="relative flex-1">
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg text-white/30 font-medium pointer-events-none">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg text-[var(--fg-faint)] font-medium pointer-events-none">
                       $                     </span>
                     <input
                       type="text"
@@ -1017,11 +1017,11 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                       onChange={(e) => setTotalAmountInput(e.target.value)}
                       disabled={isSending}
                       placeholder="0.00"
-                      className="w-full bg-white/5 border border-white/10 text-white placeholder-white/20 pl-9 pr-4 py-4 text-xl font-semibold focus:outline-none focus:border-[var(--accent)] transition-colors duration-200 hover:border-white/20 hover:bg-white/[0.08] disabled:opacity-40 disabled:cursor-not-allowed"
+                      className="w-full bg-black/[0.03] border border-[var(--line)] text-[var(--fg)] placeholder:text-[var(--fg-faint)] pl-9 pr-4 py-4 text-xl font-semibold focus:outline-none focus:border-[var(--accent)] transition-colors duration-200 hover:border-[var(--line-strong)] hover:bg-black/[0.04] disabled:opacity-40 disabled:cursor-not-allowed"
                     />
                   </div>
-                  <div className="flex items-center border border-white/10 bg-white/[0.03] px-4 shrink-0">
-                    <span className="text-sm font-semibold text-white/70">
+                  <div className="flex items-center border border-[var(--line)] bg-black/[0.03] px-4 shrink-0">
+                    <span className="text-sm font-semibold text-[var(--fg-muted)]">
                       USDC
                     </span>
                   </div>
@@ -1042,17 +1042,17 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                         r="5"
                         stroke="currentColor"
                         strokeWidth="1"
-                        className="text-white/25"
+                        className="text-[var(--fg-faint)]"
                       />
                       <path
                         d="M6 3V6.5L8.5 8"
                         stroke="currentColor"
                         strokeWidth="1"
                         strokeLinecap="round"
-                        className="text-white/25"
+                        className="text-[var(--fg-faint)]"
                       />
                     </svg>
-                    <span className="text-[11px] text-white/25">
+                    <span className="text-[11px] text-[var(--fg-faint)]">
                       Protocol fee: {summaryData.fee.toFixed(2)} USDC (0.2%)
                     </span>
                   </div>
@@ -1062,7 +1062,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
 
             {/* ===================== SECTION 5: RECIPIENTS ===================== */}
             <div className="mb-6">
-              <p className="px-4 mb-3 text-[11px] text-white/30 leading-relaxed">
+              <p className="px-4 mb-3 text-[11px] text-[var(--fg-faint)] leading-relaxed">
                 Paste each person&apos;s wallet address (it starts with 0x).
                 If they have a VibeID, you can type their @handle instead and
                 the address fills in for you.
@@ -1071,17 +1071,17 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
               <div className="flex items-center gap-3 px-4 mb-3">
                 <div className="w-7 shrink-0" />
                 <div className="min-w-[120px] flex-1">
-                  <span className="text-[10px] font-medium text-white/20 uppercase tracking-wider">
+                  <span className="text-[10px] font-medium text-[var(--fg-faint)] uppercase tracking-wider">
                     Recipient
                   </span>
                 </div>
                 <div className="min-w-[180px] flex-[1.5]">
-                  <span className="text-[10px] font-medium text-white/20 uppercase tracking-wider">
+                  <span className="text-[10px] font-medium text-[var(--fg-faint)] uppercase tracking-wider">
                     Address
                   </span>
                 </div>
                 <div className="w-[130px] shrink-0 text-right">
-                  <span className="text-[10px] font-medium text-white/20 uppercase tracking-wider">
+                  <span className="text-[10px] font-medium text-[var(--fg-faint)] uppercase tracking-wider">
                     {inputMode === "amount" ? "Amount" : "Percentage"}
                   </span>
                 </div>
@@ -1112,14 +1112,14 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                 <button
                   type="button"
                   onClick={() => setShowMemo(true)}
-                  className="mt-5 text-xs text-white/35 underline-offset-4 transition-colors hover:text-white/70 hover:underline"
+                  className="mt-5 text-xs text-[var(--fg-faint)] underline-offset-4 transition-colors hover:text-[var(--fg)] hover:underline"
                 >
                   + Add a payroll label (optional)
                 </button>
               ) : (
               <div className="mt-6">
-                <label className="block text-xs font-medium text-white/40 mb-1.5">
-                  Payroll Label <span className="text-white/20">(optional)</span>
+                <label className="block text-xs font-medium text-[var(--fg-faint)] mb-1.5">
+                  Payroll Label <span className="text-[var(--fg-faint)]">(optional)</span>
                 </label>
                 <input
                   type="text"
@@ -1129,17 +1129,17 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                   placeholder="e.g. July Salary, Freelancer Batch, Marketing Team"
                   maxLength={100}
                   className={
-                    "w-full border border-white/[0.08] bg-white/[0.03] px-3.5 py-2.5 " +
-                    "text-base text-white placeholder:text-white/20 " +
-                    "focus:outline-none focus:border-[var(--accent)] focus:bg-white/[0.05] " +
+                    "w-full border border-[var(--line)] bg-black/[0.03] px-3.5 py-2.5 " +
+                    "text-base text-[var(--fg)] placeholder:text-[var(--fg-faint)] " +
+                    "focus:outline-none focus:border-[var(--accent)] focus:bg-black/[0.03] " +
                     "transition-colors duration-200 " +
                     (isSending ? "opacity-50 cursor-not-allowed" : "")
                   }
                 />
-                <p className="mt-1.5 text-[11px] text-white/25">
+                <p className="mt-1.5 text-[11px] text-[var(--fg-faint)]">
                   Stored onchain with your transaction
                   {memo.length > 0 && (
-                    <span className="ml-2 text-white/20">{memo.length}/100</span>
+                    <span className="ml-2 text-[var(--fg-faint)]">{memo.length}/100</span>
                   )}
                 </p>
               </div>
@@ -1154,8 +1154,8 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                   "w-full mt-3 border border-dashed py-4 " +
                   "text-sm font-medium transition-colors duration-300 " +
                   (atMaxRecipients || isSending
-                    ? "border-white/10 bg-white/[0.02] text-white/15 cursor-not-allowed"
-                    : "animate-add-btn-pulse border-[rgba(39,117,202,0.3)] bg-white/[0.02] text-white/50 hover:text-[var(--data)] hover:bg-[var(--accent-soft)] hover:border-[var(--accent)] active:scale-[0.99]")
+                    ? "border-[var(--line)] bg-black/[0.03] text-[var(--fg-faint)] cursor-not-allowed"
+                    : "animate-add-btn-pulse border-[rgba(39,117,202,0.3)] bg-black/[0.03] text-[var(--fg-muted)] hover:text-[var(--data)] hover:bg-[var(--accent-soft)] hover:border-[var(--accent)] active:scale-[0.99]")
                 }
               >
                 {atMaxRecipients ? (
@@ -1204,8 +1204,8 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                 )}
               </button>
               {inputMode === "percentage" ? (
-                <div className="mt-3 flex items-center justify-between border border-white/[0.06] bg-white/[0.02] px-4 py-2.5">
-                  <span className="text-[11px] text-white/35">
+                <div className="mt-3 flex items-center justify-between border border-[var(--line)] bg-black/[0.03] px-4 py-2.5">
+                  <span className="text-[11px] text-[var(--fg-faint)]">
                     Total allocated (must equal 100%)
                   </span>
                   <span
@@ -1214,8 +1214,8 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                       (summaryData.isFullyAllocated && !summaryData.isOverAllocated
                         ? "text-[var(--data)]"
                         : summaryData.isOverAllocated
-                          ? "text-rose-400"
-                          : "text-white/60")
+                          ? "text-rose-600"
+                          : "text-[var(--fg-muted)]")
                     }
                   >
                     {summaryData.allocatedLabel}
@@ -1228,29 +1228,29 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
             {showReview ? (
               <div
                 ref={reviewRef}
-                className="mt-10 border border-[rgba(39,117,202,0.3)] bg-[#0d0b16]/95 p-5"
+                className="mt-10 border border-[rgba(39,117,202,0.3)] bg-white/95 p-5"
               >
                 <span className="mono-label block mb-2">
                   SYS.REVIEW / BEFORE YOU SIGN
                 </span>
-                <h2 className="text-lg font-semibold text-white">
+                <h2 className="text-lg font-semibold text-[var(--fg)]">
                   Review this batch
                 </h2>
-                <p className="text-xs text-white/40 mt-1 leading-relaxed">
+                <p className="text-xs text-[var(--fg-faint)] mt-1 leading-relaxed">
                   Check every recipient and amount. Nothing has been sent yet.
                 </p>
 
-                <div className="mt-4 divide-y divide-white/[0.06] border border-white/[0.06]">
+                <div className="mt-4 divide-y divide-[var(--line)] border border-[var(--line)]">
                   {reviewRecipients.map((r) => (
                     <div
                       key={r.id}
                       className="flex items-center justify-between gap-4 px-3.5 py-2.5"
                     >
                       <div className="min-w-0">
-                        <p className="text-sm text-white truncate">
+                        <p className="text-sm text-[var(--fg)] truncate">
                           {r.name || "Recipient"}
                         </p>
-                        <p className="text-[11px] text-white/35 font-mono">
+                        <p className="text-[11px] text-[var(--fg-faint)] font-mono">
                           {r.address
                             ? r.address.slice(0, 6) +
                               "..." +
@@ -1258,10 +1258,10 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                             : "No address"}
                         </p>
                       </div>
-                      <span className="text-sm font-semibold text-white whitespace-nowrap">
+                      <span className="text-sm font-semibold text-[var(--fg)] whitespace-nowrap">
                         {(selectedSymbol === "EURC" ? "€" : "$") +
                           r.displayAmount.toFixed(2)}
-                        <span className="text-white/30 font-normal ml-1">
+                        <span className="text-[var(--fg-faint)] font-normal ml-1">
                           {selectedSymbol}
                         </span>
                       </span>
@@ -1270,7 +1270,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                 </div>
 
                 {summaryData.count > summaryData.validCount ? (
-                  <p className="mt-3 text-xs text-amber-300/80 leading-relaxed">
+                  <p className="mt-3 text-xs text-amber-600/80 leading-relaxed">
                     {summaryData.count - summaryData.validCount} of your rows
                     are not in this list. A row is only paid when it has a valid
                     address and an amount above $0. Go back and fix a row if
@@ -1278,23 +1278,23 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                   </p>
                 ) : null}
 
-                <div className="mt-4 grid grid-cols-3 gap-4 border border-white/[0.06] bg-white/[0.02] px-3.5 py-3">
+                <div className="mt-4 grid grid-cols-3 gap-4 border border-[var(--line)] bg-black/[0.03] px-3.5 py-3">
                   <div>
                     <span className="mono-label block mb-1">Total</span>
-                    <span className="text-sm font-semibold text-white">
+                    <span className="text-sm font-semibold text-[var(--fg)]">
                       {(selectedSymbol === "EURC" ? "€" : "$") +
                         summaryData.total.toFixed(2)}
                     </span>
                   </div>
                   <div>
                     <span className="mono-label block mb-1">Fee (0.2%)</span>
-                    <span className="text-sm font-semibold text-white/70">
+                    <span className="text-sm font-semibold text-[var(--fg-muted)]">
                       {"$" + summaryData.fee.toFixed(2)}
                     </span>
                   </div>
                   <div>
                     <span className="mono-label block mb-1">Gas est.</span>
-                    <span className="text-sm font-semibold text-white/70">
+                    <span className="text-sm font-semibold text-[var(--fg-muted)]">
                       {gasLoading
                         ? "..."
                         : gasUsd !== null
@@ -1304,7 +1304,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                   </div>
                 </div>
 
-                <div className="mt-4 space-y-1.5 text-xs text-white/45 leading-relaxed">
+                <div className="mt-4 space-y-1.5 text-xs text-[var(--fg-faint)] leading-relaxed">
                   <p>
                     Before your wallet opens, this exact batch is simulated
                     onchain. If any payment would fail, nothing is sent and the
@@ -1322,13 +1322,13 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                 </div>
 
                 {/* Schedule for later */}
-                <div className="mt-5 border-t border-white/[0.06] pt-4">
+                <div className="mt-5 border-t border-[var(--line)] pt-4">
                   <span className="mono-label block mb-2">
                     Or save it for later
                   </span>
                   {session?.user ? (
                     <>
-                      <p className="text-xs text-white/40 leading-relaxed">
+                      <p className="text-xs text-[var(--fg-faint)] leading-relaxed">
                         Scheduling saves this batch to your dashboard.
                         VibeFlow cannot send it on its own, because only your
                         wallet can sign. When the date arrives, open it from
@@ -1339,7 +1339,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                           type="datetime-local"
                           value={scheduleDate}
                           onChange={(e) => setScheduleDate(e.target.value)}
-                          className="border border-white/[0.08] bg-white/[0.03] px-3.5 py-2.5 text-base text-white focus:outline-none focus:border-[var(--accent)] [color-scheme:dark]"
+                          className="border border-[var(--line)] bg-black/[0.03] px-3.5 py-2.5 text-base text-[var(--fg)] focus:outline-none focus:border-[var(--accent)] [color-scheme:dark]"
                         />
                         <button
                           type="button"
@@ -1358,13 +1358,13 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                         </p>
                       ) : null}
                       {scheduleError ? (
-                        <p className="mt-2 text-xs text-rose-300/80">
+                        <p className="mt-2 text-xs text-rose-600/80">
                           {scheduleError}
                         </p>
                       ) : null}
                     </>
                   ) : (
-                    <p className="text-xs text-white/40 leading-relaxed">
+                    <p className="text-xs text-[var(--fg-faint)] leading-relaxed">
                       Sign in with your account to save this batch as a
                       scheduled payment and find it later on your dashboard.
                     </p>
@@ -1374,7 +1374,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                 <button
                   type="button"
                   onClick={() => setShowReview(false)}
-                  className="mt-4 text-xs text-white/40 underline underline-offset-4 hover:text-white/70 transition-colors"
+                  className="mt-4 text-xs text-[var(--fg-faint)] underline underline-offset-4 hover:text-[var(--fg)] transition-colors"
                 >
                   Back to edit
                 </button>
@@ -1388,10 +1388,10 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                 className={
                   "border p-5 transition-colors duration-300 " +
                   (summaryData.isFullyAllocated && !summaryData.isOverAllocated
-                    ? "border-[rgba(39,117,202,0.3)] bg-[#0a1010]/95"
+                    ? "border-[rgba(39,117,202,0.35)] bg-[rgba(39,117,202,0.07)]"
                     : summaryData.isOverAllocated
-                      ? "border-rose-500/25 bg-[#14090d]/95"
-                      : "border-white/10 bg-[#0b0b12]/95")
+                      ? "border-rose-500/25 bg-rose-500/[0.06]"
+                      : "border-[var(--line)] bg-[var(--glass-strong)]")
                 }
               >
                 <div className="flex flex-col gap-5">
@@ -1401,13 +1401,13 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     <span className="mono-label block mb-1.5">
                       Total
                     </span>
-                    <span className="text-sm font-semibold text-white">
+                    <span className="text-sm font-semibold text-[var(--fg)]">
                       {inputMode === "amount"
                         ? "$" + summaryData.total.toFixed(2)
                         : totalAmountInput
                           ? "$" + (parseFloat(totalAmountInput) || 0).toFixed(2)
                           : "$0.00"}
-                      <span className="text-white/30 font-normal ml-1">
+                      <span className="text-[var(--fg-faint)] font-normal ml-1">
                         USDC
                       </span>
                     </span>
@@ -1418,12 +1418,12 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     <span className="mono-label block mb-1.5">
                       Valid Recipients
                     </span>
-                    <span className="block text-[10px] text-white/25 mb-1">
+                    <span className="block text-[10px] text-[var(--fg-faint)] mb-1">
                       Needs a valid address and an amount above $0
                     </span>
-                    <span className="text-sm font-semibold text-white">
+                    <span className="text-sm font-semibold text-[var(--fg)]">
                       {summaryData.validCount}
-                      <span className="text-white/30 font-normal ml-1">
+                      <span className="text-[var(--fg-faint)] font-normal ml-1">
                         of {summaryData.count}
                       </span>
                     </span>
@@ -1434,9 +1434,9 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     <span className="mono-label block mb-1.5">
                       Protocol Fee
                     </span>
-                    <span className="text-sm font-semibold text-white/60">
+                    <span className="text-sm font-semibold text-[var(--fg-muted)]">
                       ${summaryData.fee.toFixed(2)}
-                      <span className="text-white/25 font-normal ml-1">
+                      <span className="text-[var(--fg-faint)] font-normal ml-1">
                         (0.2%)
                       </span>
                     </span>
@@ -1455,9 +1455,9 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                             !summaryData.isOverAllocated
                             ? "text-[var(--data)]"
                             : summaryData.isOverAllocated
-                              ? "text-rose-400"
-                              : "text-white/40"
-                          : "text-white")
+                              ? "text-rose-600"
+                              : "text-[var(--fg-faint)]"
+                          : "text-[var(--fg)]")
                       }
                     >
                       {inputMode === "percentage"
@@ -1494,7 +1494,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-3 border-t border-white/[0.06] pt-5">
+                <div className="flex flex-col gap-3 border-t border-[var(--line)] pt-5">
 
               {/* Error display */}
               {status === "error" && error ? (
@@ -1524,10 +1524,10 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                       <circle cx="8" cy="11" r="0.75" fill="#f43f5e" />
                     </svg>
                     <div>
-                      <p className="text-sm font-medium text-rose-400">
+                      <p className="text-sm font-medium text-rose-600">
                         Transaction Failed
                       </p>
-                      <p className="text-xs text-rose-400/70 mt-0.5 leading-relaxed">
+                      <p className="text-xs text-rose-600/70 mt-0.5 leading-relaxed">
                         {error}
                       </p>
                     </div>
@@ -1536,7 +1536,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
               ) : null}
 
               {/* Gas line */}
-              <div className="flex items-center gap-2 text-[11px] text-white/35">
+              <div className="flex items-center gap-2 text-[11px] text-[var(--fg-faint)]">
                 <span>
                   Gas{" "}
                   <span key={gasUsd?.toFixed(4)} className="font-medium text-[var(--data)] animate-value-flash">
@@ -1544,13 +1544,13 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                   </span>{" "}
                   USDC
                 </span>
-                <span className="text-white/15">·</span>
+                <span className="text-[var(--fg-faint)]">·</span>
                 <span>Powered by Arc</span>
                 <button
                   type="button"
                   onClick={refreshGas}
                   title="Refresh gas estimate"
-                  className="ml-auto flex h-5 w-5 shrink-0 items-center justify-center rounded hover:bg-white/[0.06] transition-colors duration-150"
+                  className="ml-auto flex h-5 w-5 shrink-0 items-center justify-center rounded hover:bg-black/[0.04] transition-colors duration-150"
                 >
                   <svg
                     width="10"
@@ -1558,7 +1558,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     viewBox="0 0 12 12"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
-                    className={gasLoading ? "animate-spin text-[var(--accent)]" : "text-white/30"}
+                    className={gasLoading ? "animate-spin text-[var(--accent)]" : "text-[var(--fg-faint)]"}
                   >
                     <path d="M10.5 6A4.5 4.5 0 1 1 6 1.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
                     <path d="M6 1.5L8 3.5M6 1.5L8 0" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
@@ -1574,7 +1574,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                   "w-full px-6 py-3.5 text-sm font-semibold transition-colors duration-300 " +
                   (canSend
                     ? "bg-[var(--fg)] text-[var(--bg)] hover:opacity-85"
-                    : "bg-white/[0.06] text-white/20 cursor-not-allowed")
+                    : "bg-black/[0.04] text-[var(--fg-faint)] cursor-not-allowed")
                 }
               >
                 {isSending ? (
@@ -1654,7 +1654,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
           </form>
 
           {/* How it works - quiet footer strip */}
-          <div className="mt-14 border-t border-white/[0.06] pt-6">
+          <div className="mt-14 border-t border-[var(--line)] pt-6">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
               {[
                 ["01", "Add recipients", "Name, wallet address (0x, 42 characters) and amount for each person."],
@@ -1664,8 +1664,8 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                 <div key={step} className="flex gap-3">
                   <span className="mono-label !text-[var(--accent)]">{step}</span>
                   <div>
-                    <p className="text-sm font-medium text-white">{title}</p>
-                    <p className="mt-0.5 text-[11px] leading-relaxed text-white/35">{body}</p>
+                    <p className="text-sm font-medium text-[var(--fg)]">{title}</p>
+                    <p className="mt-0.5 text-[11px] leading-relaxed text-[var(--fg-faint)]">{body}</p>
                   </div>
                 </div>
               ))}
