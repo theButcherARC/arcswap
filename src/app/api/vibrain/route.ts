@@ -48,6 +48,7 @@ export async function GET() {
         ["0x" + (latest - i).toString(16), false],
       ]);
     }
+    calls.push(["eth_call", [{ to: USDC, data: "0x18160ddd" }, "latest"]]);
     calls.push([
       "eth_getLogs",
       [
@@ -62,7 +63,8 @@ export async function GET() {
 
     const results = await rpcBatch(calls);
     const rawBlocks = results.slice(0, BLOCKS_SHOWN);
-    const logs: any[] = results[BLOCKS_SHOWN] ?? [];
+    const supplyHex: string | null = results[BLOCKS_SHOWN] ?? null;
+    const logs: any[] = results[BLOCKS_SHOWN + 1] ?? [];
 
     const blocks = rawBlocks
       .filter(Boolean)
@@ -91,8 +93,66 @@ export async function GET() {
     const totalMoved = transfers.reduce((s, t) => s + t.amount, 0);
     const largest = transfers.reduce((m, t) => Math.max(m, t.amount), 0);
 
+    // USDC issued on Arc: total supply of the native USDC contract,
+    // read live. Growth windows compare against the supply at the block
+    // closest to that many seconds ago (timestamp-targeted, corrected
+    // once), so the percentages mean what they say. Any failure here
+    // degrades to fewer windows, never to wrong numbers.
+    let issued: any = null;
+    try {
+      if (supplyHex) {
+        const total = Number(BigInt(supplyHex)) / 1e6;
+        const nowTs = blocks.length ? blocks[0].timestamp : Math.floor(Date.now() / 1000);
+        const [fromBlock] = await rpcBatch([
+          ["eth_getBlockByNumber", ["0x" + from.toString(16), false]],
+        ]);
+        const avgBlockTime =
+          fromBlock && blocks.length
+            ? (nowTs - parseInt(fromBlock.timestamp, 16)) / WINDOW_BLOCKS
+            : 0.5;
+        const supplyAt = async (secondsAgo: number) => {
+          const target = nowTs - secondsAgo;
+          let guess = Math.max(0, latest - Math.round(secondsAgo / avgBlockTime));
+          for (let i = 0; i < 2; i++) {
+            const [b] = await rpcBatch([
+              ["eth_getBlockByNumber", ["0x" + guess.toString(16), false]],
+            ]);
+            if (!b) return null;
+            const diff = target - parseInt(b.timestamp, 16);
+            if (Math.abs(diff) <= 2 || i === 1) {
+              const [s] = await rpcBatch([
+                ["eth_call", [{ to: USDC, data: "0x18160ddd" }, "0x" + guess.toString(16)]],
+              ]);
+              return s ? Number(BigInt(s)) / 1e6 : null;
+            }
+            guess = Math.max(0, guess + Math.round(diff / avgBlockTime));
+          }
+          return null;
+        };
+        const win = async (secondsAgo: number) => {
+          const past = await supplyAt(secondsAgo);
+          if (past === null || past <= 0) return null;
+          const delta = total - past;
+          return {
+            delta: Math.round(delta * 100) / 100,
+            pct: Math.round((delta / past) * 10000) / 100,
+          };
+        };
+        issued = {
+          total: Math.round(total * 100) / 100,
+          hour: await win(3600),
+          day: await win(86400),
+          week: await win(604800),
+          month: await win(2592000),
+        };
+      }
+    } catch {
+      issued = null;
+    }
+
     return NextResponse.json({
       latestBlock: latest,
+      issued,
       blockTimeSec: Math.round(blockTimeSec * 100) / 100,
       windowBlocks: WINDOW_BLOCKS,
       blocks,

@@ -5,10 +5,16 @@ import { useEffect, useState } from "react";
 type Stats = {
   latestBlock: number;
   stats: { transferCount: number; totalMoved: number };
+  issued: { total: number } | null;
 };
 
 function fmtInt(n: number): string {
   return n.toLocaleString("en-US");
+}
+function fmtBig(n: number): string {
+  if (n >= 1e9) return "$" + (n / 1e9).toFixed(2) + "B";
+  if (n >= 1e6) return "$" + (n / 1e6).toFixed(1) + "M";
+  return "$" + fmtUsd(n);
 }
 function fmtUsd(n: number): string {
   return n.toLocaleString("en-US", {
@@ -42,6 +48,10 @@ export function LiveStats() {
 
   const cells = [
     {
+      value: data?.issued ? fmtBig(data.issued.total) : "...",
+      label: "USDC Issued on Arc, Live",
+    },
+    {
       value: data ? "#" + fmtInt(data.latestBlock) : "...",
       label: "Latest Arc Block, Live",
     },
@@ -53,7 +63,6 @@ export function LiveStats() {
       value: data ? fmtInt(data.stats.transferCount) : "...",
       label: "USDC Transfers, Last ~10 Min",
     },
-    { value: "100", label: "Recipients Per Batch" },
   ];
 
   return (

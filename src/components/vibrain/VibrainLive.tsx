@@ -17,6 +17,13 @@ type VibrainData = {
   blocks: Block[];
   transfers: Transfer[];
   stats: { transferCount: number; totalMoved: number; largest: number };
+  issued: {
+    total: number;
+    hour: { delta: number; pct: number } | null;
+    day: { delta: number; pct: number } | null;
+    week: { delta: number; pct: number } | null;
+    month: { delta: number; pct: number } | null;
+  } | null;
   fetchedAt: string;
 };
 
@@ -32,6 +39,18 @@ function fmtUsd(n: number): string {
     maximumFractionDigits: 2,
   });
 }
+function fmtBig(n: number): string {
+  if (n >= 1e9) return "$" + (n / 1e9).toFixed(2) + "B";
+  if (n >= 1e6) return "$" + (n / 1e6).toFixed(1) + "M";
+  return "$" + fmtUsd(n);
+}
+function fmtDelta(n: number): string {
+  const sign = n >= 0 ? "+" : "-";
+  const a = Math.abs(n);
+  if (a >= 1e6) return sign + "$" + (a / 1e6).toFixed(1) + "M";
+  if (a >= 1e3) return sign + "$" + (a / 1e3).toFixed(1) + "K";
+  return sign + "$" + a.toFixed(0);
+}
 function shortAddr(a: string): string {
   return a.slice(0, 6) + "..." + a.slice(-4);
 }
@@ -39,6 +58,18 @@ function ago(sec: number): string {
   if (sec < 60) return Math.max(1, Math.round(sec)) + "s ago";
   if (sec < 3600) return Math.round(sec / 60) + "m ago";
   return Math.round(sec / 3600) + "h ago";
+}
+
+function TokenCoinIssued() {
+  return (
+    <span className="hidden items-center gap-2 rounded-full border border-[var(--line)] px-3.5 py-2 sm:flex">
+      <span className="relative flex h-2 w-2">
+        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-60" />
+        <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-600" />
+      </span>
+      <span className="mono-label">TOTAL SUPPLY · LIVE</span>
+    </span>
+  );
 }
 
 export function VibrainLive() {
@@ -132,6 +163,48 @@ export function VibrainLive() {
 
       {data && (
         <>
+          {/* USDC issued on Arc: live total supply (usdc.cool-style panel) */}
+          {data.issued && (
+            <div className="mb-10 rounded-[var(--radius)] border border-[var(--line)] bg-[var(--glass)] px-6 py-7 sm:px-8">
+              <div className="flex flex-wrap items-end justify-between gap-6">
+                <div>
+                  <p className="mono-label mb-2">USDC ISSUED ON ARC</p>
+                  <p className="font-mono text-5xl font-bold tracking-tight text-[var(--fg)] sm:text-6xl">
+                    {fmtBig(data.issued.total)}
+                  </p>
+                  <p className="mt-3 max-w-md text-sm text-[var(--fg-muted)]">
+                    Total supply of native USDC on Arc, read live from the
+                    USDC contract. Growth compares against the supply at the
+                    block closest to that time.
+                  </p>
+                </div>
+                <TokenCoinIssued />
+              </div>
+              <div className="mt-7 grid grid-cols-2 gap-px overflow-hidden rounded-[var(--radius)] border border-[var(--line)] bg-[var(--line)] sm:grid-cols-4">
+                {(
+                  [
+                    ["PAST HOUR", data.issued.hour],
+                    ["PAST 24 HOURS", data.issued.day],
+                    ["PAST WEEK", data.issued.week],
+                    ["PAST MONTH", data.issued.month],
+                  ] as const
+                )
+                  .filter(([, w]) => w !== null)
+                  .map(([label, w]) => (
+                    <div key={label} className="bg-[var(--bg-raised)] px-4 py-3.5">
+                      <p className="mono-label mb-1">{label}</p>
+                      <p className="font-mono text-base font-semibold text-emerald-600">
+                        {(w!.pct >= 0 ? "+" : "") + w!.pct.toFixed(2) + "%"}
+                      </p>
+                      <p className="font-mono text-xs text-[var(--fg-muted)]">
+                        {fmtDelta(w!.delta)}
+                      </p>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          )}
+
           {/* Stats strip */}
           <div className="mb-10 grid grid-cols-2 overflow-hidden rounded-[var(--radius)] border border-[var(--line)] bg-[var(--glass)] lg:grid-cols-4">
             {[
