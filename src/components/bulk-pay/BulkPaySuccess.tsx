@@ -13,10 +13,10 @@ export default function BulkPaySuccess({ txHash, onReset, tokenSymbol = "USDC" }
   const explorerUrl = `${DEFAULT_CHAIN.blockExplorers.default.url}/tx/${txHash}`;
 
   return (
-    <div className="min-h-screen bg-[#050508] flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-[var(--bg)] flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-lg">
         {/* Success card */}
-        <div className="border border-emerald-500/20 bg-white/5 backdrop-blur-2xl p-8 sm:p-10 text-center shadow-[0_0_60px_rgba(16,185,129,0.08)]">
+        <div className="border border-emerald-500/20 bg-black/[0.03] backdrop-blur-2xl p-8 sm:p-10 text-center shadow-[0_0_60px_rgba(16,185,129,0.08)]">
           {/* Animated checkmark circle */}
           <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full border-2 border-emerald-500/30 bg-emerald-500/[0.08]">
             <svg
@@ -44,17 +44,17 @@ export default function BulkPaySuccess({ txHash, onReset, tokenSymbol = "USDC" }
             </svg>
           </div>
 
-          <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight mb-2">
+          <h2 className="text-2xl sm:text-3xl font-bold text-[var(--fg)] tracking-tight mb-2">
             Payments Sent
           </h2>
-          <p className="text-sm text-white/40 mb-5">
+          <p className="text-sm text-[var(--fg-faint)] mb-5">
             Your batch transaction has been submitted to Arc
           </p>
 
           {/* Settlement speed badge */}
           <div className="mb-2 flex justify-center">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-4 py-1.5 shadow-[0_0_14px_rgba(52,211,153,0.25)]">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-500/10 px-4 py-1.5 shadow-[0_0_14px_rgba(52,211,153,0.25)]">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
               <span className="text-xs font-semibold text-emerald-300 tracking-wide">
                 Settled in {"<"}1s
               </span>
@@ -62,13 +62,13 @@ export default function BulkPaySuccess({ txHash, onReset, tokenSymbol = "USDC" }
           </div>
 
           {/* Comparison text */}
-          <p className="text-[11px] text-white/25 mb-8">
+          <p className="text-[11px] text-[var(--fg-faint)] mb-8">
             {"Ethereum L1: ~13 min\u2002|\u2002L2s: up to 7 days"}
           </p>
 
           {/* Transaction hash */}
-          <div className="border border-white/10 bg-white/[0.03] p-4 mb-6">
-            <span className="block text-[10px] font-medium text-white/30 uppercase tracking-wider mb-2">
+          <div className="border border-[var(--line)] bg-black/[0.03] p-4 mb-6">
+            <span className="block text-[10px] font-medium text-[var(--fg-faint)] uppercase tracking-wider mb-2">
               Transaction Hash
             </span>
             <a
@@ -83,17 +83,17 @@ export default function BulkPaySuccess({ txHash, onReset, tokenSymbol = "USDC" }
 
           {/* Info rows */}
           <div className="grid grid-cols-2 gap-3 mb-8">
-            <div className="border border-white/[0.06] bg-white/[0.02] p-3.5">
-              <span className="block text-[10px] text-white/25 uppercase tracking-wider mb-1">
+            <div className="border border-[var(--line)] bg-black/[0.03] p-3.5">
+              <span className="block text-[10px] text-[var(--fg-faint)] uppercase tracking-wider mb-1">
                 Network
               </span>
-              <span className="text-sm font-medium text-white/70">Arc</span>
+              <span className="text-sm font-medium text-[var(--fg-muted)]">Arc</span>
             </div>
-            <div className="border border-white/[0.06] bg-white/[0.02] p-3.5">
-              <span className="block text-[10px] text-white/25 uppercase tracking-wider mb-1">
+            <div className="border border-[var(--line)] bg-black/[0.03] p-3.5">
+              <span className="block text-[10px] text-[var(--fg-faint)] uppercase tracking-wider mb-1">
                 Asset
               </span>
-              <span className="text-sm font-medium text-white/70">{tokenSymbol}</span>
+              <span className="text-sm font-medium text-[var(--fg-muted)]">{tokenSymbol}</span>
             </div>
           </div>
 
@@ -103,7 +103,7 @@ export default function BulkPaySuccess({ txHash, onReset, tokenSymbol = "USDC" }
               href={explorerUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 inline-flex items-center justify-center gap-2 border border-white/10 bg-white/[0.04] px-5 py-3.5 text-sm font-medium text-white/70 hover:text-white hover:border-white/20 hover:bg-white/[0.08] transition-all duration-200"
+              className="flex-1 inline-flex items-center justify-center gap-2 border border-[var(--line)] bg-black/[0.03] px-5 py-3.5 text-sm font-medium text-[var(--fg-muted)] hover:text-[var(--fg)] hover:border-[var(--line-strong)] hover:bg-black/[0.04] transition-all duration-200"
             >
               <svg
                 width="16"
@@ -125,7 +125,7 @@ export default function BulkPaySuccess({ txHash, onReset, tokenSymbol = "USDC" }
             <button
               type="button"
               onClick={onReset}
-              className="flex-1 inline-flex items-center justify-center gap-2 bg-[var(--fg)] text-[var(--bg)] px-5 py-3.5 text-sm font-semibold text-white transition-all duration-200"
+              className="flex-1 inline-flex items-center justify-center gap-2 bg-[var(--fg)] text-[var(--bg)] px-5 py-3.5 text-sm font-semibold text-[var(--fg)] transition-all duration-200"
             >
               <svg
                 width="16"

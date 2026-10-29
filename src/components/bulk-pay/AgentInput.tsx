@@ -57,7 +57,7 @@ export default function AgentInput({ onParsed }: AgentInputProps) {
           <span className="text-violet-400 text-sm">AI</span>
         </div>
         <div>
-          <p className="text-sm font-semibold text-white">AI Payment Agent</p>
+          <p className="text-sm font-semibold text-[var(--fg)]">AI Payment Agent</p>
           <p className="text-xs text-gray-400">Describe your payment in plain English</p>
         </div>
         <span className="ml-auto text-xs bg-[var(--accent-soft)] text-[var(--accent)] px-2 py-0.5 rounded-full">
@@ -71,7 +71,7 @@ export default function AgentInput({ onParsed }: AgentInputProps) {
         onChange={(e) => setInstruction(e.target.value)}
         placeholder="e.g. Pay Alice 500 USDC at @alice, Bob 300 at VIBE-ABC123, or Carol 200 at 0x1234...abcd"
         rows={3}
-        className="w-full bg-surface border border-white/10 text-white placeholder-gray-500 text-sm p-3 resize-none focus:outline-none focus:border-violet-500/50 transition-colors"
+        className="w-full bg-surface border border-[var(--line)] text-[var(--fg)] placeholder-gray-500 text-sm p-3 resize-none focus:outline-none focus:border-violet-500/50 transition-colors"
       />
 
       {/* Examples */}
@@ -94,7 +94,7 @@ export default function AgentInput({ onParsed }: AgentInputProps) {
       <button
         onClick={handleParse}
         disabled={loading || !instruction.trim()}
-        className="w-full py-2.5 bg-[var(--fg)] text-[var(--bg)] hover:opacity-85 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-semibold transition-colors"
+        className="w-full py-2.5 bg-[var(--fg)] text-[var(--bg)] hover:opacity-85 disabled:opacity-40 disabled:cursor-not-allowed text-[var(--fg)] text-sm font-semibold transition-colors"
       >
         {loading ? "Parsing..." : "Parse with AI"}
       </button>
