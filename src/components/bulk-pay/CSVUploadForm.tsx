@@ -64,6 +64,38 @@ function validateRow(
   return { ok: true, row: { name, address, rawAmount: amount, amount: amountStr } };
 }
 
+
+// Shared row collection for both upload paths: validates each row, then
+// drops later rows that repeat an address already used (case-insensitive),
+// so a copy-paste slip can never pay the same person twice in one batch.
+function collectRows(data: string[][]): {
+  validRows: ParsedRow[];
+  errors: ParseError[];
+} {
+  const validRows: ParsedRow[] = [];
+  const errors: ParseError[] = [];
+  const seen = new Map<string, number>();
+  data.forEach((raw, i) => {
+    const result = validateRow(raw, i + 1);
+    if (!result.ok) {
+      errors.push(result.error);
+      return;
+    }
+    const key = result.row.address.toLowerCase();
+    const firstRow = seen.get(key);
+    if (firstRow !== undefined) {
+      errors.push({
+        row: i + 1,
+        message: `Row ${i + 1}: duplicate address "${result.row.address}" (first used in row ${firstRow})`,
+      });
+      return;
+    }
+    seen.set(key, i + 1);
+    validRows.push(result.row);
+  });
+  return { validRows, errors };
+}
+
 // ─── Main Component ─────────────────────────────────────────────────────────
 
 export default function CSVUploadForm() {
@@ -107,14 +139,7 @@ export default function CSVUploadForm() {
     Papa.parse<string[]>(file, {
       skipEmptyLines: true,
       complete(results) {
-        const validRows: ParsedRow[] = [];
-        const errors: ParseError[] = [];
-
-        results.data.forEach((raw, i) => {
-          const result = validateRow(raw, i + 1);
-          if (result.ok) validRows.push(result.row);
-          else errors.push(result.error);
-        });
+        const { validRows, errors } = collectRows(results.data);
 
         setRows(validRows);
         setParseErrors(errors);
@@ -145,14 +170,7 @@ export default function CSVUploadForm() {
     Papa.parse<string[]>(text, {
       skipEmptyLines: true,
       complete(results) {
-        const validRows: ParsedRow[] = [];
-        const errors: ParseError[] = [];
-
-        results.data.forEach((raw, i) => {
-          const result = validateRow(raw, i + 1);
-          if (result.ok) validRows.push(result.row);
-          else errors.push(result.error);
-        });
+        const { validRows, errors } = collectRows(results.data);
 
         setRows(validRows);
         setParseErrors(errors);
