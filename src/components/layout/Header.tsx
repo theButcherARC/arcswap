@@ -2,19 +2,11 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
 import { ConnectButton } from '@/components/wallet/ConnectButton';
 import { NetworkSwitcher } from '@/components/wallet/NetworkSwitcher';
 import { ROUTES } from '@/constants/routes';
 
-const NAV_LINKS = [
-  { label: 'Bulk Pay', href: ROUTES.BULK_PAY },
-  { label: 'Dashboard', href: ROUTES.DASHBOARD },
-  { label: 'VibeID', href: ROUTES.SOCIAL_PROFILE },
-];
-
 export function Header() {
-  const pathname = usePathname();
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-[var(--line)] bg-[rgba(11,13,22,0.86)] backdrop-blur-2xl">
@@ -37,21 +29,14 @@ export function Header() {
             </span>
           </Link>
 
-          {/* Nav Links */}
-          <nav className="hidden items-center gap-1 rounded-xl border border-[var(--line)] bg-[var(--glass)] p-1 md:flex" aria-label="Main navigation">
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                aria-current={pathname === link.href ? 'page' : undefined}
-                className={pathname === link.href
-                  ? 'whitespace-nowrap rounded-lg bg-[var(--accent)] px-3.5 py-2 text-sm font-medium text-white shadow-[0_8px_24px_rgba(139,124,246,0.22)] transition-all duration-200'
-                  : 'whitespace-nowrap rounded-lg px-3.5 py-2 text-sm font-medium text-[var(--fg-muted)] transition-all duration-200 hover:bg-[var(--glass-strong)] hover:text-[var(--fg)]'
-                }
-              >
-                {link.label}
-              </Link>
-            ))}
+          {/* Home, the only header nav button (Haroon, Oct 29) */}
+          <nav aria-label="Main navigation">
+            <Link
+              href={ROUTES.HOME_PAGE}
+              className="flex min-h-[44px] items-center whitespace-nowrap rounded-lg bg-[var(--accent)] px-4 text-sm font-medium text-white shadow-[0_8px_24px_rgba(39,117,202,0.25)] transition-all duration-200 hover:opacity-90"
+            >
+              Home
+            </Link>
           </nav>
 
           {/* Right Side */}
