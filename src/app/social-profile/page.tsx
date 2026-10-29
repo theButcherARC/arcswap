@@ -130,7 +130,7 @@ export default function SocialProfilePage() {
           <h1 className="text-2xl font-bold tracking-tight text-balance">
             <span className="text-[var(--fg)]">VibeID</span>
           </h1>
-          <p className="mt-2 text-sm text-white/50 leading-relaxed">
+          <p className="mt-2 text-sm text-[var(--fg-muted)] leading-relaxed">
             Get your unique VibeID. Link X account. Get paid by anyone with just an identifier.
           </p>
         </div>
@@ -138,51 +138,51 @@ export default function SocialProfilePage() {
         <div className="flex flex-col gap-4">
 
           {/* ── Section 1: Wallet Address ───────────────────────────────── */}
-          <div className="border border-white/10 bg-[var(--glass)] p-6 ">
+          <div className="border border-[var(--line)] bg-[var(--glass)] p-6 ">
             <div className="flex items-center gap-3 mb-4">
               <div className={
                 'flex h-7 w-7 items-center justify-center text-xs font-bold ' +
-                (walletConnected ? 'bg-[var(--accent)] text-white' : 'bg-white/10 text-white/50')
+                (walletConnected ? 'bg-[var(--accent)] text-white' : 'bg-[var(--glass-strong)] text-[var(--fg-muted)]')
               }>
                 {walletConnected ? '✓' : '1'}
               </div>
-              <span className="text-sm font-semibold text-white">Wallet Address</span>
-              <span className="text-xs text-white/30 font-normal ml-1">Primary Identity</span>
+              <span className="text-sm font-semibold text-[var(--fg)]">Wallet Address</span>
+              <span className="text-xs text-[var(--fg-faint)] font-normal ml-1">Primary Identity</span>
             </div>
 
             {walletConnected ? (
               <div className="border border-[rgba(39,117,202,0.2)] bg-[var(--accent-soft)] px-4 py-3">
-                <p className="text-sm font-mono text-white break-all">{address}</p>
-                <p className="text-xs text-white/40 mt-0.5">Wallet connected</p>
+                <p className="text-sm font-mono text-[var(--fg)] break-all">{address}</p>
+                <p className="text-xs text-[var(--fg-faint)] mt-0.5">Wallet connected</p>
               </div>
             ) : (
-              <p className="text-sm text-white/40">
+              <p className="text-sm text-[var(--fg-faint)]">
                 Use the &quot;Connect Wallet&quot; button in the header to connect your wallet.
               </p>
             )}
           </div>
 
           {/* ── Section 2: Connect X ────────────────────────────────────── */}
-          <div className="border border-white/10 bg-[var(--glass)] p-6 ">
+          <div className="border border-[var(--line)] bg-[var(--glass)] p-6 ">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <div className={
                   'flex h-7 w-7 items-center justify-center text-xs font-bold ' +
-                  (xConnected ? 'bg-[var(--accent)] text-white' : 'bg-white/10 text-white/50')
+                  (xConnected ? 'bg-[var(--accent)] text-white' : 'bg-[var(--glass-strong)] text-[var(--fg-muted)]')
                 }>
                   {xConnected ? '✓' : '2'}
                 </div>
-                <span className="text-sm font-semibold text-white">Connect X Account</span>
+                <span className="text-sm font-semibold text-[var(--fg)]">Connect X Account</span>
               </div>
               {xConnected && (
-                <button onClick={handleLogout} className="text-xs text-white/40 hover:text-white/70 transition-colors">
+                <button onClick={handleLogout} className="text-xs text-[var(--fg-faint)] hover:text-[var(--fg)] transition-colors">
                   Logout
                 </button>
               )}
             </div>
 
             {isPending ? (
-              <div className="h-10 bg-white/5 animate-pulse" />
+              <div className="h-10 bg-black/[0.06] animate-pulse" />
             ) : xConnected ? (
               <div className="flex items-center gap-3 border border-[rgba(39,117,202,0.2)] bg-[var(--accent-soft)] px-4 py-3">
                 {session!.user.image && (
@@ -190,19 +190,19 @@ export default function SocialProfilePage() {
                 )}
                 <div className="min-w-0">
                   {fetchingProfile ? (
-                    <div className="h-4 w-32 rounded bg-white/10 animate-pulse" />
+                    <div className="h-4 w-32 rounded bg-[var(--glass-strong)] animate-pulse" />
                   ) : (
-                    <p className="text-sm font-medium text-white truncate">
+                    <p className="text-sm font-medium text-[var(--fg)] truncate">
                       {profile?.username ? '@' + profile.username : session!.user.name ?? 'Connected to X'}
                     </p>
                   )}
-                  <p className="text-xs text-white/40 truncate mt-0.5">{session!.user.name ?? 'X account'}</p>
+                  <p className="text-xs text-[var(--fg-faint)] truncate mt-0.5">{session!.user.name ?? 'X account'}</p>
                 </div>
               </div>
             ) : (
               <button
                 onClick={handleLoginWithX}
-                className="flex w-full items-center justify-center gap-2 bg-white px-4 py-3 text-sm font-semibold text-black hover:bg-white/90 transition-colors"
+                className="flex w-full items-center justify-center gap-2 bg-[var(--fg)] px-4 py-3 text-sm font-semibold text-[var(--fg)] hover:opacity-85 transition-opacity"
               >
                 <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current">
                   <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
@@ -225,19 +225,19 @@ export default function SocialProfilePage() {
                 <div className="flex h-7 w-7 items-center justify-center bg-[var(--accent-soft)] text-xs font-bold text-[var(--data)]">
                   V
                 </div>
-                <span className="text-sm font-semibold text-white">VibeID</span>
-                <span className="text-xs text-white/30 ml-1">Unique Payment Identifier</span>
+                <span className="text-sm font-semibold text-[var(--fg)]">VibeID</span>
+                <span className="text-xs text-[var(--fg-faint)] ml-1">Unique Payment Identifier</span>
               </div>
 
               {fetchingProfile ? (
-                <div className="h-12 bg-white/5 animate-pulse" />
+                <div className="h-12 bg-black/[0.06] animate-pulse" />
               ) : profile?.vibeId ? (
                 <div className="flex items-center justify-between gap-3 border border-[rgba(39,117,202,0.3)] bg-[var(--accent-soft)] px-4 py-3">
                   <div>
                     <p className="text-lg font-bold font-mono text-[var(--data)] tracking-widest">
                       {profile.vibeId}
                     </p>
-                    <p className="text-xs text-white/40 mt-0.5">Permanent · Cannot be changed</p>
+                    <p className="text-xs text-[var(--fg-faint)] mt-0.5">Permanent · Cannot be changed</p>
                   </div>
                   <button
                     onClick={copyVibeId}
@@ -257,27 +257,27 @@ export default function SocialProfilePage() {
                   </button>
                 </div>
               ) : (
-                <p className="text-sm text-white/40">Connect X to generate your VibeID.</p>
+                <p className="text-sm text-[var(--fg-faint)]">Connect X to generate your VibeID.</p>
               )}
             </div>
           )}
 
           {/* ── Section 4: Link Handle to Wallet ───────────────────────── */}
-          <div className="border border-white/10 bg-[var(--glass)] p-6 ">
+          <div className="border border-[var(--line)] bg-[var(--glass)] p-6 ">
             <div className="flex items-center gap-3 mb-4">
               <div className={
                 'flex h-7 w-7 items-center justify-center text-xs font-bold ' +
-                (status === 'success' ? 'bg-[var(--accent)] text-white' : 'bg-white/10 text-white/50')
+                (status === 'success' ? 'bg-[var(--accent)] text-white' : 'bg-[var(--glass-strong)] text-[var(--fg-muted)]')
               }>
                 {status === 'success' ? '✓' : '3'}
               </div>
-              <span className="text-sm font-semibold text-white">Link Handle to Wallet</span>
+              <span className="text-sm font-semibold text-[var(--fg)]">Link Handle to Wallet</span>
             </div>
 
             {status === 'success' ? (
               <div className="border border-[rgba(39,117,202,0.25)] bg-[rgba(39,117,202,0.1)] px-4 py-3">
                 <p className="text-sm text-[var(--data)] font-semibold">Linked successfully</p>
-                <p className="text-xs text-white/50 mt-0.5">{message}</p>
+                <p className="text-xs text-[var(--fg-muted)] mt-0.5">{message}</p>
               </div>
             ) : (
               <>
@@ -288,7 +288,7 @@ export default function SocialProfilePage() {
                 )}
                 {profile?.username && (
                   <div className="mb-4 border border-[rgba(39,117,202,0.2)] bg-[var(--accent-soft)] px-4 py-3">
-                    <p className="text-xs text-white/50 mb-1">X Handle (auto-detected)</p>
+                    <p className="text-xs text-[var(--fg-muted)] mb-1">X Handle (auto-detected)</p>
                     <p className="text-sm font-medium text-[var(--data)]">@{profile.username}</p>
                   </div>
                 )}
@@ -299,7 +299,7 @@ export default function SocialProfilePage() {
                     'w-full px-4 py-3 text-sm font-semibold transition-colors flex items-center justify-center gap-2 ' +
                     (canLink
                       ? 'bg-[var(--fg)] text-[var(--bg)]'
-                      : 'bg-white/5 text-white/30 cursor-not-allowed')
+                      : 'bg-[var(--glass-strong)] text-[var(--fg-faint)] cursor-not-allowed')
                   }
                 >
                   {status === 'linking' && (
@@ -315,15 +315,15 @@ export default function SocialProfilePage() {
                       : 'Link X Handle to This Wallet'}
                 </button>
                 {!xConnected || !walletConnected ? (
-                  <p className="mt-2 text-xs text-white/30 text-center">Complete steps 1 and 2 first</p>
+                  <p className="mt-2 text-xs text-[var(--fg-faint)] text-center">Complete steps 1 and 2 first</p>
                 ) : null}
               </>
             )}
           </div>
 
           {/* Info card */}
-          <div className="border border-white/5 bg-white/[0.02] px-6 py-5">
-            <p className="text-xs text-white/40 leading-relaxed">
+          <div className="border border-[var(--line)] bg-[var(--glass-strong)] px-6 py-5">
+            <p className="text-xs text-[var(--fg-faint)] leading-relaxed">
               Once linked, anyone can pay you using{' '}
               <span className="text-[var(--accent)] font-mono">@{profile?.username ?? 'yourhandle'}</span>
               {profile?.vibeId && (

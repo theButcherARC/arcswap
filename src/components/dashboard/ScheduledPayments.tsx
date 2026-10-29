@@ -102,7 +102,7 @@ export function ScheduledPayments() {
             payment on its own, only your wallet can sign.
           </p>
         ) : (
-          <div className="mt-4 divide-y divide-white/[0.06] border border-white/[0.06]">
+          <div className="mt-4 divide-y divide-[var(--line)] border border-[var(--line)]">
             {items.map((item) => {
               const due =
                 item.status === "pending" &&
@@ -113,16 +113,16 @@ export function ScheduledPayments() {
                   className="flex flex-col gap-2 px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between"
                 >
                   <div className="min-w-0">
-                    <p className="text-sm font-medium text-white">
+                    <p className="text-sm font-medium text-[var(--fg)]">
                       {"$" + item.totalAmount + " " + item.tokenSymbol}
-                      <span className="text-white/35 font-normal">
+                      <span className="text-[var(--fg-faint)] font-normal">
                         {" to " +
                           item.recipients.length +
                           " recipient" +
                           (item.recipients.length !== 1 ? "s" : "")}
                       </span>
                     </p>
-                    <p className="text-[11px] text-white/35 mt-0.5">
+                    <p className="text-[11px] text-[var(--fg-faint)] mt-0.5">
                       {formatWhen(item.scheduledFor)}
                       {item.memo ? " · " + item.memo : ""}
                     </p>
@@ -133,7 +133,7 @@ export function ScheduledPayments() {
                         Sent
                       </span>
                     ) : item.status === "cancelled" ? (
-                      <span className="text-[11px] font-medium text-white/30">
+                      <span className="text-[11px] font-medium text-[var(--fg-faint)]">
                         Cancelled
                       </span>
                     ) : due ? (
@@ -141,7 +141,7 @@ export function ScheduledPayments() {
                         Due now
                       </span>
                     ) : (
-                      <span className="text-[11px] font-medium text-white/40">
+                      <span className="text-[11px] font-medium text-[var(--fg-faint)]">
                         Scheduled
                       </span>
                     )}
@@ -157,7 +157,7 @@ export function ScheduledPayments() {
                           type="button"
                           onClick={() => handleCancel(item.id)}
                           disabled={cancellingId === item.id}
-                          className="text-xs text-white/35 hover:text-rose-300 disabled:opacity-40"
+                          className="text-xs text-[var(--fg-faint)] hover:text-rose-600 disabled:opacity-40"
                         >
                           {cancellingId === item.id
                             ? "Cancelling..."
