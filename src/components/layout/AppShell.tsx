@@ -177,7 +177,7 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
                         "flex items-center gap-3 px-2.5 py-2 text-sm transition-colors duration-150 " +
                         (active
                           ? "bg-[var(--accent-soft)] font-medium text-[var(--fg)]"
-                          : "text-[var(--fg-muted)] hover:bg-white/[0.04] hover:text-[var(--fg)]")
+                          : "text-[var(--fg-muted)] hover:bg-black/[0.04] hover:text-[var(--fg)]")
                       }
                     >
                       <span className={active ? "text-[var(--accent)]" : "text-[var(--fg-faint)]"}>

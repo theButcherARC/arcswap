@@ -3,24 +3,24 @@
 @tailwind utilities;
 
 /* ============================================
-   VibeFlow Design Tokens — Spatial Glass + Brutalist Grid
-   Palette (5): ink bg, glass surface, foreground, USDC blue accent, light blue data accent
+   VibeFlow Design Tokens — Light Premium (theme v2, Haroon, Oct 29 2026)
+   Palette (5): paper bg, white surface, ink foreground, USDC blue accent, deep blue data accent
    ============================================ */
 :root {
-  --bg: #0b0d16;
-  --bg-raised: #111525;
-  --glass: #151a2b;
-  --glass-strong: #1c2338;
-  --line: rgba(177, 190, 226, 0.12);
-  --line-strong: rgba(177, 190, 226, 0.2);
-  --fg: #f7f8fc;
-  --fg-muted: #9ca5bd;
-  --fg-faint: #65708b;
+  --bg: #f5f6fa;
+  --bg-raised: #ffffff;
+  --glass: #ffffff;
+  --glass-strong: #eceff6;
+  --line: rgba(11, 13, 22, 0.09);
+  --line-strong: rgba(11, 13, 22, 0.16);
+  --fg: #0b0d16;
+  --fg-muted: #59637a;
+  --fg-faint: #8b94a9;
   --accent: #2775ca;
-  --accent-soft: rgba(39, 117, 202, 0.16);
-  --data: #6ea8ec;
-  --data-soft: rgba(110, 168, 236, 0.14);
-  --success: #63d7a1;
+  --accent-soft: rgba(39, 117, 202, 0.1);
+  --data: #1f6fd0;
+  --data-soft: rgba(39, 117, 202, 0.1);
+  --success: #12805c;
   --radius: 16px;
 }
 
@@ -80,8 +80,8 @@
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.06),
-    0 24px 64px rgba(0, 0, 0, 0.5);
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    0 24px 48px rgba(11, 13, 22, 0.1);
 }
 
 /* Mono micro-label — FIG/SYS style annotations */
@@ -123,7 +123,7 @@
 .depth-glow {
   box-shadow:
     0 0 0 1px var(--line),
-    0 16px 48px rgba(0, 0, 0, 0.45),
+    0 16px 40px rgba(11, 13, 22, 0.12),
     0 0 80px var(--accent-soft);
 }
 
@@ -397,7 +397,7 @@
 }
 
 /* ============================================
-   Custom Scrollbar (dark theme)
+   Custom Scrollbar (light theme)
    ============================================ */
 
 ::-webkit-scrollbar {
@@ -405,7 +405,7 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #050508;
+  background: #e9ebf2;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -422,8 +422,8 @@
    ============================================ */
 
 ::selection {
-  background: rgba(39, 117, 202, 0.3);
-  color: white;
+  background: rgba(39, 117, 202, 0.25);
+  color: #0b0d16;
 }
 
 /* ============================================

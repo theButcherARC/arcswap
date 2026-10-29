@@ -196,7 +196,7 @@ export default function VibeFlowLanding() {
           {/* Accent glow behind the card */}
           <div className="pointer-events-none absolute left-1/2 top-1/2 h-72 w-[36rem] max-w-full -translate-x-1/2 -translate-y-1/2 rounded-full bg-[var(--accent)] opacity-[0.13] blur-[110px]" aria-hidden="true" />
 
-          <div className="animate-fade-in-up delay-200 relative border border-[var(--line)] bg-[var(--bg-raised)] shadow-[0_30px_80px_rgba(0,0,0,0.35)]">
+          <div className="animate-fade-in-up delay-200 relative border border-[var(--line)] bg-[var(--bg-raised)] shadow-[0_30px_80px_rgba(11,13,22,0.12)]">
             {/* Crosshair corner marks */}
             <span className="mono-label absolute -top-2.5 left-4 z-10 bg-[var(--bg)] px-1 !text-[var(--fg-faint)]" aria-hidden="true">+</span>
             <span className="mono-label absolute -top-2.5 right-4 z-10 bg-[var(--bg)] px-1 !text-[var(--fg-faint)]" aria-hidden="true">+</span>
@@ -255,7 +255,7 @@ export default function VibeFlowLanding() {
           </div>
 
           {/* Floating chips */}
-          <div className="animate-fade-in-up delay-300 absolute -top-6 right-6 hidden items-center gap-3 border border-[var(--line)] bg-[var(--glass-strong)] px-4 py-3 shadow-[0_16px_40px_rgba(0,0,0,0.4)] backdrop-blur-xl md:flex">
+          <div className="animate-fade-in-up delay-300 absolute -top-6 right-6 hidden items-center gap-3 border border-[var(--line)] bg-[var(--glass-strong)] px-4 py-3 shadow-[0_16px_40px_rgba(11,13,22,0.14)] backdrop-blur-xl md:flex">
             <span className="flex h-6 w-6 items-center justify-center bg-[var(--data)] text-[var(--bg)]">
               <svg width="12" height="12" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M2.5 7.5L5.5 10.5L11.5 3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -266,7 +266,7 @@ export default function VibeFlowLanding() {
               <p className="font-mono text-[10px] text-[var(--fg-faint)]">0.4s on Arc</p>
             </div>
           </div>
-          <div className="animate-fade-in-up delay-500 absolute -bottom-6 left-6 hidden items-center gap-3 border border-[var(--line)] bg-[var(--glass-strong)] px-4 py-3 shadow-[0_16px_40px_rgba(0,0,0,0.4)] backdrop-blur-xl md:flex">
+          <div className="animate-fade-in-up delay-500 absolute -bottom-6 left-6 hidden items-center gap-3 border border-[var(--line)] bg-[var(--glass-strong)] px-4 py-3 shadow-[0_16px_40px_rgba(11,13,22,0.14)] backdrop-blur-xl md:flex">
             <span className="flex h-6 w-6 items-center justify-center bg-[var(--accent)] text-[var(--bg)]">
               <svg width="12" height="12" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="7" cy="7" r="5.5" stroke="currentColor" strokeWidth="1.6" />
@@ -334,7 +334,7 @@ export default function VibeFlowLanding() {
 
           <div className="grid gap-px border border-[var(--line)] bg-[var(--line)] md:grid-cols-3">
             {STEPS.map((s, i) => (
-              <div key={s.fig} className="relative bg-[var(--bg-raised)] p-8 transition-colors duration-300 hover:bg-[#101018]">
+              <div key={s.fig} className="relative bg-[var(--bg-raised)] p-8 transition-colors duration-300 hover:bg-[var(--glass-strong)]">
                 <div className="mb-10 flex items-center justify-between">
                   <span className="mono-label">{s.fig}</span>
                   <span className="font-mono text-2xl font-bold text-[var(--fg-faint)]">{String(i + 1).padStart(2, "0")}</span>
