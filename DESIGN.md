@@ -4,23 +4,23 @@ How VibeFlow should look and feel. AGENTS/build notes say how the project is bui
 
 ## 1. Theme
 
-Dark premium. The people layer of Arc should feel like a quiet, expensive terminal that happens to be social: near-black surfaces, hairline borders instead of stacked boxes, one accent color, big confident headlines, and a lot of empty space. Layout discipline comes from the owner's portfolio (haroon-web3.vercel.app): breathing space, very little text, one idea per view, clean and simple motion, never tacky or flashy. If a screen feels dense like a document, it is wrong.
+Light premium (theme v2, owner decision Oct 29 2026, supersedes the dark theme). The people layer of Arc should feel like a quiet, expensive fintech product: paper-white surfaces, hairline borders instead of stacked boxes, one accent color, big confident headlines, and a lot of empty space. The owner avatar or character never appears anywhere in this product. Layout discipline comes from the owner's portfolio (haroon-web3.vercel.app): breathing space, very little text, one idea per view, clean and simple motion, never tacky or flashy. If a screen feels dense like a document, it is wrong.
 
 ## 2. Colors
 
 Tokens live in src/app/globals.css and are the single source. Use the CSS variables, never raw hex in components.
 
-- --bg #0b0d16: page background.
-- --bg-raised #111525: raised panels and cards.
-- --glass #151a2b: glass surfaces (strips, composer).
-- --glass-strong #1c2338: hover and emphasis surface.
+- --bg #f5f6fa: page background.
+- --bg-raised #ffffff: raised panels and cards.
+- --glass #ffffff: card surfaces (strips, composer).
+- --glass-strong #eceff6: hover and emphasis surface.
 - --line rgba(177, 190, 226, 0.12): every border and divider. Hairlines only.
-- --fg #f7f8fc: primary text.
-- --fg-muted #9ca5bd: secondary text.
-- --fg-faint #65708b: tertiary text, timestamps, hints.
+- --fg #0b0d16: primary text.
+- --fg-muted #59637a: secondary text.
+- --fg-faint #8b94a9: tertiary text, timestamps, hints.
 - --accent #2775ca: USDC blue. The only accent. Primary actions, live indicators, links of consequence.
 - --accent-soft rgba(39, 117, 202, 0.16): accent tint backgrounds.
-- --data #6ea8ec: data blue for numbers' unit labels and chart-like details.
+- --data #1f6fd0: data blue for numbers' unit labels and chart-like details.
 - --radius 16px: default corner radius.
 
 The logo gradient (violet to blue V mark) is brand art and stays as it is; it never recolors the UI. No other accent colors. No gradient washes on surfaces.
@@ -37,7 +37,7 @@ The logo gradient (violet to blue V mark) is brand art and stays as it is; it ne
 - Primary button: --accent background, white text, pill or the landing's squared style per surface, label names the exact action (Post, Send tip, Launch App).
 - Secondary button: hairline border, --fg-muted text, brightens on hover.
 - Cards and strips: --glass or --bg-raised with a --line border, divided by hairlines (divide-y / gap-px grids), never shadow stacks.
-- Review step before signing is always one clean dark summary card: recipients, total, fee, then the sign action. Nothing moves before the user sees it.
+- Review step before signing is always one clean summary card: recipients, total, fee, then the sign action. Nothing moves before the user sees it.
 - Live badge: small pill with a pulsing --accent dot and a mono LIVE label.
 - Status tags are honest: Live now only when it works in production today, Coming soon otherwise.
 

@@ -9,7 +9,7 @@ import { ROUTES } from '@/constants/routes';
 export function Header() {
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b border-[var(--line)] bg-[rgba(11,13,22,0.86)] backdrop-blur-2xl">
+    <header className="fixed top-0 left-0 right-0 z-50 border-b border-[var(--line)] bg-[rgba(255,255,255,0.86)] backdrop-blur-2xl">
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
         <div className="flex h-[72px] items-center justify-between gap-6">
           {/* Logo */}
@@ -46,7 +46,7 @@ export function Header() {
               href="https://x.com/The_Last_Dip"
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden sm:block text-gray-400 hover:text-white transition-colors p-2"
+              className="hidden sm:block text-[var(--fg-faint)] hover:text-[var(--fg)] transition-colors p-2"
               aria-label="Follow us on X"
             >
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
