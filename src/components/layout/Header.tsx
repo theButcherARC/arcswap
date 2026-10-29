@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { ConnectButton } from '@/components/wallet/ConnectButton';
+import { HeaderVolume } from './HeaderVolume';
 import { NetworkSwitcher } from '@/components/wallet/NetworkSwitcher';
 import { ROUTES } from '@/constants/routes';
 
@@ -29,19 +30,16 @@ export function Header() {
             </span>
           </Link>
 
-          {/* Home, the only header nav button (Haroon, Oct 29) */}
-          <nav aria-label="Main navigation">
-            <Link
-              href={ROUTES.HOME_PAGE}
-              className="flex min-h-[44px] items-center whitespace-nowrap rounded-lg bg-[var(--accent)] px-4 text-sm font-medium text-white shadow-[0_8px_24px_rgba(39,117,202,0.25)] transition-all duration-200 hover:opacity-90"
-            >
-              Home
-            </Link>
-          </nav>
+          {/* Live Arc volume (Haroon, Oct 29: replaces the Home button) */}
+          <div className="flex flex-1 justify-center">
+            <HeaderVolume />
+          </div>
 
           {/* Right Side */}
           <div className="flex items-center gap-2 sm:gap-3">
-            <NetworkSwitcher />
+            <div className="hidden sm:block">
+              <NetworkSwitcher />
+            </div>
             <a
               href="https://x.com/The_Last_Dip"
               target="_blank"

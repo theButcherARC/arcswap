@@ -163,7 +163,8 @@ export default function VibeFlowLanding() {
 
             {/* Spec column: brutalist metadata */}
             <div className="animate-fade-in-up delay-500 hidden lg:col-span-3 lg:block">
-              <div className="mb-10 flex items-end gap-4 pl-6">
+              <div className="relative mb-10 flex items-end gap-4 pl-6">
+                <div aria-hidden className="pointer-events-none absolute -left-10 -top-16 h-56 w-56 rounded-full" style={{ background: "radial-gradient(closest-side, rgba(39,117,202,0.14), transparent)" }} />
                 <TokenCoin symbol="USDC" size={104} animate />
                 <div className="flex flex-col gap-3 pb-1">
                   <TokenCoin symbol="EURC" size={44} />
