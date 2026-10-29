@@ -8,6 +8,7 @@ const PoweredBySection = dynamic(() => import("@/components/landing/PoweredBySec
 import FaqSection from "@/components/landing/FaqSection";
 import { LiveStats } from "@/components/landing/LiveStats";
 import { TokenCoin } from "@/components/TokenCoin";
+import { LiveTicker } from "@/components/layout/LiveTicker";
 
 const FEATURES = [
   {
@@ -87,8 +88,13 @@ export default function VibeFlowLanding() {
       {/* Exposed brutalist grid backdrop */}
       <div className="grid-lines pointer-events-none absolute inset-0 opacity-25" aria-hidden="true" />
 
+      {/* Live transfers ticker (Cooltown-inspired living strip, Oct 29) */}
+      <div className="relative z-20 mt-[72px]">
+        <LiveTicker />
+      </div>
+
       {/* ==================== HERO ==================== */}
-      <section className="relative flex min-h-screen flex-col justify-center px-5 pt-28 pb-20 sm:px-8">
+      <section className="relative flex min-h-screen flex-col justify-center px-5 pt-16 pb-20 sm:px-8">
 
         <div className="relative z-10 mx-auto w-full max-w-6xl">
           {/* Mono metadata row */}
