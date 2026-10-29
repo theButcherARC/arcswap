@@ -23,7 +23,7 @@ export const TOKENS: Record<string, Token> = {
     decimals: 6,
     address: "0x3600000000000000000000000000000000000000",
     chainId: DEFAULT_CHAIN.id,
-    logoURI: "https://assets.coingecko.com/coins/images/6319/small/USD_Coin_icon.png",
+    logoURI: "/coins/usdc.svg",
   },
   EURC: {
     symbol: "EURC",
@@ -31,7 +31,7 @@ export const TOKENS: Record<string, Token> = {
     decimals: 6,
     address: (process.env.NEXT_PUBLIC_EURC_ADDRESS ?? MAINNET_EURC_ADDRESS) as `0x${string}`,
     chainId: DEFAULT_CHAIN.id,
-    logoURI: "https://assets.coingecko.com/coins/images/26045/small/euro-coin.png",
+    logoURI: "https://assets.coingecko.com/coins/images/26045/large/euro-coin.png",
   },
   cirBTC: {
     symbol: "cirBTC",
@@ -39,7 +39,7 @@ export const TOKENS: Record<string, Token> = {
     decimals: 8,
     address: (process.env.NEXT_PUBLIC_CIRBTC_ADDRESS ?? MAINNET_CIRBTC_ADDRESS) as `0x${string}`,
     chainId: DEFAULT_CHAIN.id,
-    logoURI: "https://assets.coingecko.com/coins/images/1/small/bitcoin.png",
+    logoURI: "/coins/btc.svg",
   },
   VIBE: {
     symbol: "VIBE",
