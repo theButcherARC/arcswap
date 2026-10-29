@@ -236,7 +236,7 @@ export default function CSVUploadForm() {
   // ── Render ────────────────────────────────────────────────────────────────
 
   return (
-    <div className="min-h-screen bg-[var(--bg)] text-white px-4 sm:px-6 lg:px-8 pt-10 pb-12">
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--fg)] px-4 sm:px-6 lg:px-8 pt-10 pb-12">
       <div className="mx-auto max-w-3xl">
 
         {/* ── Header ─────────────────────────────────────────────────────── */}
@@ -247,7 +247,7 @@ export default function CSVUploadForm() {
                 CSV Upload
               </span>
             </h1>
-            <p className="text-sm text-white/40 mt-2 max-w-md">
+            <p className="text-sm text-[var(--fg-faint)] mt-2 max-w-md">
               Upload a CSV to pay 100+ recipients in one transaction
             </p>
             {/* Token pills */}
@@ -261,7 +261,7 @@ export default function CSVUploadForm() {
                     "flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold transition-colors duration-200 border active:scale-95 " +
                     (selectedSymbol === sym
                       ? "bg-[var(--accent-soft)] border-[var(--accent)]/40 text-[var(--accent)]"
-                      : "bg-white/[0.03] border-white/[0.08] text-white/40 hover:text-white/70 hover:border-[rgba(39,117,202,0.3)] hover:bg-[var(--accent-soft)]")
+                      : "bg-black/[0.03] border-[var(--line)] text-[var(--fg-faint)] hover:text-[var(--fg)] hover:border-[rgba(39,117,202,0.3)] hover:bg-[var(--accent-soft)]")
                   }
                 >
                   {sym === "USDC" ? "$" : "€"} {sym}
@@ -273,21 +273,21 @@ export default function CSVUploadForm() {
           {/* Right side: balance + nav tab */}
           <div className="flex items-center gap-3">
             {address && (
-              <div className="flex items-center gap-2 border border-white/10 bg-white/[0.03] backdrop-blur-xl px-3.5 py-2">
-                <span className="text-xs font-medium text-white/40">Balance</span>
-                <span className="text-xs font-semibold text-white/70">
+              <div className="flex items-center gap-2 border border-[var(--line)] bg-black/[0.03] backdrop-blur-xl px-3.5 py-2">
+                <span className="text-xs font-medium text-[var(--fg-faint)]">Balance</span>
+                <span className="text-xs font-semibold text-[var(--fg-muted)]">
                   {balance} {selectedSymbol}
                 </span>
               </div>
             )}
-            <div className="flex items-center border border-white/10 bg-white/[0.03] p-1 gap-1">
+            <div className="flex items-center border border-[var(--line)] bg-black/[0.03] p-1 gap-1">
               <Link
                 href="/bulk-pay"
-                className="px-3.5 py-1.5 text-xs font-medium text-white/40 hover:text-white/70 hover:bg-white/[0.05] transition-colors duration-200"
+                className="px-3.5 py-1.5 text-xs font-medium text-[var(--fg-faint)] hover:text-[var(--fg)] hover:bg-black/[0.04] transition-colors duration-200"
               >
                 Quick Pay
               </Link>
-              <span className="px-3.5 py-1.5 text-xs font-semibold text-white bg-white/[0.08] border border-white/10">
+              <span className="px-3.5 py-1.5 text-xs font-semibold text-[var(--fg)] bg-black/[0.04] border border-[var(--line)]">
                 CSV Upload
               </span>
             </div>
@@ -295,18 +295,18 @@ export default function CSVUploadForm() {
         </div>
 
         {/* ── Main card ──────────────────────────────────────────────────── */}
-        <div className="border border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl shadow-[0_0_80px_rgba(124,58,237,0.08),0_0_160px_rgba(99,102,241,0.04)] overflow-hidden">
+        <div className="border border-[var(--line)] bg-black/[0.03] backdrop-blur-2xl shadow-[0_0_80px_rgba(124,58,237,0.08),0_0_160px_rgba(99,102,241,0.04)] overflow-hidden">
 
           {/* ── Input mode tabs ────────────────────────────────────────── */}
-          <div className="px-6 sm:px-8 pt-6 pb-0 flex items-center gap-1 border-b border-white/[0.06]">
+          <div className="px-6 sm:px-8 pt-6 pb-0 flex items-center gap-1 border-b border-[var(--line)]">
             <button
               type="button"
               onClick={() => setInputMode("upload")}
               className={
                 "rounded-t-2xl px-5 py-3 text-xs font-semibold transition-colors duration-200 border-b-2 " +
                 (inputMode === "upload"
-                  ? "border-[var(--accent)] text-white bg-white/[0.04]"
-                  : "border-transparent text-white/40 hover:text-white/70")
+                  ? "border-[var(--accent)] text-[var(--fg)] bg-black/[0.03]"
+                  : "border-transparent text-[var(--fg-faint)] hover:text-[var(--fg)]")
               }
             >
               Upload File
@@ -317,8 +317,8 @@ export default function CSVUploadForm() {
               className={
                 "rounded-t-2xl px-5 py-3 text-xs font-semibold transition-colors duration-200 border-b-2 " +
                 (inputMode === "paste"
-                  ? "border-[var(--accent)] text-white bg-white/[0.04]"
-                  : "border-transparent text-white/40 hover:text-white/70")
+                  ? "border-[var(--accent)] text-[var(--fg)] bg-black/[0.03]"
+                  : "border-transparent text-[var(--fg-faint)] hover:text-[var(--fg)]")
               }
             >
               Paste CSV
@@ -326,7 +326,7 @@ export default function CSVUploadForm() {
           </div>
 
           {/* ── Drop zone / Paste mode ─────────────────────────────────── */}
-          <div className="p-6 sm:p-8 border-b border-white/[0.06]">
+          <div className="p-6 sm:p-8 border-b border-[var(--line)]">
             {inputMode === "upload" ? (
               <>
                 {/* Upload file mode */}
@@ -342,13 +342,13 @@ export default function CSVUploadForm() {
                       ? "border-[var(--accent)] bg-[var(--accent-soft)] shadow-[0_0_30px_rgba(124,58,237,0.15)]"
                       : fileName
                         ? "border-[rgba(39,117,202,0.4)] bg-[rgba(39,117,202,0.04)] hover:border-[rgba(39,117,202,0.6)]"
-                        : "border-white/10 bg-white/[0.02] hover:border-[rgba(39,117,202,0.35)] hover:bg-[var(--accent-soft)]",
+                        : "border-[var(--line)] bg-black/[0.03] hover:border-[rgba(39,117,202,0.35)] hover:bg-[var(--accent-soft)]",
                   ].join(" ")}
                 >
                   {/* Icon */}
                   <div className={[
                     "flex h-14 w-14 items-center justify-center border transition-colors duration-300",
-                    fileName ? "border-[rgba(39,117,202,0.3)] bg-[rgba(39,117,202,0.08)]" : "border-white/10 bg-white/[0.04] group-hover:border-[rgba(39,117,202,0.3)] group-hover:bg-[var(--accent-soft)]",
+                    fileName ? "border-[rgba(39,117,202,0.3)] bg-[rgba(39,117,202,0.08)]" : "border-[var(--line)] bg-black/[0.03] group-hover:border-[rgba(39,117,202,0.3)] group-hover:bg-[var(--accent-soft)]",
                   ].join(" ")}>
                     {fileName ? (
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -367,7 +367,7 @@ export default function CSVUploadForm() {
                   {fileName ? (
                     <div className="text-center">
                       <p className="text-sm font-semibold text-[var(--data)]">{fileName}</p>
-                      <p className="text-xs text-white/35 mt-1">
+                      <p className="text-xs text-[var(--fg-faint)] mt-1">
                         {rows.length} valid recipient{rows.length !== 1 ? "s" : ""} loaded
                         {parseErrors.length > 0 && `, ${parseErrors.length} row${parseErrors.length !== 1 ? "s" : ""} skipped`}
                         {" · "}
@@ -376,13 +376,13 @@ export default function CSVUploadForm() {
                     </div>
                   ) : (
                     <div className="text-center">
-                      <p className="text-sm font-semibold text-white/70 group-hover:text-white/90 transition-colors">
+                      <p className="text-sm font-semibold text-[var(--fg-muted)] group-hover:text-[var(--fg)] transition-colors">
                         Upload CSV &mdash; Add 100+ Recipients
                       </p>
-                      <p className="text-xs text-white/30 mt-1">
+                      <p className="text-xs text-[var(--fg-faint)] mt-1">
                         Drag & drop or click to browse &mdash; .csv files only
                       </p>
-                      <p className="text-[11px] text-white/20 mt-3 font-mono">
+                      <p className="text-[11px] text-[var(--fg-faint)] mt-3 font-mono">
                         Alice, 0x1234...abcd, 100.50
                       </p>
                     </div>
@@ -398,10 +398,10 @@ export default function CSVUploadForm() {
                 />
 
                 {/* Format hint */}
-                <p className="mt-4 text-[11px] text-white/25 text-center leading-relaxed">
-                  Columns: <span className="font-mono text-white/35">name, address, amount</span>
+                <p className="mt-4 text-[11px] text-[var(--fg-faint)] text-center leading-relaxed">
+                  Columns: <span className="font-mono text-[var(--fg-faint)]">name, address, amount</span>
                   &nbsp;&mdash;&nbsp;or just&nbsp;
-                  <span className="font-mono text-white/35">address, amount</span>
+                  <span className="font-mono text-[var(--fg-faint)]">address, amount</span>
                   &nbsp;&mdash;&nbsp;no header row required
                 </p>
               </>
@@ -409,15 +409,15 @@ export default function CSVUploadForm() {
               <>
                 {/* Paste mode */}
                 <div className="space-y-3">
-                  <label className="block text-xs font-semibold text-white/70">CSV Content</label>
+                  <label className="block text-xs font-semibold text-[var(--fg-muted)]">CSV Content</label>
                   <textarea
                     value={pasteContent}
                     onChange={handlePaste}
                     placeholder="Paste CSV content here - name, address, amount per line"
-                    className="w-full h-48 bg-white/[0.03] border border-white/10 text-white placeholder-white/30 px-4 py-3 text-sm focus:outline-none focus:border-[var(--accent)] focus:bg-white/[0.08] focus:shadow-[0_0_0_3px_rgba(39,117,202,0.15)] transition-colors duration-200 font-mono hover:border-white/20 hover:bg-white/[0.07] resize-none"
+                    className="w-full h-48 bg-black/[0.03] border border-[var(--line)] text-[var(--fg)] placeholder:text-[var(--fg-faint)] px-4 py-3 text-sm focus:outline-none focus:border-[var(--accent)] focus:bg-black/[0.03] focus:shadow-[0_0_0_3px_rgba(39,117,202,0.15)] transition-colors duration-200 font-mono hover:border-[var(--line-strong)] hover:bg-black/[0.04] resize-none"
                   />
-                  <p className="text-[11px] text-white/25 leading-relaxed">
-                    Format: <span className="font-mono text-white/35">name, address, amount</span> or <span className="font-mono text-white/35">address, amount</span> - one row per line, no header required
+                  <p className="text-[11px] text-[var(--fg-faint)] leading-relaxed">
+                    Format: <span className="font-mono text-[var(--fg-faint)]">name, address, amount</span> or <span className="font-mono text-[var(--fg-faint)]">address, amount</span> - one row per line, no header required
                   </p>
                 </div>
               </>
@@ -426,7 +426,7 @@ export default function CSVUploadForm() {
 
           {/* ── Parse errors ───────────────────────────────────────────── */}
           {parseErrors.length > 0 && (
-            <div className="px-6 sm:px-8 py-4 border-b border-white/[0.06] bg-amber-500/[0.03]">
+            <div className="px-6 sm:px-8 py-4 border-b border-[var(--line)] bg-amber-500/[0.03]">
               <div className="flex items-start gap-3">
                 <div className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center border border-amber-500/30 bg-amber-500/10">
                   <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
@@ -434,15 +434,15 @@ export default function CSVUploadForm() {
                   </svg>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-semibold text-amber-400 mb-1.5">
+                  <p className="text-xs font-semibold text-amber-600 mb-1.5">
                     {parseErrors.length} row{parseErrors.length !== 1 ? "s" : ""} skipped &mdash; continuing with valid recipients
                   </p>
                   <ul className="space-y-0.5">
                     {parseErrors.slice(0, 5).map((e, i) => (
-                      <li key={i} className="text-[11px] text-white/30 font-mono truncate">{e.message}</li>
+                      <li key={i} className="text-[11px] text-[var(--fg-faint)] font-mono truncate">{e.message}</li>
                     ))}
                     {parseErrors.length > 5 && (
-                      <li className="text-[11px] text-white/20">…and {parseErrors.length - 5} more</li>
+                      <li className="text-[11px] text-[var(--fg-faint)]">…and {parseErrors.length - 5} more</li>
                     )}
                   </ul>
                 </div>
@@ -452,29 +452,29 @@ export default function CSVUploadForm() {
 
           {/* ── Preview table ──────────────────────────────────────────── */}
           {rows.length > 0 && (
-            <div className="px-6 sm:px-8 py-6 border-b border-white/[0.06]">
+            <div className="px-6 sm:px-8 py-6 border-b border-[var(--line)]">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <h2 className="text-sm font-semibold text-white/80">
+                  <h2 className="text-sm font-semibold text-[var(--fg)]">
                     Recipients
                   </h2>
                   <span className="inline-flex items-center border border-[var(--accent)]/25 bg-[var(--accent-soft)] px-2.5 py-0.5 text-[11px] font-semibold text-[var(--accent)]">
                     {rows.length} loaded
                   </span>
                 </div>
-                <span className="text-xs text-white/30">
-                  Total: <span className="text-white/60 font-medium">
+                <span className="text-xs text-[var(--fg-faint)]">
+                  Total: <span className="text-[var(--fg-muted)] font-medium">
                     {selectedSymbol === "USDC" ? "$" : "€"}{totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {selectedSymbol}
                   </span>
                 </span>
               </div>
 
-              <div className="border border-white/[0.07] overflow-hidden">
+              <div className="border border-[var(--line)] overflow-hidden">
                 {/* Table header */}
-                <div className="grid grid-cols-[1fr_2fr_auto] gap-0 border-b border-white/[0.07] bg-white/[0.02]">
-                  <div className="px-4 py-2.5 text-[10px] font-semibold text-white/30 uppercase tracking-wider">Name</div>
-                  <div className="px-4 py-2.5 text-[10px] font-semibold text-white/30 uppercase tracking-wider">Address</div>
-                  <div className="px-4 py-2.5 text-[10px] font-semibold text-white/30 uppercase tracking-wider text-right">Amount</div>
+                <div className="grid grid-cols-[1fr_2fr_auto] gap-0 border-b border-[var(--line)] bg-black/[0.03]">
+                  <div className="px-4 py-2.5 text-[10px] font-semibold text-[var(--fg-faint)] uppercase tracking-wider">Name</div>
+                  <div className="px-4 py-2.5 text-[10px] font-semibold text-[var(--fg-faint)] uppercase tracking-wider">Address</div>
+                  <div className="px-4 py-2.5 text-[10px] font-semibold text-[var(--fg-faint)] uppercase tracking-wider text-right">Amount</div>
                 </div>
 
                 {/* Rows */}
@@ -482,10 +482,10 @@ export default function CSVUploadForm() {
                   {previewRows.map((row, i) => (
                     <div
                       key={i}
-                      className="grid grid-cols-[1fr_2fr_auto] gap-0 border-b border-white/[0.04] last:border-0 hover:bg-white/[0.03] transition-colors duration-150"
+                      className="grid grid-cols-[1fr_2fr_auto] gap-0 border-b border-[var(--line)] last:border-0 hover:bg-black/[0.04] transition-colors duration-150"
                     >
-                      <div className="px-4 py-3 text-xs text-white/70 truncate">{row.name}</div>
-                      <div className="px-4 py-3 text-xs text-white/50 font-mono truncate">
+                      <div className="px-4 py-3 text-xs text-[var(--fg-muted)] truncate">{row.name}</div>
+                      <div className="px-4 py-3 text-xs text-[var(--fg-muted)] font-mono truncate">
                         {row.address.slice(0, 6)}…{row.address.slice(-4)}
                       </div>
                       <div className="px-4 py-3 text-xs font-semibold text-[var(--data)] text-right whitespace-nowrap">
@@ -500,7 +500,7 @@ export default function CSVUploadForm() {
                   <button
                     type="button"
                     onClick={() => setShowAll((v) => !v)}
-                    className="w-full py-3 text-xs text-white/35 hover:text-white/60 hover:bg-white/[0.03] transition-colors duration-200 border-t border-white/[0.06]"
+                    className="w-full py-3 text-xs text-[var(--fg-faint)] hover:text-[var(--fg)] hover:bg-black/[0.04] transition-colors duration-200 border-t border-[var(--line)]"
                   >
                     {showAll
                       ? "Show less"
@@ -512,9 +512,9 @@ export default function CSVUploadForm() {
           )}
 
           {/* ── Memo field ─────────────────────────────────────────────── */}
-          <div className="px-6 sm:px-8 py-6 border-b border-white/[0.06]">
-            <label className="block text-xs font-semibold text-white/50 uppercase tracking-wider mb-3">
-              Payroll Label <span className="normal-case font-normal text-white/25">(optional)</span>
+          <div className="px-6 sm:px-8 py-6 border-b border-[var(--line)]">
+            <label className="block text-xs font-semibold text-[var(--fg-muted)] uppercase tracking-wider mb-3">
+              Payroll Label <span className="normal-case font-normal text-[var(--fg-faint)]">(optional)</span>
             </label>
             <input
               type="text"
@@ -522,10 +522,10 @@ export default function CSVUploadForm() {
               onChange={(e) => setMemo(e.target.value)}
               maxLength={120}
               placeholder="e.g. July Salary, Q3 Bonus, Contractor Batch"
-              className="w-full bg-white/[0.04] border border-white/10 text-white placeholder-white/25 px-4 py-3 text-sm focus:outline-none focus:border-[var(--accent)] focus:bg-white/[0.06] focus:shadow-[0_0_0_3px_rgba(39,117,202,0.15)] transition-colors duration-200 hover:border-white/20"
+              className="w-full bg-black/[0.03] border border-[var(--line)] text-[var(--fg)] placeholder:text-[var(--fg-faint)] px-4 py-3 text-sm focus:outline-none focus:border-[var(--accent)] focus:bg-black/[0.03] focus:shadow-[0_0_0_3px_rgba(39,117,202,0.15)] transition-colors duration-200 hover:border-[var(--line-strong)]"
             />
             {memo.length > 0 && (
-              <p className="mt-1.5 text-[11px] text-white/25 text-right">{memo.length}/120 · stored onchain</p>
+              <p className="mt-1.5 text-[11px] text-[var(--fg-faint)] text-right">{memo.length}/120 · stored onchain</p>
             )}
           </div>
 
@@ -540,7 +540,7 @@ export default function CSVUploadForm() {
 
             {/* Not connected */}
             {!address && (
-              <div className="mb-4 border border-white/10 bg-white/[0.03] px-4 py-3 text-xs text-white/40 text-center">
+              <div className="mb-4 border border-[var(--line)] bg-black/[0.03] px-4 py-3 text-xs text-[var(--fg-faint)] text-center">
                 Connect your wallet to send payments
               </div>
             )}
@@ -550,7 +550,7 @@ export default function CSVUploadForm() {
               <button
                 type="button"
                 onClick={switchToArcNetwork}
-                className="w-full mb-4 border border-amber-500/25 bg-amber-500/[0.06] px-4 py-3 text-xs font-semibold text-amber-400 hover:bg-amber-500/10 transition-colors duration-200"
+                className="w-full mb-4 border border-amber-500/25 bg-amber-500/[0.06] px-4 py-3 text-xs font-semibold text-amber-600 hover:bg-amber-500/10 transition-colors duration-200"
               >
                 Switch to Arc
               </button>
@@ -558,19 +558,19 @@ export default function CSVUploadForm() {
 
             {/* Stats bar */}
             {rows.length > 0 && (
-              <div className="mb-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 border border-white/[0.06] bg-white/[0.02] px-4 py-2.5">
-                <span className="text-[11px] text-white/40 whitespace-nowrap">
-                  Recipients: <span className="text-white/60 font-medium">{rows.length}</span>
+              <div className="mb-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 border border-[var(--line)] bg-black/[0.03] px-4 py-2.5">
+                <span className="text-[11px] text-[var(--fg-faint)] whitespace-nowrap">
+                  Recipients: <span className="text-[var(--fg-muted)] font-medium">{rows.length}</span>
                 </span>
-                <span className="text-white/20 text-[11px]">|</span>
-                <span className="text-[11px] text-white/40 whitespace-nowrap">
-                  Total: <span className="text-white/70 font-medium">
+                <span className="text-[var(--fg-faint)] text-[11px]">|</span>
+                <span className="text-[11px] text-[var(--fg-faint)] whitespace-nowrap">
+                  Total: <span className="text-[var(--fg-muted)] font-medium">
                     {selectedSymbol === "USDC" ? "$" : "€"}{totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {selectedSymbol}
                   </span>
                 </span>
                 {parseErrors.length > 0 && (
                   <>
-                    <span className="text-white/20 text-[11px]">|</span>
+                    <span className="text-[var(--fg-faint)] text-[11px]">|</span>
                     <span className="text-[11px] text-amber-500/70 whitespace-nowrap">
                       {parseErrors.length} row{parseErrors.length !== 1 ? "s" : ""} skipped
                     </span>
@@ -588,12 +588,12 @@ export default function CSVUploadForm() {
                 "w-full px-6 py-3.5 text-sm font-semibold transition-colors duration-300 flex items-center justify-center gap-2.5 " +
                 (canSend
                   ? "animate-send-pulse bg-[var(--fg)] text-[var(--bg)]"
-                  : "bg-white/[0.06] text-white/20 cursor-not-allowed")
+                  : "bg-black/[0.04] text-[var(--fg-faint)] cursor-not-allowed")
               }
             >
               {isSending ? (
                 <>
-                  <svg className="animate-spin h-4 w-4 text-white/70" viewBox="0 0 24 24" fill="none">
+                  <svg className="animate-spin h-4 w-4 text-[var(--fg-muted)]" viewBox="0 0 24 24" fill="none">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
                   </svg>
@@ -613,7 +613,7 @@ export default function CSVUploadForm() {
               )}
             </button>
 
-            <p className="mt-3 text-center text-[11px] text-white/20">
+            <p className="mt-3 text-center text-[11px] text-[var(--fg-faint)]">
               One MetaMask popup &mdash; all {rows.length > 0 ? rows.length : ""} transfers execute atomically via Multicall3From
             </p>
           </div>

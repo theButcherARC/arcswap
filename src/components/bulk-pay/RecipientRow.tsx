@@ -116,20 +116,20 @@ export default function RecipientRow({
   };
 
   const inputClasses =
-    "w-full bg-white/5 border border-white/10 text-white placeholder-white/30 px-4 py-3 text-sm focus:outline-none focus:border-violet-500/50 focus:bg-white/[0.08] focus:shadow-[0_0_0_3px_rgba(124,58,237,0.12)] transition-all duration-200 hover:border-white/20 hover:bg-white/[0.07] disabled:opacity-40 disabled:cursor-not-allowed";
+    "w-full bg-black/[0.03] border border-[var(--line)] text-[var(--fg)] placeholder:text-[var(--fg-faint)] px-4 py-3 text-sm focus:outline-none focus:border-violet-500/50 focus:bg-black/[0.03] focus:shadow-[0_0_0_3px_rgba(124,58,237,0.12)] transition-all duration-200 hover:border-[var(--line-strong)] hover:bg-black/[0.04] disabled:opacity-40 disabled:cursor-not-allowed";
 
   const addressClasses =
-    "w-full border px-4 py-3 text-sm font-mono placeholder-white/30 focus:outline-none transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed " +
+    "w-full border px-4 py-3 text-sm font-mono placeholder:text-[var(--fg-faint)] focus:outline-none transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed " +
     (addressValid
-      ? "border-emerald-500/40 bg-emerald-500/5 text-white focus:border-emerald-500/60"
+      ? "border-emerald-500/40 bg-emerald-500/5 text-[var(--fg)] focus:border-emerald-500/60"
       : addressHasInput
-        ? "border-rose-500/40 bg-rose-500/5 text-white focus:border-rose-500/60"
-        : "border-white/10 bg-white/5 text-white focus:border-violet-500/50 hover:border-white/20 hover:bg-white/[0.08]");
+        ? "border-rose-500/40 bg-rose-500/5 text-[var(--fg)] focus:border-rose-500/60"
+        : "border-[var(--line)] bg-black/[0.03] text-[var(--fg)] focus:border-violet-500/50 hover:border-[var(--line-strong)] hover:bg-black/[0.04]");
 
   const rowNumber = index + 1;
 
   return (
-    <div className="group animate-slide-in-top bg-white/5 border border-white/10 p-4 hover:border-violet-500/25 hover:bg-white/[0.08] hover:shadow-[0_0_20px_rgba(124,58,237,0.08)] transition-all duration-200">
+    <div className="group animate-slide-in-top bg-black/[0.03] border border-[var(--line)] p-4 hover:border-violet-500/25 hover:bg-black/[0.04] hover:shadow-[0_0_20px_rgba(124,58,237,0.08)] transition-all duration-200">
       <div className="flex flex-wrap items-start gap-3">
         {/* Row number badge */}
         <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--accent-soft)] mt-3">
@@ -140,7 +140,7 @@ export default function RecipientRow({
 
         {/* Name input */}
         <div className="min-w-[120px] flex-1">
-          <label className="block text-[10px] font-medium text-white/30 uppercase tracking-wider mb-1.5">
+          <label className="block text-[10px] font-medium text-[var(--fg-faint)] uppercase tracking-wider mb-1.5">
             Name
           </label>
           <input
@@ -155,7 +155,7 @@ export default function RecipientRow({
 
         {/* Address input */}
         <div className="min-w-[180px] flex-[1.5]">
-          <label className="block text-[10px] font-medium text-white/30 uppercase tracking-wider mb-1.5">
+          <label className="block text-[10px] font-medium text-[var(--fg-faint)] uppercase tracking-wider mb-1.5">
             Address, @username, or VIBE-ID
           </label>
           <div className="relative">
@@ -204,17 +204,17 @@ export default function RecipientRow({
           </div>
           {/* Handle resolution feedback */}
           {handleState === 'resolving' && (
-            <p className="mt-1.5 text-[11px] text-white/40 animate-pulse">Resolving handle...</p>
+            <p className="mt-1.5 text-[11px] text-[var(--fg-faint)] animate-pulse">Resolving handle...</p>
           )}
           {handleState === 'resolved' && (
-            <p className="mt-1.5 text-[11px] text-emerald-400 font-mono">{handleText}</p>
+            <p className="mt-1.5 text-[11px] text-emerald-600 font-mono">{handleText}</p>
           )}
           {handleState === 'not_found' && (
-            <p className="mt-1.5 text-[11px] text-amber-400">
+            <p className="mt-1.5 text-[11px] text-amber-600">
               {handleText} &mdash;{' '}
               <button
                 type="button"
-                className="underline hover:text-amber-300 transition-colors"
+                className="underline hover:text-amber-600 transition-colors"
                 onClick={() => {
                   setHandleState('idle');
                   onAddressChange(recipient.id, '');
@@ -225,18 +225,18 @@ export default function RecipientRow({
             </p>
           )}
           {handleState === 'error' && (
-            <p className="mt-1.5 text-[11px] text-rose-400">{handleText}</p>
+            <p className="mt-1.5 text-[11px] text-rose-600">{handleText}</p>
           )}
         </div>
 
         {/* Amount / Percentage input */}
         <div className="w-[130px] shrink-0">
-          <label className="block text-[10px] font-medium text-white/30 uppercase tracking-wider mb-1.5">
+          <label className="block text-[10px] font-medium text-[var(--fg-faint)] uppercase tracking-wider mb-1.5">
             {inputMode === "amount" ? "Amount" : "Percentage"}
           </label>
           <div className="relative">
             {inputMode === "amount" && (
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-white/30 pointer-events-none font-medium">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-[var(--fg-faint)] pointer-events-none font-medium">
                 $               </span>
             )}
             <input
@@ -247,19 +247,19 @@ export default function RecipientRow({
               disabled={isDisabled}
               placeholder={activePlaceholder}
               className={
-                "w-full bg-white/5 border border-white/10 text-white placeholder-white/30 py-3 text-sm text-right focus:outline-none focus:border-violet-500/50 transition-all duration-200 hover:border-white/20 hover:bg-white/[0.08] disabled:opacity-40 disabled:cursor-not-allowed " +
+                "w-full bg-black/[0.03] border border-[var(--line)] text-[var(--fg)] placeholder:text-[var(--fg-faint)] py-3 text-sm text-right focus:outline-none focus:border-violet-500/50 transition-all duration-200 hover:border-[var(--line-strong)] hover:bg-black/[0.04] disabled:opacity-40 disabled:cursor-not-allowed " +
                 (inputMode === "amount" ? "pl-8 pr-4" : "pl-4 pr-8")
               }
             />
             {inputMode === "percentage" && (
-              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-white/30 pointer-events-none font-medium">
+              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-[var(--fg-faint)] pointer-events-none font-medium">
                 %
               </span>
             )}
           </div>
           {/* Cross-calculation hint */}
           {(percentageHint || dollarHint) && (
-            <p className="mt-1.5 text-[11px] text-white/25 text-right font-mono">
+            <p className="mt-1.5 text-[11px] text-[var(--fg-faint)] text-right font-mono">
               {inputMode === "amount"
                 ? "= " + percentageHint
                 : "= " + dollarHint}
@@ -272,7 +272,7 @@ export default function RecipientRow({
           type="button"
           onClick={() => onRemove(recipient.id)}
           disabled={isDisabled}
-          className="mt-5 flex h-8 w-8 shrink-0 items-center justify-center border border-white/10 bg-white/[0.02] text-white/30 transition-all duration-200 hover:border-rose-500/30 hover:bg-rose-500/10 hover:text-rose-400 active:scale-90 disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:border-white/10 disabled:hover:bg-white/[0.02] disabled:hover:text-white/30"
+          className="mt-5 flex h-8 w-8 shrink-0 items-center justify-center border border-[var(--line)] bg-black/[0.03] text-[var(--fg-faint)] transition-all duration-200 hover:border-rose-500/30 hover:bg-rose-500/10 hover:text-rose-600 active:scale-90 disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:border-[var(--line-strong)] disabled:hover:bg-black/[0.04] disabled:hover:text-[var(--fg-faint)]"
           aria-label={"Remove recipient " + rowNumber}
         >
           <svg
