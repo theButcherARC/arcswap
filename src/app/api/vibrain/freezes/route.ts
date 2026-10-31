@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { FREEZE_ARC } from "../../../data/freeze-arc";
-import { FREEZE_ETH_A } from "../../../data/freeze-ethereum-a";
-import { FREEZE_ETH_B } from "../../../data/freeze-ethereum-b";
+import { FREEZE_ARC } from "../../../../data/freeze-arc";
+import { FREEZE_ETH_A } from "../../../../data/freeze-ethereum-a";
+import { FREEZE_ETH_B } from "../../../../data/freeze-ethereum-b";
 
 export const dynamic = "force-dynamic";
 
