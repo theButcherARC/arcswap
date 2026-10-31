@@ -3,7 +3,7 @@ import { HomeTop } from "@/components/home/HomeTop";
 import { SquareFeed } from "@/components/square/SquareFeed";
 
 export const metadata: Metadata = {
-  title: "Home | VibeFlow",
+  title: "Home",
   robots: { index: false, follow: false },
 };
 
