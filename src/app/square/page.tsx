@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { SquareFeed } from "@/components/square/SquareFeed";
 
 export const metadata: Metadata = {
-  title: "VibeSquare | VibeFlow",
+  title: "VibeSquare",
   robots: { index: false, follow: false },
 };
 

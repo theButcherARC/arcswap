@@ -10,6 +10,39 @@ const USDC = "0x3600000000000000000000000000000000000000";
 const TRANSFER_TOPIC =
   "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
 const WINDOW_BLOCKS = 1200; // about 10 minutes of Arc activity
+
+// Known addresses get human labels in the transfers list. Only addresses
+// verified from our own production code or the chain itself belong here.
+const ZERO = "0x0000000000000000000000000000000000000000";
+const LABELS: Record<string, string> = {
+  "0x522faf9a91c41c443c66765030741e4aace147d0": "VibeFlow batch contract",
+  "0x5294e9927c3306dcbadb03fe70b92e01ccede505": "VibeFlow memo contract",
+  "0x3600000000000000000000000000000000000000": "USDC contract",
+};
+function labelFor(addr: string, side: "from" | "to"): string | null {
+  const a = addr.toLowerCase();
+  if (a === ZERO) return side === "from" ? "New USDC (mint)" : "USDC (burn)";
+  return LABELS[a] ?? null;
+}
+
+// Global USDC total (all chains) from DefiLlama's public stablecoin data,
+// used only for the share-of-total framing on the issued panel. Started in
+// parallel with the RPC work and time-boxed; any failure just omits it.
+async function globalUsdcTotal(): Promise<number | null> {
+  try {
+    const res = await fetch(
+      "https://stablecoins.llama.fi/stablecoins?includePrices=true",
+      { signal: AbortSignal.timeout(3000), cache: "no-store" },
+    );
+    if (!res.ok) return null;
+    const d: any = await res.json();
+    const usdc = (d?.peggedAssets ?? []).find((a: any) => a.symbol === "USDC");
+    const total = usdc?.circulating?.peggedUSD;
+    return typeof total === "number" && total > 0 ? total : null;
+  } catch {
+    return null;
+  }
+}
 const BLOCKS_SHOWN = 12;
 const TRANSFERS_SHOWN = 25;
 
@@ -36,6 +69,7 @@ async function rpcBatch(calls: Call[]): Promise<any[]> {
 }
 
 export async function GET() {
+  const globalPromise = globalUsdcTotal();
   try {
     const [latestHex] = await rpcBatch([["eth_blockNumber", []]]);
     const latest = parseInt(latestHex, 16);
@@ -81,13 +115,19 @@ export async function GET() {
         : 0;
 
     const transfers = logs
-      .map((l: any) => ({
-        from: "0x" + l.topics[1].slice(26),
-        to: "0x" + l.topics[2].slice(26),
-        amount: parseInt(l.data, 16) / 1e6,
-        blockNumber: parseInt(l.blockNumber, 16),
-        txHash: l.transactionHash as string,
-      }))
+      .map((l: any) => {
+        const from = "0x" + l.topics[1].slice(26);
+        const to = "0x" + l.topics[2].slice(26);
+        return {
+          from,
+          to,
+          fromLabel: labelFor(from, "from"),
+          toLabel: labelFor(to, "to"),
+          amount: parseInt(l.data, 16) / 1e6,
+          blockNumber: parseInt(l.blockNumber, 16),
+          txHash: l.transactionHash as string,
+        };
+      })
       .sort((a, b) => b.blockNumber - a.blockNumber);
 
     const totalMoved = transfers.reduce((s, t) => s + t.amount, 0);
@@ -138,8 +178,13 @@ export async function GET() {
             pct: Math.round((delta / past) * 10000) / 100,
           };
         };
+        const globalTotal = await globalPromise;
         issued = {
           total: Math.round(total * 100) / 100,
+          sharePct:
+            globalTotal !== null
+              ? Math.round((total / globalTotal) * 10000) / 100
+              : null,
           hour: await win(3600),
           day: await win(86400),
           week: await win(604800),

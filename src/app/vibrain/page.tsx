@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { VibrainLive } from "@/components/vibrain/VibrainLive";
 
 export const metadata: Metadata = {
-  title: "Vibrain | VibeFlow",
+  title: "Vibrain",
   description:
     "Live activity on Arc mainnet: latest blocks, USDC transfers and the largest moves, read straight from the chain.",
 };
