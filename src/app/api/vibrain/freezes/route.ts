@@ -127,21 +127,36 @@ async function processChain(cfg: ChainCfg) {
   // batched getLogs hard).
   const tail: FreezeEvent[] = [];
   const logsRpc = cfg.logsRpc ?? cfg.rpc;
+  let firstSpan = true;
   for (let s = cfg.snapshot.throughBlock + 1; s <= latest; s += cfg.span) {
     const e = Math.min(s + cfg.span - 1, latest);
-    const [logs] = await rpc(logsRpc, [
-      [
-        "eth_getLogs",
-        [
-          {
-            address: cfg.usdc,
-            topics: [[BL, UN]],
-            fromBlock: "0x" + s.toString(16),
-            toBlock: "0x" + e.toString(16),
-          },
-        ],
-      ],
-    ]);
+    // Public RPCs rate-limit rapid-fire getLogs; pace the spans and
+    // retry a span with growing backoff before giving up on the chain.
+    if (!firstSpan) await new Promise((res) => setTimeout(res, 400));
+    firstSpan = false;
+    let logs: any[] | undefined;
+    let lastErr: unknown = null;
+    for (let attempt = 0; attempt < 3 && logs === undefined; attempt++) {
+      try {
+        [logs] = await rpc(logsRpc, [
+          [
+            "eth_getLogs",
+            [
+              {
+                address: cfg.usdc,
+                topics: [[BL, UN]],
+                fromBlock: "0x" + s.toString(16),
+                toBlock: "0x" + e.toString(16),
+              },
+            ],
+          ],
+        ]);
+      } catch (err) {
+        lastErr = err;
+        await new Promise((res) => setTimeout(res, 800 * (attempt + 1)));
+      }
+    }
+    if (logs === undefined) throw lastErr ?? new Error("getLogs failed");
     for (const lg of logs ?? []) {
       tail.push({
         block: parseInt(lg.blockNumber, 16),
@@ -166,8 +181,8 @@ async function processChain(cfg: ChainCfg) {
     .map(([a]) => a);
 
   let locked = 0;
-  for (let i = 0; i < frozenNow.length; i += 40) {
-    const chunk = frozenNow.slice(i, i + 40);
+  for (let i = 0; i < frozenNow.length; i += 100) {
+    const chunk = frozenNow.slice(i, i + 100);
     const bals = await rpc(
       cfg.rpc,
       chunk.map(
@@ -255,6 +270,13 @@ async function processChain(cfg: ChainCfg) {
   };
 }
 
+// Warm-instance cache: the full computation reads two chains end to
+// end, and public RPC rate limits are per egress IP, so collapsing
+// bursts of visitors into one computation every few minutes keeps the
+// panel reliable. Freeze events still surface within minutes.
+let FULL_CACHE: { at: number; body: unknown } | null = null;
+const FULL_TTL_MS = 180000;
+
 export async function GET(req: Request) {
   const params = new URL(req.url).searchParams;
   const check = params.get("check");
@@ -292,6 +314,10 @@ export async function GET(req: Request) {
     }
   }
 
+  if (FULL_CACHE && Date.now() - FULL_CACHE.at < FULL_TTL_MS) {
+    return NextResponse.json(FULL_CACHE.body);
+  }
+
   const errors: Record<string, string> = {};
   const results = await Promise.all(
     CHAINS.map(async (cfg) => {
@@ -316,7 +342,7 @@ export async function GET(req: Request) {
       .filter(Boolean)
       .sort((a, b) => (b.ts ?? 0) - (a.ts ?? 0))[0] ?? null;
 
-  return NextResponse.json({
+  const body = {
     global: {
       // All-chains USDC freeze record, from the Eagle freeze tracker's
       // public USDC page. A dated third-party snapshot, labeled as such
@@ -341,5 +367,9 @@ export async function GET(req: Request) {
     chains: Object.fromEntries(chains.map((c) => [c.id, c])),
     lastFreeze,
     errors,
-  });
+  };
+  if (chains.length === CHAINS.length) {
+    FULL_CACHE = { at: Date.now(), body };
+  }
+  return NextResponse.json(body);
 }
