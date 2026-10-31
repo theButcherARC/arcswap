@@ -131,6 +131,372 @@ function sideText(label: string | null, addr: string): string {
   return label ? label : shortAddr(addr);
 }
 
+type GlobalFreezes = {
+  asOf: string;
+  source: string;
+  sourceUrl: string;
+  freezes: number;
+  unfreezes: number;
+  wallets: number;
+  chains: number;
+  frozenUsd: number;
+  monthFreezes: number;
+  monthLabel: string;
+  biggest: { amount: number; chain: string; date: string; note: string };
+};
+type ChainFreezes = {
+  id: string;
+  name: string;
+  explorer: string;
+  frozenCount: number;
+  lockedUsdc: number;
+  totalFreezes: number;
+  totalUnfreezes: number;
+  throughBlock: number;
+  events: {
+    block: number;
+    kind: "freeze" | "unfreeze";
+    address: string;
+    tx: string;
+    ts: number | null;
+  }[];
+};
+type LastFreeze = {
+  chain: string;
+  chainName: string;
+  explorer: string;
+  address: string;
+  tx: string;
+  ts: number | null;
+  balance: number;
+};
+type FreezeData = {
+  global: GlobalFreezes;
+  chains: { arc?: ChainFreezes; ethereum?: ChainFreezes };
+  lastFreeze: LastFreeze | null;
+};
+type CheckResult = {
+  address: string;
+  chain: string;
+  frozen: boolean;
+  balance: number;
+};
+
+function fmtDateTime(ts: number): string {
+  return new Date(ts * 1000).toLocaleString("en-GB", {
+    day: "numeric",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+function ChainEvents({ c }: { c: ChainFreezes }) {
+  return (
+    <div>
+      <div className="mb-3 flex items-baseline justify-between">
+        <h3 className="text-base font-semibold text-[var(--fg)]">
+          {c.name}
+        </h3>
+        <p className="font-mono text-xs text-[var(--fg-faint)]">
+          {fmtInt(c.frozenCount)} frozen · ${fmtBig(c.lockedUsdc)} locked
+        </p>
+      </div>
+      <div className="divide-y divide-[var(--line)] border-y border-[var(--line)]">
+        {c.events.map((e, i) => (
+          <div
+            key={e.tx + i}
+            className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2.5"
+          >
+            <span
+              className={
+                "rounded-full px-2 py-0.5 text-[10px] font-semibold text-white " +
+                (e.kind === "freeze" ? "bg-rose-600" : "bg-emerald-600")
+              }
+            >
+              {e.kind === "freeze" ? "FREEZE" : "UNFREEZE"}
+            </span>
+            <a
+              href={c.explorer + "/address/" + e.address}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-mono text-xs text-[var(--data)] hover:underline"
+            >
+              {shortAddr(e.address)}
+            </a>
+            <span className="text-xs text-[var(--fg-faint)]">
+              {e.ts ? fmtDateTime(e.ts) : "block " + fmtInt(e.block)}
+            </span>
+            <a
+              href={c.explorer + "/tx/" + e.tx}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs font-semibold text-[var(--data)] hover:underline"
+            >
+              view tx
+            </a>
+          </div>
+        ))}
+        {c.events.length === 0 && (
+          <p className="py-3 text-sm text-[var(--fg-faint)]">
+            No events yet.
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function FreezePanel() {
+  const [fz, setFz] = useState<FreezeData | null>(null);
+  const [addr, setAddr] = useState("");
+  const [chain, setChain] = useState<"arc" | "ethereum">("arc");
+  const [check, setCheck] = useState<CheckResult | null>(null);
+  const [checkErr, setCheckErr] = useState<string | null>(null);
+  const [checking, setChecking] = useState(false);
+
+  useEffect(() => {
+    let alive = true;
+    async function load() {
+      try {
+        const res = await fetch("/api/vibrain/freezes", { cache: "no-store" });
+        if (!res.ok) return;
+        const json = await res.json();
+        if (alive && json && json.global) setFz(json);
+      } catch {
+        // panel simply stays absent on failure
+      }
+    }
+    load();
+    const id = setInterval(load, 300000);
+    return () => {
+      alive = false;
+      clearInterval(id);
+    };
+  }, []);
+
+  async function runCheck() {
+    const a = addr.trim();
+    setCheck(null);
+    setCheckErr(null);
+    if (!/^0x[0-9a-fA-F]{40}$/.test(a)) {
+      setCheckErr(
+        "That does not look like an address. Paste a full 0x address.",
+      );
+      return;
+    }
+    setChecking(true);
+    try {
+      const res = await fetch(
+        "/api/vibrain/freezes?chain=" +
+          chain +
+          "&check=" +
+          encodeURIComponent(a),
+        { cache: "no-store" },
+      );
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error ?? "check failed");
+      setCheck(json);
+    } catch {
+      setCheckErr("The check failed. Try again in a moment.");
+    } finally {
+      setChecking(false);
+    }
+  }
+
+  if (!fz) return null;
+  const liveChains = [fz.chains.arc, fz.chains.ethereum].filter(
+    Boolean,
+  ) as ChainFreezes[];
+  const frozenNow = liveChains.reduce((s, c) => s + c.frozenCount, 0);
+  const lockedNow = liveChains.reduce((s, c) => s + c.lockedUsdc, 0);
+  const lf = fz.lastFreeze;
+
+  return (
+    <section className="mb-12 border-y border-[var(--line)] py-8">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <p className="mono-label !text-rose-600">USDC FREEZES</p>
+        <span className="inline-flex items-center gap-2 rounded-full bg-[var(--glass-strong)] px-3 py-1.5 font-mono text-[11px] font-semibold text-[var(--fg-muted)]">
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-60" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-600" />
+          </span>
+          LIVE, ARC + ETHEREUM
+        </span>
+      </div>
+      <h2 className="mt-2 text-3xl font-semibold tracking-tight text-[var(--fg)]">
+        Every USDC freeze, counted
+      </h2>
+      <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[var(--fg-muted)]">
+        Circle can freeze USDC at any address, for law enforcement or
+        sanctions. The contract records every freeze and unfreeze on chain.
+        Vibrain reads the Arc and Ethereum contracts live, so a new freeze
+        appears here minutes after it lands, without waiting for any
+        announcement.
+      </p>
+
+      <div className="mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--line)] lg:grid-cols-4">
+        <div className="bg-[var(--bg-raised)] p-4">
+          <p className="font-mono text-2xl font-semibold text-[var(--fg)]">
+            {fmtInt(fz.global.freezes)}
+          </p>
+          <p className="mt-1 text-xs text-[var(--fg-muted)]">
+            total USDC freezes, all {fz.global.chains} chains (record to{" "}
+            {fz.global.asOf})
+          </p>
+        </div>
+        <div className="bg-[var(--bg-raised)] p-4">
+          <p className="font-mono text-2xl font-semibold text-[var(--fg)]">
+            {fmtInt(frozenNow)}
+          </p>
+          <p className="mt-1 text-xs text-[var(--fg-muted)]">
+            addresses frozen right now on Arc + Ethereum, read live
+          </p>
+        </div>
+        <div className="bg-[var(--bg-raised)] p-4">
+          <p className="font-mono text-2xl font-semibold text-[var(--fg)]">
+            ${fmtBig(lockedNow)}
+          </p>
+          <p className="mt-1 text-xs text-[var(--fg-muted)]">
+            USDC locked at those addresses right now
+          </p>
+        </div>
+        <div className="bg-[var(--bg-raised)] p-4">
+          <p className="font-mono text-2xl font-semibold text-[var(--fg)]">
+            {fmtInt(fz.global.unfreezes)}
+          </p>
+          <p className="mt-1 text-xs text-[var(--fg-muted)]">
+            unfreezes, all chains (record to {fz.global.asOf})
+          </p>
+        </div>
+      </div>
+
+      {lf && (
+        <div className="mt-6 rounded-2xl border border-rose-600/30 bg-rose-600/[0.04] p-5">
+          <p className="mono-label !text-rose-600">LAST FREEZE, LIVE</p>
+          <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            <a
+              href={lf.explorer + "/address/" + lf.address}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-mono text-lg font-semibold text-[var(--fg)] hover:underline"
+            >
+              {shortAddr(lf.address)}
+            </a>
+            <span className="rounded-full bg-[var(--glass-strong)] px-2.5 py-1 text-[11px] font-semibold text-[var(--fg-muted)]">
+              {lf.chainName}
+            </span>
+            <span className="text-sm text-[var(--fg-muted)]">
+              {lf.ts ? fmtDateTime(lf.ts) : ""}
+            </span>
+          </div>
+          <p className="mt-1 text-sm text-[var(--fg-muted)]">
+            ${fmtUsd(lf.balance)} USDC is locked at this address.{" "}
+            <a
+              href={lf.explorer + "/tx/" + lf.tx}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-[var(--data)] hover:underline"
+            >
+              View the freeze transaction
+            </a>
+          </p>
+        </div>
+      )}
+
+      <div className="mt-8 max-w-xl">
+        <p className="mono-label mb-2">CHECK AN ADDRESS</p>
+        <div className="mb-2 flex gap-2">
+          {(["arc", "ethereum"] as const).map((c) => (
+            <button
+              key={c}
+              onClick={() => setChain(c)}
+              className={
+                "min-h-[36px] rounded-full px-4 text-xs font-semibold " +
+                (chain === c
+                  ? "bg-[var(--accent)] text-white"
+                  : "border border-[var(--line)] text-[var(--fg-muted)]")
+              }
+            >
+              {c === "arc" ? "Arc" : "Ethereum"}
+            </button>
+          ))}
+        </div>
+        <div className="flex gap-2">
+          <input
+            value={addr}
+            onChange={(e) => setAddr(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && runCheck()}
+            placeholder="0x..."
+            spellCheck={false}
+            className="min-h-[44px] min-w-0 flex-1 rounded-full border border-[var(--line)] bg-[var(--bg-raised)] px-4 font-mono text-base text-[var(--fg)] outline-none focus:border-[var(--accent)] sm:text-sm"
+          />
+          <button
+            onClick={runCheck}
+            disabled={checking}
+            className="min-h-[44px] shrink-0 rounded-full bg-[var(--accent)] px-5 text-sm font-semibold text-white disabled:opacity-50"
+          >
+            {checking ? "Checking..." : "Check"}
+          </button>
+        </div>
+        {checkErr && <p className="mt-2 text-sm text-rose-600">{checkErr}</p>}
+        {check && (
+          <div className="mt-3 rounded-2xl border border-[var(--line)] bg-[var(--bg-raised)] p-4">
+            <p
+              className={
+                "text-sm font-semibold " +
+                (check.frozen ? "text-rose-600" : "text-emerald-600")
+              }
+            >
+              {check.frozen
+                ? "FROZEN on " +
+                  (check.chain === "arc" ? "Arc" : "Ethereum") +
+                  ". This address is on Circle's blacklist. Its USDC cannot move."
+                : "Not frozen on " +
+                  (check.chain === "arc" ? "Arc" : "Ethereum") +
+                  ". This address is not on the blacklist right now."}
+            </p>
+            <p className="mt-1 font-mono text-xs text-[var(--fg-muted)]">
+              {check.address} · balance ${fmtUsd(check.balance)} USDC · read
+              live from the contract
+            </p>
+          </div>
+        )}
+      </div>
+
+      <div className="mt-10 grid gap-10 lg:grid-cols-2">
+        {fz.chains.arc && <ChainEvents c={fz.chains.arc} />}
+        {fz.chains.ethereum && <ChainEvents c={fz.chains.ethereum} />}
+      </div>
+
+      <div className="mt-8 border-t border-[var(--line)] pt-6">
+        <p className="mono-label mb-3">THE FULL RECORD</p>
+        <p className="max-w-2xl text-sm leading-relaxed text-[var(--fg-muted)]">
+          Across every chain, about ${fmtBig(fz.global.frozenUsd)} of USDC
+          has been frozen over the years, on {fmtInt(fz.global.wallets)}{" "}
+          wallets. {fz.global.monthLabel}: {fmtInt(fz.global.monthFreezes)}{" "}
+          freezes. The biggest single freeze: $
+          {fmtInt(fz.global.biggest.amount)} on {fz.global.biggest.chain},{" "}
+          {fz.global.biggest.date}, {fz.global.biggest.note}.
+        </p>
+        <p className="mt-2 text-xs text-[var(--fg-faint)]">
+          All-chains record:{" "}
+          <a
+            href={fz.global.sourceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[var(--data)] underline"
+          >
+            {fz.global.source}
+          </a>
+          , as of {fz.global.asOf}. Arc and Ethereum figures are read live
+          by Vibrain from the USDC contracts on every load.
+        </p>
+      </div>
+    </section>
+  );
+}
+
 export function VibrainLive() {
   const [data, setData] = useState<VibrainData | null>(null);
   const [history, setHistory] = useState<HistoryPoint[]>([]);
@@ -301,6 +667,8 @@ export function VibrainLive() {
               <Sparkline points={history} />
             </div>
           )}
+
+          <FreezePanel />
 
           {/* Stats strip */}
           <div className="mb-10 grid grid-cols-2 overflow-hidden rounded-[var(--radius)] border border-[var(--line)] bg-[var(--glass)] lg:grid-cols-4">
