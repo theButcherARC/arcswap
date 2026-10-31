@@ -34,7 +34,17 @@ type ChainCfg = {
   usdc: string;
   span: number;
   explorer: string;
-  snapshot: { throughBlock: number; events: FreezeEvent[] };
+  snapshot: {
+    throughBlock: number;
+    events: FreezeEvent[];
+    // Standing state at throughBlock, when precomputed: the route then
+    // only reads balances for addresses the live tail touched, plus the
+    // known balance holders. Needed on Arc, whose public RPC rejects
+    // the full frozen-set balance scan from server egress IPs.
+    frozen?: string[];
+    lockedUsdc?: number;
+    balances?: Record<string, number>;
+  };
 };
 
 function toEvents(raw: RawEvent[]): FreezeEvent[] {
@@ -58,6 +68,9 @@ const CHAINS: ChainCfg[] = [
     snapshot: {
       throughBlock: FREEZE_ARC.throughBlock,
       events: toEvents(FREEZE_ARC.events),
+      frozen: FREEZE_ARC.frozen,
+      lockedUsdc: FREEZE_ARC.lockedUsdc,
+      balances: FREEZE_ARC.balances,
     },
   },
   {
@@ -187,19 +200,68 @@ async function processChain(cfg: ChainCfg) {
     .map(([a]) => a);
 
   let locked = 0;
-  for (let i = 0; i < frozenNow.length; i += 100) {
-    const chunk = frozenNow.slice(i, i + 100);
-    const bals = await rpc(
-      cfg.rpc,
-      chunk.map(
-        (a) =>
-          [
-            "eth_call",
-            [{ to: cfg.usdc, data: "0x70a08231" + padAddr(a) }, "latest"],
-          ] as [string, unknown[]],
-      ),
-    );
-    for (const b of bals) if (b) locked += Number(BigInt(b)) / 1e6;
+  if (cfg.snapshot.lockedUsdc !== undefined && cfg.snapshot.frozen) {
+    // Delta mode: start from the snapshot's standing locked total and
+    // adjust only for what the tail changed, plus drift on the known
+    // balance holders. A frozen address cannot send, so its balance at
+    // unfreeze time equals what was locked; rare inflows while frozen
+    // are the only approximation.
+    locked = cfg.snapshot.lockedUsdc;
+    const snapBalances = cfg.snapshot.balances ?? {};
+    const tailAddrs = [...new Set(tail.map((e) => e.address.toLowerCase()))];
+    const fetchAddrs = [
+      ...new Set([...tailAddrs, ...Object.keys(snapBalances)]),
+    ];
+    const balNow = new Map<string, number>();
+    if (fetchAddrs.length) {
+      const bals = await rpc(
+        cfg.rpc,
+        fetchAddrs.map(
+          (a) =>
+            [
+              "eth_call",
+              [{ to: cfg.usdc, data: "0x70a08231" + padAddr(a) }, "latest"],
+            ] as [string, unknown[]],
+        ),
+      );
+      fetchAddrs.forEach((a, i) => {
+        if (bals[i]) balNow.set(a, Number(BigInt(bals[i])) / 1e6);
+      });
+    }
+    const tailSet = new Set(tailAddrs);
+    for (const [a, oldBal] of Object.entries(snapBalances)) {
+      if (!tailSet.has(a) && balNow.has(a)) {
+        locked += (balNow.get(a) as number) - oldBal;
+      }
+    }
+    const frozenSet = new Set(cfg.snapshot.frozen);
+    for (const ev of tail) {
+      const a = ev.address.toLowerCase();
+      const b = balNow.get(a) ?? snapBalances[a] ?? 0;
+      if (ev.kind === "freeze" && !frozenSet.has(a)) {
+        locked += b;
+        frozenSet.add(a);
+      } else if (ev.kind === "unfreeze" && frozenSet.has(a)) {
+        locked -= b;
+        frozenSet.delete(a);
+      }
+    }
+    locked = Math.round(locked * 100) / 100;
+  } else {
+    for (let i = 0; i < frozenNow.length; i += 100) {
+      const chunk = frozenNow.slice(i, i + 100);
+      const bals = await rpc(
+        cfg.rpc,
+        chunk.map(
+          (a) =>
+            [
+              "eth_call",
+              [{ to: cfg.usdc, data: "0x70a08231" + padAddr(a) }, "latest"],
+            ] as [string, unknown[]],
+        ),
+      );
+      for (const b of bals) if (b) locked += Number(BigInt(b)) / 1e6;
+    }
   }
 
   const latestEvents = [...events].slice(-10).reverse();
