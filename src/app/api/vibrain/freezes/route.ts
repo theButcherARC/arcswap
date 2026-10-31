@@ -103,7 +103,13 @@ async function rpc(
     const arr = Array.isArray(out) ? out : [out];
     arr.sort((a: any, b: any) => a.id - b.id);
     return arr.map((r: any) => {
-      if (r.error) throw new Error(r.error.message ?? "RPC error");
+      if (r.error)
+        throw new Error(
+          calls[0][0] +
+            (single ? "" : " x" + calls.length) +
+            ": " +
+            (r.error.message ?? "RPC error"),
+        );
       return r.result;
     });
   };
