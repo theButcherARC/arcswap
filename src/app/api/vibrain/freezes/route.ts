@@ -30,6 +30,7 @@ type ChainCfg = {
   id: "arc" | "ethereum";
   name: string;
   rpc: string;
+  logsRpc?: string;
   usdc: string;
   span: number;
   explorer: string;
@@ -62,7 +63,11 @@ const CHAINS: ChainCfg[] = [
   {
     id: "ethereum",
     name: "Ethereum",
-    rpc: "https://gateway.tenderly.co/public/mainnet",
+    // The Tenderly public gateway rate-limits batch requests (batches
+    // over ~5 calls fail), so eth_call work runs on publicnode, whose
+    // batches are fine; only archive getLogs needs Tenderly.
+    rpc: "https://ethereum-rpc.publicnode.com",
+    logsRpc: "https://gateway.tenderly.co/public/mainnet",
     usdc: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
     span: 9999,
     explorer: "https://etherscan.io",
@@ -86,20 +91,28 @@ async function rpc(
         method,
         params,
       }));
-  const res = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-    cache: "no-store",
-  });
-  if (!res.ok) throw new Error("RPC status " + res.status);
-  const out = await res.json();
-  const arr = Array.isArray(out) ? out : [out];
-  arr.sort((a: any, b: any) => a.id - b.id);
-  return arr.map((r: any) => {
-    if (r.error) throw new Error(r.error.message ?? "RPC error");
-    return r.result;
-  });
+  const attempt = async (): Promise<any[]> => {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+      cache: "no-store",
+    });
+    if (!res.ok) throw new Error("RPC status " + res.status);
+    const out = await res.json();
+    const arr = Array.isArray(out) ? out : [out];
+    arr.sort((a: any, b: any) => a.id - b.id);
+    return arr.map((r: any) => {
+      if (r.error) throw new Error(r.error.message ?? "RPC error");
+      return r.result;
+    });
+  };
+  try {
+    return await attempt();
+  } catch {
+    await new Promise((res) => setTimeout(res, 700));
+    return attempt();
+  }
 }
 
 function padAddr(a: string): string {
@@ -113,9 +126,10 @@ async function processChain(cfg: ChainCfg) {
   // Live tail, sequential single getLogs calls (both RPCs throttle
   // batched getLogs hard).
   const tail: FreezeEvent[] = [];
+  const logsRpc = cfg.logsRpc ?? cfg.rpc;
   for (let s = cfg.snapshot.throughBlock + 1; s <= latest; s += cfg.span) {
     const e = Math.min(s + cfg.span - 1, latest);
-    const [logs] = await rpc(cfg.rpc, [
+    const [logs] = await rpc(logsRpc, [
       [
         "eth_getLogs",
         [
@@ -278,11 +292,13 @@ export async function GET(req: Request) {
     }
   }
 
+  const errors: Record<string, string> = {};
   const results = await Promise.all(
     CHAINS.map(async (cfg) => {
       try {
         return await processChain(cfg);
-      } catch {
+      } catch (e) {
+        errors[cfg.id] = e instanceof Error ? e.message : "unknown error";
         return null;
       }
     }),
@@ -290,7 +306,7 @@ export async function GET(req: Request) {
   const chains = results.filter(Boolean) as any[];
   if (!chains.length) {
     return NextResponse.json(
-      { error: "Freeze data unavailable right now" },
+      { error: "Freeze data unavailable right now", errors },
       { status: 502 },
     );
   }
@@ -324,5 +340,6 @@ export async function GET(req: Request) {
     },
     chains: Object.fromEntries(chains.map((c) => [c.id, c])),
     lastFreeze,
+    errors,
   });
 }
