@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ConnectButton } from "@/components/wallet/ConnectButton";
 import { NetworkSwitcher } from "@/components/wallet/NetworkSwitcher";
+import { LogoMark } from "@/components/brand/Logo";
 import { ROUTES } from "@/constants/routes";
 
 type NavItem = {
@@ -152,7 +152,7 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
           className="flex items-center gap-2.5"
           aria-label="VibeFlow home"
         >
-          <Image src="/logo.png" alt="VibeFlow" width={28} height={28} />
+          <LogoMark size={28} />
           <span className="text-base font-semibold tracking-tight text-[var(--fg)]">
             VibeFlow
           </span>
@@ -232,7 +232,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       {/* Mobile top bar */}
       <div className="sticky top-0 z-40 flex h-14 items-center justify-between border-b border-[var(--line)] bg-[var(--bg)]/90 px-4 backdrop-blur-xl lg:hidden">
         <Link href={ROUTES.HOME} className="flex items-center gap-2.5" aria-label="VibeFlow home">
-          <Image src="/logo.png" alt="VibeFlow" width={26} height={26} />
+          <LogoMark size={26} />
           <span className="text-base font-semibold tracking-tight text-[var(--fg)]">VibeFlow</span>
         </Link>
         <button

@@ -1,11 +1,11 @@
 "use client";
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { ConnectButton } from '@/components/wallet/ConnectButton';
 import { HeaderVolume } from './HeaderVolume';
 import { NetworkSwitcher } from '@/components/wallet/NetworkSwitcher';
 import { JoinWithXButton } from '@/components/auth/JoinWithXButton';
+import { LogoMark } from '@/components/brand/Logo';
 import { ROUTES } from '@/constants/routes';
 
 export function Header() {
@@ -16,16 +16,9 @@ export function Header() {
         <div className="flex h-[72px] items-center justify-between gap-6">
           {/* Logo */}
           <Link href={ROUTES.HOME} className="flex items-center gap-2.5 group">
-            <Image
-              src="/logo.png"
-              alt="VibeFlow"
-              width={40}
-              height={40}
-              style={{ objectFit: 'contain' }}
-              className="transition-opacity duration-300 group-hover:opacity-80"
-              priority
-              unoptimized
-            />
+            <span className="transition-opacity duration-300 group-hover:opacity-80">
+              <LogoMark size={40} />
+            </span>
             <span className="hidden sm:inline font-semibold text-lg tracking-tight text-[var(--fg)]">
               VibeFlow
             </span>

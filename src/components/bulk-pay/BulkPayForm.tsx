@@ -6,6 +6,7 @@ import { parseUnits, createPublicClient, http } from "viem";
 import type { Address } from "viem";
 import { useAccount } from "wagmi";
 import { ConnectButton } from "@/components/wallet/ConnectButton";
+import { LogoTile } from "@/components/brand/Logo";
 import { useBulkPay } from "@/hooks/useBulkPay";
 import { authClient } from "@/lib/auth-client";
 import { toChecksumAddress } from "@/utils/address";
@@ -750,22 +751,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
               {/* Agent header - minimal */}
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 14 14"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M2 2.5L7 11.5L12 2.5"
-                      stroke="var(--accent)"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
+                  <LogoTile size={28} />
                   <div>
                     <h2 className="text-sm font-semibold text-[var(--fg)]">
                       AI Payment Agent

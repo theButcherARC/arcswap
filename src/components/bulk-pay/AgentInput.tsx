@@ -5,6 +5,7 @@
 
 import { useState } from "react";
 import { parsePaymentInstruction, ParsedBulkPay } from "@/services/agentService";
+import { LogoTile } from "@/components/brand/Logo";
 
 interface AgentInputProps {
   onParsed: (data: ParsedBulkPay) => void;
@@ -50,12 +51,10 @@ export default function AgentInput({ onParsed }: AgentInputProps) {
   };
 
   return (
-    <div className="border border-violet-500/20 bg-[var(--glass)] p-5 space-y-4">
+    <div className="border border-[rgba(39,117,202,0.25)] bg-[var(--glass)] p-5 space-y-4">
       {/* Header */}
       <div className="flex items-center gap-2">
-        <div className="w-7 h-7 bg-[var(--accent-soft)] flex items-center justify-center">
-          <span className="text-violet-400 text-sm">AI</span>
-        </div>
+        <LogoTile size={28} />
         <div>
           <p className="text-sm font-semibold text-[var(--fg)]">AI Payment Agent</p>
           <p className="text-xs text-gray-400">Describe your payment in plain English</p>
@@ -71,7 +70,7 @@ export default function AgentInput({ onParsed }: AgentInputProps) {
         onChange={(e) => setInstruction(e.target.value)}
         placeholder="e.g. Pay Alice 500 USDC at @alice, Bob 300 at VIBE-ABC123, or Carol 200 at 0x1234...abcd"
         rows={3}
-        className="w-full bg-surface border border-[var(--line)] text-[var(--fg)] placeholder-gray-500 text-sm p-3 resize-none focus:outline-none focus:border-violet-500/50 transition-colors"
+        className="w-full bg-surface border border-[var(--line)] text-[var(--fg)] placeholder-gray-500 text-sm p-3 resize-none focus:outline-none focus:border-[var(--accent)] transition-colors"
       />
 
       {/* Examples */}
@@ -82,7 +81,7 @@ export default function AgentInput({ onParsed }: AgentInputProps) {
             <button
               key={i}
               onClick={() => handleExample(ex)}
-              className="text-left text-xs text-violet-400 hover:text-violet-300 transition-colors truncate"
+              className="text-left text-xs text-[var(--accent)] hover:opacity-75 transition-colors truncate"
             >
               {ex}
             </button>
