@@ -8,7 +8,7 @@ import { NextRequest, NextResponse } from "next/server";
 // The user_profiles table is created on first use so this feature ships
 // without a manual migration step (same pattern as square_posts).
 let tableReady: Promise<void> | null = null;
-export function ensureProfilesTable(): Promise<void> {
+function ensureProfilesTable(): Promise<void> {
   if (!tableReady) {
     tableReady = db
       .execute(
