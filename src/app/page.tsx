@@ -9,6 +9,7 @@ import FaqSection from "@/components/landing/FaqSection";
 import { LiveStats } from "@/components/landing/LiveStats";
 import { TokenCoin } from "@/components/TokenCoin";
 import { LiveTicker } from "@/components/layout/LiveTicker";
+import { JoinWithXButton } from "@/components/auth/JoinWithXButton";
 
 const FEATURES = [
   {
@@ -146,6 +147,7 @@ export default function VibeFlowLanding() {
                     <path d="M3 9H15M15 9L10 4M15 9L10 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </Link>
+                <JoinWithXButton variant="hero" />
                 <Link
                   href={ROUTES.VIBRAIN}
                   className="btn-brutal inline-flex items-center justify-center gap-2.5 px-8 py-4 text-base font-medium text-[var(--fg-muted)] hover:text-[var(--fg)]"
