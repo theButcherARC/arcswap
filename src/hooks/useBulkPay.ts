@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { useAccount, usePublicClient, useWriteContract } from "wagmi";
+import { useAccount, useChainId, usePublicClient, useWriteContract } from "wagmi";
 import { encodeFunctionData, keccak256, toHex, toBytes } from "viem";
 import { useArcNetwork } from "./useArcNetwork";
+import { arc, arcTestnet } from "@/constants/chains";
 import { getErrorMessage, isUserRejection, APP_ERRORS } from "@/utils/errors";
 import { BULK_PAY_MAX_RECIPIENTS } from "@/constants/tokens";
 import {
@@ -36,7 +37,14 @@ const MEMO_ABI = [
 export function useBulkPay() {
   const { address } = useAccount();
   const { isCorrectNetwork } = useArcNetwork();
-  const publicClient = usePublicClient();
+  const walletChainId = useChainId();
+  // Pin every read, simulation and write to the Arc chain this session targets.
+  // Without the pin, wagmi follows the wallet's per-site chain: if MetaMask has
+  // another chain selected for this site (for example Base), the batch is sent
+  // there instead, where the same calls silently do nothing. Passing chainId
+  // to writeContractAsync makes the wallet switch to Arc before signing.
+  const targetChainId = walletChainId === arcTestnet.id ? arcTestnet.id : arc.id;
+  const publicClient = usePublicClient({ chainId: targetChainId });
   const { writeContractAsync } = useWriteContract();
 
   const [status, setBulkStatus] = useState<BulkPayStatus>("idle");
@@ -100,6 +108,7 @@ export function useBulkPay() {
 
           // Call Memo contract which wraps the Multicall3From call
           hash = await writeContractAsync({
+            chainId: targetChainId,
             address: MEMO_CONTRACT_ADDRESS,
             abi: MEMO_ABI,
             functionName: "memo",
@@ -113,6 +122,7 @@ export function useBulkPay() {
         } else {
           // No memo - call Multicall3From directly
           hash = await writeContractAsync({
+            chainId: targetChainId,
             address: MULTICALL3_FROM_ADDRESS,
             abi: MULTICALL3_FROM_ABI,
             functionName: "aggregate3",
@@ -153,7 +163,7 @@ export function useBulkPay() {
         setBulkStatus("error");
       }
     },
-    [address, isCorrectNetwork, publicClient, writeContractAsync],
+    [address, isCorrectNetwork, publicClient, writeContractAsync, targetChainId],
   );
 
   function reset() {
