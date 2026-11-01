@@ -23,13 +23,13 @@ interface Extras {
 const EMPTY_EXTRAS: Extras = { displayName: '', bio: '', telegram: '' }
 
 export default function SocialProfilePage() {
-  const { address, isConnected, chainId } = useAccount()
+  const { address, isConnected } = useAccount()
   const { data: balanceRaw, isLoading: balanceLoading } = useReadContract({
     address: TOKENS.USDC.address as `0x${string}`,
     abi: erc20Abi,
     functionName: 'balanceOf',
     args: [address ?? '0x0000000000000000000000000000000000000000'],
-    chainId,
+    chainId: 5042,
     query: { enabled: !!address, refetchInterval: 20000 },
   })
   const balanceText =
@@ -267,6 +267,15 @@ export default function SocialProfilePage() {
                           {profile.vibeId}
                         </span>
                       )}
+                      {isConnected && (
+                        <p className="mt-2 flex items-center gap-1.5 text-sm text-[var(--fg-muted)]">
+                          <img src={TOKENS.USDC.logoURI} alt="USDC" className="h-4 w-4" />
+                          <span className="font-mono font-semibold text-[var(--fg)]">
+                            {balanceLoading ? '...' : balanceText ?? '—'} USDC
+                          </span>
+                          balance
+                        </p>
+                      )}
                     </div>
                   </div>
                   <div className="flex shrink-0 items-center gap-3">
@@ -457,10 +466,10 @@ export default function SocialProfilePage() {
                 <img src={TOKENS.USDC.logoURI} alt="USDC" className="h-6 w-6" />
                 <div>
                   <p className="font-mono text-lg font-semibold leading-tight text-[var(--fg)]">
-                    {balanceLoading || balanceText === null ? '...' : balanceText} USDC
+                    {balanceLoading ? '...' : balanceText ?? '—'} USDC
                   </p>
                   <p className="text-xs text-[var(--fg-faint)]">
-                    Balance · {chainId === 5042002 ? 'Arc Testnet' : 'Arc Mainnet'}
+                    Balance · Arc Mainnet
                   </p>
                 </div>
               </div>
