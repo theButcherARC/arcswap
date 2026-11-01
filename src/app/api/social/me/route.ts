@@ -49,10 +49,50 @@ export async function GET() {
   }
 
   if (dbUser.username?.trim()) {
+    // Best-effort refresh of name and avatar from X. Stored avatar URLs go
+    // stale when the X profile picture changes (the old file 404s), so heal
+    // them here. Never blocks or fails the response.
+    let name = dbUser.name
+    let image = dbUser.image
+    try {
+      const [xAccount] = await db
+        .select({ accessToken: account.accessToken })
+        .from(account)
+        .where(and(eq(account.userId, session.user.id), eq(account.providerId, 'twitter')))
+        .limit(1)
+      if (xAccount?.accessToken) {
+        const xResponse = await fetch(
+          'https://api.x.com/2/users/me?user.fields=name,profile_image_url',
+          {
+            headers: { Authorization: `Bearer ${xAccount.accessToken}` },
+            cache: 'no-store',
+            signal: AbortSignal.timeout(5000),
+          },
+        )
+        if (xResponse.ok) {
+          const xProfile = (await xResponse.json()) as XProfileResponse
+          const updates: { name?: string; image?: string } = {}
+          const freshImage = xProfile.data?.profile_image_url?.trim()
+          const freshName = xProfile.data?.name?.trim()
+          if (freshImage && freshImage !== dbUser.image) updates.image = freshImage
+          if (freshName && freshName !== dbUser.name) updates.name = freshName
+          if (Object.keys(updates).length > 0) {
+            await db
+              .update(userTable)
+              .set({ ...updates, updatedAt: new Date() })
+              .where(eq(userTable.id, session.user.id))
+            name = updates.name ?? name
+            image = updates.image ?? image
+          }
+        }
+      }
+    } catch {
+      // Stored values are good enough; the refresh retries on the next load.
+    }
     return NextResponse.json({
       username: dbUser.username.trim(),
-      name: dbUser.name ?? '',
-      image: dbUser.image ?? '',
+      name: name ?? '',
+      image: image ?? '',
       vibeId,
     })
   }

@@ -2,7 +2,9 @@
 
 import { authClient } from '@/lib/auth-client'
 import { JoinWithXButton } from '@/components/auth/JoinWithXButton'
-import { useAccount } from 'wagmi'
+import { useAccount, useReadContract } from 'wagmi'
+import { erc20Abi, formatUnits } from 'viem'
+import { TOKENS } from '@/constants/tokens'
 import { useState, useEffect, useCallback } from 'react'
 
 interface ProfileData {
@@ -21,7 +23,22 @@ interface Extras {
 const EMPTY_EXTRAS: Extras = { displayName: '', bio: '', telegram: '' }
 
 export default function SocialProfilePage() {
-  const { address, isConnected } = useAccount()
+  const { address, isConnected, chainId } = useAccount()
+  const { data: balanceRaw, isLoading: balanceLoading } = useReadContract({
+    address: TOKENS.USDC.address as `0x${string}`,
+    abi: erc20Abi,
+    functionName: 'balanceOf',
+    args: [address ?? '0x0000000000000000000000000000000000000000'],
+    chainId,
+    query: { enabled: !!address, refetchInterval: 20000 },
+  })
+  const balanceText =
+    balanceRaw === undefined
+      ? null
+      : Number(formatUnits(balanceRaw, TOKENS.USDC.decimals)).toLocaleString('en-US', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 6,
+        })
   const { data: session, isPending } = authClient.useSession()
 
   const [profile, setProfile] = useState<ProfileData | null>(null)
@@ -184,6 +201,14 @@ export default function SocialProfilePage() {
   const canLink = xConnected && walletConnected && !fetchingProfile && status !== 'linking'
   const displayName = extras.displayName || profile?.name || session?.user?.name || ''
   const avatar = profile?.image || session?.user?.image || ''
+  const [avatarStage, setAvatarStage] = useState(0)
+  useEffect(() => {
+    setAvatarStage(0)
+  }, [avatar])
+  const avatarSrc =
+    avatarStage === 0 && avatar.includes('_normal.')
+      ? avatar.replace('_normal.', '_400x400.')
+      : avatar
   const publicUrl = profile?.username ? 'arcswap-lac.vercel.app/u/' + profile.username : ''
 
   return (
@@ -215,8 +240,14 @@ export default function SocialProfilePage() {
               <>
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex items-center gap-4">
-                    {avatar ? (
-                      <img src={avatar} alt="" className="h-20 w-20 shrink-0 rounded-full border border-[var(--line)]" />
+                    {avatar && avatarStage < 2 ? (
+                      <img
+                        src={avatarSrc}
+                        alt=""
+                        referrerPolicy="no-referrer"
+                        onError={() => setAvatarStage((stage) => (avatar.includes('_normal.') ? stage + 1 : 2))}
+                        className="h-20 w-20 shrink-0 rounded-full border border-[var(--line)] object-cover"
+                      />
                     ) : (
                       <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-[var(--accent-soft)] text-2xl font-bold text-[var(--accent)]">
                         {(displayName || 'V').slice(0, 1).toUpperCase()}
@@ -409,6 +440,7 @@ export default function SocialProfilePage() {
               <span className="ml-1 text-xs font-normal text-[var(--fg-faint)]">Primary Identity</span>
             </div>
             {walletConnected ? (
+              <>
               <div className="flex items-center gap-2">
                 <div className="min-w-0 flex-1 border border-[rgba(39,117,202,0.2)] bg-[var(--accent-soft)] px-4 py-3">
                   <p className="break-all font-mono text-sm text-[var(--fg)]">{address}</p>
@@ -421,6 +453,18 @@ export default function SocialProfilePage() {
                   {copied === 'wallet' ? 'Copied' : 'Copy'}
                 </button>
               </div>
+              <div className="mt-4 flex items-center gap-3 border-t border-[var(--line)] pt-4">
+                <img src={TOKENS.USDC.logoURI} alt="USDC" className="h-6 w-6" />
+                <div>
+                  <p className="font-mono text-lg font-semibold leading-tight text-[var(--fg)]">
+                    {balanceLoading || balanceText === null ? '...' : balanceText} USDC
+                  </p>
+                  <p className="text-xs text-[var(--fg-faint)]">
+                    Balance · {chainId === 5042002 ? 'Arc Testnet' : 'Arc Mainnet'}
+                  </p>
+                </div>
+              </div>
+              </>
             ) : (
               <p className="text-sm text-[var(--fg-faint)]">Use the &quot;Connect Wallet&quot; button in the header to connect your wallet.</p>
             )}

@@ -23,6 +23,11 @@ export default function PublicProfilePage() {
   const [data, setData] = useState<PublicProfile | null>(null)
   const [state, setState] = useState<'loading' | 'found' | 'missing' | 'error'>('loading')
   const [copied, setCopied] = useState(false)
+  const [imgStage, setImgStage] = useState(0)
+
+  useEffect(() => {
+    setImgStage(0)
+  }, [data?.image])
 
   useEffect(() => {
     if (!handle) return
@@ -82,8 +87,14 @@ export default function PublicProfilePage() {
         {state === 'found' && data && (
           <div className="border border-[var(--line)] bg-[var(--glass)] p-8">
             <div className="flex flex-col items-center text-center">
-              {data.image ? (
-                <img src={data.image} alt="" className="h-[88px] w-[88px] rounded-full border border-[var(--line)]" />
+              {data.image && imgStage < 2 ? (
+                <img
+                  src={imgStage === 0 && data.image.includes('_normal.') ? data.image.replace('_normal.', '_400x400.') : data.image}
+                  alt=""
+                  referrerPolicy="no-referrer"
+                  onError={() => setImgStage((stage) => (data.image?.includes('_normal.') ? stage + 1 : 2))}
+                  className="h-[88px] w-[88px] rounded-full border border-[var(--line)] object-cover"
+                />
               ) : (
                 <div className="flex h-[88px] w-[88px] items-center justify-center rounded-full bg-[var(--accent-soft)] text-3xl font-bold text-[var(--accent)]">
                   {(data.name || data.username || 'V').slice(0, 1).toUpperCase()}
