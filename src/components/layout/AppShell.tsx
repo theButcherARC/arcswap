@@ -126,7 +126,7 @@ const NAV_GROUPS: { group: string; items: NavItem[] }[] = [
     group: "Account",
     items: [
       {
-        label: "VibeID",
+        label: "Profile",
         href: ROUTES.SOCIAL_PROFILE,
         icon: (
           <svg {...iconProps}>
