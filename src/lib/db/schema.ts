@@ -69,6 +69,17 @@ export const socialProfiles = pgTable('social_profiles', {
   updatedAt:     timestamp('updatedAt').notNull().defaultNow(),
 })
 
+// ── Public profile extras (bio, telegram, display name override) ──────────
+// Filled from the profile page; everything public on /u/<handle> reads these
+// first and falls back to the X-provided name on the user row.
+export const userProfiles = pgTable('user_profiles', {
+  userId:      text('userId').primaryKey().references(() => user.id),
+  displayName: text('displayName'),
+  bio:         text('bio'),
+  telegram:    text('telegram'),
+  updatedAt:   timestamp('updatedAt').notNull().defaultNow(),
+})
+
 // ── Scheduled payments table ───────────────────────────────────────────────
 
 export const scheduledBatches = pgTable('scheduled_batches', {
