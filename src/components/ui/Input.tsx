@@ -14,7 +14,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="flex flex-col gap-1.5">
         {label && (
-          <label htmlFor={inputId} className="text-sm font-medium text-arc-900">
+          <label htmlFor={inputId} className="text-sm font-medium text-[var(--fg)]">
             {label}
           </label>
         )}
@@ -23,11 +23,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             id={inputId}
             className={[
-              "w-full rounded-2xl border bg-surface-25 px-4 py-3 text-sm transition-colors",
-              "placeholder:text-surface-300 focus:outline-none focus:ring-2 focus:bg-white",
+              "w-full rounded-[var(--radius)] border bg-[var(--bg-raised)] px-4 py-3 text-base text-[var(--fg)] transition-colors",
+              "placeholder:text-[var(--fg-faint)] focus:outline-none focus:ring-2",
               error
                 ? "border-rose-300 focus:ring-rose-200"
-                : "border-surface-100 focus:border-arc-300 focus:ring-arc-100",
+                : "border-[var(--line)] focus:border-[var(--accent)] focus:ring-[var(--accent-soft)]",
               rightSlot ? "pr-28" : "",
               className,
             ].join(" ")}
@@ -35,8 +35,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           />
           {rightSlot && <div className="absolute right-2">{rightSlot}</div>}
         </div>
-        {error && <p className="text-xs text-rose-500">{error}</p>}
-        {hint && !error && <p className="text-xs text-surface-300">{hint}</p>}
+        {error && <p className="text-xs text-rose-600">{error}</p>}
+        {hint && !error && <p className="text-xs text-[var(--fg-faint)]">{hint}</p>}
       </div>
     );
   }

@@ -11,19 +11,19 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<Variant, string> = {
   primary:
-    "bg-[var(--fg)] text-[var(--bg)] hover:opacity-85 disabled:opacity-30 focus-visible:ring-[var(--fg)]",
+    "bg-[var(--accent)] text-white hover:opacity-90 disabled:opacity-40 focus-visible:ring-[var(--accent)]",
   secondary:
-    "border border-[var(--line)] bg-[var(--glass)] text-[var(--fg)] hover:bg-[var(--glass-strong)] disabled:opacity-50",
+    "border border-[var(--line)] bg-[var(--glass)] text-[var(--fg)] hover:bg-[var(--glass-strong)] disabled:opacity-50 focus-visible:ring-[var(--accent)]",
   ghost:
-    "text-[var(--fg-muted)] hover:text-[var(--fg)] hover:bg-[var(--glass)] disabled:opacity-40",
+    "text-[var(--fg-muted)] hover:text-[var(--fg)] hover:bg-[var(--glass)] disabled:opacity-40 focus-visible:ring-[var(--accent)]",
   danger:
-    "border border-rose-500/40 bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 disabled:opacity-50",
+    "border border-rose-300 bg-rose-50 text-rose-600 hover:bg-rose-100 disabled:opacity-50 focus-visible:ring-rose-300",
 };
 
 const sizeClasses: Record<Size, string> = {
-  sm: "px-3.5 py-1.5 text-xs",
-  md: "px-5 py-2.5 text-sm",
-  lg: "px-6 py-3.5 text-sm",
+  sm: "min-h-9 px-3.5 py-1.5 text-xs",
+  md: "min-h-11 px-5 py-2.5 text-sm",
+  lg: "min-h-12 px-6 py-3 text-sm",
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -44,7 +44,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         disabled={disabled || isLoading}
         className={[
-          "inline-flex items-center justify-center gap-2 font-semibold transition-all",
+          "inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-all active:scale-[0.98]",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
           "disabled:cursor-not-allowed",
           variantClasses[variant],

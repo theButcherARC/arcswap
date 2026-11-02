@@ -174,7 +174,7 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
                       onClick={onNavigate}
                       aria-current={active ? "page" : undefined}
                       className={
-                        "flex items-center gap-3 px-2.5 py-2 text-sm transition-colors duration-150 " +
+                        "flex min-h-11 items-center gap-3 rounded-lg px-2.5 py-2.5 text-sm transition-colors duration-150 " +
                         (active
                           ? "bg-[var(--accent-soft)] font-medium text-[var(--fg)]"
                           : "text-[var(--fg-muted)] hover:bg-black/[0.04] hover:text-[var(--fg)]")
@@ -239,7 +239,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           type="button"
           onClick={() => setOpen(true)}
           aria-label="Open menu"
-          className="flex h-9 w-9 items-center justify-center border border-[var(--line)] text-[var(--fg-muted)] transition-colors hover:text-[var(--fg)]"
+          className="flex h-11 w-11 items-center justify-center border border-[var(--line)] text-[var(--fg-muted)] transition-colors hover:text-[var(--fg)]"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             <path d="M4 7h16M4 12h16M4 17h16" />
@@ -256,6 +256,16 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             aria-hidden="true"
           />
           <aside className="absolute inset-y-0 left-0 w-64 border-r border-[var(--line)] bg-[var(--bg-raised)]">
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              aria-label="Close menu"
+              className="absolute right-3 top-2.5 z-10 flex h-11 w-11 items-center justify-center text-[var(--fg-muted)] transition-colors hover:text-[var(--fg)]"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+                <path d="M6 6l12 12M18 6L6 18" />
+              </svg>
+            </button>
             <NavContent onNavigate={() => setOpen(false)} />
           </aside>
         </div>

@@ -7,7 +7,7 @@ export function Card({ children, className = "" }: CardProps) {
   return (
     <div
       className={[
-        "rounded-3xl border border-surface-100 bg-white p-6 shadow-premium-lg",
+        "rounded-2xl border border-[var(--line)] bg-[var(--bg-raised)] p-6",
         className,
       ].join(" ")}
     >
@@ -25,5 +25,5 @@ export function CardHeader({ children, className = "" }: CardProps) {
 }
 
 export function CardTitle({ children }: { children: React.ReactNode }) {
-  return <h2 className="text-lg font-semibold text-arc-900">{children}</h2>;
+  return <h2 className="text-lg font-semibold text-[var(--fg)]">{children}</h2>;
 }
