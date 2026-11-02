@@ -10,6 +10,7 @@ import { LiveStats } from "@/components/landing/LiveStats";
 import { TokenCoin } from "@/components/TokenCoin";
 import { LiveTicker } from "@/components/layout/LiveTicker";
 import { JoinWithXButton } from "@/components/auth/JoinWithXButton";
+import { HERO_COINS_SRC } from "@/assets/heroCoins";
 
 const FEATURES = [
   {
@@ -95,7 +96,18 @@ export default function VibeFlowLanding() {
       </div>
 
       {/* ==================== HERO ==================== */}
-      <section className="relative flex min-h-screen flex-col justify-center px-5 pt-16 pb-20 sm:px-8">
+      <section className="relative flex min-h-screen flex-col justify-center overflow-hidden px-5 pt-16 pb-20 sm:px-8">
+        {/* 3D coins visual: glass USDC coins riding a light wave */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+          <img
+            src={HERO_COINS_SRC}
+            alt=""
+            className="hero-visual h-full w-full object-cover object-[72%_center]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg)] via-[var(--bg)]/60 to-transparent" />
+          <div className="absolute inset-0 bg-[var(--bg)]/35 sm:hidden" />
+          <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[var(--bg)] to-transparent" />
+        </div>
 
         <div className="relative z-10 mx-auto w-full max-w-6xl">
           {/* Mono metadata row */}
@@ -106,9 +118,10 @@ export default function VibeFlowLanding() {
 
           <div className="grid gap-10 lg:grid-cols-12 lg:items-end">
             <div className="lg:col-span-9">
+              <div className="mb-8 flex flex-wrap items-center gap-3">
               <Link
                 href={ROUTES.VIBRAIN}
-                className="animate-fade-in-up group mb-4 flex w-fit items-center gap-2.5 border border-[var(--accent)]/40 bg-[var(--accent-soft)] px-4 py-2 backdrop-blur-xl transition-colors duration-200 hover:border-[var(--accent)]"
+                className="animate-fade-in-up group flex w-fit items-center gap-2.5 border border-[var(--accent)]/40 bg-[var(--accent-soft)] px-4 py-2 backdrop-blur-xl transition-colors duration-200 hover:border-[var(--accent)]"
               >
                 <span className="mono-label !text-[var(--accent)]">New</span>
                 <span className="mono-label !text-[var(--fg-muted)]">Vibrain is live: watch Arc move</span>
@@ -117,12 +130,13 @@ export default function VibeFlowLanding() {
                 </svg>
               </Link>
 
-              <div className="animate-fade-in-up mb-8 inline-flex items-center gap-2.5 border border-[var(--line)] bg-[var(--glass)] px-4 py-2 backdrop-blur-xl">
+              <div className="animate-fade-in-up inline-flex items-center gap-2.5 border border-[var(--line)] bg-[var(--glass)] px-4 py-2 backdrop-blur-xl">
                 <span className="relative flex h-1.5 w-1.5">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--data)] opacity-75" />
                   <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[var(--data)]" />
                 </span>
                 <span className="mono-label !text-[var(--fg-muted)]">Built with Arc Studio · Powered by Arc Blockchain</span>
+              </div>
               </div>
 
               <h1 className="animate-fade-in-up delay-100 max-w-4xl text-5xl font-bold leading-[0.98] tracking-[-0.03em] sm:text-6xl md:text-7xl xl:text-8xl">
@@ -159,6 +173,20 @@ export default function VibeFlowLanding() {
                 </Link>
               </div>
 
+              <div className="glass-live animate-fade-in-up delay-300 mt-6 grid grid-cols-2 gap-x-4 px-5 py-3 lg:hidden">
+                {[
+                  "No code required",
+                  "Zero approval needed",
+                  "AI-powered parsing",
+                  "Sub-second finality",
+                ].map((label) => (
+                  <div key={label} className="flex items-center gap-2.5 py-2">
+                    <span className="h-1 w-1 shrink-0 bg-[var(--data)]" />
+                    <span className="mono-label !text-[var(--fg-muted)]">{label}</span>
+                  </div>
+                ))}
+              </div>
+
               <div className="animate-fade-in-up delay-500 mt-10 flex items-center gap-5">
                 <div className="flex items-center -space-x-2">
                   <TokenCoin symbol="USDC" size={34} />
@@ -179,7 +207,7 @@ export default function VibeFlowLanding() {
                   <TokenCoin symbol="cirBTC" size={44} />
                 </div>
               </div>
-              <div className="space-y-0 border-l border-[var(--line)] pl-6">
+              <div className="glass-live space-y-0 px-5 py-2">
                 {[
                   ["No code required"],
                   ["Zero approval needed"],
@@ -205,7 +233,7 @@ export default function VibeFlowLanding() {
           {/* Accent glow behind the card */}
           <div className="pointer-events-none absolute left-1/2 top-1/2 h-72 w-[36rem] max-w-full -translate-x-1/2 -translate-y-1/2 rounded-full bg-[var(--accent)] opacity-[0.13] blur-[110px]" aria-hidden="true" />
 
-          <div className="animate-fade-in-up delay-200 relative border border-[var(--line)] bg-[var(--bg-raised)] shadow-[0_30px_80px_rgba(11,13,22,0.12)]">
+          <div className="glass-live animate-fade-in-up delay-200 relative">
             {/* Crosshair corner marks */}
             <span className="mono-label absolute -top-2.5 left-4 z-10 bg-[var(--bg)] px-1 !text-[var(--fg-faint)]" aria-hidden="true">+</span>
             <span className="mono-label absolute -top-2.5 right-4 z-10 bg-[var(--bg)] px-1 !text-[var(--fg-faint)]" aria-hidden="true">+</span>
@@ -289,6 +317,19 @@ export default function VibeFlowLanding() {
           </div>
 
           <p className="mono-label mt-10 text-center !text-[var(--fg-faint)]">Illustration of a VibeFlow batch</p>
+
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-[var(--data)]" />
+            <span className="mono-label !text-[var(--fg-muted)]">Live proof: a real batch settled on Arc mainnet</span>
+            <a
+              href="https://explorer.arc.io/tx/0x2998eb1bab0bcdaf673f8f1e2558817faa6eba0dfc4f5cea4095648f444d9439"
+              target="_blank"
+              rel="noreferrer"
+              className="mono-label !text-[var(--accent)] underline underline-offset-4"
+            >
+              TX 0x2998...d9439
+            </a>
+          </div>
         </div>
       </section>
 
@@ -297,7 +338,10 @@ export default function VibeFlowLanding() {
 
       {/* ==================== FEATURES ==================== */}
       <section id="features" className="relative z-10 px-5 mb-32 sm:px-8">
-        <div className="mx-auto max-w-6xl">
+        <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+          <img src={HERO_COINS_SRC} alt="" className="absolute right-0 top-0 h-full w-auto object-cover opacity-[0.07]" />
+        </div>
+        <div className="relative mx-auto max-w-6xl">
           <div className="rule-tick mb-14 pt-4">
             <div className="flex items-baseline justify-between">
               <h2 className="max-w-2xl text-3xl font-bold tracking-[-0.02em] sm:text-4xl md:text-5xl">
@@ -309,7 +353,7 @@ export default function VibeFlowLanding() {
 
           <div className="grid gap-px overflow-hidden border border-[var(--line)] bg-[var(--line)] md:grid-cols-2 lg:grid-cols-3">
             {FEATURES.map((f) => (
-              <div key={f.fig} className="group relative bg-[var(--bg-raised)] p-8 transition-colors duration-300 hover:bg-[var(--glass-strong)]">
+              <div key={f.fig} className="group relative bg-white/60 p-8 backdrop-blur-xl transition-colors duration-300 hover:bg-[var(--glass-strong)]">
                 <div className="mb-10 flex items-center justify-between">
                   <span className="mono-label">{f.fig}</span>
                   <span className={`mono-label ${f.accent === "accent" ? "!text-[var(--accent)]" : "!text-[var(--data)]"}`}>{f.sys}</span>
@@ -343,7 +387,7 @@ export default function VibeFlowLanding() {
 
           <div className="grid gap-px border border-[var(--line)] bg-[var(--line)] md:grid-cols-3">
             {STEPS.map((s, i) => (
-              <div key={s.fig} className="relative bg-[var(--bg-raised)] p-8 transition-colors duration-300 hover:bg-[var(--glass-strong)]">
+              <div key={s.fig} className="relative bg-white/60 p-8 backdrop-blur-xl transition-colors duration-300 hover:bg-[var(--glass-strong)]">
                 <div className="mb-10 flex items-center justify-between">
                   <span className="mono-label">{s.fig}</span>
                   <span className="font-mono text-2xl font-bold text-[var(--fg-faint)]">{String(i + 1).padStart(2, "0")}</span>
