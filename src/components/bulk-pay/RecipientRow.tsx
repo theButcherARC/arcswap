@@ -116,24 +116,24 @@ export default function RecipientRow({
   };
 
   const inputClasses =
-    "w-full bg-black/[0.03] border border-[var(--line)] text-[var(--fg)] placeholder:text-[var(--fg-faint)] px-4 py-3 text-sm focus:outline-none focus:border-violet-500/50 focus:bg-black/[0.03] focus:shadow-[0_0_0_3px_rgba(124,58,237,0.12)] transition-all duration-200 hover:border-[var(--line-strong)] hover:bg-black/[0.04] disabled:opacity-40 disabled:cursor-not-allowed";
+    "w-full bg-black/[0.03] border border-[var(--line)] text-[var(--fg)] placeholder:text-[var(--fg-faint)] px-4 py-3 text-base focus:outline-none focus:border-[var(--accent)] focus:bg-black/[0.03] focus:shadow-[0_0_0_3px_rgba(39,117,202,0.14)] transition-all duration-200 hover:border-[var(--line-strong)] hover:bg-black/[0.04] disabled:opacity-40 disabled:cursor-not-allowed";
 
   const addressClasses =
-    "w-full border px-4 py-3 text-sm font-mono placeholder:text-[var(--fg-faint)] focus:outline-none transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed " +
+    "w-full border px-4 py-3 text-base font-mono placeholder:text-[var(--fg-faint)] focus:outline-none transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed " +
     (addressValid
       ? "border-emerald-500/40 bg-emerald-500/5 text-[var(--fg)] focus:border-emerald-500/60"
       : addressHasInput
         ? "border-rose-500/40 bg-rose-500/5 text-[var(--fg)] focus:border-rose-500/60"
-        : "border-[var(--line)] bg-black/[0.03] text-[var(--fg)] focus:border-violet-500/50 hover:border-[var(--line-strong)] hover:bg-black/[0.04]");
+        : "border-[var(--line)] bg-black/[0.03] text-[var(--fg)] focus:border-[var(--accent)] hover:border-[var(--line-strong)] hover:bg-black/[0.04]");
 
   const rowNumber = index + 1;
 
   return (
-    <div className="group animate-slide-in-top bg-black/[0.03] border border-[var(--line)] p-4 hover:border-violet-500/25 hover:bg-black/[0.04] hover:shadow-[0_0_20px_rgba(124,58,237,0.08)] transition-all duration-200">
+    <div className="group animate-slide-in-top bg-black/[0.03] border border-[var(--line)] p-4 hover:border-[var(--accent)] hover:bg-black/[0.04] transition-all duration-200">
       <div className="flex flex-wrap items-start gap-3">
         {/* Row number badge */}
         <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--accent-soft)] mt-3">
-          <span className="text-[11px] font-bold text-violet-400">
+          <span className="text-[11px] font-bold text-[var(--accent)]">
             {rowNumber}
           </span>
         </div>
@@ -247,7 +247,7 @@ export default function RecipientRow({
               disabled={isDisabled}
               placeholder={activePlaceholder}
               className={
-                "w-full bg-black/[0.03] border border-[var(--line)] text-[var(--fg)] placeholder:text-[var(--fg-faint)] py-3 text-sm text-right focus:outline-none focus:border-violet-500/50 transition-all duration-200 hover:border-[var(--line-strong)] hover:bg-black/[0.04] disabled:opacity-40 disabled:cursor-not-allowed " +
+                "w-full bg-black/[0.03] border border-[var(--line)] text-[var(--fg)] placeholder:text-[var(--fg-faint)] py-3 text-base text-right focus:outline-none focus:border-[var(--accent)] transition-all duration-200 hover:border-[var(--line-strong)] hover:bg-black/[0.04] disabled:opacity-40 disabled:cursor-not-allowed " +
                 (inputMode === "amount" ? "pl-8 pr-4" : "pl-4 pr-8")
               }
             />
@@ -272,7 +272,7 @@ export default function RecipientRow({
           type="button"
           onClick={() => onRemove(recipient.id)}
           disabled={isDisabled}
-          className="mt-5 flex h-8 w-8 shrink-0 items-center justify-center border border-[var(--line)] bg-black/[0.03] text-[var(--fg-faint)] transition-all duration-200 hover:border-rose-500/30 hover:bg-rose-500/10 hover:text-rose-600 active:scale-90 disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:border-[var(--line-strong)] disabled:hover:bg-black/[0.04] disabled:hover:text-[var(--fg-faint)]"
+          className="mt-4 flex h-11 w-11 shrink-0 items-center justify-center border border-[var(--line)] bg-black/[0.03] text-[var(--fg-faint)] transition-all duration-200 hover:border-rose-500/30 hover:bg-rose-500/10 hover:text-rose-600 active:scale-90 disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:border-[var(--line-strong)] disabled:hover:bg-black/[0.04] disabled:hover:text-[var(--fg-faint)]"
           aria-label={"Remove recipient " + rowNumber}
         >
           <svg

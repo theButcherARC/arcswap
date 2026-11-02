@@ -75,7 +75,7 @@ export default function BulkPaySuccess({ txHash, onReset, tokenSymbol = "USDC" }
               href={explorerUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm text-violet-400 hover:text-violet-300 font-mono break-all transition-colors duration-200"
+              className="text-sm text-[var(--accent)] hover:opacity-80 font-mono break-all transition-colors duration-200"
             >
               {txHash}
             </a>
