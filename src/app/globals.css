@@ -636,3 +636,22 @@ select:focus-visible {
   .hero-visual { animation: none; }
 }
 
+/* App-wide polish (design skills pass): browser surfaces themed from the palette */
+::selection {
+  background: var(--accent-soft);
+  color: var(--fg);
+}
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.font-mono {
+  font-variant-numeric: tabular-nums;
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(11, 13, 22, 0.18) transparent;
+}
