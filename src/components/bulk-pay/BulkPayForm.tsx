@@ -1072,7 +1072,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                 the address fills in for you.
               </p>
               {/* Column headers */}
-              <div className="flex items-center gap-3 px-4 mb-3">
+              <div className="hidden items-center gap-3 px-4 pb-3 lg:flex">
                 <div className="w-7 shrink-0" />
                 <div className="min-w-[120px] flex-1">
                   <span className="text-[10px] font-medium text-[var(--fg-faint)] uppercase tracking-wider">
@@ -1089,11 +1089,11 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     {inputMode === "amount" ? "Amount" : "Percentage"}
                   </span>
                 </div>
-                <div className="w-8 shrink-0" />
+                <div className="w-11 shrink-0" />
               </div>
 
               {/* Recipient rows */}
-              <div className="space-y-3">
+              <div className="divide-y divide-[var(--line)] border border-[var(--line)] bg-[var(--bg-raised)]">
                 {recipients.map((recipient, i) => (
                   <RecipientRow
                     key={recipient.id}
