@@ -70,7 +70,7 @@ export default function AgentInput({ onParsed }: AgentInputProps) {
         onChange={(e) => setInstruction(e.target.value)}
         placeholder="e.g. Pay Alice 500 USDC at @alice, Bob 300 at VIBE-ABC123, or Carol 200 at 0x1234...abcd"
         rows={3}
-        className="w-full bg-surface border border-[var(--line)] text-[var(--fg)] placeholder-gray-500 text-sm p-3 resize-none focus:outline-none focus:border-[var(--accent)] transition-colors"
+        className="w-full bg-surface border border-[var(--line)] text-[var(--fg)] placeholder-gray-500 text-base p-3 resize-none focus:outline-none focus:border-[var(--accent)] transition-colors"
       />
 
       {/* Examples */}
@@ -93,7 +93,7 @@ export default function AgentInput({ onParsed }: AgentInputProps) {
       <button
         onClick={handleParse}
         disabled={loading || !instruction.trim()}
-        className="w-full py-2.5 bg-[var(--fg)] text-[var(--bg)] hover:opacity-85 disabled:opacity-40 disabled:cursor-not-allowed text-[var(--fg)] text-sm font-semibold transition-colors"
+        className="w-full min-h-11 py-2.5 bg-[var(--accent)] text-white hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed text-sm font-semibold transition-colors"
       >
         {loading ? "Parsing..." : "Parse with AI"}
       </button>
