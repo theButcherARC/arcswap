@@ -309,7 +309,7 @@ export default function CSVUploadForm() {
         </Link>
 
         {/* ── Main card ──────────────────────────────────────────────────── */}
-        <div className="border border-[var(--line)] bg-black/[0.03] backdrop-blur-2xl shadow-[0_0_80px_rgba(124,58,237,0.08),0_0_160px_rgba(99,102,241,0.04)] overflow-hidden">
+        <div className="border border-[var(--line)] bg-black/[0.03] backdrop-blur-2xl overflow-hidden">
 
           {/* ── Input mode tabs ────────────────────────────────────────── */}
           <div className="px-6 sm:px-8 pt-6 pb-0 flex items-center gap-1 border-b border-[var(--line)]">
@@ -353,7 +353,7 @@ export default function CSVUploadForm() {
                   className={[
                     "w-full border-2 border-dashed transition-colors duration-300 flex flex-col items-center justify-center gap-4 py-14 px-6 cursor-pointer group",
                     isDragging
-                      ? "border-[var(--accent)] bg-[var(--accent-soft)] shadow-[0_0_30px_rgba(124,58,237,0.15)]"
+                      ? "border-[var(--accent)] bg-[var(--accent-soft)]"
                       : fileName
                         ? "border-[rgba(39,117,202,0.4)] bg-[rgba(39,117,202,0.04)] hover:border-[rgba(39,117,202,0.6)]"
                         : "border-[var(--line)] bg-black/[0.03] hover:border-[rgba(39,117,202,0.35)] hover:bg-[var(--accent-soft)]",
