@@ -294,6 +294,20 @@ export default function CSVUploadForm() {
           </div>
         </div>
 
+        {/* ── Automation banner: the AI agent path ─────────────────────── */}
+        <Link
+          href="/bulk-pay"
+          className="group -mt-4 mb-6 flex items-center justify-between gap-4 border border-[var(--accent)]/30 bg-[var(--accent-soft)] px-5 py-4 transition-colors duration-200 hover:border-[var(--accent)]/60"
+        >
+          <p className="text-sm leading-relaxed text-[var(--fg-muted)]">
+            <span className="font-semibold text-[var(--fg)]">Prefer automation?</span>{" "}
+            Skip the spreadsheet. Describe the payments in one sentence and the AI Payment Agent builds the batch for you. You review and sign, nothing is sent before that.
+          </p>
+          <span className="shrink-0 text-sm font-semibold text-[var(--accent)]">
+            Try the agent <span aria-hidden="true">→</span>
+          </span>
+        </Link>
+
         {/* ── Main card ──────────────────────────────────────────────────── */}
         <div className="border border-[var(--line)] bg-black/[0.03] backdrop-blur-2xl shadow-[0_0_80px_rgba(124,58,237,0.08),0_0_160px_rgba(99,102,241,0.04)] overflow-hidden">
 
