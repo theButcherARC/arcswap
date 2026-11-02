@@ -11,7 +11,6 @@ import { TokenCoin } from "@/components/TokenCoin";
 import { LiveTicker } from "@/components/layout/LiveTicker";
 import { JoinWithXButton } from "@/components/auth/JoinWithXButton";
 import { HERO_COINS_SRC } from "@/assets/heroCoins";
-import { CoinFlow } from "@/components/landing/CoinFlow";
 
 const FEATURES = [
   {
@@ -108,7 +107,6 @@ export default function VibeFlowLanding() {
           <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg)] via-[var(--bg)]/60 to-transparent" />
           <div className="absolute inset-0 bg-[var(--bg)]/35 sm:hidden" />
           <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[var(--bg)] to-transparent" />
-          <CoinFlow />
         </div>
 
         <div className="relative z-10 mx-auto w-full max-w-6xl">
