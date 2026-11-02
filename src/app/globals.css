@@ -635,3 +635,35 @@ select:focus-visible {
 @media (prefers-reduced-motion: reduce) {
   .hero-visual { animation: none; }
 }
+
+/* CoinFlow: coins flowing down the hero (the name, made visible) */
+.coin-flow {
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 12%, black 82%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, black 12%, black 82%, transparent);
+}
+.coin-fall {
+  position: absolute;
+  top: 0;
+  animation-name: coin-fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+@keyframes coin-fall {
+  from { transform: translateY(-12vh); }
+  to { transform: translateY(108vh); }
+}
+.coin-sway {
+  display: inline-block;
+  animation-name: coin-sway;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+@keyframes coin-sway {
+  from { transform: translateX(-9px) rotate(-5deg); }
+  to { transform: translateX(9px) rotate(5deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .coin-flow { display: none; }
+}
