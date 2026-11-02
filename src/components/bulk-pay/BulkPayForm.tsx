@@ -796,6 +796,24 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
               {/* Expanded agent content */}
               {showAgent ? (
                 <div>
+                  {/* How it works */}
+                  <div className="mb-4 grid gap-2 sm:grid-cols-3">
+                    <div className="border border-[var(--line)] bg-black/[0.03] px-3.5 py-3">
+                      <p className="font-mono text-[11px] font-semibold text-[var(--accent)]">01</p>
+                      <p className="mt-1 text-xs font-semibold text-[var(--fg)]">Describe it</p>
+                      <p className="mt-0.5 text-[11px] leading-relaxed text-[var(--fg-faint)]">Write who gets paid and how much, in plain words.</p>
+                    </div>
+                    <div className="border border-[var(--line)] bg-black/[0.03] px-3.5 py-3">
+                      <p className="font-mono text-[11px] font-semibold text-[var(--accent)]">02</p>
+                      <p className="mt-1 text-xs font-semibold text-[var(--fg)]">The agent drafts it</p>
+                      <p className="mt-0.5 text-[11px] leading-relaxed text-[var(--fg-faint)]">It fills the batch below for you. Nothing is sent.</p>
+                    </div>
+                    <div className="border border-[var(--line)] bg-black/[0.03] px-3.5 py-3">
+                      <p className="font-mono text-[11px] font-semibold text-[var(--accent)]">03</p>
+                      <p className="mt-1 text-xs font-semibold text-[var(--fg)]">You review and sign</p>
+                      <p className="mt-0.5 text-[11px] leading-relaxed text-[var(--fg-faint)]">Check every row, then sign once in your wallet.</p>
+                    </div>
+                  </div>
                   <textarea
                     value={agentInput}
                     onChange={(e) => {
