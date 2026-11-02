@@ -624,12 +624,12 @@ select:focus-visible {
     0 24px 48px rgba(11, 13, 22, 0.1);
 }
 
-@keyframes hero-drift {
-  from { transform: scale(1.03) translateY(0); }
-  to { transform: scale(1.09) translateY(-16px); }
+@keyframes hero-float {
+  from { transform: translateY(0) scale(1.06); }
+  to { transform: translateY(-18px) scale(1.06); }
 }
 .hero-visual {
-  animation: hero-drift 16s ease-in-out infinite alternate;
+  animation: hero-float 7s ease-in-out infinite alternate;
   will-change: transform;
 }
 @media (prefers-reduced-motion: reduce) {
