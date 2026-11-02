@@ -95,7 +95,7 @@ export function ScheduledPayments() {
         </div>
 
         {items.length === 0 ? (
-          <p className="mt-3 text-sm text-gray-400 leading-relaxed">
+          <p className="mt-3 text-sm text-[var(--fg-muted)] leading-relaxed">
             No scheduled payments yet. Build a batch in Bulk Pay, and in the
             review step choose a date to save it here. When the date arrives,
             you review and sign it in one click. VibeFlow never sends a

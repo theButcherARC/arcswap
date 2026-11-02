@@ -285,7 +285,7 @@ export default function DashboardPage() {
                 onClick={handleSync}
                 disabled={syncLoading || isLoading || !isConnected}
                 title={!isConnected ? "Connect your wallet to sync" : "Refresh dashboard data"}
-                className="inline-flex items-center gap-2 rounded-lg border border-[var(--line)] bg-black/[0.03] px-3 py-2 text-xs font-medium text-gray-300 transition-colors hover:border-[var(--line-strong)] hover:bg-black/[0.04] disabled:opacity-50 disabled:cursor-not-allowed"
+                className="inline-flex items-center gap-2 rounded-lg border border-[var(--line)] bg-black/[0.03] px-3 py-2 text-xs font-medium text-[var(--fg-muted)] transition-colors hover:border-[var(--line-strong)] hover:bg-black/[0.04] disabled:opacity-50 disabled:cursor-not-allowed"
                 aria-label="Refresh dashboard data"
               >
                 <svg
@@ -326,7 +326,7 @@ export default function DashboardPage() {
               )}
             </div>
           </div>
-          <p className="text-sm text-gray-400 sm:text-base">
+          <p className="text-sm text-[var(--fg-muted)] sm:text-base">
             Payment history and analytics
           </p>
         </header>
@@ -501,10 +501,10 @@ export default function DashboardPage() {
                       <path d="M5 4h14M5 9h14M5 14h9M5 19h9" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round"/>
                     </svg>
                   </div>
-                  <p className="text-sm font-medium text-gray-300">
+                  <p className="text-sm font-medium text-[var(--fg)]">
                     No bulk payments yet
                   </p>
-                  <p className="mt-1 text-xs text-gray-500">
+                  <p className="mt-1 text-xs text-[var(--fg-muted)]">
                     Create your first bulk payment to get started
                   </p>
                 </div>
@@ -515,19 +515,19 @@ export default function DashboardPage() {
                       <tr className="border-b border-[var(--line)]">
                         <th
                           scope="col"
-                          className="px-5 py-3 text-xs font-medium uppercase tracking-wider text-gray-400 sm:px-6"
+                          className="px-5 py-3 text-xs font-medium uppercase tracking-wider text-[var(--fg-faint)] sm:px-6"
                         >
                           Name
                         </th>
                         <th
                           scope="col"
-                          className="px-5 py-3 text-xs font-medium uppercase tracking-wider text-gray-400 sm:px-6"
+                          className="px-5 py-3 text-xs font-medium uppercase tracking-wider text-[var(--fg-faint)] sm:px-6"
                         >
                           Address
                         </th>
                         <th
                           scope="col"
-                          className="px-5 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-400 sm:px-6"
+                          className="px-5 py-3 text-right text-xs font-medium uppercase tracking-wider text-[var(--fg-faint)] sm:px-6"
                         >
                           Amount
                         </th>
@@ -539,7 +539,7 @@ export default function DashboardPage() {
                           key={r.address + "-" + index}
                           className="border-b border-[var(--line)] transition-colors last:border-0 hover:bg-black/[0.04]"
                         >
-                          <td className="whitespace-nowrap px-5 py-4 text-gray-300 sm:px-6">
+                          <td className="whitespace-nowrap px-5 py-4 text-[var(--fg)] sm:px-6">
                             {r.name}
                           </td>
                           <td className="whitespace-nowrap px-5 py-4 sm:px-6">
@@ -564,7 +564,7 @@ export default function DashboardPage() {
                     <tfoot>
                       <tr className="border-t border-[var(--line)]">
                         <td
-                          className="px-5 py-4 text-xs font-medium uppercase tracking-wider text-gray-400 sm:px-6"
+                          className="px-5 py-4 text-xs font-medium uppercase tracking-wider text-[var(--fg-faint)] sm:px-6"
                           colSpan={2}
                         >
                           Total
