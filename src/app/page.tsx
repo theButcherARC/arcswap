@@ -544,6 +544,13 @@ export default function VibeFlowLanding() {
               </a>
             </div>
           </div>
+
+          {/* Ghost wordmark (SONVEX mobile reference): the brand, huge and quiet, closing the page */}
+          <div aria-hidden="true" className="pointer-events-none mt-12 select-none overflow-hidden">
+            <p className="translate-y-[30%] text-center text-[20vw] font-bold leading-none tracking-tight text-[var(--fg)] opacity-[0.055] lg:text-[12rem]">
+              VibeFlow
+            </p>
+          </div>
         </div>
       </footer>
     </div>
