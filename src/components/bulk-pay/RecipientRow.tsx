@@ -129,7 +129,7 @@ export default function RecipientRow({
   const rowNumber = index + 1;
 
   return (
-    <div className="group animate-slide-in-top bg-black/[0.03] border border-[var(--line)] p-4 hover:border-[var(--accent)] hover:bg-black/[0.04] transition-all duration-200">
+    <div className="group animate-slide-in-top px-4 py-4 transition-colors duration-200 hover:bg-black/[0.02]">
       <div className="flex flex-wrap items-start gap-3">
         {/* Row number badge */}
         <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--accent-soft)] mt-3">
@@ -140,7 +140,7 @@ export default function RecipientRow({
 
         {/* Name input */}
         <div className="min-w-[120px] flex-1">
-          <label className="block text-[10px] font-medium text-[var(--fg-faint)] uppercase tracking-wider mb-1.5">
+          <label className="block text-[10px] font-medium text-[var(--fg-faint)] uppercase tracking-wider mb-1.5 lg:hidden">
             Name
           </label>
           <input
@@ -155,7 +155,7 @@ export default function RecipientRow({
 
         {/* Address input */}
         <div className="min-w-[180px] flex-[1.5]">
-          <label className="block text-[10px] font-medium text-[var(--fg-faint)] uppercase tracking-wider mb-1.5">
+          <label className="block text-[10px] font-medium text-[var(--fg-faint)] uppercase tracking-wider mb-1.5 lg:hidden">
             Address, @username, or VIBE-ID
           </label>
           <div className="relative">
@@ -231,7 +231,7 @@ export default function RecipientRow({
 
         {/* Amount / Percentage input */}
         <div className="w-[130px] shrink-0">
-          <label className="block text-[10px] font-medium text-[var(--fg-faint)] uppercase tracking-wider mb-1.5">
+          <label className="block text-[10px] font-medium text-[var(--fg-faint)] uppercase tracking-wider mb-1.5 lg:hidden">
             {inputMode === "amount" ? "Amount" : "Percentage"}
           </label>
           <div className="relative">
