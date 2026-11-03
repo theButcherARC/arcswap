@@ -13,6 +13,7 @@ export const ROUTES = {
   SCHEDULED: "/scheduled",
   DASHBOARD: "/dashboard",
   SOCIAL_PROFILE: "/social-profile",
+  ROADMAP: "/roadmap",
 } as const;
 
 export type AppRoute = (typeof ROUTES)[keyof typeof ROUTES];

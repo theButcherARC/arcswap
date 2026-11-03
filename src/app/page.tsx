@@ -467,6 +467,7 @@ export default function VibeFlowLanding() {
                 <li><Link href={ROUTES.BULK_PAY} className="text-sm text-[var(--fg-faint)] transition-colors duration-200 hover:text-[var(--fg)]">Bulk Payments</Link></li>
                 <li><Link href={ROUTES.DASHBOARD} className="text-sm text-[var(--fg-faint)] transition-colors duration-200 hover:text-[var(--fg)]">Dashboard</Link></li>
                 <li><Link href={ROUTES.SOCIAL_PROFILE} className="text-sm text-[var(--fg-faint)] transition-colors duration-200 hover:text-[var(--fg)]">VibeID</Link></li>
+                <li><Link href={ROUTES.ROADMAP} className="text-sm text-[var(--fg-faint)] transition-colors duration-200 hover:text-[var(--fg)]">Roadmap</Link></li>
               </ul>
             </div>
 
