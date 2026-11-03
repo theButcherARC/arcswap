@@ -658,3 +658,56 @@ html {
   scrollbar-width: thin;
   scrollbar-color: rgba(11, 13, 22, 0.18) transparent;
 }
+
+/* Roadmap journey: scroll reveal + moving road dashes */
+@keyframes roadmarch {
+  to {
+    stroke-dashoffset: -38;
+  }
+}
+.road-dash-anim {
+  animation: roadmarch 1.1s linear infinite;
+}
+.rj-pin {
+  opacity: 0;
+  transform: scale(0.55);
+  transition:
+    opacity 0.45s ease,
+    transform 0.45s cubic-bezier(0.2, 1.4, 0.4, 1);
+}
+.rj-pin.on {
+  opacity: 1;
+  transform: scale(1);
+}
+.rj-card {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.65s ease,
+    transform 0.65s ease;
+}
+.rj-card.on {
+  opacity: 1;
+  transform: translateY(0);
+}
+.rj-banner {
+  opacity: 0;
+  transform: translateY(calc(-50% + 14px));
+  transition:
+    opacity 0.65s ease,
+    transform 0.65s ease;
+}
+.rj-banner.on {
+  opacity: 1;
+  transform: translateY(-50%);
+}
+@media (prefers-reduced-motion: reduce) {
+  .road-dash-anim {
+    animation: none;
+  }
+  .rj-pin,
+  .rj-card,
+  .rj-banner {
+    transition: none;
+  }
+}
