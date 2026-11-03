@@ -7,6 +7,7 @@ const PoweredBySection = dynamic(() => import("@/components/landing/PoweredBySec
 });
 import FaqSection from "@/components/landing/FaqSection";
 import { LiveStats } from "@/components/landing/LiveStats";
+import Reveal from "@/components/landing/Reveal";
 import { TokenCoin } from "@/components/TokenCoin";
 import { LiveTicker } from "@/components/layout/LiveTicker";
 import { JoinWithXButton } from "@/components/auth/JoinWithXButton";
@@ -95,134 +96,109 @@ export default function VibeFlowLanding() {
         <LiveTicker />
       </div>
 
-      {/* ==================== HERO ==================== */}
-      <section className="relative flex min-h-screen flex-col justify-center overflow-hidden px-5 pt-16 pb-20 sm:px-8">
-        {/* 3D coins visual: glass USDC coins riding a light wave */}
+            {/* ==================== HERO ==================== */}
+      <section className="relative overflow-hidden px-5 pb-20 pt-16 sm:px-8">
+        {/* 3D coins visual: a soft band behind the lower hero, its own coins only */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
           <img
             src={HERO_COINS_SRC}
             alt=""
-            className="hero-visual h-full w-full object-cover object-[72%_center]"
+            className="hero-visual absolute inset-x-0 bottom-0 h-[64%] w-full object-cover object-center"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg)] via-[var(--bg)]/60 to-transparent" />
-          <div className="absolute inset-0 bg-[var(--bg)]/35 sm:hidden" />
-          <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[var(--bg)] to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg)] via-[var(--bg)]/80 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[var(--bg)] to-transparent" />
         </div>
 
-        <div className="relative z-10 mx-auto w-full max-w-6xl">
+        <div className="relative z-10 mx-auto w-full max-w-6xl text-center">
           {/* Mono metadata row */}
-          <div className="animate-fade-in mb-10 flex items-center justify-between border-b border-[var(--line)] pb-3">
+          <div className="animate-fade-in mb-10 flex items-center justify-between border-b border-[var(--line)] pb-3 text-left">
             <span className="mono-label">VF.HUB / ARC.CHAIN / REV 2.0</span>
             <span className="mono-label hidden sm:inline">SETTLEMENT: USDC.EURC</span>
           </div>
 
-          <div className="grid gap-10 lg:grid-cols-12 lg:items-end">
-            <div className="lg:col-span-9">
-              <div className="mb-8 flex flex-wrap items-center gap-3">
-              <Link
-                href={ROUTES.VIBRAIN}
-                className="animate-fade-in-up group flex w-fit items-center gap-2.5 border border-[var(--accent)]/40 bg-[var(--accent-soft)] px-4 py-2 backdrop-blur-xl transition-colors duration-200 hover:border-[var(--accent)]"
-              >
-                <span className="mono-label !text-[var(--accent)]">New</span>
-                <span className="mono-label !text-[var(--fg-muted)]">Vibrain is live: watch Arc move</span>
-                <svg className="text-[var(--accent)] transition-transform duration-300 group-hover:translate-x-0.5" width="12" height="12" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M3 9H15M15 9L10 4M15 9L10 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </Link>
+          <div className="mb-8 flex flex-wrap items-center justify-center gap-3">
+            <Link
+              href={ROUTES.VIBRAIN}
+              className="animate-fade-in-up group flex w-fit items-center gap-2.5 border border-[var(--accent)]/40 bg-[var(--accent-soft)] px-4 py-2 backdrop-blur-xl transition-colors duration-200 hover:border-[var(--accent)]"
+            >
+              <span className="mono-label !text-[var(--accent)]">New</span>
+              <span className="mono-label !text-[var(--fg-muted)]">Vibrain is live: watch Arc move</span>
+              <svg className="text-[var(--accent)] transition-transform duration-300 group-hover:translate-x-0.5" width="12" height="12" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 9H15M15 9L10 4M15 9L10 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </Link>
 
-              <div className="animate-fade-in-up inline-flex items-center gap-2.5 border border-[var(--line)] bg-[var(--glass)] px-4 py-2 backdrop-blur-xl">
-                <span className="relative flex h-1.5 w-1.5">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--data)] opacity-75" />
-                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[var(--data)]" />
-                </span>
-                <span className="mono-label !text-[var(--fg-muted)]">Built with Arc Studio · Powered by Arc Blockchain</span>
-              </div>
-              </div>
-
-              <h1 className="animate-fade-in-up delay-100 max-w-4xl text-5xl font-bold leading-[0.98] tracking-[-0.03em] sm:text-6xl md:text-7xl xl:text-8xl">
-                The people
-                <br />
-                layer of <span className="text-[var(--accent)]">Arc.</span>
-              </h1>
-
-              <p className="animate-fade-in-up delay-200 mt-8 max-w-xl text-base leading-relaxed text-[var(--fg-muted)] sm:text-lg">
-                Pay your whole team in one signature, get paid from anywhere, and watch it all move live. Stablecoin payments for everyone, everywhere.
-              </p>
-
-              <div className="animate-fade-in-up delay-300 mt-10 flex flex-col gap-3 sm:flex-row">
-                <Link
-                  href={ROUTES.BULK_PAY}
-                  className="group inline-flex items-center justify-center gap-2.5 bg-[var(--accent)] px-8 py-4 text-base font-semibold text-[var(--bg)] transition-opacity duration-200 hover:opacity-85"
-                >
-                  Launch App
-                  <svg className="transition-transform duration-300 group-hover:translate-x-0.5" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M3 9H15M15 9L10 4M15 9L10 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </Link>
-                <JoinWithXButton variant="hero" />
-                <Link
-                  href={ROUTES.VIBRAIN}
-                  className="btn-brutal inline-flex items-center justify-center gap-2.5 px-8 py-4 text-base font-medium text-[var(--fg-muted)] hover:text-[var(--fg)]"
-                >
-                  Watch Arc Live
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6 4L10 8L6 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </Link>
-              </div>
-
-              <div className="glass-live animate-fade-in-up delay-300 mt-6 grid grid-cols-2 gap-x-4 px-5 py-3 lg:hidden">
-                {[
-                  "No code required",
-                  "Zero approval needed",
-                  "AI-powered parsing",
-                  "Sub-second finality",
-                ].map((label) => (
-                  <div key={label} className="flex items-center gap-2.5 py-2">
-                    <span className="h-1 w-1 shrink-0 bg-[var(--data)]" />
-                    <span className="mono-label !text-[var(--fg-muted)]">{label}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="animate-fade-in-up delay-500 mt-10 flex items-center gap-5">
-                <div className="flex items-center -space-x-2">
-                  <TokenCoin symbol="USDC" size={34} />
-                  <TokenCoin symbol="EURC" size={34} />
-                  <TokenCoin symbol="cirBTC" size={34} />
-                </div>
-                <span className="mono-label !text-[var(--fg-muted)]">Settles in USDC · EURC · cirBTC on Arc</span>
-              </div>
-            </div>
-
-            {/* Spec column: brutalist metadata */}
-            <div className="animate-fade-in-up delay-500 hidden lg:col-span-3 lg:block">
-              <div className="relative mb-10 flex items-end gap-4 pl-6">
-                <div aria-hidden className="pointer-events-none absolute -left-10 -top-16 h-56 w-56 rounded-full" style={{ background: "radial-gradient(closest-side, rgba(39,117,202,0.14), transparent)" }} />
-                <TokenCoin symbol="USDC" size={104} animate />
-                <div className="flex flex-col gap-3 pb-1">
-                  <TokenCoin symbol="EURC" size={44} />
-                  <TokenCoin symbol="cirBTC" size={44} />
-                </div>
-              </div>
-              <div className="glass-live space-y-0 px-5 py-2">
-                {[
-                  ["No code required"],
-                  ["Zero approval needed"],
-                  ["AI-powered parsing"],
-                  ["Sub-second finality"],
-                ].map(([label]) => (
-                  <div key={label} className="flex items-center gap-3 border-b border-[var(--line)] py-3 last:border-b-0">
-                    <span className="h-1 w-1 bg-[var(--data)]" />
-                    <span className="mono-label !text-[var(--fg-muted)]">{label}</span>
-                  </div>
-                ))}
-              </div>
+            <div className="animate-fade-in-up inline-flex items-center gap-2.5 border border-[var(--line)] bg-[var(--glass)] px-4 py-2 backdrop-blur-xl">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--data)] opacity-75" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[var(--data)]" />
+              </span>
+              <span className="mono-label !text-[var(--fg-muted)]">Built with Arc Studio · Powered by Arc Blockchain</span>
             </div>
           </div>
-        </div>
 
-        <div className="absolute bottom-0 left-0 right-0 z-10 h-24 bg-gradient-to-t from-[var(--bg)] to-transparent pointer-events-none" />
+          <h1 className="animate-fade-in-up delay-100 mx-auto max-w-4xl text-5xl font-bold leading-[0.98] tracking-[-0.03em] sm:text-6xl md:text-7xl xl:text-8xl">
+            The people
+            <br />
+            layer of <span className="text-[var(--accent)]">Arc.</span>
+          </h1>
+
+          <p className="animate-fade-in-up delay-200 mx-auto mt-8 max-w-xl text-base leading-relaxed text-[var(--fg-muted)] sm:text-lg">
+            Pay your whole team in one signature, get paid from anywhere, and watch it all move live. Stablecoin payments for everyone, everywhere.
+          </p>
+
+          <div className="animate-fade-in-up delay-300 mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <Link
+              href={ROUTES.BULK_PAY}
+              className="group inline-flex items-center justify-center gap-2.5 bg-[var(--accent)] px-8 py-4 text-base font-semibold text-[var(--bg)] transition-opacity duration-200 hover:opacity-85"
+            >
+              Launch App
+              <svg className="transition-transform duration-300 group-hover:translate-x-0.5" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 9H15M15 9L10 4M15 9L10 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </Link>
+            <JoinWithXButton variant="hero" />
+            <Link
+              href={ROUTES.VIBRAIN}
+              className="btn-brutal inline-flex items-center justify-center gap-2.5 px-8 py-4 text-base font-medium text-[var(--fg-muted)] hover:text-[var(--fg)]"
+            >
+              Watch Arc Live
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 4L10 8L6 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </Link>
+          </div>
+
+          {/* Trust chips */}
+          <div className="animate-fade-in-up delay-300 mt-10 flex flex-wrap items-center justify-center gap-2.5">
+            {[
+              "0.2% flat fee · $0.01 min",
+              "No code required",
+              "Zero approval needed",
+              "AI-powered parsing",
+              "Sub-second finality",
+            ].map((label) => (
+              <span
+                key={label}
+                className="inline-flex items-center gap-2 border border-[var(--line)] bg-[var(--glass)] px-3.5 py-2 backdrop-blur-xl"
+              >
+                <svg width="11" height="11" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-[var(--accent)]">
+                  <path d="M2.5 7.5L5.5 10.5L11.5 3.5" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <span className="mono-label !text-[var(--fg-muted)]">{label}</span>
+              </span>
+            ))}
+          </div>
+
+          <div className="animate-fade-in-up delay-500 mt-10 flex items-center justify-center gap-5">
+            <div className="flex items-center -space-x-2">
+              <TokenCoin symbol="USDC" size={34} />
+              <TokenCoin symbol="EURC" size={34} />
+              <TokenCoin symbol="cirBTC" size={34} />
+            </div>
+            <span className="mono-label !text-[var(--fg-muted)]">Settles in USDC · EURC · cirBTC on Arc</span>
+          </div>
+        </div>
       </section>
 
       {/* ==================== PRODUCT PREVIEW ==================== */}
@@ -231,7 +207,7 @@ export default function VibeFlowLanding() {
           {/* Accent glow behind the card */}
           <div className="pointer-events-none absolute left-1/2 top-1/2 h-72 w-[36rem] max-w-full -translate-x-1/2 -translate-y-1/2 rounded-full bg-[var(--accent)] opacity-[0.13] blur-[110px]" aria-hidden="true" />
 
-          <div className="glass-live animate-fade-in-up delay-200 relative">
+          <div className="glass-live animate-fade-in-up delay-200 relative lg:-rotate-1">
             {/* Crosshair corner marks */}
             <span className="mono-label absolute -top-2.5 left-4 z-10 bg-[var(--bg)] px-1 !text-[var(--fg-faint)]" aria-hidden="true">+</span>
             <span className="mono-label absolute -top-2.5 right-4 z-10 bg-[var(--bg)] px-1 !text-[var(--fg-faint)]" aria-hidden="true">+</span>
@@ -290,7 +266,7 @@ export default function VibeFlowLanding() {
           </div>
 
           {/* Floating chips */}
-          <div className="animate-fade-in-up delay-300 absolute -top-6 right-6 hidden items-center gap-3 border border-[var(--line)] bg-[var(--glass-strong)] px-4 py-3 shadow-[0_16px_40px_rgba(11,13,22,0.14)] backdrop-blur-xl md:flex">
+          <div className="floaty absolute -top-6 right-6 hidden items-center gap-3 border border-[var(--line)] bg-[var(--glass-strong)] px-4 py-3 shadow-[0_16px_40px_rgba(11,13,22,0.14)] backdrop-blur-xl md:flex">
             <span className="flex h-6 w-6 items-center justify-center bg-[var(--data)] text-[var(--bg)]">
               <svg width="12" height="12" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M2.5 7.5L5.5 10.5L11.5 3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -301,7 +277,7 @@ export default function VibeFlowLanding() {
               <p className="font-mono text-[10px] text-[var(--fg-faint)]">0.4s on Arc</p>
             </div>
           </div>
-          <div className="animate-fade-in-up delay-500 absolute -bottom-6 left-6 hidden items-center gap-3 border border-[var(--line)] bg-[var(--glass-strong)] px-4 py-3 shadow-[0_16px_40px_rgba(11,13,22,0.14)] backdrop-blur-xl md:flex">
+          <div className="floaty-b absolute -bottom-6 left-6 hidden items-center gap-3 border border-[var(--line)] bg-[var(--glass-strong)] px-4 py-3 shadow-[0_16px_40px_rgba(11,13,22,0.14)] backdrop-blur-xl md:flex">
             <span className="flex h-6 w-6 items-center justify-center bg-[var(--accent)] text-[var(--bg)]">
               <svg width="12" height="12" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="7" cy="7" r="5.5" stroke="currentColor" strokeWidth="1.6" />
@@ -349,9 +325,9 @@ export default function VibeFlowLanding() {
             </div>
           </div>
 
-          <div className="grid gap-px overflow-hidden border border-[var(--line)] bg-[var(--line)] md:grid-cols-2 lg:grid-cols-3">
+          <Reveal className="rv-group grid gap-px overflow-hidden border border-[var(--line)] bg-[var(--line)] md:grid-cols-2 lg:grid-cols-3">
             {FEATURES.map((f) => (
-              <div key={f.fig} className="group relative bg-white/60 p-8 backdrop-blur-xl transition-colors duration-300 hover:bg-[var(--glass-strong)]">
+              <div key={f.fig} className="rv-item group relative bg-white/60 p-8 backdrop-blur-xl transition-colors duration-300 hover:bg-[var(--glass-strong)]">
                 <div className="mb-10 flex items-center justify-between">
                   <span className="mono-label">{f.fig}</span>
                   <span className={`mono-label ${f.accent === "accent" ? "!text-[var(--accent)]" : "!text-[var(--data)]"}`}>{f.sys}</span>
@@ -364,7 +340,7 @@ export default function VibeFlowLanding() {
                 </div>
               </div>
             ))}
-          </div>
+          </Reveal>
         </div>
       </section>
 
@@ -383,9 +359,17 @@ export default function VibeFlowLanding() {
             </div>
           </div>
 
-          <div className="grid gap-px border border-[var(--line)] bg-[var(--line)] md:grid-cols-3">
+          <div className="mb-10 hidden items-center md:flex" aria-hidden="true">
+            <span className="h-2 w-2 shrink-0 rounded-full bg-[var(--fg)]" />
+            <span className="mx-2 flex-1 border-t-2 border-dashed border-[var(--fg)]/25" />
+            <span className="h-2 w-2 shrink-0 rounded-full bg-[var(--fg)]" />
+            <span className="mx-2 flex-1 border-t-2 border-dashed border-[var(--fg)]/25" />
+            <span className="h-2 w-2 shrink-0 rounded-full bg-[var(--accent)]" />
+          </div>
+
+          <Reveal className="rv-group grid gap-px border border-[var(--line)] bg-[var(--line)] md:grid-cols-3">
             {STEPS.map((s, i) => (
-              <div key={s.fig} className="relative bg-white/60 p-8 backdrop-blur-xl transition-colors duration-300 hover:bg-[var(--glass-strong)]">
+              <div key={s.fig} className="rv-item relative bg-white/60 p-8 backdrop-blur-xl transition-colors duration-300 hover:bg-[var(--glass-strong)]">
                 <div className="mb-10 flex items-center justify-between">
                   <span className="mono-label">{s.fig}</span>
                   <span className="font-mono text-2xl font-bold text-[var(--fg-faint)]">{String(i + 1).padStart(2, "0")}</span>
@@ -402,7 +386,7 @@ export default function VibeFlowLanding() {
                 </div>
               </div>
             ))}
-          </div>
+          </Reveal>
         </div>
       </section>
 
@@ -412,22 +396,22 @@ export default function VibeFlowLanding() {
       {/* ==================== CTA ==================== */}
       <section className="relative z-10 px-5 mb-32 sm:px-8">
         <div className="mx-auto max-w-4xl">
-          <div className="glass-panel-strong depth-glow relative overflow-hidden px-8 py-16 text-center sm:px-16 sm:py-20">
-            <div className="grid-lines pointer-events-none absolute inset-0 opacity-30" aria-hidden="true" />
+          <div className="relative overflow-hidden bg-[var(--accent)] px-8 py-16 text-center text-white sm:px-16 sm:py-20">
+            <div className="grid-lines pointer-events-none absolute inset-0 opacity-20" aria-hidden="true" />
             <div className="relative">
               <div className="mb-8 flex justify-center">
                 <TokenCoin symbol="USDC" size={64} animate />
               </div>
-              <span className="mono-label mb-6 block">SYS.INIT / VIBEFLOW.HUB</span>
+              <span className="mono-label mb-6 block !text-white/70">SYS.INIT / VIBEFLOW.HUB</span>
               <h2 className="mb-5 text-3xl font-bold leading-tight tracking-[-0.02em] sm:text-4xl md:text-5xl">
                 The people layer of Arc is open.
               </h2>
-              <p className="mx-auto mb-10 max-w-lg text-base leading-relaxed text-[var(--fg-muted)]">
+              <p className="mx-auto mb-10 max-w-lg text-base leading-relaxed text-white/80">
                 Pay your whole team in one signature, get paid from anywhere, and watch it all move live.
               </p>
               <Link
                 href={ROUTES.BULK_PAY}
-                className="group inline-flex items-center gap-2.5 bg-[var(--accent)] px-10 py-4 text-base font-semibold text-[var(--bg)] transition-opacity duration-200 hover:opacity-85"
+                className="group inline-flex items-center gap-2.5 bg-white px-10 py-4 text-base font-semibold text-[var(--fg)] transition-opacity duration-200 hover:opacity-90"
               >
                 Launch App
                 <svg className="transition-transform duration-300 group-hover:translate-x-1" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
