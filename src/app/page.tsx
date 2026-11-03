@@ -7,6 +7,7 @@ const PoweredBySection = dynamic(() => import("@/components/landing/PoweredBySec
 });
 import FaqSection from "@/components/landing/FaqSection";
 import { LiveStats } from "@/components/landing/LiveStats";
+import HeroParallax from "@/components/landing/HeroParallax";
 import { TokenCoin } from "@/components/TokenCoin";
 import { LiveTicker } from "@/components/layout/LiveTicker";
 import { JoinWithXButton } from "@/components/auth/JoinWithXButton";
@@ -89,6 +90,7 @@ export default function VibeFlowLanding() {
     <div className="relative min-h-screen overflow-hidden bg-[var(--bg)] text-[var(--fg)]">
       {/* Exposed brutalist grid backdrop */}
       <div className="grid-lines pointer-events-none absolute inset-0 opacity-25" aria-hidden="true" />
+      <HeroParallax />
 
       {/* Live transfers ticker (Cooltown-inspired living strip, Oct 29) */}
       <div className="relative z-20 mt-[72px]">
@@ -98,7 +100,7 @@ export default function VibeFlowLanding() {
       {/* ==================== HERO ==================== */}
       <section className="relative flex min-h-screen flex-col justify-center overflow-hidden px-5 pt-16 pb-20 sm:px-8">
         {/* 3D coins visual: glass USDC coins riding a light wave */}
-        <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+        <div className="px-bg pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
           <img
             src={HERO_COINS_SRC}
             alt=""
@@ -200,14 +202,14 @@ export default function VibeFlowLanding() {
             {/* Spec column: brutalist metadata */}
             <div className="animate-fade-in-up delay-500 hidden lg:col-span-3 lg:block">
               <div className="relative mb-10 flex items-end gap-4 pl-6">
-                <div aria-hidden className="pointer-events-none absolute -left-10 -top-16 h-56 w-56 rounded-full" style={{ background: "radial-gradient(closest-side, rgba(39,117,202,0.14), transparent)" }} />
+                <div aria-hidden className="px-glow pointer-events-none absolute -left-10 -top-16 h-56 w-56 rounded-full" style={{ background: "radial-gradient(closest-side, rgba(39,117,202,0.14), transparent)" }} />
                 <TokenCoin symbol="USDC" size={104} animate />
                 <div className="flex flex-col gap-3 pb-1">
                   <TokenCoin symbol="EURC" size={44} />
                   <TokenCoin symbol="cirBTC" size={44} />
                 </div>
               </div>
-              <div className="glass-live space-y-0 px-5 py-2">
+              <div className="glass-live px-panel space-y-0 px-5 py-2">
                 {[
                   ["No code required"],
                   ["Zero approval needed"],
@@ -233,7 +235,7 @@ export default function VibeFlowLanding() {
           {/* Accent glow behind the card */}
           <div className="pointer-events-none absolute left-1/2 top-1/2 h-72 w-[36rem] max-w-full -translate-x-1/2 -translate-y-1/2 rounded-full bg-[var(--accent)] opacity-[0.13] blur-[110px]" aria-hidden="true" />
 
-          <div className="glass-live animate-fade-in-up delay-200 relative">
+          <div className="glass-live px-card animate-fade-in-up delay-200 relative">
             {/* Crosshair corner marks */}
             <span className="mono-label absolute -top-2.5 left-4 z-10 bg-[var(--bg)] px-1 !text-[var(--fg-faint)]" aria-hidden="true">+</span>
             <span className="mono-label absolute -top-2.5 right-4 z-10 bg-[var(--bg)] px-1 !text-[var(--fg-faint)]" aria-hidden="true">+</span>
