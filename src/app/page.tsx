@@ -284,8 +284,8 @@ export default function VibeFlowLanding() {
       <section className="relative px-5 py-10 sm:px-8" aria-label="Core features">
         <div className="mx-auto max-w-6xl space-y-28">
           {/* Bulk Pay */}
-          <Reveal className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-            <div>
+          <Reveal className="rv-group grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+            <div className="rv-item">
               <span className="mono-label !text-[var(--accent)]">SYS.BATCH · BULK PAY</span>
               <h3 className="mt-4 text-3xl font-bold tracking-[-0.02em] sm:text-4xl">Pay the whole team in one signature.</h3>
               <p className="mt-4 max-w-md text-base leading-relaxed text-[var(--fg-muted)]">
@@ -297,7 +297,7 @@ export default function VibeFlowLanding() {
                 <a href="https://explorer.arc.io/tx/0x2998eb1bab0bcdaf673f8f1e2558817faa6eba0dfc4f5cea4095648f444d9439" target="_blank" rel="noreferrer" className="mono-label !text-[var(--accent)] underline underline-offset-4">View tx</a>
               </div>
             </div>
-            <div className="relative">
+            <div className="rv-item relative">
               <div aria-hidden="true" className="absolute inset-0 rotate-[1.5deg] rounded-lg border border-[var(--line)] bg-white" />
               <div className="glass-live relative rounded-lg">
                 <div className="flex items-center justify-between border-b border-[var(--line)] px-6 py-4">
@@ -328,8 +328,8 @@ export default function VibeFlowLanding() {
           </Reveal>
 
           {/* Vibrain */}
-          <Reveal className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-            <div className="lg:order-2">
+          <Reveal className="rv-group grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+            <div className="rv-item lg:order-2">
               <span className="mono-label !text-[var(--accent)]">SYS.VIBRAIN · LIVE CHAIN DATA</span>
               <h3 className="mt-4 text-3xl font-bold tracking-[-0.02em] sm:text-4xl">Watch Arc move, live.</h3>
               <p className="mt-4 max-w-md text-base leading-relaxed text-[var(--fg-muted)]">
@@ -342,7 +342,7 @@ export default function VibeFlowLanding() {
                 </svg>
               </Link>
             </div>
-            <div className="relative lg:order-1">
+            <div className="rv-item relative lg:order-1">
               <div aria-hidden="true" className="absolute inset-0 -rotate-[1.5deg] rounded-lg border border-[var(--line)] bg-white" />
               <div className="glass-live relative rounded-lg">
                 <div className="flex items-center justify-between border-b border-[var(--line)] px-6 py-4">
@@ -376,8 +376,8 @@ export default function VibeFlowLanding() {
           </Reveal>
 
           {/* VibeSquare */}
-          <Reveal className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-            <div>
+          <Reveal className="rv-group grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+            <div className="rv-item">
               <span className="mono-label !text-[var(--accent)]">SYS.SQUARE · COMMUNITY</span>
               <h3 className="mt-4 text-3xl font-bold tracking-[-0.02em] sm:text-4xl">A feed where money is attached.</h3>
               <p className="mt-4 max-w-md text-base leading-relaxed text-[var(--fg-muted)]">
@@ -390,7 +390,7 @@ export default function VibeFlowLanding() {
                 </svg>
               </Link>
             </div>
-            <div className="relative">
+            <div className="rv-item relative">
               <div aria-hidden="true" className="absolute inset-0 rotate-[1.5deg] rounded-lg border border-[var(--line)] bg-white" />
               <div className="glass-live relative rounded-lg p-6">
                 <div className="flex items-center gap-3">
