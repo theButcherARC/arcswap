@@ -29,7 +29,7 @@ export function JoinWithXButton({ variant = "header" }: { variant?: "header" | "
 
   const sizing =
     variant === "hero"
-      ? "inline-flex min-h-[52px] px-8 py-4 text-base"
+      ? "inline-flex min-h-[52px] rounded-full px-8 py-4 text-base"
       : "hidden min-h-[44px] px-4 text-sm md:inline-flex";
 
   if (user) {

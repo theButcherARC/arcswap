@@ -764,3 +764,16 @@ html {
     transform: none;
   }
 }
+
+/* Hero load-in choreography (Outcrowd-style staged rise) */
+.hi { opacity: 0; animation: hi-rise 0.8s cubic-bezier(0.22, 0.8, 0.3, 1) forwards; }
+.hi-big { opacity: 0; animation: hi-rise-big 1s cubic-bezier(0.22, 0.8, 0.3, 1) forwards; }
+.hi-line { display: block; overflow: hidden; }
+.hi-line > span { display: block; transform: translateY(110%); animation: hi-line-up 0.9s cubic-bezier(0.22, 0.8, 0.3, 1) forwards; }
+@keyframes hi-rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes hi-rise-big { from { opacity: 0; transform: translateY(64px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes hi-line-up { from { transform: translateY(110%); } to { transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) {
+  .hi, .hi-big { opacity: 1; animation: none; }
+  .hi-line > span { transform: none; animation: none; }
+}

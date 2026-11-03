@@ -8,6 +8,7 @@ const PoweredBySection = dynamic(() => import("@/components/landing/PoweredBySec
 import FaqSection from "@/components/landing/FaqSection";
 import { LiveStats } from "@/components/landing/LiveStats";
 import Reveal from "@/components/landing/Reveal";
+import { HeroScroll } from "@/components/landing/HeroScroll";
 import { TokenCoin } from "@/components/TokenCoin";
 import { JoinWithXButton } from "@/components/auth/JoinWithXButton";
 
@@ -106,12 +107,8 @@ export default function VibeFlowLanding() {
           </div>
 
           <h1 className="mx-auto mt-8 max-w-4xl text-6xl font-bold leading-[0.98] tracking-[-0.03em] sm:text-7xl xl:text-8xl">
-            <span className="animate-fade-in-up inline-block">The</span>{" "}
-            <span className="animate-fade-in-up inline-block" style={{ animationDelay: "70ms" }}>people</span>
-            <br />
-            <span className="animate-fade-in-up inline-block" style={{ animationDelay: "140ms" }}>layer</span>{" "}
-            <span className="animate-fade-in-up inline-block" style={{ animationDelay: "210ms" }}>of</span>{" "}
-            <span className="animate-fade-in-up inline-block text-[var(--accent)]" style={{ animationDelay: "280ms" }}>Arc.</span>
+            <span className="hi-line"><span style={{ animationDelay: "100ms" }}>The people</span></span>
+            <span className="hi-line"><span style={{ animationDelay: "220ms" }}>layer of <span className="text-[var(--accent)]">Arc.</span></span></span>
           </h1>
 
           <p className="animate-fade-in-up delay-300 mx-auto mt-7 max-w-xl text-base leading-relaxed text-[var(--fg-muted)] sm:text-lg">
@@ -152,11 +149,12 @@ export default function VibeFlowLanding() {
           </div>
 
           {/* Hero visual: the batch, as a document on a desk */}
-          <div className="relative mx-auto mt-20 max-w-3xl text-left">
+          <HeroScroll className="relative mx-auto mt-20 max-w-3xl text-left">
+            <div className="hi-big" style={{ animationDelay: "700ms" }}>
             <div aria-hidden="true" className="absolute inset-0 -rotate-2 rounded-lg border border-[var(--line)] bg-white" />
             <div aria-hidden="true" className="absolute inset-0 rotate-[1.2deg] rounded-lg border border-[var(--line)] bg-white" />
 
-            <div className="glass-live animate-fade-in-up delay-200 relative rounded-lg">
+            <div className="glass-live relative rounded-lg">
               <div className="flex items-center justify-between border-b border-[var(--line)] px-6 py-4 sm:px-8">
                 <span className="mono-label">SYS.BATCH / JULY PAYROLL</span>
                 <span className="mono-label border border-[var(--line)] px-2.5 py-1 !text-[var(--accent)]">1 signature</span>
@@ -205,11 +203,12 @@ export default function VibeFlowLanding() {
             </div>
 
             {/* Floating widgets */}
-            <div className="floaty-b absolute -left-8 top-14 z-20 hidden h-24 w-24 flex-col items-center justify-center rounded-full bg-[var(--accent)] text-white lg:flex">
+            <div className="absolute -left-8 top-14 z-20 hidden lg:block" style={{ transform: "translateX(calc(var(--hp, 0) * -38px))" }}><div className="floaty-b flex h-24 w-24 flex-col items-center justify-center rounded-full bg-[var(--accent)] text-white">
               <span className="text-xl font-extrabold leading-none">0.2%</span>
               <span className="mt-1 font-mono text-[9px] uppercase tracking-[0.14em] text-white/75">flat fee</span>
             </div>
-            <div className="floaty absolute -top-6 right-4 z-20 hidden items-center gap-3 border border-[var(--line)] bg-[var(--glass-strong)] px-4 py-3 backdrop-blur-xl md:flex">
+            </div>
+            <div className="absolute -top-6 right-4 z-20 hidden md:block" style={{ transform: "translateX(calc(var(--hp, 0) * 38px))" }}><div className="floaty flex items-center gap-3 border border-[var(--line)] bg-[var(--glass-strong)] px-4 py-3 backdrop-blur-xl">
               <span className="flex h-6 w-6 items-center justify-center bg-[var(--data)] text-[var(--bg)]">
                 <svg width="12" height="12" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M2.5 7.5L5.5 10.5L11.5 3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -220,7 +219,8 @@ export default function VibeFlowLanding() {
                 <p className="font-mono text-[10px] text-[var(--fg-faint)]">0.4s on Arc</p>
               </div>
             </div>
-            <div className="floaty-b absolute -bottom-6 left-4 z-20 hidden items-center gap-3 border border-[var(--line)] bg-[var(--glass-strong)] px-4 py-3 backdrop-blur-xl md:flex">
+            </div>
+            <div className="absolute -bottom-6 left-4 z-20 hidden md:block" style={{ transform: "translateX(calc(var(--hp, 0) * -30px))" }}><div className="floaty-b flex items-center gap-3 border border-[var(--line)] bg-[var(--glass-strong)] px-4 py-3 backdrop-blur-xl">
               <span className="flex h-6 w-6 items-center justify-center bg-[var(--accent)] text-[var(--bg)]">
                 <svg width="12" height="12" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <circle cx="7" cy="7" r="5.5" stroke="currentColor" strokeWidth="1.6" />
@@ -232,7 +232,9 @@ export default function VibeFlowLanding() {
                 <p className="font-mono text-[10px] text-[var(--fg-faint)]">Pays out Oct 31, 9:00 AM</p>
               </div>
             </div>
-          </div>
+            </div>
+            </div>
+          </HeroScroll>
 
           <p className="mono-label mt-12 text-center !text-[var(--fg-faint)]">Illustration of a VibeFlow batch</p>
           <div className="mt-5 flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
