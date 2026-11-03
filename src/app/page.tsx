@@ -143,12 +143,10 @@ export default function VibeFlowLanding() {
                 The people
                 <br />
                 layer of <span className="text-[var(--accent)]">Arc.</span>
-                <br />
-                <span className="text-[var(--fg-faint)]">One signature.</span>
               </h1>
 
               <p className="animate-fade-in-up delay-200 mt-8 max-w-xl text-base leading-relaxed text-[var(--fg-muted)] sm:text-lg">
-                Pay your whole team in one transaction, watch Arc move live, and earn from real work. USDC and EURC, zero approvals, settled in under a second.
+                Pay your whole team in one signature, get paid from anywhere, and watch it all move live. Stablecoin payments for everyone, everywhere.
               </p>
 
               <div className="animate-fade-in-up delay-300 mt-10 flex flex-col gap-3 sm:flex-row">
@@ -379,7 +377,7 @@ export default function VibeFlowLanding() {
           <div className="rule-tick mb-14 pt-4">
             <div className="flex items-baseline justify-between">
               <h2 className="max-w-2xl text-3xl font-bold tracking-[-0.02em] sm:text-4xl md:text-5xl">
-                Three steps to mass payment clarity.
+                Three steps. One signature.
               </h2>
               <span className="mono-label hidden md:inline">SYS.FLOW / 03</span>
             </div>
@@ -420,18 +418,18 @@ export default function VibeFlowLanding() {
               <div className="mb-8 flex justify-center">
                 <TokenCoin symbol="USDC" size={64} animate />
               </div>
-              <span className="mono-label mb-6 block">SYS.INIT / PAYROLL.BATCH</span>
+              <span className="mono-label mb-6 block">SYS.INIT / VIBEFLOW.HUB</span>
               <h2 className="mb-5 text-3xl font-bold leading-tight tracking-[-0.02em] sm:text-4xl md:text-5xl">
-                Ready to streamline your mass payments?
+                The people layer of Arc is open.
               </h2>
               <p className="mx-auto mb-10 max-w-lg text-base leading-relaxed text-[var(--fg-muted)]">
-                Start moving USDC through VibeFlow. Get started in under five minutes.
+                Pay your whole team in one signature, get paid from anywhere, and watch it all move live.
               </p>
               <Link
                 href={ROUTES.BULK_PAY}
                 className="group inline-flex items-center gap-2.5 bg-[var(--accent)] px-10 py-4 text-base font-semibold text-[var(--bg)] transition-opacity duration-200 hover:opacity-85"
               >
-                Start Paying in Batches
+                Launch App
                 <svg className="transition-transform duration-300 group-hover:translate-x-1" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M3 9H15M15 9L10 4M15 9L10 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
@@ -452,7 +450,7 @@ export default function VibeFlowLanding() {
                 <span className="text-lg font-semibold tracking-tight text-[var(--fg)]">VibeFlow</span>
               </Link>
               <p className="mb-6 max-w-xs text-sm leading-relaxed text-[var(--fg-faint)]">
-                Programmable USDC payroll and batch payments for Web3 teams on Arc.
+                The people layer of Arc: payments, community and live chain data in one hub.
               </p>
               <div className="flex items-center gap-3">
                 <a href="https://x.com/The_Last_Dip" target="_blank" rel="noopener noreferrer" aria-label="VibeFlow on X" className="btn-brutal flex h-9 w-9 items-center justify-center text-[var(--fg-muted)] hover:text-[var(--fg)]">

@@ -50,11 +50,11 @@ export default function PoweredBySection() {
           <div className="relative overflow-hidden">
             <div
               className="pointer-events-none absolute inset-y-0 left-0 w-20 z-10"
-              style={{ background: "linear-gradient(to right, #f5f6fa 0%, transparent 100%)" }}
+              style={{ background: "linear-gradient(to right, var(--bg) 0%, transparent 100%)" }}
             />
             <div
               className="pointer-events-none absolute inset-y-0 right-0 w-20 z-10"
-              style={{ background: "linear-gradient(to left, #f5f6fa 0%, transparent 100%)" }}
+              style={{ background: "linear-gradient(to left, var(--bg) 0%, transparent 100%)" }}
             />
 
             <div className="marquee-track select-none py-2">

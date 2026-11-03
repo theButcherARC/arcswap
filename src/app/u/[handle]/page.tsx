@@ -108,7 +108,7 @@ export default function PublicProfilePage() {
                 <button
                   onClick={copyVibe}
                   title="Copy VibeID"
-                  className="mt-4 bg-[var(--accent-soft)] px-3 py-1.5 font-mono text-xs font-semibold tracking-wider text-[var(--accent)] transition-opacity hover:opacity-80"
+                  className="mt-4 inline-flex min-h-[44px] items-center bg-[var(--accent-soft)] px-4 font-mono text-xs font-semibold tracking-wider text-[var(--accent)] transition-opacity hover:opacity-80"
                 >
                   {data.vibeId} {copied ? '· Copied' : ''}
                 </button>
