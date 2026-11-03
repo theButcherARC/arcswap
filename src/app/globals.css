@@ -636,6 +636,28 @@ select:focus-visible {
   .hero-visual { animation: none; }
 }
 
+/* Hero parallax layers (Lead Bank quiet motion, preview): driven by --hpx/--hpy/--hsy
+   variables written on :root by HeroParallax. Transform-only, calm multipliers. */
+.px-bg {
+  transform: translate3d(calc(var(--hpx, 0) * 8px), calc(var(--hpy, 0) * 8px - var(--hsy, 0) * 18px), 0) scale(1.04);
+  will-change: transform;
+}
+.px-panel {
+  transform: translate3d(calc(var(--hpx, 0) * -7px), calc(var(--hpy, 0) * -7px - var(--hsy, 0) * 30px), 0);
+  will-change: transform;
+}
+.px-glow {
+  transform: translate3d(calc(var(--hpx, 0) * 22px), calc(var(--hpy, 0) * 22px), 0);
+  will-change: transform;
+}
+.px-card {
+  transform: perspective(1000px) rotateX(calc(var(--hpy, 0) * -2.5deg)) rotateY(calc(var(--hpx, 0) * 2.5deg)) translate3d(calc(var(--hpx, 0) * -9px), calc(var(--hpy, 0) * -9px - var(--hsy, 0) * 34px), 0);
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {
+  .px-bg, .px-panel, .px-glow, .px-card { transform: none; }
+}
+
 /* App-wide polish (design skills pass): browser surfaces themed from the palette */
 ::selection {
   background: var(--accent-soft);
