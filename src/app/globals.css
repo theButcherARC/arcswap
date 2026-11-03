@@ -20,6 +20,9 @@
   --accent-soft: rgba(39, 117, 202, 0.1);
   --data: #1f6fd0;
   --data-soft: rgba(39, 117, 202, 0.1);
+  --phase-1: #ce0e33;
+  --phase-3: #bc580c;
+  --phase-4: #6a3ec9;
   --success: #12805c;
   --radius: 16px;
 }
