@@ -777,3 +777,10 @@ html {
   .hi, .hi-big { opacity: 1; animation: none; }
   .hi-line > span { transform: none; animation: none; }
 }
+
+/* 3D coin spin */
+.coin-spin { animation-name: coinspin; animation-timing-function: linear; animation-iteration-count: infinite; }
+@keyframes coinspin { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .coin-spin { animation: none; }
+}

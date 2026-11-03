@@ -9,6 +9,7 @@ import FaqSection from "@/components/landing/FaqSection";
 import { LiveStats } from "@/components/landing/LiveStats";
 import Reveal from "@/components/landing/Reveal";
 import { HeroScroll } from "@/components/landing/HeroScroll";
+import HeroCoin from "@/components/landing/HeroCoin";
 import { TokenCoin } from "@/components/TokenCoin";
 import { JoinWithXButton } from "@/components/auth/JoinWithXButton";
 
@@ -96,8 +97,10 @@ export default function VibeFlowLanding() {
   return (
     <div className="relative min-h-screen bg-[var(--bg)] text-[var(--fg)]">
       {/* ==================== HERO ==================== */}
-      <section className="relative overflow-hidden px-5 pb-24 pt-36 sm:px-8">
-        <div className="relative mx-auto w-full max-w-6xl text-center">
+      <section className="relative overflow-hidden px-5 pb-24 pt-28 sm:px-8 lg:pt-36">
+        <div className="relative mx-auto w-full max-w-6xl">
+          <div className="grid items-center gap-14 lg:grid-cols-[1.02fr_0.98fr] lg:gap-6">
+          <div className="text-center lg:text-left">
           <div className="animate-fade-in-up inline-flex items-center gap-2.5 rounded-full border border-[var(--accent)]/40 bg-[var(--accent-soft)] py-2 pl-3.5 pr-4">
             <span className="relative flex h-1.5 w-1.5">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--accent)] opacity-75" />
@@ -106,16 +109,16 @@ export default function VibeFlowLanding() {
             <span className="mono-label !text-[var(--accent)]">VibeFlow · The Arc Hub · Live on mainnet</span>
           </div>
 
-          <h1 className="mx-auto mt-8 max-w-4xl text-6xl font-bold leading-[0.98] tracking-[-0.03em] sm:text-7xl xl:text-8xl">
+          <h1 className="mx-auto mt-8 max-w-4xl text-6xl font-bold leading-[0.98] tracking-[-0.03em] sm:text-7xl lg:mx-0 xl:text-8xl">
             <span className="hi-line"><span style={{ animationDelay: "100ms" }}>The people</span></span>
             <span className="hi-line"><span style={{ animationDelay: "220ms" }}>layer of <span className="text-[var(--accent)]">Arc.</span></span></span>
           </h1>
 
-          <p className="animate-fade-in-up delay-300 mx-auto mt-7 max-w-xl text-base leading-relaxed text-[var(--fg-muted)] sm:text-lg">
+          <p className="animate-fade-in-up delay-300 mx-auto mt-7 max-w-xl text-base leading-relaxed text-[var(--fg-muted)] sm:text-lg lg:mx-0">
             Pay your whole team in one signature, get paid from anywhere, and watch it all move live. Stablecoin payments for everyone, everywhere.
           </p>
 
-          <div className="animate-fade-in-up delay-300 mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <div className="animate-fade-in-up delay-300 mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row lg:items-start lg:justify-start">
             <Link
               href={ROUTES.BULK_PAY}
               className="group inline-flex items-center justify-center gap-2.5 rounded-full bg-[var(--fg)] px-8 py-4 text-base font-semibold text-[var(--bg)] transition-opacity duration-200 hover:opacity-85"
@@ -137,7 +140,7 @@ export default function VibeFlowLanding() {
             </Link>
           </div>
 
-          <div className="animate-fade-in-up delay-500 mt-9 flex flex-wrap items-center justify-center gap-2.5">
+          <div className="animate-fade-in-up delay-500 mt-9 flex flex-wrap items-center justify-center gap-2.5 lg:justify-start">
             {CHIPS.map((label) => (
               <span key={label} className="inline-flex items-center gap-2 rounded-full border border-[var(--line)] bg-white px-3.5 py-2">
                 <svg width="11" height="11" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-[var(--accent)]">
@@ -146,6 +149,24 @@ export default function VibeFlowLanding() {
                 <span className="mono-label !text-[var(--fg-muted)]">{label}</span>
               </span>
             ))}
+          </div>
+          </div>
+
+          {/* 3D stage: one big glass coin, slow spin and float */}
+          <div className="hi-big relative mx-auto h-[320px] w-full max-w-[440px] sm:h-[380px] lg:h-[500px] lg:max-w-none" style={{ animationDelay: "450ms" }}>
+            <div aria-hidden="true" className="absolute left-1/2 top-1/2 h-[80%] w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-full" style={{ background: "radial-gradient(closest-side, rgba(39,117,202,0.20), rgba(39,117,202,0.05) 55%, transparent 72%)" }} />
+            <div aria-hidden="true" className="absolute bottom-[6%] left-1/2 h-7 w-[56%] -translate-x-1/2 rounded-[100%] bg-[#0b0d16]/15 blur-xl" />
+            <div className="absolute left-1/2 top-1/2 w-[74%] max-w-[400px] -translate-x-1/2 -translate-y-1/2 lg:left-auto lg:right-[-4%] lg:translate-x-0">
+              <div className="floaty">
+                <HeroCoin thickness={18} duration={17} />
+              </div>
+            </div>
+            <div className="floaty-b absolute left-[1%] top-[4%] w-[19%] max-w-[84px]" style={{ animationDelay: "0.9s" }}>
+              <HeroCoin thickness={9} duration={23} />
+            </div>
+            <div aria-hidden="true" className="floaty absolute bottom-[13%] left-[7%] h-9 w-32 rounded-full bg-white shadow-[0_14px_28px_rgba(11,13,22,0.10)]" style={{ animationDelay: "1.7s" }} />
+            <div aria-hidden="true" className="floaty-b absolute right-[10%] top-[7%] h-3 w-3 rounded-full bg-[var(--accent)]" style={{ animationDelay: "0.4s" }} />
+          </div>
           </div>
 
           {/* Hero visual: the batch, as a document on a desk */}
