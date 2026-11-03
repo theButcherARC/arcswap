@@ -97,18 +97,6 @@ export default function VibeFlowLanding() {
 
       {/* ==================== HERO ==================== */}
       <section className="relative flex min-h-screen flex-col justify-center overflow-hidden px-5 pt-16 pb-20 sm:px-8">
-        {/* 3D coins visual: glass USDC coins riding a light wave */}
-        <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-          <img
-            src={HERO_COINS_SRC}
-            alt=""
-            className="hero-visual h-full w-full object-cover object-[72%_center]"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[var(--bg)] via-[var(--bg)]/60 to-transparent" />
-          <div className="absolute inset-0 bg-[var(--bg)]/35 sm:hidden" />
-          <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[var(--bg)] to-transparent" />
-        </div>
-
         <div className="relative z-10 mx-auto w-full max-w-6xl">
           {/* Mono metadata row */}
           <div className="animate-fade-in mb-10 flex items-center justify-between border-b border-[var(--line)] pb-3">
@@ -116,8 +104,8 @@ export default function VibeFlowLanding() {
             <span className="mono-label hidden sm:inline">SETTLEMENT: USDC.EURC</span>
           </div>
 
-          <div className="grid gap-10 lg:grid-cols-12 lg:items-end">
-            <div className="lg:col-span-9">
+          <div className="grid gap-12 lg:grid-cols-12 lg:items-center">
+            <div className="lg:col-span-6">
               <div className="mb-8 flex flex-wrap items-center gap-3">
               <Link
                 href={ROUTES.VIBRAIN}
@@ -143,12 +131,10 @@ export default function VibeFlowLanding() {
                 The people
                 <br />
                 layer of <span className="text-[var(--accent)]">Arc.</span>
-                <br />
-                <span className="text-[var(--fg-faint)]">One signature.</span>
               </h1>
 
               <p className="animate-fade-in-up delay-200 mt-8 max-w-xl text-base leading-relaxed text-[var(--fg-muted)] sm:text-lg">
-                Pay your whole team in one transaction, watch Arc move live, and earn from real work. USDC and EURC, zero approvals, settled in under a second.
+                Pay your whole team in one signature, get paid from anywhere, and watch it all move live. Stablecoin payments for everyone, everywhere.
               </p>
 
               <div className="animate-fade-in-up delay-300 mt-10 flex flex-col gap-3 sm:flex-row">
@@ -197,43 +183,12 @@ export default function VibeFlowLanding() {
               </div>
             </div>
 
-            {/* Spec column: brutalist metadata */}
-            <div className="animate-fade-in-up delay-500 hidden lg:col-span-3 lg:block">
-              <div className="relative mb-10 flex items-end gap-4 pl-6">
-                <div aria-hidden className="pointer-events-none absolute -left-10 -top-16 h-56 w-56 rounded-full" style={{ background: "radial-gradient(closest-side, rgba(39,117,202,0.14), transparent)" }} />
-                <TokenCoin symbol="USDC" size={104} animate />
-                <div className="flex flex-col gap-3 pb-1">
-                  <TokenCoin symbol="EURC" size={44} />
-                  <TokenCoin symbol="cirBTC" size={44} />
-                </div>
-              </div>
-              <div className="glass-live space-y-0 px-5 py-2">
-                {[
-                  ["No code required"],
-                  ["Zero approval needed"],
-                  ["AI-powered parsing"],
-                  ["Sub-second finality"],
-                ].map(([label]) => (
-                  <div key={label} className="flex items-center gap-3 border-b border-[var(--line)] py-3 last:border-b-0">
-                    <span className="h-1 w-1 bg-[var(--data)]" />
-                    <span className="mono-label !text-[var(--fg-muted)]">{label}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="absolute bottom-0 left-0 right-0 z-10 h-24 bg-gradient-to-t from-[var(--bg)] to-transparent pointer-events-none" />
-      </section>
-
-      {/* ==================== PRODUCT PREVIEW ==================== */}
-      <section className="relative z-10 px-5 mb-28 sm:px-8" aria-label="Product preview">
-        <div className="relative mx-auto max-w-6xl">
+            {/* Product column: the real batch panel is the hero visual */}
+            <div className="relative animate-fade-in-up delay-200 lg:col-span-6">
           {/* Accent glow behind the card */}
           <div className="pointer-events-none absolute left-1/2 top-1/2 h-72 w-[36rem] max-w-full -translate-x-1/2 -translate-y-1/2 rounded-full bg-[var(--accent)] opacity-[0.13] blur-[110px]" aria-hidden="true" />
 
-          <div className="glass-live animate-fade-in-up delay-200 relative">
+          <div className="glass-live relative">
             {/* Crosshair corner marks */}
             <span className="mono-label absolute -top-2.5 left-4 z-10 bg-[var(--bg)] px-1 !text-[var(--fg-faint)]" aria-hidden="true">+</span>
             <span className="mono-label absolute -top-2.5 right-4 z-10 bg-[var(--bg)] px-1 !text-[var(--fg-faint)]" aria-hidden="true">+</span>
@@ -317,18 +272,26 @@ export default function VibeFlowLanding() {
           </div>
 
           <p className="mono-label mt-10 text-center !text-[var(--fg-faint)]">Illustration of a VibeFlow batch</p>
+            </div>
+          </div>
 
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-[var(--data)]" />
-            <span className="mono-label !text-[var(--fg-muted)]">Live proof: a real batch settled on Arc mainnet</span>
-            <a
-              href="https://explorer.arc.io/tx/0x2998eb1bab0bcdaf673f8f1e2558817faa6eba0dfc4f5cea4095648f444d9439"
-              target="_blank"
-              rel="noreferrer"
-              className="mono-label !text-[var(--accent)] underline underline-offset-4"
-            >
-              TX 0x2998...d9439
-            </a>
+          {/* Proof strip: verifiable claims only, with the real mainnet batch link */}
+          <div className="mt-16 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-[var(--line)] pt-6">
+            <span className="flex items-center gap-2.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-[var(--data)]" />
+              <span className="mono-label !text-[var(--fg-muted)]">Live proof: a real batch settled on Arc mainnet</span>
+              <a
+                href="https://explorer.arc.io/tx/0x2998eb1bab0bcdaf673f8f1e2558817faa6eba0dfc4f5cea4095648f444d9439"
+                target="_blank"
+                rel="noreferrer"
+                className="mono-label !text-[var(--accent)] underline underline-offset-4"
+              >
+                TX 0x2998...d9439
+              </a>
+            </span>
+            <span className="mono-label !text-[var(--fg-faint)]">Built with Arc Studio</span>
+            <span className="mono-label !text-[var(--fg-faint)]">Architect Tier 1 · Arc House</span>
+            <span className="mono-label !text-[var(--fg-faint)]">Solo built, in public</span>
           </div>
         </div>
       </section>
