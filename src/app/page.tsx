@@ -11,7 +11,6 @@ import Reveal from "@/components/landing/Reveal";
 import { TokenCoin } from "@/components/TokenCoin";
 import { LiveTicker } from "@/components/layout/LiveTicker";
 import { JoinWithXButton } from "@/components/auth/JoinWithXButton";
-import { HERO_COINS_SRC } from "@/assets/heroCoins";
 
 const FEATURES = [
   {
@@ -99,16 +98,7 @@ export default function VibeFlowLanding() {
             {/* ==================== HERO ==================== */}
       <section className="relative overflow-hidden px-5 pb-20 pt-16 sm:px-8">
         {/* 3D coins visual: a soft band behind the lower hero, its own coins only */}
-        <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-          <img
-            src={HERO_COINS_SRC}
-            alt=""
-            className="hero-visual absolute inset-x-0 bottom-0 h-[64%] w-full object-cover object-center"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg)] via-[var(--bg)]/80 to-transparent" />
-          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[var(--bg)] to-transparent" />
-        </div>
-
+        
         <div className="relative z-10 mx-auto w-full max-w-6xl text-center">
           {/* Mono metadata row */}
           <div className="animate-fade-in mb-10 flex items-center justify-between border-b border-[var(--line)] pb-3 text-left">
@@ -199,11 +189,7 @@ export default function VibeFlowLanding() {
             <span className="mono-label !text-[var(--fg-muted)]">Settles in USDC · EURC · cirBTC on Arc</span>
           </div>
         </div>
-      </section>
-
-      {/* ==================== PRODUCT PREVIEW ==================== */}
-      <section className="relative z-10 px-5 mb-28 sm:px-8" aria-label="Product preview">
-        <div className="relative mx-auto max-w-6xl">
+<div className="relative z-10 mx-auto mt-16 w-full max-w-6xl text-left">
           {/* Accent glow behind the card */}
           <div className="pointer-events-none absolute left-1/2 top-1/2 h-72 w-[36rem] max-w-full -translate-x-1/2 -translate-y-1/2 rounded-full bg-[var(--accent)] opacity-[0.13] blur-[110px]" aria-hidden="true" />
 
@@ -307,14 +293,12 @@ export default function VibeFlowLanding() {
         </div>
       </section>
 
+      
       {/* ==================== LIVE STATS ==================== */}
       <LiveStats />
 
       {/* ==================== FEATURES ==================== */}
       <section id="features" className="relative z-10 px-5 mb-32 sm:px-8">
-        <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-          <img src={HERO_COINS_SRC} alt="" className="absolute right-0 top-0 h-full w-auto object-cover opacity-[0.07]" />
-        </div>
         <div className="relative mx-auto max-w-6xl">
           <div className="rule-tick mb-14 pt-4">
             <div className="flex items-baseline justify-between">
