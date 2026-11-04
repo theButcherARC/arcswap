@@ -103,7 +103,7 @@ export default function VibeFlowLanding() {
         <LiveTicker />
       </div>
 
-      <section className="relative overflow-hidden px-5 pb-24 pt-4 sm:px-8 lg:pt-6">
+      <section className="relative overflow-hidden px-5 pb-10 pt-4 sm:px-8 lg:pt-6">
         <div className="relative mx-auto w-full max-w-6xl">
           <div className="grid items-center gap-14 lg:grid-cols-[1.02fr_0.98fr] lg:gap-6">
           <div className="text-center lg:text-left">
@@ -284,7 +284,7 @@ export default function VibeFlowLanding() {
       </section>
 
       {/* ==================== THE PROBLEM ==================== */}
-      <section className="relative px-5 py-28 sm:px-8" aria-label="The problem">
+      <section className="relative px-5 pb-28 pt-14 sm:px-8" aria-label="The problem">
         <div className="mx-auto max-w-6xl">
           <div className="mx-auto max-w-2xl text-center">
             <span className="mono-label !text-[var(--accent)]">THE PROBLEM</span>
