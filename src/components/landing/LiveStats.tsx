@@ -66,7 +66,7 @@ export function LiveStats() {
   ];
 
   return (
-    <section className="relative z-10 px-5 mb-28 sm:px-8" aria-label="Live Arc numbers">
+    <section className="relative z-10" aria-label="Live Arc numbers">
       <div className="mx-auto max-w-6xl">
         <div className="overflow-hidden border border-[var(--line)] bg-[var(--line)] grid grid-cols-2 gap-px md:grid-cols-4">
           {cells.map((s) => (
