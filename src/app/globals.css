@@ -711,3 +711,76 @@ html {
     transition: none;
   }
 }
+
+/* Landing redesign: scroll reveals + floating widgets */
+.rv-group .rv-item {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease;
+}
+.rv-group.on .rv-item {
+  opacity: 1;
+  transform: translateY(0);
+}
+.rv-group.on .rv-item:nth-child(2) {
+  transition-delay: 0.07s;
+}
+.rv-group.on .rv-item:nth-child(3) {
+  transition-delay: 0.14s;
+}
+.rv-group.on .rv-item:nth-child(4) {
+  transition-delay: 0.21s;
+}
+.rv-group.on .rv-item:nth-child(5) {
+  transition-delay: 0.28s;
+}
+.rv-group.on .rv-item:nth-child(6) {
+  transition-delay: 0.35s;
+}
+@keyframes floaty {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-9px);
+  }
+}
+.floaty {
+  animation: floaty 5.5s ease-in-out infinite alternate;
+}
+.floaty-b {
+  animation: floaty 7s ease-in-out -2.5s infinite alternate;
+}
+@media (prefers-reduced-motion: reduce) {
+  .floaty,
+  .floaty-b {
+    animation: none;
+  }
+  .rv-group .rv-item {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Hero load-in choreography (Outcrowd-style staged rise) */
+.hi { opacity: 0; animation: hi-rise 0.8s cubic-bezier(0.22, 0.8, 0.3, 1) forwards; }
+.hi-big { opacity: 0; animation: hi-rise-big 1s cubic-bezier(0.22, 0.8, 0.3, 1) forwards; }
+.hi-line { display: block; overflow: hidden; }
+.hi-line > span { display: block; transform: translateY(110%); animation: hi-line-up 0.9s cubic-bezier(0.22, 0.8, 0.3, 1) forwards; }
+@keyframes hi-rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes hi-rise-big { from { opacity: 0; transform: translateY(64px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes hi-line-up { from { transform: translateY(110%); } to { transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) {
+  .hi, .hi-big { opacity: 1; animation: none; }
+  .hi-line > span { transform: none; animation: none; }
+}
+
+/* 3D coin spin */
+.coin-spin { animation-name: coinspin; animation-timing-function: linear; animation-iteration-count: infinite; }
+@keyframes coinspin { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .coin-spin { animation: none; }
+}
