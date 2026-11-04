@@ -131,7 +131,7 @@ export default function VibeFlowLanding() {
             <JoinWithXButton variant="hero" />
             <Link
               href={ROUTES.VIBRAIN}
-              className="inline-flex items-center justify-center gap-2.5 rounded-full px-6 py-4 text-base font-medium text-[var(--fg-muted)] transition-colors hover:text-[var(--fg)]"
+              className="inline-flex items-center justify-center gap-2.5 whitespace-nowrap rounded-full px-6 py-4 text-base font-medium text-[var(--fg-muted)] transition-colors hover:text-[var(--fg)]"
             >
               Watch Arc Live
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -164,7 +164,6 @@ export default function VibeFlowLanding() {
             <div className="floaty-b absolute left-[1%] top-[4%] w-[19%] max-w-[84px]" style={{ animationDelay: "0.9s" }}>
               <HeroCoin thickness={9} duration={23} />
             </div>
-            <div aria-hidden="true" className="floaty absolute bottom-[13%] left-[7%] h-9 w-32 rounded-full bg-white shadow-[0_14px_28px_rgba(11,13,22,0.10)]" style={{ animationDelay: "1.7s" }} />
             <div aria-hidden="true" className="floaty-b absolute right-[10%] top-[7%] h-3 w-3 rounded-full bg-[var(--accent)]" style={{ animationDelay: "0.4s" }} />
           </div>
           </div>
