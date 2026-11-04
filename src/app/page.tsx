@@ -7,6 +7,7 @@ const PoweredBySection = dynamic(() => import("@/components/landing/PoweredBySec
 });
 import FaqSection from "@/components/landing/FaqSection";
 import { LiveStats } from "@/components/landing/LiveStats";
+import { LiveTicker } from "@/components/layout/LiveTicker";
 import Reveal from "@/components/landing/Reveal";
 import { HeroScroll } from "@/components/landing/HeroScroll";
 import HeroCoin from "@/components/landing/HeroCoin";
@@ -97,7 +98,12 @@ export default function VibeFlowLanding() {
   return (
     <div className="relative min-h-screen bg-[var(--bg)] text-[var(--fg)]">
       {/* ==================== HERO ==================== */}
-      <section className="relative overflow-hidden px-5 pb-24 pt-20 sm:px-8 lg:pt-24">
+      {/* Live transfers ticker */}
+      <div className="relative z-20 mt-[72px]">
+        <LiveTicker />
+      </div>
+
+      <section className="relative overflow-hidden px-5 pb-24 pt-10 sm:px-8 lg:pt-14">
         <div className="relative mx-auto w-full max-w-6xl">
           <div className="grid items-center gap-14 lg:grid-cols-[1.02fr_0.98fr] lg:gap-6">
           <div className="text-center lg:text-left">
@@ -140,16 +146,6 @@ export default function VibeFlowLanding() {
             </Link>
           </div>
 
-          <div className="animate-fade-in-up delay-500 mt-9 flex flex-wrap items-center justify-center gap-2.5 lg:justify-start">
-            {CHIPS.map((label) => (
-              <span key={label} className="inline-flex items-center gap-2 rounded-full border border-[var(--line)] bg-white px-3.5 py-2">
-                <svg width="11" height="11" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-[var(--accent)]">
-                  <path d="M2.5 7.5L5.5 10.5L11.5 3.5" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-                <span className="mono-label !text-[var(--fg-muted)]">{label}</span>
-              </span>
-            ))}
-          </div>
           </div>
 
           {/* 3D stage: one big glass coin, slow spin and float */}
@@ -166,6 +162,17 @@ export default function VibeFlowLanding() {
             </div>
             <div aria-hidden="true" className="floaty-b absolute right-[10%] top-[7%] h-3 w-3 rounded-full bg-[var(--accent)]" style={{ animationDelay: "0.4s" }} />
           </div>
+          </div>
+
+          <div className="animate-fade-in-up delay-500 mt-10 flex flex-nowrap items-center justify-start gap-2.5 overflow-x-auto pb-1">
+            {CHIPS.map((label) => (
+              <span key={label} className="inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full border border-[var(--line)] bg-white px-3.5 py-2">
+                <svg width="11" height="11" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-[var(--accent)]">
+                  <path d="M2.5 7.5L5.5 10.5L11.5 3.5" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <span className="mono-label !text-[var(--fg-muted)]">{label}</span>
+              </span>
+            ))}
           </div>
 
           {/* Hero visual: the batch, as a document on a desk */}
