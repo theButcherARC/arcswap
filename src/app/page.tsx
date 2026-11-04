@@ -97,7 +97,7 @@ export default function VibeFlowLanding() {
   return (
     <div className="relative min-h-screen bg-[var(--bg)] text-[var(--fg)]">
       {/* ==================== HERO ==================== */}
-      <section className="relative overflow-hidden px-5 pb-24 pt-28 sm:px-8 lg:pt-36">
+      <section className="relative overflow-hidden px-5 pb-24 pt-20 sm:px-8 lg:pt-24">
         <div className="relative mx-auto w-full max-w-6xl">
           <div className="grid items-center gap-14 lg:grid-cols-[1.02fr_0.98fr] lg:gap-6">
           <div className="text-center lg:text-left">
@@ -169,7 +169,11 @@ export default function VibeFlowLanding() {
           </div>
 
           {/* Hero visual: the batch, as a document on a desk */}
-          <HeroScroll className="relative mx-auto mt-20 max-w-3xl text-left">
+          <div className="hi mt-14 lg:mt-16" style={{ animationDelay: "620ms" }}>
+            <LiveStats />
+          </div>
+
+          <HeroScroll className="relative mx-auto mt-14 max-w-3xl text-left">
             <div className="hi-big" style={{ animationDelay: "700ms" }}>
             <div aria-hidden="true" className="absolute inset-0 -rotate-2 rounded-lg border border-[var(--line)] bg-white" />
             <div aria-hidden="true" className="absolute inset-0 rotate-[1.2deg] rounded-lg border border-[var(--line)] bg-white" />
@@ -271,9 +275,6 @@ export default function VibeFlowLanding() {
           </div>
         </div>
       </section>
-
-      {/* ==================== LIVE STATS ==================== */}
-      <LiveStats />
 
       {/* ==================== THE PROBLEM ==================== */}
       <section className="relative px-5 py-28 sm:px-8" aria-label="The problem">
