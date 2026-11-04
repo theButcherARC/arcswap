@@ -103,7 +103,7 @@ export default function VibeFlowLanding() {
         <LiveTicker />
       </div>
 
-      <section className="relative overflow-hidden px-5 pb-24 pt-10 sm:px-8 lg:pt-14">
+      <section className="relative overflow-hidden px-5 pb-24 pt-4 sm:px-8 lg:pt-6">
         <div className="relative mx-auto w-full max-w-6xl">
           <div className="grid items-center gap-14 lg:grid-cols-[1.02fr_0.98fr] lg:gap-6">
           <div className="text-center lg:text-left">
