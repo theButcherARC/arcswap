@@ -1,12 +1,10 @@
 "use client";
 
 import React, { useState, useMemo, useCallback, useEffect, useRef } from "react";
-import Link from "next/link";
 import { parseUnits, createPublicClient, http } from "viem";
 import type { Address } from "viem";
 import { useAccount } from "wagmi";
 import { ConnectButton } from "@/components/wallet/ConnectButton";
-import { LogoTile } from "@/components/brand/Logo";
 import { useBulkPay } from "@/hooks/useBulkPay";
 import { authClient } from "@/lib/auth-client";
 import { toChecksumAddress } from "@/utils/address";
@@ -14,10 +12,8 @@ import { isValidAddress } from "@/utils/address";
 import { parseTokenAmount } from "@/utils/format";
 import { TOKENS, BULK_PAY_MAX_RECIPIENTS } from "@/constants/tokens";
 import { DEFAULT_CHAIN } from "@/constants/chains";
-import { parsePaymentInstruction } from "@/services/agentService";
 import BulkPaySuccess from "./BulkPaySuccess";
 import RecipientRow from "./RecipientRow";
-import type { ParsedBulkPay } from "@/services/agentService";
 import type { Recipient, InputMode } from "@/types/bulkPay";
 
 /* --------------------------------------------------------------- */
@@ -86,114 +82,6 @@ function createRecipient(): Recipient {
   };
 }
 
-const EXAMPLE_PROMPTS = [
-  "Pay Alice 500 USDC at 0x742d35Cc6634C0532925a3b844Bc9e7595f2bD38 and Bob 300 USDC at 0x8ba1f109551bD432803012645Ac136ddd64DBA72",
-  "Split 1000 USDC equally between 3 team members: Alex at 0x742d35Cc6634C0532925a3b844Bc9e7595f2bD38, Sarah at 0x8ba1f109551bD432803012645Ac136ddd64DBA72, Mike at 0xdD870fA1b7C4700F2BD7f44238821C26f7392148",
-  "Pay 200 USDC to 0x742d35Cc6634C0532925a3b844Bc9e7595f2bD38 for March consulting and 150 USDC to 0x8ba1f109551bD432803012645Ac136ddd64DBA72 for design work",
-];
-
-/* --------------------------------------------------------------- */
-/*  Extracted child: AI Agent Preview                               */
-/* --------------------------------------------------------------- */
-
-function AgentPreview({
-  result,
-  onApply,
-  onDiscard,
-}: {
-  result: ParsedBulkPay;
-  onApply: () => void;
-  onDiscard: () => void;
-}) {
-  return (
-    <div className="mt-4 border border-[rgba(39,117,202,0.25)] bg-[rgba(39,117,202,0.05)] p-5">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2.5">
-          <div className="h-2 w-2 rounded-full bg-[var(--accent)] animate-pulse" />
-          <span className="text-sm font-medium text-[var(--data)]">
-            Parsed {result.recipients.length} recipient
-            {result.recipients.length !== 1 ? "s" : ""} successfully
-          </span>
-        </div>
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={onDiscard}
-            className="px-3.5 py-1.5 text-xs font-medium text-[var(--fg-muted)] hover:text-[var(--fg)] border border-[var(--line)] hover:border-[var(--line-strong)] bg-black/[0.03] transition-colors duration-200 active:scale-95"
-          >
-            Discard
-          </button>
-          <button
-            type="button"
-            onClick={onApply}
-            className="px-4 py-1.5 text-xs font-semibold text-white bg-[var(--accent)] hover:opacity-90 transition-colors duration-200 active:scale-95"
-          >
-            Apply All
-          </button>
-        </div>
-      </div>
-      <div className="space-y-2 max-h-60 overflow-y-auto pr-1">
-        {result.recipients.map((r, i) => (
-          <div
-            key={"ai-preview-" + i}
-            className="flex items-center gap-3 bg-black/[0.03] border border-[var(--line)] px-4 py-3"
-          >
-            <span className="text-[11px] text-[var(--fg-faint)] font-mono w-5 shrink-0">
-              {i + 1}.
-            </span>
-            <span className="text-sm text-[var(--fg-muted)] flex-1 truncate font-medium">
-              {r.name || "Unnamed"}
-            </span>
-            <span className="text-[11px] text-[var(--fg-faint)] font-mono truncate max-w-[120px]">
-              {r.address
-                ? r.address.slice(0, 6) + "..." + r.address.slice(-4)
-                : "No address"}
-            </span>
-            <span className="text-sm text-[var(--accent)] font-semibold shrink-0">
-              {r.amount ? "$" + r.amount : "---"}
-            </span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-/* --------------------------------------------------------------- */
-/*  Extracted child: Agent Loading Spinner                          */
-/* --------------------------------------------------------------- */
-
-function AgentSpinner() {
-  return (
-    <div className="flex items-center justify-center gap-3 py-6">
-      <svg
-        className="animate-spin"
-        width="20"
-        height="20"
-        viewBox="0 0 20 20"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <circle
-          cx="10"
-          cy="10"
-          r="8"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeOpacity="0.15"
-        />
-        <path
-          d="M10 2A8 8 0 0118 10"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-        />
-      </svg>
-      <span className="text-sm text-[var(--fg-muted)]">Parsing your instructions...</span>
-    </div>
-  );
-}
-
 /* --------------------------------------------------------------- */
 /*  Main Component                                                  */
 /* --------------------------------------------------------------- */
@@ -211,11 +99,6 @@ export default function BulkPayForm() {
 
   const token = HARDCODED_TOKENS[selectedSymbol];
   const [recipients, setRecipients] = useState<Recipient[]>([createRecipient()]);
-  const [showAgent, setShowAgent] = useState(false);
-  const [agentInput, setAgentInput] = useState("");
-  const [agentLoading, setAgentLoading] = useState(false);
-  const [agentError, setAgentError] = useState("");
-  const [agentResult, setAgentResult] = useState<ParsedBulkPay | null>(null);
 
   const [memo, setMemo] = useState("");
   const [showReview, setShowReview] = useState(false);
@@ -461,71 +344,6 @@ export default function BulkPayForm() {
     );
   }, []);
 
-  /* ---- Agent handlers ---- */
-  const handleParseAgent = useCallback(async () => {
-    if (!agentInput.trim() || agentLoading) return;
-    setAgentLoading(true);
-    setAgentError("");
-    setAgentResult(null);
-    try {
-      const result = await parsePaymentInstruction(agentInput.trim());
-      if (result.error) {
-        setAgentError(result.error);
-      } else if (result.recipients.length === 0) {
-        setAgentError("Could not parse any recipients from your description. Try being more specific with names, amounts, and addresses.");
-      } else {
-        setAgentResult(result);
-      }
-    } catch (err) {
-      const msg =
-        err instanceof Error ? err.message : "Failed to parse instructions. Please try again.";
-      setAgentError(msg);
-    } finally {
-      setAgentLoading(false);
-    }
-  }, [agentInput, agentLoading]);
-
-  const handleApplyAgent = useCallback(() => {
-    if (!agentResult) return;
-
-    const newRecipients = agentResult.recipients.map((r) => {
-      const parsedAmt = r.amount ? parseFloat(r.amount) : null;
-      return {
-        id: crypto.randomUUID(),
-        name: r.name || "",
-        address: (r.address || "") as Recipient["address"],
-        percentageInput: "",
-        percentage: null,
-        amountInput: r.amount || "",
-        amount: isNaN(parsedAmt as number) ? null : (parsedAmt as number),
-      };
-    });
-
-    setRecipients(newRecipients);
-
-    if (agentResult.totalAmount) {
-      setTotalAmountInput(agentResult.totalAmount);
-    }
-
-    if (agentResult.recipients.some((r) => r.amount)) {
-      setInputMode("amount");
-    }
-
-    setAgentResult(null);
-    setAgentInput("");
-    setShowAgent(false);
-  }, [agentResult]);
-
-  const handleDiscardAgent = useCallback(() => {
-    setAgentResult(null);
-  }, []);
-
-  const handleExampleClick = useCallback((prompt: string) => {
-    setAgentInput(prompt);
-    setAgentError("");
-    setAgentResult(null);
-  }, []);
-
   /* ---- Form submit ---- */
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
@@ -676,7 +494,7 @@ export default function BulkPayForm() {
               <div>
                 <span className="mono-label mb-2 block">SYS.PAY / BATCH.TRANSFER</span>
                 <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--fg)]">
-                  Bulk Pay
+                  Quick Pay
                 </h1>
                 <p className="text-sm text-[var(--fg-muted)] mt-2 max-w-md">
                   {selectedSymbol === "USDC"
@@ -719,14 +537,6 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     EURC
                   </button>
                 </div>
-                <Link
-                  href="/bulk-pay/upload"
-                  title="Upload a CSV file with recipients and amounts"
-                  className="inline-flex items-center gap-1.5 border border-[var(--line)] bg-[var(--glass)] px-3.5 py-1.5 text-xs font-semibold text-[var(--fg-muted)] transition-colors duration-200 hover:text-[var(--fg)] hover:border-[var(--fg-muted)]"
-                >
-                  CSV Upload
-                  <span aria-hidden="true">→</span>
-                </Link>
               </div>
             </div>
           </div>
@@ -745,217 +555,6 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
           ) : null}
 
           <form onSubmit={handleSubmit}>
-            {/* ===================== SECTION 2: AI AGENT ===================== */}
-            <div className="relative mb-7 border-y border-[var(--line)]">
-            <div className="p-5 sm:p-6">
-              {/* Agent header - minimal */}
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <LogoTile size={28} />
-                  <div>
-                    <h2 className="text-sm font-semibold text-[var(--fg)]">
-                      AI Payment Agent
-                    </h2>
-                    <p className="mono-label mt-0.5">
-                      Describe payments in natural language
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2.5">
-                  {/* Collapse toggle */}
-                  <button
-                    type="button"
-                    onClick={() => setShowAgent((prev) => !prev)}
-                    className="btn-brutal flex h-8 w-8 items-center justify-center text-[var(--fg-muted)] hover:text-[var(--fg)] transition-colors duration-200"
-                    aria-label={showAgent ? "Collapse agent" : "Expand agent"}
-                  >
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 14 14"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      className={
-                        "transition-transform duration-200 " +
-                        (showAgent ? "rotate-180" : "")
-                      }
-                    >
-                      <path
-                        d="M3.5 5.25L7 8.75L10.5 5.25"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-
-              {/* Expanded agent content */}
-              {showAgent ? (
-                <div>
-                  {/* How it works */}
-                  <div className="mb-4 grid gap-2 sm:grid-cols-3">
-                    <div className="border border-[var(--line)] bg-black/[0.03] px-3.5 py-3">
-                      <p className="font-mono text-[11px] font-semibold text-[var(--accent)]">01</p>
-                      <p className="mt-1 text-xs font-semibold text-[var(--fg)]">Describe it</p>
-                      <p className="mt-0.5 text-[11px] leading-relaxed text-[var(--fg-faint)]">Write who gets paid and how much, in plain words.</p>
-                    </div>
-                    <div className="border border-[var(--line)] bg-black/[0.03] px-3.5 py-3">
-                      <p className="font-mono text-[11px] font-semibold text-[var(--accent)]">02</p>
-                      <p className="mt-1 text-xs font-semibold text-[var(--fg)]">The agent drafts it</p>
-                      <p className="mt-0.5 text-[11px] leading-relaxed text-[var(--fg-faint)]">It fills the batch below for you. Nothing is sent.</p>
-                    </div>
-                    <div className="border border-[var(--line)] bg-black/[0.03] px-3.5 py-3">
-                      <p className="font-mono text-[11px] font-semibold text-[var(--accent)]">03</p>
-                      <p className="mt-1 text-xs font-semibold text-[var(--fg)]">You review and sign</p>
-                      <p className="mt-0.5 text-[11px] leading-relaxed text-[var(--fg-faint)]">Check every row, then sign once in your wallet.</p>
-                    </div>
-                  </div>
-                  <textarea
-                    value={agentInput}
-                    onChange={(e) => {
-                      setAgentInput(e.target.value);
-                      setAgentError("");
-                    }}
-                    disabled={agentLoading}
-                    placeholder="Pay Alice 500 USDC at 0x... and Bob 300 USDC at 0x..."
-                    rows={3}
-                    className="w-full min-h-24 border border-[var(--line)] bg-transparent px-4 py-3 text-base leading-relaxed text-[var(--fg)] placeholder:text-[var(--fg-faint)] focus:outline-none focus:border-[var(--fg-muted)] transition-colors resize-none disabled:opacity-40 disabled:cursor-not-allowed"
-                  />
-
-                  {/* Example chips */}
-                  <div className="flex flex-wrap gap-2 mt-3">
-                    {EXAMPLE_PROMPTS.map((prompt, i) => (
-                      <button
-                        key={"example-" + i}
-                        type="button"
-                        onClick={() => handleExampleClick(prompt)}
-                        disabled={agentLoading}
-                        className="text-[11px] text-[var(--fg-faint)] hover:text-[var(--fg)] border border-[var(--line)] hover:border-[var(--line-strong)] bg-black/[0.03] hover:bg-black/[0.04] px-3 py-1.5 transition-colors duration-200 truncate max-w-[260px] disabled:opacity-40 disabled:cursor-not-allowed"
-                      >
-                        {prompt.slice(0, 50)}
-                        {prompt.length > 50 ? "..." : ""}
-                      </button>
-                    ))}
-                  </div>
-
-                  <p className="mt-3 text-[11px] leading-relaxed text-[var(--fg-faint)]">
-                    The AI fills the form below from your text. Nothing is sent until you review and sign.
-                  </p>
-
-                  {/* Parse button */}
-                  <button
-                    type="button"
-                    onClick={handleParseAgent}
-                    disabled={agentLoading || !agentInput.trim()}
-                    className={
-                      "w-full mt-4 px-6 py-3.5 text-sm font-semibold transition-colors duration-200 " +
-                      (agentLoading || !agentInput.trim()
-                        ? "bg-black/[0.04] text-[var(--fg-faint)] cursor-not-allowed"
-                        : "bg-[var(--fg)] text-[var(--bg)]")
-                    }
-                  >
-                    {agentLoading ? (
-                      <span className="flex items-center justify-center gap-2.5">
-                        <svg
-                          className="animate-spin"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 16 16"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <circle
-                            cx="8"
-                            cy="8"
-                            r="6.5"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                            strokeOpacity="0.2"
-                          />
-                          <path
-                            d="M8 1.5A6.5 6.5 0 0114.5 8"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                          />
-                        </svg>
-                        Parsing...
-                      </span>
-                    ) : (
-                      <span className="flex items-center justify-center gap-2">
-                        <svg
-                          width="16"
-                          height="16"
-                          viewBox="0 0 16 16"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M9 2L11 6.5L16 7.5L12.5 11L13.5 16L9 13.5L4.5 16L5.5 11L2 7.5L7 6.5L9 2Z"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                        Parse with AI
-                      </span>
-                    )}
-                  </button>
-
-                  {/* Loading state */}
-                  {agentLoading ? <AgentSpinner /> : null}
-
-                  {/* Error state */}
-                  {agentError && !agentLoading ? (
-                    <div className="mt-4 border border-rose-500/20 bg-rose-500/[0.06] px-4 py-3">
-                      <div className="flex items-start gap-2.5">
-                        <svg
-                          className="mt-0.5 shrink-0"
-                          width="14"
-                          height="14"
-                          viewBox="0 0 14 14"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <circle
-                            cx="7"
-                            cy="7"
-                            r="6"
-                            stroke="#f43f5e"
-                            strokeWidth="1.5"
-                          />
-                          <path
-                            d="M7 4V7.5"
-                            stroke="#f43f5e"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                          />
-                          <circle cx="7" cy="10" r="0.75" fill="#f43f5e" />
-                        </svg>
-                        <p className="text-xs text-rose-600/90 leading-relaxed">
-                          {agentError}
-                        </p>
-                      </div>
-                    </div>
-                  ) : null}
-
-                  {/* Success preview */}
-                  {agentResult && !agentLoading ? (
-                    <AgentPreview
-                      result={agentResult}
-                      onApply={handleApplyAgent}
-                      onDiscard={handleDiscardAgent}
-                    />
-                  ) : null}
-                </div>
-              ) : null}
-            </div>
-            </div>
-
             {/* ===================== SECTION 3: INPUT MODE TOGGLE ===================== */}
             <div className="flex items-center justify-between mb-6 px-6">
               <span className="mono-label">
