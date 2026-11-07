@@ -136,7 +136,7 @@ function AgentSpinner() {
 }
 
 /* --------------------------------------------------------------- */
-/*  Main Component: AI Pay (dedicated page)                         */
+/*  Main Component: AI (dedicated page)                            */
 /* --------------------------------------------------------------- */
 
 export default function AIPayForm() {
@@ -362,10 +362,10 @@ export default function AIPayForm() {
               <div>
                 <span className="mono-label mb-2 block">SYS.PAY / AI.PARSE</span>
                 <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--fg)]">
-                  AI Pay
+                  AI
                 </h1>
                 <p className="text-sm text-[var(--fg-muted)] mt-2 max-w-md">
-                  Describe your payments in plain words. The agent builds the
+                  Describe your payments in plain words. The AI drafts the
                   batch, you review every row, then sign once.
                 </p>
               </div>
@@ -429,7 +429,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                   <LogoTile size={28} />
                   <div>
                     <h2 className="text-sm font-semibold text-[var(--fg)]">
-                      AI Payment Agent
+                      AI
                     </h2>
                     <p className="mono-label mt-0.5">
                       Describe payments in natural language
@@ -643,11 +643,11 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
 
               {/* Memo */}
               <div className="mt-5">
-                <label className="mono-label block mb-2" htmlFor="ai-pay-memo">
+                <label className="mono-label block mb-2" htmlFor="ai-memo">
                   Memo (optional)
                 </label>
                 <input
-                  id="ai-pay-memo"
+                  id="ai-memo"
                   value={memo}
                   onChange={(e) => setMemo(e.target.value)}
                   maxLength={100}
