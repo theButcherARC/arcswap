@@ -100,7 +100,7 @@ const NAV_GROUPS: { group: string; items: NavItem[] }[] = [
         ),
       },
       {
-        label: "AI Pay",
+        label: "AI",
         href: ROUTES.BULK_PAY_AI,
         icon: (
           <svg {...iconProps}>
