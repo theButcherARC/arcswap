@@ -89,13 +89,22 @@ const NAV_GROUPS: { group: string; items: NavItem[] }[] = [
     group: "Payments",
     items: [
       {
-        label: "Bulk Pay",
+        label: "Quick Pay",
         href: ROUTES.BULK_PAY,
         icon: (
           <svg {...iconProps}>
             <path d="M12 2 2 7l10 5 10-5-10-5z" />
             <path d="M2 17l10 5 10-5" />
             <path d="M2 12l10 5 10-5" />
+          </svg>
+        ),
+      },
+      {
+        label: "AI Pay",
+        href: ROUTES.BULK_PAY_AI,
+        icon: (
+          <svg {...iconProps}>
+            <path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z" />
           </svg>
         ),
       },

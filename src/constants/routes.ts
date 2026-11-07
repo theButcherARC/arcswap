@@ -10,6 +10,7 @@ export const ROUTES = {
   EARN: "/earn",
   BULK_PAY: "/bulk-pay",
   BULK_PAY_UPLOAD: "/bulk-pay/upload",
+  BULK_PAY_AI: "/bulk-pay/ai",
   SCHEDULED: "/scheduled",
   DASHBOARD: "/dashboard",
   SOCIAL_PROFILE: "/social-profile",
