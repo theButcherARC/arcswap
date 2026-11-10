@@ -65,7 +65,7 @@ export default function RoadmapPage() {
         <section className="mt-24" aria-label="The plan">
           <div className="mb-12 text-center">
             <h2 className="text-3xl font-bold tracking-[-0.02em] sm:text-4xl">The plan, in order</h2>
-            <p className="mono-label mt-3">SYS.PLAN / 14 STOPS</p>
+            <p className="mono-label mt-3">SYS.PLAN / 15 STOPS</p>
             <p className="mt-3 text-sm text-[var(--fg-faint)]">Scroll. The road builds itself.</p>
           </div>
 
