@@ -21,12 +21,13 @@ const ITEMS: Item[] = [
   { phase: "Money in and out", color: "var(--phase-4)", title: "Swap", body: "A quiet swap inside your balance: USDC, EURC and cirBTC. No trading screen, no noise." },
   { phase: "Growth", color: "var(--phase-1)", title: "Embeds", body: "VibeSquare tips and pay requests that any site or community can embed." },
   { phase: "Growth", color: "var(--phase-1)", title: "Creator gigs", body: "Campaigns on Earn with apply-first curation: approved creators, escrowed budgets, instant settlement." },
+  { phase: "Later", color: "var(--accent)", title: "Mobile app", body: "VibeFlow in your pocket: Android and iOS, with your batches, schedules and balance wherever you are." },
   { phase: "Growth", color: "var(--phase-1)", title: "$VIBE fee discount", body: "Holding $VIBE cuts the batch fee. The token serves the product, not the other way around." },
   { phase: "Later", color: "var(--accent)", title: "Fiat last mile", body: "Bank and card payouts through licensed partners, once volume justifies it. Receiving stays instant on Arc." },
   { phase: "Last", color: "var(--fg-faint)", title: "Prediction markets", body: "Last on this list, and only after a full legal review." },
 ];
 
-const H = 3720;
+const H = 3970;
 const Y0 = 90;
 const STEP = 250;
 const stopY = (i: number) => Y0 + i * STEP;
@@ -39,7 +40,7 @@ const ROAD_D = (() => {
   }
   const lx = stopX(ITEMS.length - 1);
   const ly = stopY(ITEMS.length - 1);
-  d += ` C ${lx} ${ly + 125}, 500 ${ly + 95}, 500 3560`;
+  d += ` C ${lx} ${ly + 125}, 500 ${ly + 95}, 500 3810`;
   return d;
 })();
 
@@ -123,7 +124,7 @@ export default function RoadJourney() {
               className="road-dash-anim"
             />
           </g>
-          <polygon points="500,3626 476,3566 524,3566" fill="var(--fg)" />
+          <polygon points="500,3876 476,3816 524,3816" fill="var(--fg)" />
         </svg>
 
         {ITEMS.map((item, i) => {
