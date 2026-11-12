@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { ConnectButton } from "@/components/wallet/ConnectButton";
 import { NetworkSwitcher } from "@/components/wallet/NetworkSwitcher";
 import { LogoMark } from "@/components/brand/Logo";
+import { StudioBadge } from "@/components/brand/StudioBadge";
 import { ROUTES } from "@/constants/routes";
 
 type NavItem = {
@@ -282,6 +283,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       {/* Content */}
       <div className="lg:pl-60">{children}</div>
+
+      <StudioBadge />
     </div>
   );
 }
