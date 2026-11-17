@@ -542,7 +542,7 @@ export default function BulkPayForm() {
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <span className="mono-label mb-2 block">SYS.PAY / BATCH.TRANSFER</span>
-                <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--fg)]">
+                <h1 className="text-3xl font-bold tracking-tight text-[var(--fg)] sm:text-4xl">
                   Quick Pay
                 </h1>
                 <p className="text-sm text-[var(--fg-muted)] mt-2 max-w-md">
@@ -564,7 +564,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     onClick={() => setSelectedSymbol("USDC")}
                     aria-pressed={selectedSymbol === "USDC"}
                     className={
-                      "px-3.5 py-1.5 text-xs font-semibold transition-colors duration-200 " +
+                      "flex min-h-11 items-center justify-center rounded-md px-3.5 py-1.5 text-xs font-semibold transition-colors duration-200 " +
                       (selectedSymbol === "USDC"
                         ? "bg-[var(--fg)] text-[var(--bg)]"
                         : "text-[var(--fg-muted)] hover:text-[var(--fg)]")
@@ -577,7 +577,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     onClick={() => setSelectedSymbol("EURC")}
                     aria-pressed={selectedSymbol === "EURC"}
                     className={
-                      "px-3.5 py-1.5 text-xs font-semibold transition-colors duration-200 " +
+                      "flex min-h-11 items-center justify-center rounded-md px-3.5 py-1.5 text-xs font-semibold transition-colors duration-200 " +
                       (selectedSymbol === "EURC"
                         ? "bg-[var(--fg)] text-[var(--bg)]"
                         : "text-[var(--fg-muted)] hover:text-[var(--fg)]")
@@ -592,7 +592,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
 
           {/* Wallet requirement banner (shown until connected) */}
           {!isConnected ? (
-            <div className="mb-7 flex flex-col gap-3 border border-[rgba(39,117,202,0.3)] bg-[var(--accent-soft)] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="mb-7 flex flex-col gap-3 rounded-[var(--radius)] border border-[rgba(39,117,202,0.3)] bg-[var(--accent-soft)] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm text-[var(--fg-muted)]">
                 <span className="font-semibold text-[var(--fg)]">Connect your wallet to send.</span>{" "}
                 MetaMask on Arc Mainnet is required before you can submit a batch.
@@ -610,7 +610,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                 Distribution Mode
               </span>
               <div
-                className="flex items-center border border-[var(--line)] bg-[var(--glass)] p-0.5"
+                className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--glass)] p-0.5"
                 role="group"
                 aria-label="Distribution mode"
               >
@@ -620,7 +620,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                   disabled={isSending}
                   aria-pressed={inputMode === "percentage"}
                   className={
-                    "px-4 py-1.5 text-xs font-semibold transition-colors duration-200 " +
+                    "flex min-h-11 items-center justify-center rounded-md px-4 py-1.5 text-xs font-semibold transition-colors duration-200 " +
                     (inputMode === "percentage"
                       ? "bg-[var(--fg)] text-[var(--bg)]"
                       : "text-[var(--fg-muted)] hover:text-[var(--fg)]")
@@ -634,7 +634,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                   disabled={isSending}
                   aria-pressed={inputMode === "amount"}
                   className={
-                    "px-4 py-1.5 text-xs font-semibold transition-colors duration-200 " +
+                    "flex min-h-11 items-center justify-center rounded-md px-4 py-1.5 text-xs font-semibold transition-colors duration-200 " +
                     (inputMode === "amount"
                       ? "bg-[var(--fg)] text-[var(--bg)]"
                       : "text-[var(--fg-muted)] hover:text-[var(--fg)]")
@@ -669,10 +669,10 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                       onChange={(e) => setTotalAmountInput(e.target.value)}
                       disabled={isSending}
                       placeholder="0.00"
-                      className="w-full bg-black/[0.03] border border-[var(--line)] text-[var(--fg)] placeholder:text-[var(--fg-faint)] pl-9 pr-4 py-4 text-xl font-semibold focus:outline-none focus:border-[var(--accent)] transition-colors duration-200 hover:border-[var(--line-strong)] hover:bg-black/[0.04] disabled:opacity-40 disabled:cursor-not-allowed"
+                      className="w-full rounded-lg bg-black/[0.03] border border-[var(--line)] text-[var(--fg)] placeholder:text-[var(--fg-faint)] pl-9 pr-4 py-4 text-xl font-semibold focus:outline-none focus:border-[var(--accent)] transition-colors duration-200 hover:border-[var(--line-strong)] hover:bg-black/[0.04] disabled:opacity-40 disabled:cursor-not-allowed"
                     />
                   </div>
-                  <div className="flex items-center border border-[var(--line)] bg-black/[0.03] px-4 shrink-0">
+                  <div className="flex items-center rounded-lg border border-[var(--line)] bg-black/[0.03] px-4 shrink-0">
                     <span className="text-sm font-semibold text-[var(--fg-muted)]">
                       USDC
                     </span>
@@ -723,17 +723,17 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
               <div className="hidden items-center gap-3 px-4 pb-3 lg:flex">
                 <div className="w-7 shrink-0" />
                 <div className="min-w-[120px] flex-1">
-                  <span className="text-[10px] font-medium text-[var(--fg-faint)] uppercase tracking-wider">
+                  <span className="mono-label">
                     Recipient
                   </span>
                 </div>
                 <div className="min-w-[180px] flex-[1.5]">
-                  <span className="text-[10px] font-medium text-[var(--fg-faint)] uppercase tracking-wider">
+                  <span className="mono-label">
                     Address
                   </span>
                 </div>
                 <div className="w-[130px] shrink-0 text-right">
-                  <span className="text-[10px] font-medium text-[var(--fg-faint)] uppercase tracking-wider">
+                  <span className="mono-label">
                     {inputMode === "amount" ? "Amount" : "Percentage"}
                   </span>
                 </div>
@@ -741,7 +741,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
               </div>
 
               {/* Recipient rows */}
-              <div className="divide-y divide-[var(--line)] border border-[var(--line)] bg-[var(--bg-raised)]">
+              <div className="divide-y divide-[var(--line)] overflow-hidden rounded-[var(--radius)] border border-[var(--line)] bg-[var(--bg-raised)]">
                 {recipients.map((recipient, i) => (
                   <RecipientRow
                     key={recipient.id}
@@ -781,7 +781,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                   placeholder="e.g. July Salary, Freelancer Batch, Marketing Team"
                   maxLength={100}
                   className={
-                    "w-full border border-[var(--line)] bg-black/[0.03] px-3.5 py-2.5 " +
+                    "w-full rounded-lg border border-[var(--line)] bg-black/[0.03] px-3.5 py-2.5 " +
                     "text-base text-[var(--fg)] placeholder:text-[var(--fg-faint)] " +
                     "focus:outline-none focus:border-[var(--accent)] focus:bg-black/[0.03] " +
                     "transition-colors duration-200 " +
@@ -822,7 +822,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                 onClick={addRecipient}
                 disabled={atMaxRecipients || isSending}
                 className={
-                  "w-full mt-3 border border-dashed py-4 " +
+                  "w-full mt-3 rounded-[var(--radius)] border border-dashed py-4 " +
                   "text-sm font-medium transition-colors duration-300 " +
                   (atMaxRecipients || isSending
                     ? "border-[var(--line)] bg-black/[0.03] text-[var(--fg-faint)] cursor-not-allowed"
@@ -875,7 +875,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                 )}
               </button>
               {inputMode === "percentage" ? (
-                <div className="mt-3 flex items-center justify-between border border-[var(--line)] bg-black/[0.03] px-4 py-2.5">
+                <div className="mt-3 flex items-center justify-between rounded-lg border border-[var(--line)] bg-black/[0.03] px-4 py-2.5">
                   <span className="text-[11px] text-[var(--fg-faint)]">
                     Total allocated (must equal 100%)
                   </span>
@@ -899,7 +899,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
             {showReview ? (
               <div
                 ref={reviewRef}
-                className="mt-10 border border-[rgba(39,117,202,0.3)] bg-white/95 p-5"
+                className="mt-10 rounded-[var(--radius)] border border-[rgba(39,117,202,0.3)] bg-[var(--bg-raised)] p-5"
               >
                 <span className="mono-label block mb-2">
                   SYS.REVIEW / BEFORE YOU SIGN
@@ -926,7 +926,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                   currencySymbol={selectedSymbol === "EURC" ? "€" : "$"}
                 />
 
-                <div className="divide-y divide-[var(--line)] border border-[var(--line)]">
+                <div className="divide-y divide-[var(--line)] overflow-hidden rounded-lg border border-[var(--line)]">
                   {reviewRecipients.map((r) => (
                     <div key={r.id} className="px-3.5 py-2.5">
                       <div className="flex items-center justify-between gap-4">
@@ -958,7 +958,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                         maxLength={100}
                         placeholder="Memo (optional, public onchain)"
                         aria-label={`Memo for ${r.name || "recipient"}`}
-                        className="mt-1.5 w-full border border-[var(--line)] bg-black/[0.03] px-2.5 py-1.5 text-xs text-[var(--fg-muted)] placeholder:text-[var(--fg-faint)] focus:outline-none focus:border-[var(--accent)] disabled:opacity-40"
+                        className="mt-1.5 w-full rounded-md border border-[var(--line)] bg-black/[0.03] px-2.5 py-2 text-base text-[var(--fg-muted)] placeholder:text-[var(--fg-faint)] focus:outline-none focus:border-[var(--accent)] disabled:opacity-40 sm:text-xs"
                       />
                     </div>
                   ))}
@@ -1015,13 +1015,13 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                           type="datetime-local"
                           value={scheduleDate}
                           onChange={(e) => setScheduleDate(e.target.value)}
-                          className="border border-[var(--line)] bg-black/[0.03] px-3.5 py-2.5 text-base text-[var(--fg)] focus:outline-none focus:border-[var(--accent)] [color-scheme:dark]"
+                          className="min-h-11 rounded-lg border border-[var(--line)] bg-black/[0.03] px-3.5 py-2.5 text-base text-[var(--fg)] focus:outline-none focus:border-[var(--accent)] [color-scheme:light]"
                         />
                         <button
                           type="button"
                           onClick={handleSaveSchedule}
                           disabled={scheduleSaving || !scheduleDate}
-                          className="border border-[rgba(39,117,202,0.35)] bg-[var(--accent-soft)] px-4 py-2.5 text-sm font-medium text-[var(--data)] transition-colors hover:bg-[var(--accent-soft)] disabled:cursor-not-allowed disabled:opacity-40"
+                          className="min-h-11 rounded-lg border border-[rgba(39,117,202,0.35)] bg-[var(--accent-soft)] px-4 py-2.5 text-sm font-medium text-[var(--data)] transition-colors hover:bg-[var(--accent-soft)] disabled:cursor-not-allowed disabled:opacity-40"
                         >
                           {scheduleSaving
                             ? "Saving..."
@@ -1062,7 +1062,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
               {/* Summary + send card */}
               <div
                 className={
-                  "border p-5 transition-colors duration-300 " +
+                  "rounded-[var(--radius)] border p-5 transition-colors duration-300 " +
                   (summaryData.isFullyAllocated && !summaryData.isOverAllocated
                     ? "border-[rgba(39,117,202,0.35)] bg-[rgba(39,117,202,0.07)]"
                     : summaryData.isOverAllocated
@@ -1174,7 +1174,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
 
               {/* Error display */}
               {status === "error" && error ? (
-                <div className="border border-rose-500/20 bg-rose-500/[0.06] px-4 py-3.5">
+                <div className="rounded-lg border border-rose-500/20 bg-rose-500/[0.06] px-4 py-3.5">
                   <div className="flex items-start gap-3">
                     <svg
                       className="mt-0.5 shrink-0"
@@ -1226,7 +1226,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                   type="button"
                   onClick={refreshGas}
                   title="Refresh gas estimate"
-                  className="ml-auto flex h-5 w-5 shrink-0 items-center justify-center rounded hover:bg-black/[0.04] transition-colors duration-150"
+                  className="ml-auto flex h-8 w-8 shrink-0 items-center justify-center rounded hover:bg-black/[0.04] transition-colors duration-150"
                 >
                   <svg
                     width="10"
@@ -1247,7 +1247,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                 type="submit"
                 disabled={!canSend}
                 className={
-                  "w-full px-6 py-3.5 text-sm font-semibold transition-colors duration-300 " +
+                  "w-full rounded-full px-6 py-3.5 text-sm font-semibold transition-colors duration-300 " +
                   (canSend
                     ? "bg-[var(--fg)] text-[var(--bg)] hover:opacity-85"
                     : "bg-black/[0.04] text-[var(--fg-faint)] cursor-not-allowed")
