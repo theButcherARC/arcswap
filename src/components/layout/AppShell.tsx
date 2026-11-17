@@ -186,8 +186,8 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
                       className={
                         "flex min-h-11 items-center gap-3 rounded-lg px-2.5 py-2.5 text-sm transition-colors duration-150 " +
                         (active
-                          ? "bg-[var(--accent-soft)] font-medium text-[var(--fg)]"
-                          : "text-[var(--fg-muted)] hover:bg-black/[0.04] hover:text-[var(--fg)]")
+                          ? "bg-[var(--accent-soft)] font-medium text-[var(--fg)] active:bg-[var(--accent-soft)]"
+                          : "text-[var(--fg-muted)] hover:bg-black/[0.04] hover:text-[var(--fg)] active:bg-black/[0.07]")
                       }
                     >
                       <span className={active ? "text-[var(--accent)]" : "text-[var(--fg-faint)]"}>
@@ -212,7 +212,7 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
         <Link
           href={ROUTES.HOME}
           onClick={onNavigate}
-          className="mono-label mt-4 inline-flex items-center gap-1.5 transition-colors hover:!text-[var(--fg)]"
+          className="mono-label mt-4 inline-flex min-h-11 items-center gap-1.5 transition-colors hover:!text-[var(--fg)]"
         >
           <svg width="12" height="12" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M9 2L4 7L9 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -249,7 +249,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           type="button"
           onClick={() => setOpen(true)}
           aria-label="Open menu"
-          className="flex h-11 w-11 items-center justify-center border border-[var(--line)] text-[var(--fg-muted)] transition-colors hover:text-[var(--fg)]"
+          className="flex h-11 w-11 items-center justify-center rounded-lg border border-[var(--line)] text-[var(--fg-muted)] transition-colors hover:text-[var(--fg)] active:bg-black/[0.04]"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             <path d="M4 7h16M4 12h16M4 17h16" />
