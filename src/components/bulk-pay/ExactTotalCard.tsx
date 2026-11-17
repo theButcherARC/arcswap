@@ -31,7 +31,7 @@ export default function ExactTotalCard({
   const grandTotal = total + fee;
 
   return (
-    <div className="mb-4 border border-[rgba(39,117,202,0.35)] bg-[var(--accent-soft)] px-4 py-4">
+    <div className="mb-4 rounded-[var(--radius)] border border-[rgba(39,117,202,0.35)] bg-[var(--accent-soft)] px-4 py-4">
       <span className="mono-label block mb-1.5">You approve exactly</span>
       <p className="text-2xl font-bold tracking-tight text-[var(--fg)]">
         {currencySymbol}
