@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { Spinner } from "@/components/ui/Spinner";
 
 type Block = { number: number; timestamp: number; txCount: number };
 type Transfer = {
@@ -412,10 +413,10 @@ function FreezePanel() {
               key={c}
               onClick={() => setChain(c)}
               className={
-                "min-h-[36px] rounded-full px-4 text-xs font-semibold " +
+                "inline-flex min-h-[44px] items-center rounded-full px-4 text-xs font-semibold transition-colors " +
                 (chain === c
                   ? "bg-[var(--accent)] text-white"
-                  : "border border-[var(--line)] text-[var(--fg-muted)]")
+                  : "border border-[var(--line)] text-[var(--fg-muted)] hover:border-[var(--accent)] hover:text-[var(--fg)]")
               }
             >
               {c === "arc" ? "Arc" : "Ethereum"}
@@ -585,7 +586,8 @@ export function VibrainLive() {
       </div>
 
       {!data && !failed && (
-        <div className="rounded-[var(--radius)] border border-[var(--line)] bg-[var(--glass)] p-10 text-center">
+        <div className="flex flex-col items-center gap-3 rounded-[var(--radius)] border border-[var(--line)] bg-[var(--glass)] p-10 text-center">
+          <Spinner />
           <p className="text-sm text-[var(--fg-muted)]">
             Reading the chain...
           </p>
