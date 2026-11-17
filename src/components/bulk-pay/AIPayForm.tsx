@@ -82,25 +82,41 @@ function AgentPreview({
         {result.recipients.map((r, i) => (
           <div
             key={"ai-preview-" + i}
-            className="flex items-center gap-3 bg-black/[0.03] border border-[var(--line)] px-4 py-3"
+            className="bg-black/[0.03] border border-[var(--line)] px-4 py-3"
           >
-            <span className="text-[11px] text-[var(--fg-faint)] font-mono w-5 shrink-0">
-              {i + 1}.
-            </span>
-            <span className="text-sm text-[var(--fg-muted)] flex-1 truncate font-medium">
-              {r.name || "Unnamed"}
-            </span>
-            <span className="text-[11px] text-[var(--fg-faint)] font-mono truncate max-w-[120px]">
-              {r.address
-                ? r.address.slice(0, 6) + "..." + r.address.slice(-4)
-                : "No address"}
-            </span>
-            <span className="text-sm text-[var(--accent)] font-semibold shrink-0">
-              {r.amount ? "$" + r.amount : "---"}
-            </span>
+            <div className="flex items-center gap-3">
+              <span className="text-[11px] text-[var(--fg-faint)] font-mono w-5 shrink-0">
+                {i + 1}.
+              </span>
+              <span className="text-sm text-[var(--fg-muted)] flex-1 truncate font-medium">
+                {r.name || "Unnamed"}
+              </span>
+              <span className="text-[11px] text-[var(--fg-faint)] font-mono truncate max-w-[120px]">
+                {r.address
+                  ? r.address.slice(0, 6) + "..." + r.address.slice(-4)
+                  : "No address"}
+              </span>
+              <span className="text-sm text-[var(--accent)] font-semibold shrink-0">
+                {r.amount ? "$" + r.amount : "---"}
+              </span>
+            </div>
+            {r.memo ? (
+              <p className="mt-1.5 pl-8 text-[11px] text-[var(--fg-faint)]">
+                Memo:{" "}
+                <span className="text-[var(--fg-muted)]">{r.memo}</span>
+              </p>
+            ) : null}
           </div>
         ))}
       </div>
+      {result.batchMemo ? (
+        <p className="mt-3 text-[11px] text-[var(--fg-faint)]">
+          Batch memo:{" "}
+          <span className="font-medium text-[var(--fg-muted)]">
+            {result.batchMemo}
+          </span>
+        </p>
+      ) : null}
     </div>
   );
 }
@@ -199,6 +215,8 @@ export default function AIPayForm() {
 
     const newRecipients = agentResult.recipients.map((r) => {
       const parsedAmt = r.amount ? parseFloat(r.amount) : null;
+      const parsedMemo =
+        typeof r.memo === "string" ? r.memo.trim().slice(0, 100) : "";
       return {
         id: crypto.randomUUID(),
         name: r.name || "",
@@ -207,10 +225,23 @@ export default function AIPayForm() {
         percentage: null,
         amountInput: r.amount || "",
         amount: isNaN(parsedAmt as number) ? null : (parsedAmt as number),
+        // A parsed memo becomes the row's explicit memo, which wins over
+        // the name-as-memo fallback at send time. When the parse gave no
+        // memo the field stays undefined, so the fallback still applies.
+        memo: parsedMemo ? parsedMemo : undefined,
       };
     });
 
     setRecipients(newRecipients);
+    // A parsed batch memo fills the form's batch memo field. When the
+    // parse has none, whatever the user already typed there stays as is.
+    const parsedBatchMemo =
+      typeof agentResult.batchMemo === "string"
+        ? agentResult.batchMemo.trim().slice(0, 100)
+        : "";
+    if (parsedBatchMemo) {
+      setMemo(parsedBatchMemo);
+    }
     setAgentResult(null);
     setAgentInput("");
     setShowReview(false);
@@ -771,6 +802,17 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                 ) : (
                   <div className="mt-5 border-t border-[var(--line)] pt-5">
                     <p className="mono-label mb-3">Review before you sign</p>
+                    {memo.trim() ? (
+                      <p className="mb-3 text-xs text-[var(--fg-muted)]">
+                        Batch memo:{" "}
+                        <span className="font-medium text-[var(--fg)]">
+                          {memo.trim()}
+                        </span>{" "}
+                        <span className="text-[var(--fg-faint)]">
+                          (written onchain with the batch)
+                        </span>
+                      </p>
+                    ) : null}
                     <ExactTotalCard
                       total={validTotal}
                       fee={reviewFee}

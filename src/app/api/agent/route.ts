@@ -118,6 +118,16 @@ function tryParseCSV(input: string): { recipients: any[]; token: string; totalAm
   };
 }
 
+/** Normalize a memo coming back from the AI parser: only a real string
+ *  counts, it is trimmed and capped at the form's 100-char limit, and an
+ *  empty result becomes undefined so the field can be dropped entirely.
+ *  A memo is never created here, only cleaned. */
+function cleanMemo(value: unknown): string | undefined {
+  if (typeof value !== "string") return undefined;
+  const trimmed = value.trim().slice(0, 100);
+  return trimmed ? trimmed : undefined;
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { instruction } = await req.json();
@@ -132,9 +142,20 @@ export async function POST(req: NextRequest) {
     // Get base URL for internal API calls
     const baseUrl = req.nextUrl.origin;
 
-    // Try direct CSV parsing first
+    // Try direct CSV parsing first. The fast path is only trusted when it
+    // accounts for EVERY identifier in the instruction. Prose that merely
+    // lists comma-separated addresses (a natural-language request naming
+    // several wallets) must fall through to the AI parser below, which is
+    // the path that also extracts per-recipient and batch memos.
     const csvParsed = tryParseCSV(instruction);
-    if (csvParsed && csvParsed.recipients.length > 0) {
+    const identifierCount = (
+      instruction.match(/0x[a-fA-F0-9]{40}|@\w+|VIBE-\w+/gi) || []
+    ).length;
+    if (
+      csvParsed &&
+      csvParsed.recipients.length > 0 &&
+      csvParsed.recipients.length >= identifierCount
+    ) {
       // Validate and resolve CSV-parsed data
       const resolved = [];
       for (const recipient of csvParsed.recipients) {
@@ -242,12 +263,25 @@ export async function POST(req: NextRequest) {
             { status: 200 }
           );
         }
-        resolved.push({
-          ...recipient,
-          address: walletAddress,
-        });
+        const cleaned = { ...recipient, address: walletAddress };
+        const memo = cleanMemo(recipient.memo);
+        if (memo) {
+          cleaned.memo = memo;
+        } else {
+          delete cleaned.memo;
+        }
+        resolved.push(cleaned);
       }
       parsed.recipients = resolved;
+    }
+
+    // Normalize the batch memo the same way: kept only when the AI
+    // actually returned one, so an absent batch memo stays absent.
+    const batchMemo = cleanMemo(parsed.batchMemo);
+    if (batchMemo) {
+      parsed.batchMemo = batchMemo;
+    } else {
+      delete parsed.batchMemo;
     }
 
     return NextResponse.json(parsed);

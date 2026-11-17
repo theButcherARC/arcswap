@@ -5,12 +5,19 @@ export interface ParsedRecipient {
   name: string;
   address: string;
   amount: string;
+  /** Per-recipient memo. Present only when the instruction gives a memo
+   *  for this payment, or one memo meant for every payment. Absent when
+   *  no memo was mentioned; a memo is never invented. */
+  memo?: string;
 }
 
 export interface ParsedBulkPay {
   recipients: ParsedRecipient[];
   token: string;
   totalAmount: string;
+  /** Batch-level memo. Present only when the instruction gives a memo
+   *  for the whole batch. Absent when no batch memo was mentioned. */
+  batchMemo?: string;
   error?: string;
 }
 
@@ -31,15 +38,25 @@ Parsing Rules:
   * VibeID: VIBE- followed by alphanumerics (e.g. VIBE-ABC123)
 - If amounts are given as percentages, calculate from total
 - If "each" is specified with an amount, apply that amount to all recipients
+
+Memo Rules:
+- A memo is a short note attached to a payment. Extract memos exactly as written, without the surrounding quotes
+- If a memo is given for one specific payment (e.g. "for Alice, memo 'March consulting'" or "Alice 100, memo: salary"), set that recipient's "memo" field to the memo text
+- If one memo is meant for EVERY payment (e.g. "add the memo 'Test payment' to every payment", "memo for all: X", "each with memo X"), set that same "memo" on EVERY recipient
+- If a memo is given for the whole batch (e.g. "batch memo: X", "overall memo: X", "memo for the batch: X"), set the top-level "batchMemo" field instead of a per-recipient memo
+- NEVER invent a memo. If no memo is mentioned for a recipient, omit the "memo" field for that recipient entirely. If no batch memo is mentioned, omit "batchMemo" entirely
+- A recipient's name is NOT a memo. Only set "memo" when the instruction explicitly asks for a memo
+
 - Return ONLY valid JSON, no markdown, no explanation
 
 Output format:
 {
   "recipients": [
-    { "name": "string", "address": "0x...", "amount": "string" }
+    { "name": "string", "address": "0x...", "amount": "string", "memo": "string - include ONLY when a memo is given for this payment" }
   ],
   "token": "USDC",
-  "totalAmount": "string"
+  "totalAmount": "string",
+  "batchMemo": "string - include ONLY when a batch-level memo is given"
 }
 
 If you cannot parse, return:
