@@ -54,5 +54,9 @@ export const TOKENS: Record<string, Token> = {
 /** Ordered list for UI rendering */
 export const TOKEN_LIST: Token[] = [TOKENS.USDC, TOKENS.EURC, TOKENS.cirBTC, TOKENS.VIBE];
 
-/** Maximum recipients allowed in a single bulk pay operation */
-export const BULK_PAY_MAX_RECIPIENTS = 100;
+/**
+ * Maximum recipients allowed in a single bulk pay operation.
+ * Matches the BatchPay v2 contract cap (1000 per disperse call);
+ * the app sends larger batches in chunks of 250 per transaction.
+ */
+export const BULK_PAY_MAX_RECIPIENTS = 1000;

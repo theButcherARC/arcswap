@@ -2,14 +2,18 @@
 
 import React from "react";
 import { DEFAULT_CHAIN } from "@/constants/chains";
+import PayslipReceipt from "./PayslipReceipt";
+import type { BatchResult } from "@/types/bulkPay";
 
 interface BulkPaySuccessProps {
   txHash: string;
   onReset: () => void;
   tokenSymbol?: string;
+  /** Full batch result (reconciliation + totals) for the payslip receipt. */
+  result?: BatchResult | null;
 }
 
-export default function BulkPaySuccess({ txHash, onReset, tokenSymbol = "USDC" }: BulkPaySuccessProps) {
+export default function BulkPaySuccess({ txHash, onReset, tokenSymbol = "USDC", result }: BulkPaySuccessProps) {
   const explorerUrl = `${DEFAULT_CHAIN.blockExplorers.default.url}/tx/${txHash}`;
 
   return (
@@ -151,6 +155,11 @@ export default function BulkPaySuccess({ txHash, onReset, tokenSymbol = "USDC" }
             </button>
           </div>
         </div>
+
+        {/* Payslip receipt: per-line verification read from the chain */}
+        {result ? (
+          <PayslipReceipt result={result} tokenSymbol={tokenSymbol} />
+        ) : null}
       </div>
     </div>
   );

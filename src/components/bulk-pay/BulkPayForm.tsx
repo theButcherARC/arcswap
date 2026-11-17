@@ -12,8 +12,13 @@ import { isValidAddress } from "@/utils/address";
 import { parseTokenAmount } from "@/utils/format";
 import { TOKENS, BULK_PAY_MAX_RECIPIENTS } from "@/constants/tokens";
 import { DEFAULT_CHAIN } from "@/constants/chains";
+import { BATCHPAY_CHUNK_SIZE } from "@/services/bulkPayService";
+import { loadPaidRecipientAddresses } from "@/lib/paidHistory";
+import { effectiveMemo, type ReviewLine } from "@/lib/bulkPayReview";
 import BulkPaySuccess from "./BulkPaySuccess";
 import RecipientRow from "./RecipientRow";
+import ReviewFlags from "./ReviewFlags";
+import ExactTotalCard from "./ExactTotalCard";
 import type { Recipient, InputMode } from "@/types/bulkPay";
 
 /* --------------------------------------------------------------- */
@@ -25,7 +30,9 @@ const arcPublicClient = createPublicClient({
   transport: http(DEFAULT_CHAIN.rpcUrls.default.http[0]),
 });
 
-const GAS_PER_RECIPIENT = 50_000n;
+// disperse() does a pull plus one transfer per recipient; heavier than
+// the retired plain-transfer path, so the per-recipient estimate is up.
+const GAS_PER_RECIPIENT = 85_000n;
 
 function useGasEstimate(recipientCount: number) {
   const [gasUsd, setGasUsd] = useState<number | null>(null);
@@ -101,6 +108,7 @@ export default function BulkPayForm() {
   const [recipients, setRecipients] = useState<Recipient[]>([createRecipient()]);
 
   const [memo, setMemo] = useState("");
+  const [nameAsMemo, setNameAsMemo] = useState(true);
   const [showReview, setShowReview] = useState(false);
   const [showMemo, setShowMemo] = useState(false);
   const reviewRef = useRef<HTMLDivElement>(null);
@@ -111,9 +119,13 @@ export default function BulkPayForm() {
   const [scheduleError, setScheduleError] = useState("");
   const [loadedScheduleId, setLoadedScheduleId] = useState<string | null>(null);
 
-  const { executeBulkPay, status, txHash, error, reset } = useBulkPay();
+  const { executeBulkPay, status, txHash, result, error, reset } = useBulkPay();
 
-  const isSending = status === "preparing" || status === "sending";
+  const isSending =
+    status === "preparing" ||
+    status === "approving" ||
+    status === "sending" ||
+    status === "reconciling";
 
   /* ---- Scroll the review step into view when it opens ---- */
   useEffect(() => {
@@ -251,6 +263,35 @@ export default function BulkPayForm() {
       }));
   }, [recipients, inputMode, totalAmountInput]);
 
+  /* ---- Review-step data: flags, exact total, chunk count ---- */
+  const reviewLines: ReviewLine[] = useMemo(
+    () =>
+      reviewRecipients.map((r, i) => ({
+        row: i + 1,
+        name: r.name || "",
+        address: typeof r.address === "string" ? r.address : "",
+        amount: r.displayAmount,
+      })),
+    [reviewRecipients],
+  );
+
+  // Reload the paid history each time the review opens, so recipients
+  // paid in an earlier batch today are not flagged as first-time.
+  const knownAddresses = useMemo(
+    () => (showReview ? loadPaidRecipientAddresses() : new Set<string>()),
+    [showReview],
+  );
+
+  const reviewTotal = useMemo(
+    () => reviewRecipients.reduce((sum, r) => sum + r.displayAmount, 0),
+    [reviewRecipients],
+  );
+  const reviewFee = Math.max(reviewTotal * 0.002, 0.01);
+  const reviewChunkCount = Math.max(
+    1,
+    Math.ceil(reviewRecipients.length / BATCHPAY_CHUNK_SIZE),
+  );
+
   /* ---- Gas estimate ---- */
   const { gasUsd, loading: gasLoading, refresh: refreshGas } = useGasEstimate(summaryData.validCount);
 
@@ -329,6 +370,12 @@ export default function BulkPayForm() {
     },
     []
   );
+
+  const handleMemoChange = useCallback((id: string, value: string) => {
+    setRecipients((prev) =>
+      prev.map((r) => (r.id === id ? { ...r, memo: value } : r))
+    );
+  }, []);
 
   const handleAmountChange = useCallback((id: string, value: string) => {
     setRecipients((prev) =>
@@ -416,6 +463,7 @@ export default function BulkPayForm() {
           address: checksumAddr as Address,
           amount,
           name: r.name,
+          memo: effectiveMemo(r.name, r.memo, nameAsMemo) || undefined,
         };
       });
 
@@ -423,10 +471,10 @@ export default function BulkPayForm() {
         totalAmount: totalAmountRaw,
         token,
         recipients: transfers,
-        memo: memo.trim() || undefined,
+        batchMemo: memo.trim() || undefined,
       });
     },
-    [canSend, recipients, inputMode, totalAmountInput, token, executeBulkPay, showReview]
+    [canSend, recipients, inputMode, totalAmountInput, token, executeBulkPay, showReview, nameAsMemo, memo]
   );
 
   /* ---- Save this batch as a scheduled payment ---- */
@@ -485,6 +533,7 @@ export default function BulkPayForm() {
           txHash={txHash || ""}
           onReset={reset}
           tokenSymbol={selectedSymbol}
+          result={result}
         />
       ) : (
         <div className="mx-auto max-w-3xl px-2 sm:px-4">
@@ -498,8 +547,8 @@ export default function BulkPayForm() {
                 </h1>
                 <p className="text-sm text-[var(--fg-muted)] mt-2 max-w-md">
                   {selectedSymbol === "USDC"
-                    ? "Send USDC to your entire team in one transaction"
-                    : "Send EURC to your entire team in one transaction"}
+                    ? "Send USDC to your entire team in one batch"
+                    : "Send EURC to your entire team in one batch"}
                 </p>
               </div>
 
@@ -748,6 +797,25 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
               </div>
               )}
 
+              {/* Name-as-memo toggle */}
+              <label className="mt-4 flex cursor-pointer items-start gap-2.5 text-xs leading-relaxed text-[var(--fg-muted)]">
+                <input
+                  type="checkbox"
+                  checked={nameAsMemo}
+                  onChange={(e) => setNameAsMemo(e.target.checked)}
+                  disabled={isSending}
+                  className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--accent)]"
+                />
+                <span>
+                  Use each recipient&apos;s name as their payment memo.{" "}
+                  <span className="text-[var(--fg-faint)]">
+                    Memos are written onchain with the payment and are
+                    public forever. You can edit or clear any line&apos;s
+                    memo in the review step before signing.
+                  </span>
+                </span>
+              </label>
+
               {/* Add recipient button */}
               <button
                 type="button"
@@ -839,35 +907,59 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                 <h2 className="text-lg font-semibold text-[var(--fg)]">
                   Review this batch
                 </h2>
-                <p className="text-xs text-[var(--fg-faint)] mt-1 leading-relaxed">
+                <p className="text-xs text-[var(--fg-faint)] mt-1 mb-4 leading-relaxed">
                   Check every recipient and amount. Nothing has been sent yet.
                 </p>
 
-                <div className="mt-4 divide-y divide-[var(--line)] border border-[var(--line)]">
+                <ExactTotalCard
+                  total={reviewTotal}
+                  fee={reviewFee}
+                  count={reviewRecipients.length}
+                  symbol={selectedSymbol}
+                  currencySymbol={selectedSymbol === "EURC" ? "€" : "$"}
+                  chunkCount={reviewChunkCount}
+                />
+
+                <ReviewFlags
+                  lines={reviewLines}
+                  knownAddresses={knownAddresses}
+                  currencySymbol={selectedSymbol === "EURC" ? "€" : "$"}
+                />
+
+                <div className="divide-y divide-[var(--line)] border border-[var(--line)]">
                   {reviewRecipients.map((r) => (
-                    <div
-                      key={r.id}
-                      className="flex items-center justify-between gap-4 px-3.5 py-2.5"
-                    >
-                      <div className="min-w-0">
-                        <p className="text-sm text-[var(--fg)] truncate">
-                          {r.name || "Recipient"}
-                        </p>
-                        <p className="text-[11px] text-[var(--fg-faint)] font-mono">
-                          {r.address
-                            ? r.address.slice(0, 6) +
-                              "..." +
-                              r.address.slice(-4)
-                            : "No address"}
-                        </p>
-                      </div>
-                      <span className="text-sm font-semibold text-[var(--fg)] whitespace-nowrap">
-                        {(selectedSymbol === "EURC" ? "€" : "$") +
-                          r.displayAmount.toFixed(2)}
-                        <span className="text-[var(--fg-faint)] font-normal ml-1">
-                          {selectedSymbol}
+                    <div key={r.id} className="px-3.5 py-2.5">
+                      <div className="flex items-center justify-between gap-4">
+                        <div className="min-w-0">
+                          <p className="text-sm text-[var(--fg)] truncate">
+                            {r.name || "Recipient"}
+                          </p>
+                          <p className="text-[11px] text-[var(--fg-faint)] font-mono">
+                            {r.address
+                              ? r.address.slice(0, 6) +
+                                "..." +
+                                r.address.slice(-4)
+                              : "No address"}
+                          </p>
+                        </div>
+                        <span className="text-sm font-semibold text-[var(--fg)] whitespace-nowrap">
+                          {(selectedSymbol === "EURC" ? "€" : "$") +
+                            r.displayAmount.toFixed(2)}
+                          <span className="text-[var(--fg-faint)] font-normal ml-1">
+                            {selectedSymbol}
+                          </span>
                         </span>
-                      </span>
+                      </div>
+                      <input
+                        type="text"
+                        value={effectiveMemo(r.name, r.memo, nameAsMemo)}
+                        onChange={(e) => handleMemoChange(r.id, e.target.value)}
+                        disabled={isSending}
+                        maxLength={100}
+                        placeholder="Memo (optional, public onchain)"
+                        aria-label={`Memo for ${r.name || "recipient"}`}
+                        className="mt-1.5 w-full border border-[var(--line)] bg-black/[0.03] px-2.5 py-1.5 text-xs text-[var(--fg-muted)] placeholder:text-[var(--fg-faint)] focus:outline-none focus:border-[var(--accent)] disabled:opacity-40"
+                      />
                     </div>
                   ))}
                 </div>
@@ -881,41 +973,22 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                   </p>
                 ) : null}
 
-                <div className="mt-4 grid grid-cols-3 gap-4 border border-[var(--line)] bg-black/[0.03] px-3.5 py-3">
-                  <div>
-                    <span className="mono-label block mb-1">Total</span>
-                    <span className="text-sm font-semibold text-[var(--fg)]">
-                      {(selectedSymbol === "EURC" ? "€" : "$") +
-                        summaryData.total.toFixed(2)}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="mono-label block mb-1">Fee (0.2%)</span>
-                    <span className="text-sm font-semibold text-[var(--fg-muted)]">
-                      {"$" + summaryData.fee.toFixed(2)}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="mono-label block mb-1">Gas est.</span>
-                    <span className="text-sm font-semibold text-[var(--fg-muted)]">
-                      {gasLoading
-                        ? "..."
-                        : gasUsd !== null
-                          ? "~$" + gasUsd.toFixed(4)
-                          : "-"}
-                    </span>
-                  </div>
-                </div>
-
                 <div className="mt-4 space-y-1.5 text-xs text-[var(--fg-faint)] leading-relaxed">
                   <p>
-                    Before your wallet opens, this exact batch is simulated
-                    onchain. If any payment would fail, nothing is sent and the
-                    error names the address that caused it.
+                    Before each transaction opens in your wallet, it is
+                    simulated onchain. If any payment would fail, nothing in
+                    that transaction is sent and the error names the address
+                    that caused it.
                   </p>
                   <p>
-                    Payments are all or nothing: if one transfer fails onchain,
-                    the whole batch reverts and no one gets a partial payment.
+                    Each transaction is all or nothing: if one transfer in
+                    it fails, that transaction reverts and no one in it gets
+                    a partial payment.
+                  </p>
+                  <p>
+                    After sending, every line is checked against the
+                    chain&apos;s transfer records and you get a payslip
+                    receipt showing each payment with its transaction link.
                   </p>
                   <p>
                     One check only you can do: a mistyped address that is still
@@ -1207,7 +1280,11 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     </svg>
                     {status === "preparing"
                       ? "Simulating batch..."
-                      : "Confirm in MetaMask..."}
+                      : status === "approving"
+                        ? "Approve the exact total in MetaMask..."
+                        : status === "reconciling"
+                          ? "Verifying every payment onchain..."
+                          : "Confirm in MetaMask..."}
                   </span>
                 ) : (
                   <span className="flex flex-col items-center justify-center leading-tight">
@@ -1262,7 +1339,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
               {[
                 ["01", "Add recipients", "Name, wallet address (0x, 42 characters) and amount for each person."],
                 ["02", "Review the batch", "Check the full list, the total and the fee before anything is sent."],
-                ["03", "Sign once", "One signature in your wallet pays everyone together."],
+                ["03", "Sign the batch", "You approve the exact total once, then sign. Batches over 250 recipients go in chunks of 250."],
               ].map(([step, title, body]) => (
                 <div key={step} className="flex gap-3">
                   <span className="mono-label !text-[var(--accent)]">{step}</span>

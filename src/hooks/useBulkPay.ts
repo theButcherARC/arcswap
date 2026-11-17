@@ -2,38 +2,47 @@
 
 import { useState, useCallback } from "react";
 import { useAccount, useChainId, usePublicClient, useWriteContract } from "wagmi";
-import { encodeFunctionData, keccak256, toHex, toBytes } from "viem";
+import { erc20Abi, zeroAddress, type Address } from "viem";
 import { useArcNetwork } from "./useArcNetwork";
 import { arc, arcTestnet } from "@/constants/chains";
 import { getErrorMessage, isUserRejection, APP_ERRORS } from "@/utils/errors";
 import { BULK_PAY_MAX_RECIPIENTS } from "@/constants/tokens";
 import {
   buildTransfers,
-  buildMulticallCalls,
   getTotalAmount,
-  MULTICALL3_FROM_ADDRESS,
-  MULTICALL3_FROM_ABI,
+  computeProtocolFee,
+  chunkList,
+  BATCHPAY_V2_ADDRESS,
+  BATCHPAY_V2_ABI,
+  BATCHPAY_FEE_RECIPIENT,
+  BATCHPAY_CHUNK_SIZE,
+  type TransferInstruction,
 } from "@/services/bulkPayService";
-import type { BulkPayParams, BulkPayStatus } from "@/types/bulkPay";
+import { reconcileBatch, type ChunkReceipt } from "@/services/reconciliation";
+import { recordPaidRecipients } from "@/lib/paidHistory";
+import type {
+  BatchResult,
+  BulkPayParams,
+  BulkPayStatus,
+  ExpectedLine,
+} from "@/types/bulkPay";
 
-const MEMO_CONTRACT_ADDRESS = "0x5294E9927c3306DcBaDb03fe70b92e01cCede505" as const;
-
-// Memo contract wraps Multicall3From calls
-const MEMO_ABI = [
-  {
-    type: "function",
-    name: "memo",
-    stateMutability: "nonpayable",
-    inputs: [
-      { name: "target", type: "address" },
-      { name: "data", type: "bytes" },
-      { name: "memoId", type: "bytes32" },
-      { name: "memoData", type: "bytes" },
-    ],
-    outputs: [],
-  },
-] as const;
-
+/**
+ * BatchPay v2 send path.
+ *
+ * 1. Preflight: the sender's balance must cover total + fee. No wallet
+ *    popup happens before this check passes.
+ * 2. Approval: if the BatchPay contract's allowance is short, the sender
+ *    approves EXACTLY total + fee. Never an unlimited approval.
+ * 3. Per chunk of up to 250 recipients: simulate disperse() first, then
+ *    send it. The protocol fee rides on the first chunk only. disperse
+ *    pulls via transferFrom, so it can only be simulated truthfully
+ *    after the approval in step 2 exists; the simulation still always
+ *    runs before the disperse signature it protects.
+ * 4. After every chunk confirms, its recipients are recorded in the
+ *    local paid history, and at the end every expected line is
+ *    reconciled against the receipts' Transfer logs.
+ */
 export function useBulkPay() {
   const { address } = useAccount();
   const { isCorrectNetwork } = useArcNetwork();
@@ -49,10 +58,12 @@ export function useBulkPay() {
 
   const [status, setBulkStatus] = useState<BulkPayStatus>("idle");
   const [txHash, setTxHash] = useState<`0x${string}` | null>(null);
+  const [txHashes, setTxHashes] = useState<`0x${string}`[]>([]);
+  const [result, setResult] = useState<BatchResult | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const executeBulkPay = useCallback(
-    async (params: BulkPayParams & { memo?: string }, onSubmit?: (timestamp: number) => void) => {
+    async (params: BulkPayParams, onSubmit?: (timestamp: number) => void) => {
       if (!address) { setError(APP_ERRORS.WALLET_NOT_CONNECTED); return; }
       if (!isCorrectNetwork) { setError(APP_ERRORS.WRONG_NETWORK); return; }
       if (params.recipients.length === 0) { setError("Add at least one recipient."); return; }
@@ -60,106 +71,165 @@ export function useBulkPay() {
         setError(`Maximum ${BULK_PAY_MAX_RECIPIENTS} recipients allowed.`);
         return;
       }
+      if (!publicClient) { setError("Network client is not ready. Try again."); return; }
+
+      const sentChunks: ChunkReceipt[] = [];
 
       try {
         setError(null);
         setTxHash(null);
+        setTxHashes([]);
+        setResult(null);
         setBulkStatus("preparing");
 
         const instructions = buildTransfers(params);
-        const transferCalls = buildMulticallCalls(instructions);
+        const totalRaw = getTotalAmount(instructions);
+        const feeRaw = computeProtocolFee(totalRaw, params.token.decimals);
+        const grandTotal = totalRaw + feeRaw;
+        const tokenAddress = params.token.address as Address;
+        const batchMemo = (params.batchMemo ?? "").trim();
+        const chunks = chunkList(instructions, BATCHPAY_CHUNK_SIZE);
 
-        const memoString = params.memo?.trim() || "";
-        const hasMemo = memoString.length > 0;
+        /* ---- Preflight: balance must cover total + fee ---- */
+        const balance = await publicClient.readContract({
+          address: tokenAddress,
+          abi: erc20Abi,
+          functionName: "balanceOf",
+          args: [address],
+        });
+        if (balance < grandTotal) {
+          throw new Error(
+            `Insufficient ${params.token.symbol} balance for this batch. ` +
+            `The batch plus its protocol fee needs more than this wallet holds.`,
+          );
+        }
 
-        // Simulate before MetaMask popup
-        if (publicClient) {
-          const simulation = await publicClient.simulateContract({
+        /* ---- Approval: exactly total + fee, never unlimited ---- */
+        const allowance = await publicClient.readContract({
+          address: tokenAddress,
+          abi: erc20Abi,
+          functionName: "allowance",
+          args: [address, BATCHPAY_V2_ADDRESS],
+        });
+        if (allowance < grandTotal) {
+          setBulkStatus("approving");
+          const approveHash = await writeContractAsync({
+            chainId: targetChainId,
+            address: tokenAddress,
+            abi: erc20Abi,
+            functionName: "approve",
+            args: [BATCHPAY_V2_ADDRESS, grandTotal],
+          });
+          const approveReceipt = await publicClient.waitForTransactionReceipt({
+            hash: approveHash,
+            timeout: 120_000,
+          });
+          if (approveReceipt.status !== "success") {
+            throw new Error(`Approval transaction reverted. Hash: ${approveHash}`);
+          }
+        }
+
+        /* ---- Send chunk by chunk: simulate, sign, confirm ---- */
+        let submitFired = false;
+        for (let i = 0; i < chunks.length; i++) {
+          const chunk = chunks[i] as TransferInstruction[];
+          const isFirst = i === 0;
+          const chunkFeeRecipient = isFirst ? BATCHPAY_FEE_RECIPIENT : zeroAddress;
+          const chunkFeeAmount = isFirst ? feeRaw : 0n;
+          const memos = chunk.map((c) => c.memo);
+          const memosArg: string[] = memos.every((m) => m.length === 0) ? [] : memos;
+
+          const disperseArgs = [
+            tokenAddress,
+            chunk.map((c) => c.to),
+            chunk.map((c) => c.amount),
+            memosArg,
+            chunkFeeRecipient,
+            chunkFeeAmount,
+            batchMemo,
+          ] as const;
+
+          setBulkStatus("preparing");
+          await publicClient.simulateContract({
             account: address,
-            address: MULTICALL3_FROM_ADDRESS,
-            abi: MULTICALL3_FROM_ABI,
-            functionName: "aggregate3",
-            args: [transferCalls],
+            address: BATCHPAY_V2_ADDRESS,
+            abi: BATCHPAY_V2_ABI,
+            functionName: "disperse",
+            args: disperseArgs,
           });
 
-          const results = simulation.result as { success: boolean; returnData: `0x${string}` }[];
-          const failedIdx = results.findIndex((r) => !r.success);
-          if (failedIdx !== -1) {
+          setBulkStatus("sending");
+          const hash = await writeContractAsync({
+            chainId: targetChainId,
+            address: BATCHPAY_V2_ADDRESS,
+            abi: BATCHPAY_V2_ABI,
+            functionName: "disperse",
+            args: disperseArgs,
+          });
+
+          if (!submitFired) {
+            onSubmit?.(Date.now());
+            submitFired = true;
+          }
+          setTxHash(hash);
+          setTxHashes((prev) => [...prev, hash]);
+
+          const receipt = await publicClient.waitForTransactionReceipt({
+            hash,
+            timeout: 120_000,
+          });
+          if (receipt.status !== "success") {
             throw new Error(
-              `Transfer to ${params.recipients[failedIdx]?.address} would fail. Check balance and addresses.`
+              `Transaction ${i + 1} of ${chunks.length} reverted. Hash: ${hash}`,
             );
           }
+          sentChunks.push({ hash, receipt });
+          recordPaidRecipients(chunk.map((c) => c.to));
         }
 
-        // One MetaMask popup - either call Memo (wrapping Multicall3From) or Multicall3From directly
-        setBulkStatus("sending");
-        let hash: `0x${string}`;
+        /* ---- Reconcile every expected line against the receipts ---- */
+        setBulkStatus("reconciling");
+        const expected: ExpectedLine[] = instructions.map((instr, idx) => ({
+          row: idx + 1,
+          name: instr.name,
+          address: instr.to,
+          amount: instr.amount,
+        }));
+        const summary = reconcileBatch(
+          sentChunks,
+          expected,
+          tokenAddress,
+          BATCHPAY_V2_ADDRESS,
+          BATCHPAY_FEE_RECIPIENT,
+          feeRaw,
+        );
 
-        if (hasMemo) {
-          // Encode the Multicall3From.aggregate3(transferCalls) call
-          const multicallData = encodeFunctionData({
-            abi: MULTICALL3_FROM_ABI,
-            functionName: "aggregate3",
-            args: [transferCalls],
-          });
-
-          // Create memoId from keccak256 hash of memo string
-          const memoId = keccak256(toBytes(memoString));
-
-          // Call Memo contract which wraps the Multicall3From call
-          hash = await writeContractAsync({
-            chainId: targetChainId,
-            address: MEMO_CONTRACT_ADDRESS,
-            abi: MEMO_ABI,
-            functionName: "memo",
-            args: [
-              MULTICALL3_FROM_ADDRESS,
-              multicallData,
-              memoId,
-              toHex(memoString),
-            ],
-          });
-        } else {
-          // No memo - call Multicall3From directly
-          hash = await writeContractAsync({
-            chainId: targetChainId,
-            address: MULTICALL3_FROM_ADDRESS,
-            abi: MULTICALL3_FROM_ABI,
-            functionName: "aggregate3",
-            args: [transferCalls],
-          });
-        }
-
-        // Call onSubmit callback exactly when transaction is submitted
-        const submitTimestamp = Date.now();
-        onSubmit?.(submitTimestamp);
-
-        console.log("[v0] Transaction submitted:", hash);
-        setTxHash(hash);
-
-        // Wait for receipt with fallback
-        if (publicClient) {
-          try {
-            const receipt = await publicClient.waitForTransactionReceipt({ 
-              hash,
-              timeout: 60_000, // 60 second timeout
-            });
-            if (receipt.status !== "success") {
-              throw new Error(`Transaction reverted. Hash: ${hash}`);
-            }
-          } catch (waitErr) {
-            // If wait times out or fails, still mark as success since tx was submitted
-            // User can verify on ArcScan
-            if (waitErr instanceof Error && waitErr.message.includes("timed out")) {
-              console.log("[v0] Receipt wait timed out, but tx was submitted:", hash);
-            }
-          }
-        }
-
-        console.log("[v0] Transaction confirmed, setting status to success");
+        setResult({
+          txHashes: sentChunks.map((c) => c.hash),
+          totalRaw,
+          feeRaw,
+          batchMemo,
+          token: params.token,
+          sender: address,
+          sentAt: Date.now(),
+          summary,
+        });
         setBulkStatus("success");
       } catch (err) {
-        setError(isUserRejection(err) ? APP_ERRORS.TX_REJECTED : getErrorMessage(err));
+        if (sentChunks.length > 0) {
+          // Part of the batch is already onchain. Say so plainly and name
+          // the transactions, so the user never resends the whole batch
+          // and double-pays the lines that already went through.
+          setError(
+            `Part of this batch was already sent (${sentChunks
+              .map((c) => c.hash)
+              .join(", ")}). The rest was not sent: ${getErrorMessage(err)} ` +
+            `Do not resend the whole batch. Remove the recipients in the sent ` +
+            `transactions and send only the remainder.`,
+          );
+        } else {
+          setError(isUserRejection(err) ? APP_ERRORS.TX_REJECTED : getErrorMessage(err));
+        }
         setBulkStatus("error");
       }
     },
@@ -169,8 +239,10 @@ export function useBulkPay() {
   function reset() {
     setBulkStatus("idle");
     setTxHash(null);
+    setTxHashes([]);
+    setResult(null);
     setError(null);
   }
 
-  return { status, txHash, error, executeBulkPay, reset };
+  return { status, txHash, txHashes, result, error, executeBulkPay, reset };
 }

@@ -11,8 +11,13 @@ import { TOKENS, BULK_PAY_MAX_RECIPIENTS } from "@/constants/tokens";
 import { isValidAddress, toChecksumAddress } from "@/utils/address";
 import { parsePaymentInstruction } from "@/services/agentService";
 import type { ParsedBulkPay } from "@/services/agentService";
+import { BATCHPAY_CHUNK_SIZE } from "@/services/bulkPayService";
+import { loadPaidRecipientAddresses } from "@/lib/paidHistory";
+import { effectiveMemo, type ReviewLine } from "@/lib/bulkPayReview";
 import BulkPaySuccess from "./BulkPaySuccess";
 import RecipientRow from "./RecipientRow";
+import ReviewFlags from "./ReviewFlags";
+import ExactTotalCard from "./ExactTotalCard";
 import type { Recipient } from "@/types/bulkPay";
 
 function createRecipient(): Recipient {
@@ -154,10 +159,15 @@ export default function AIPayForm() {
   const [agentResult, setAgentResult] = useState<ParsedBulkPay | null>(null);
   const [recipients, setRecipients] = useState<Recipient[]>([]);
   const [memo, setMemo] = useState("");
+  const [nameAsMemo, setNameAsMemo] = useState(true);
   const [showReview, setShowReview] = useState(false);
 
-  const { executeBulkPay, status, txHash, error, reset } = useBulkPay();
-  const isSending = status === "preparing" || status === "sending";
+  const { executeBulkPay, status, txHash, result, error, reset } = useBulkPay();
+  const isSending =
+    status === "preparing" ||
+    status === "approving" ||
+    status === "sending" ||
+    status === "reconciling";
   const { isConnected } = useAccount();
 
   /* ---- Agent handlers ---- */
@@ -293,6 +303,37 @@ export default function AIPayForm() {
   const fee = Math.max(total * 0.002, 0.01);
   const atMaxRecipients = recipients.length >= BULK_PAY_MAX_RECIPIENTS;
 
+  /* ---- Review-step data: flags, exact total, chunk count ---- */
+  const validTotal = useMemo(
+    () => validRecipients.reduce((sum, r) => sum + (r.amount || 0), 0),
+    [validRecipients]
+  );
+  const reviewFee = Math.max(validTotal * 0.002, 0.01);
+  const reviewLines: ReviewLine[] = useMemo(
+    () =>
+      validRecipients.map((r, i) => ({
+        row: i + 1,
+        name: r.name || "",
+        address: typeof r.address === "string" ? r.address : "",
+        amount: r.amount || 0,
+      })),
+    [validRecipients],
+  );
+  const knownAddresses = useMemo(
+    () => (showReview ? loadPaidRecipientAddresses() : new Set<string>()),
+    [showReview],
+  );
+  const reviewChunkCount = Math.max(
+    1,
+    Math.ceil(validRecipients.length / BATCHPAY_CHUNK_SIZE),
+  );
+
+  const handleMemoChange = useCallback((id: string, value: string) => {
+    setRecipients((prev) =>
+      prev.map((r) => (r.id === id ? { ...r, memo: value } : r))
+    );
+  }, []);
+
   const canSend = useMemo(() => {
     if (isSending) return false;
     if (validRecipients.length === 0) return false;
@@ -332,6 +373,7 @@ export default function AIPayForm() {
         address: checksumAddr as Address,
         amount,
         name: r.name,
+        memo: effectiveMemo(r.name, r.memo, nameAsMemo) || undefined,
       };
     });
 
@@ -339,9 +381,9 @@ export default function AIPayForm() {
       totalAmount: totalAmountRaw,
       token,
       recipients: transfers,
-      memo: memo.trim() || undefined,
+      batchMemo: memo.trim() || undefined,
     });
-  }, [canSend, validRecipients, token, executeBulkPay, memo]);
+  }, [canSend, validRecipients, token, executeBulkPay, memo, nameAsMemo]);
 
   /* ================================================================ */
   /*  RENDER                                                          */
@@ -353,6 +395,7 @@ export default function AIPayForm() {
           txHash={txHash || ""}
           onReset={reset}
           tokenSymbol={selectedSymbol}
+          result={result}
         />
       ) : (
         <div className="mx-auto max-w-3xl px-2 sm:px-4">
@@ -654,6 +697,23 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                   placeholder="e.g. March payroll"
                   className="w-full border border-[var(--line)] bg-transparent px-4 py-3 text-base text-[var(--fg)] placeholder:text-[var(--fg-faint)] focus:outline-none focus:border-[var(--fg-muted)] transition-colors"
                 />
+                <label className="mt-3 flex cursor-pointer items-start gap-2.5 text-xs leading-relaxed text-[var(--fg-muted)]">
+                  <input
+                    type="checkbox"
+                    checked={nameAsMemo}
+                    onChange={(e) => setNameAsMemo(e.target.checked)}
+                    disabled={isSending}
+                    className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--accent)]"
+                  />
+                  <span>
+                    Use each recipient&apos;s name as their payment memo.{" "}
+                    <span className="text-[var(--fg-faint)]">
+                      Memos are written onchain with the payment and are
+                      public forever. You can edit or clear any line&apos;s
+                      memo in the review before signing.
+                    </span>
+                  </span>
+                </label>
               </div>
 
               {/* Summary + actions */}
@@ -711,26 +771,49 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                 ) : (
                   <div className="mt-5 border-t border-[var(--line)] pt-5">
                     <p className="mono-label mb-3">Review before you sign</p>
+                    <ExactTotalCard
+                      total={validTotal}
+                      fee={reviewFee}
+                      count={validRecipients.length}
+                      symbol={selectedSymbol}
+                      chunkCount={reviewChunkCount}
+                    />
+                    <ReviewFlags
+                      lines={reviewLines}
+                      knownAddresses={knownAddresses}
+                    />
                     <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
                       {validRecipients.map((r, i) => (
                         <div
                           key={"ai-review-" + r.id}
-                          className="flex items-center gap-3 bg-black/[0.03] border border-[var(--line)] px-4 py-3"
+                          className="bg-black/[0.03] border border-[var(--line)] px-4 py-3"
                         >
-                          <span className="text-[11px] text-[var(--fg-faint)] font-mono w-5 shrink-0">
-                            {i + 1}.
-                          </span>
-                          <span className="text-sm text-[var(--fg-muted)] flex-1 truncate font-medium">
-                            {r.name || "Unnamed"}
-                          </span>
-                          <span className="text-[11px] text-[var(--fg-faint)] font-mono truncate max-w-[120px]">
-                            {typeof r.address === "string" && r.address.length > 10
-                              ? r.address.slice(0, 6) + "..." + r.address.slice(-4)
-                              : r.address}
-                          </span>
-                          <span className="text-sm text-[var(--accent)] font-semibold shrink-0">
-                            {"$" + (r.amount || 0).toFixed(2)}
-                          </span>
+                          <div className="flex items-center gap-3">
+                            <span className="text-[11px] text-[var(--fg-faint)] font-mono w-5 shrink-0">
+                              {i + 1}.
+                            </span>
+                            <span className="text-sm text-[var(--fg-muted)] flex-1 truncate font-medium">
+                              {r.name || "Unnamed"}
+                            </span>
+                            <span className="text-[11px] text-[var(--fg-faint)] font-mono truncate max-w-[120px]">
+                              {typeof r.address === "string" && r.address.length > 10
+                                ? r.address.slice(0, 6) + "..." + r.address.slice(-4)
+                                : r.address}
+                            </span>
+                            <span className="text-sm text-[var(--accent)] font-semibold shrink-0">
+                              {"$" + (r.amount || 0).toFixed(2)}
+                            </span>
+                          </div>
+                          <input
+                            type="text"
+                            value={effectiveMemo(r.name, r.memo, nameAsMemo)}
+                            onChange={(e) => handleMemoChange(r.id, e.target.value)}
+                            disabled={isSending}
+                            maxLength={100}
+                            placeholder="Memo (optional, public onchain)"
+                            aria-label={`Memo for ${r.name || "recipient"}`}
+                            className="mt-2 w-full border border-[var(--line)] bg-transparent px-2.5 py-1.5 text-xs text-[var(--fg-muted)] placeholder:text-[var(--fg-faint)] focus:outline-none focus:border-[var(--accent)] disabled:opacity-40"
+                          />
                         </div>
                       ))}
                     </div>
@@ -756,9 +839,13 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                       >
                         {status === "preparing"
                           ? "Preparing..."
-                          : status === "sending"
-                            ? "Sending..."
-                            : "Confirm & Send"}
+                          : status === "approving"
+                            ? "Approve the exact total..."
+                            : status === "reconciling"
+                              ? "Verifying payments onchain..."
+                              : status === "sending"
+                                ? "Sending..."
+                                : "Confirm & Send"}
                       </button>
                     </div>
                   </div>
