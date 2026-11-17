@@ -270,14 +270,12 @@ export default function DashboardPage() {
   ];
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[var(--bg)] px-4 pb-16 pt-10 sm:px-6 lg:px-8">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(circle_at_50%_0%,rgba(39,117,202,0.08),transparent_65%)]" />
-
+    <main className="relative min-h-screen bg-[var(--bg)] px-4 pb-16 pt-10 sm:px-6 lg:px-8">
       <div className="relative mx-auto flex w-full max-w-5xl flex-col gap-6">
         {/* Header */}
         <header className="animate-fade-in-up flex flex-col gap-2">
           <div className="flex items-center justify-between gap-3">
-            <h1 className="text-balance text-2xl font-bold tracking-tight text-[var(--fg)] sm:text-3xl">
+            <h1 className="text-balance text-3xl font-bold uppercase tracking-tight text-[var(--fg)] sm:text-4xl">
               Dashboard
             </h1>
             <div className="flex items-center gap-2">
@@ -285,7 +283,7 @@ export default function DashboardPage() {
                 onClick={handleSync}
                 disabled={syncLoading || isLoading || !isConnected}
                 title={!isConnected ? "Connect your wallet to sync" : "Refresh dashboard data"}
-                className="inline-flex items-center gap-2 rounded-lg border border-[var(--line)] bg-black/[0.03] px-3 py-2 text-xs font-medium text-[var(--fg-muted)] transition-colors hover:border-[var(--line-strong)] hover:bg-black/[0.04] disabled:opacity-50 disabled:cursor-not-allowed"
+                className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-[var(--line)] bg-black/[0.03] px-3.5 py-2 text-xs font-medium text-[var(--fg-muted)] transition-colors hover:border-[var(--line-strong)] hover:bg-black/[0.04] disabled:opacity-50 disabled:cursor-not-allowed"
                 aria-label="Refresh dashboard data"
               >
                 <svg
@@ -315,7 +313,7 @@ export default function DashboardPage() {
                 <span>Sync</span>
               </button>
               {syncError && (
-                <div className="text-xs text-red-400 animate-pulse max-w-xs truncate">
+                <div className="text-xs text-rose-600 animate-pulse max-w-xs truncate">
                   Error: {syncError}
                 </div>
               )}
@@ -326,7 +324,7 @@ export default function DashboardPage() {
               )}
             </div>
           </div>
-          <p className="text-sm text-[var(--fg-muted)] sm:text-base">
+          <p className="text-sm text-[var(--fg-muted)]">
             Payment history and analytics
           </p>
         </header>
@@ -375,7 +373,7 @@ export default function DashboardPage() {
           <>
             {/* Stats - one hairline strip, not four boxes */}
             <section aria-label="Key statistics" className="animate-fade-in-up delay-100">
-              <div className="grid grid-cols-2 gap-px overflow-hidden border border-[var(--line)] bg-[var(--line)] lg:grid-cols-4">
+              <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[var(--radius)] border border-[var(--line)] bg-[var(--line)] lg:grid-cols-4">
                 {stats.map((stat) => (
                   <div
                     key={stat.label}
@@ -416,7 +414,7 @@ export default function DashboardPage() {
                   >
                     <CartesianGrid
                       strokeDasharray="3 3"
-                      stroke="rgba(255,255,255,0.06)"
+                      stroke="rgba(11,13,22,0.08)"
                       vertical={false}
                     />
                     <XAxis
@@ -515,19 +513,19 @@ export default function DashboardPage() {
                       <tr className="border-b border-[var(--line)]">
                         <th
                           scope="col"
-                          className="px-5 py-3 text-xs font-medium uppercase tracking-wider text-[var(--fg-faint)] sm:px-6"
+                          className="px-5 py-3 mono-label sm:px-6"
                         >
                           Name
                         </th>
                         <th
                           scope="col"
-                          className="px-5 py-3 text-xs font-medium uppercase tracking-wider text-[var(--fg-faint)] sm:px-6"
+                          className="px-5 py-3 mono-label sm:px-6"
                         >
                           Address
                         </th>
                         <th
                           scope="col"
-                          className="px-5 py-3 text-right text-xs font-medium uppercase tracking-wider text-[var(--fg-faint)] sm:px-6"
+                          className="px-5 py-3 text-right mono-label sm:px-6"
                         >
                           Amount
                         </th>
@@ -564,7 +562,7 @@ export default function DashboardPage() {
                     <tfoot>
                       <tr className="border-t border-[var(--line)]">
                         <td
-                          className="px-5 py-4 text-xs font-medium uppercase tracking-wider text-[var(--fg-faint)] sm:px-6"
+                          className="px-5 py-4 mono-label sm:px-6"
                           colSpan={2}
                         >
                           Total

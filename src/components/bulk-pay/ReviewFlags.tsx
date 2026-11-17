@@ -40,7 +40,7 @@ export default function ReviewFlags({
   return (
     <div className="mb-4 space-y-2.5">
       {flags.duplicates.length > 0 ? (
-        <div className="border border-rose-500/40 bg-rose-500/[0.07] px-4 py-3">
+        <div className="rounded-lg border border-rose-500/40 bg-rose-500/[0.07] px-4 py-3">
           <span className="mono-label block mb-1 !text-rose-600">
             Check before you sign / Duplicate address
           </span>
@@ -55,7 +55,7 @@ export default function ReviewFlags({
       ) : null}
 
       {flags.outliers.length > 0 ? (
-        <div className="border border-amber-500/40 bg-amber-500/[0.07] px-4 py-3">
+        <div className="rounded-lg border border-amber-500/40 bg-amber-500/[0.07] px-4 py-3">
           <span className="mono-label block mb-1 !text-amber-600">
             Check before you sign / Unusual amount
           </span>
@@ -71,7 +71,7 @@ export default function ReviewFlags({
       ) : null}
 
       {flags.firstTime.length > 0 ? (
-        <div className="border border-amber-500/40 bg-amber-500/[0.07] px-4 py-3">
+        <div className="rounded-lg border border-amber-500/40 bg-amber-500/[0.07] px-4 py-3">
           <span className="mono-label block mb-1 !text-amber-600">
             Check before you sign / First-time recipient
             {flags.firstTime.length !== 1 ? "s" : ""}

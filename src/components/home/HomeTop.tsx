@@ -122,7 +122,7 @@ export function HomeTop() {
       <div className="flex flex-wrap gap-2.5">
         {[
           { label: "Send a batch", href: ROUTES.BULK_PAY },
-          { label: "Describe it to the agent", href: ROUTES.BULK_PAY },
+          { label: "Describe it to the agent", href: ROUTES.BULK_PAY_AI },
           { label: "Schedule a payment", href: ROUTES.SCHEDULED },
           { label: "Watch Arc live", href: ROUTES.VIBRAIN },
         ].map((a) => (

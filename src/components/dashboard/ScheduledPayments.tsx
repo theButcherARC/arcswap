@@ -88,7 +88,7 @@ export function ScheduledPayments() {
           </div>
           <Link
             href="/bulk-pay"
-            className="text-xs font-medium text-[var(--data)] hover:text-[var(--data)]"
+            className="inline-flex min-h-11 items-center px-2 text-xs font-medium text-[var(--data)] transition-colors hover:text-[var(--fg)]"
           >
             New batch
           </Link>
@@ -137,7 +137,7 @@ export function ScheduledPayments() {
                         Cancelled
                       </span>
                     ) : due ? (
-                      <span className="text-[11px] font-medium text-amber-300">
+                      <span className="text-[11px] font-medium text-amber-600">
                         Due now
                       </span>
                     ) : (
@@ -149,7 +149,7 @@ export function ScheduledPayments() {
                       <>
                         <Link
                           href={"/bulk-pay?schedule=" + item.id}
-                          className="text-xs font-semibold text-[var(--data)] hover:text-[var(--data)]"
+                          className="inline-flex min-h-11 items-center px-1 text-xs font-semibold text-[var(--data)] transition-colors hover:text-[var(--fg)]"
                         >
                           Review and pay
                         </Link>
@@ -157,7 +157,7 @@ export function ScheduledPayments() {
                           type="button"
                           onClick={() => handleCancel(item.id)}
                           disabled={cancellingId === item.id}
-                          className="text-xs text-[var(--fg-faint)] hover:text-rose-600 disabled:opacity-40"
+                          className="inline-flex min-h-11 items-center px-1 text-xs text-[var(--fg-faint)] transition-colors hover:text-rose-600 disabled:opacity-40"
                         >
                           {cancellingId === item.id
                             ? "Cancelling..."

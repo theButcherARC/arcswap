@@ -150,6 +150,7 @@ export function SquareFeed() {
           </p>
         </div>
       )}
+      {posts.length > 0 && (
       <div className="divide-y divide-[var(--line)] border-y border-[var(--line)]">
         {posts.map((p) => (
           <article key={p.id} className="py-5">
@@ -170,6 +171,7 @@ export function SquareFeed() {
           </article>
         ))}
       </div>
+      )}
     </div>
   );
 }

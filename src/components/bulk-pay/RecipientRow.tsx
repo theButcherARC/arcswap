@@ -116,10 +116,10 @@ export default function RecipientRow({
   };
 
   const inputClasses =
-    "w-full bg-black/[0.03] border border-[var(--line)] text-[var(--fg)] placeholder:text-[var(--fg-faint)] px-4 py-3 text-base focus:outline-none focus:border-[var(--accent)] focus:bg-black/[0.03] focus:shadow-[0_0_0_3px_rgba(39,117,202,0.14)] transition-all duration-200 hover:border-[var(--line-strong)] hover:bg-black/[0.04] disabled:opacity-40 disabled:cursor-not-allowed";
+    "w-full rounded-lg bg-black/[0.03] border border-[var(--line)] text-[var(--fg)] placeholder:text-[var(--fg-faint)] px-4 py-3 text-base focus:outline-none focus:border-[var(--accent)] focus:bg-black/[0.03] focus:shadow-[0_0_0_3px_rgba(39,117,202,0.14)] transition-all duration-200 hover:border-[var(--line-strong)] hover:bg-black/[0.04] disabled:opacity-40 disabled:cursor-not-allowed";
 
   const addressClasses =
-    "w-full border px-4 py-3 text-base font-mono placeholder:text-[var(--fg-faint)] focus:outline-none transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed " +
+    "w-full rounded-lg border px-4 py-3 text-base font-mono placeholder:text-[var(--fg-faint)] focus:outline-none transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed " +
     (addressValid
       ? "border-emerald-500/40 bg-emerald-500/5 text-[var(--fg)] focus:border-emerald-500/60"
       : addressHasInput
@@ -140,7 +140,7 @@ export default function RecipientRow({
 
         {/* Name input */}
         <div className="min-w-[120px] flex-1">
-          <label className="block text-[10px] font-medium text-[var(--fg-faint)] uppercase tracking-wider mb-1.5 lg:hidden">
+          <label className="mono-label mb-1.5 block lg:hidden">
             Name
           </label>
           <input
@@ -155,7 +155,7 @@ export default function RecipientRow({
 
         {/* Address input */}
         <div className="min-w-[180px] flex-[1.5]">
-          <label className="block text-[10px] font-medium text-[var(--fg-faint)] uppercase tracking-wider mb-1.5 lg:hidden">
+          <label className="mono-label mb-1.5 block lg:hidden">
             Address, @username, or VIBE-ID
           </label>
           <div className="relative">
@@ -231,7 +231,7 @@ export default function RecipientRow({
 
         {/* Amount / Percentage input */}
         <div className="w-[130px] shrink-0">
-          <label className="block text-[10px] font-medium text-[var(--fg-faint)] uppercase tracking-wider mb-1.5 lg:hidden">
+          <label className="mono-label mb-1.5 block lg:hidden">
             {inputMode === "amount" ? "Amount" : "Percentage"}
           </label>
           <div className="relative">
@@ -247,7 +247,7 @@ export default function RecipientRow({
               disabled={isDisabled}
               placeholder={activePlaceholder}
               className={
-                "w-full bg-black/[0.03] border border-[var(--line)] text-[var(--fg)] placeholder:text-[var(--fg-faint)] py-3 text-base text-right focus:outline-none focus:border-[var(--accent)] transition-all duration-200 hover:border-[var(--line-strong)] hover:bg-black/[0.04] disabled:opacity-40 disabled:cursor-not-allowed " +
+                "w-full rounded-lg bg-black/[0.03] border border-[var(--line)] text-[var(--fg)] placeholder:text-[var(--fg-faint)] py-3 text-base text-right focus:outline-none focus:border-[var(--accent)] transition-all duration-200 hover:border-[var(--line-strong)] hover:bg-black/[0.04] disabled:opacity-40 disabled:cursor-not-allowed " +
                 (inputMode === "amount" ? "pl-8 pr-4" : "pl-4 pr-8")
               }
             />
@@ -272,7 +272,7 @@ export default function RecipientRow({
           type="button"
           onClick={() => onRemove(recipient.id)}
           disabled={isDisabled}
-          className="mt-4 flex h-11 w-11 shrink-0 items-center justify-center border border-[var(--line)] bg-black/[0.03] text-[var(--fg-faint)] transition-all duration-200 hover:border-rose-500/30 hover:bg-rose-500/10 hover:text-rose-600 active:scale-90 disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:border-[var(--line-strong)] disabled:hover:bg-black/[0.04] disabled:hover:text-[var(--fg-faint)]"
+          className="mt-4 flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-[var(--line)] bg-black/[0.03] text-[var(--fg-faint)] transition-all duration-200 hover:border-rose-500/30 hover:bg-rose-500/10 hover:text-rose-600 active:scale-90 disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:border-[var(--line-strong)] disabled:hover:bg-black/[0.04] disabled:hover:text-[var(--fg-faint)]"
           aria-label={"Remove recipient " + rowNumber}
         >
           <svg
