@@ -52,7 +52,7 @@ function AgentPreview({
   onDiscard: () => void;
 }) {
   return (
-    <div className="mt-4 border border-[rgba(39,117,202,0.25)] bg-[rgba(39,117,202,0.05)] p-5">
+    <div className="mt-4 rounded-[var(--radius)] border border-[rgba(39,117,202,0.25)] bg-[rgba(39,117,202,0.05)] p-5">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2.5">
           <div className="h-2 w-2 rounded-full bg-[var(--accent)] animate-pulse" />
@@ -65,14 +65,14 @@ function AgentPreview({
           <button
             type="button"
             onClick={onDiscard}
-            className="px-3.5 py-1.5 text-xs font-medium text-[var(--fg-muted)] hover:text-[var(--fg)] border border-[var(--line)] hover:border-[var(--line-strong)] bg-black/[0.03] transition-colors duration-200 active:scale-95"
+            className="inline-flex min-h-11 items-center rounded-full border border-[var(--line)] bg-black/[0.03] px-4 py-1.5 text-xs font-medium text-[var(--fg-muted)] transition-colors duration-200 hover:border-[var(--line-strong)] hover:text-[var(--fg)] active:scale-95"
           >
             Discard
           </button>
           <button
             type="button"
             onClick={onApply}
-            className="px-4 py-1.5 text-xs font-semibold text-white bg-[var(--accent)] hover:opacity-90 transition-colors duration-200 active:scale-95"
+            className="inline-flex min-h-11 items-center rounded-full bg-[var(--accent)] px-5 py-1.5 text-xs font-semibold text-white transition-colors duration-200 hover:opacity-90 active:scale-95"
           >
             Apply All
           </button>
@@ -82,7 +82,7 @@ function AgentPreview({
         {result.recipients.map((r, i) => (
           <div
             key={"ai-preview-" + i}
-            className="bg-black/[0.03] border border-[var(--line)] px-4 py-3"
+            className="rounded-lg bg-black/[0.03] border border-[var(--line)] px-4 py-3"
           >
             <div className="flex items-center gap-3">
               <span className="text-[11px] text-[var(--fg-faint)] font-mono w-5 shrink-0">
@@ -435,7 +435,7 @@ export default function AIPayForm() {
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <span className="mono-label mb-2 block">SYS.PAY / AI.PARSE</span>
-                <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--fg)]">
+                <h1 className="text-3xl font-bold tracking-tight text-[var(--fg)] sm:text-4xl">
                   AI
                 </h1>
                 <p className="text-sm text-[var(--fg-muted)] mt-2 max-w-md">
@@ -456,7 +456,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     onClick={() => setSelectedSymbol("USDC")}
                     aria-pressed={selectedSymbol === "USDC"}
                     className={
-                      "px-3.5 py-1.5 text-xs font-semibold transition-colors duration-200 " +
+                      "flex min-h-11 items-center justify-center rounded-md px-3.5 py-1.5 text-xs font-semibold transition-colors duration-200 " +
                       (selectedSymbol === "USDC"
                         ? "bg-[var(--fg)] text-[var(--bg)]"
                         : "text-[var(--fg-muted)] hover:text-[var(--fg)]")
@@ -469,7 +469,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     onClick={() => setSelectedSymbol("EURC")}
                     aria-pressed={selectedSymbol === "EURC"}
                     className={
-                      "px-3.5 py-1.5 text-xs font-semibold transition-colors duration-200 " +
+                      "flex min-h-11 items-center justify-center rounded-md px-3.5 py-1.5 text-xs font-semibold transition-colors duration-200 " +
                       (selectedSymbol === "EURC"
                         ? "bg-[var(--fg)] text-[var(--bg)]"
                         : "text-[var(--fg-muted)] hover:text-[var(--fg)]")
@@ -484,7 +484,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
 
 {/* Wallet requirement banner (shown until connected) */}
           {!isConnected ? (
-            <div className="mb-7 flex flex-col gap-3 border border-[rgba(39,117,202,0.3)] bg-[var(--accent-soft)] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="mb-7 flex flex-col gap-3 rounded-[var(--radius)] border border-[rgba(39,117,202,0.3)] bg-[var(--accent-soft)] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm text-[var(--fg-muted)]">
                 <span className="font-semibold text-[var(--fg)]">Connect your wallet to send.</span>{" "}
                 MetaMask on Arc Mainnet is required before you can submit a batch.
@@ -515,17 +515,17 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
               <div>
 {/* How it works */}
                   <div className="mb-4 grid gap-2 sm:grid-cols-3">
-                    <div className="border border-[var(--line)] bg-black/[0.03] px-3.5 py-3">
+                    <div className="rounded-lg border border-[var(--line)] bg-black/[0.03] px-3.5 py-3">
                       <p className="font-mono text-[11px] font-semibold text-[var(--accent)]">01</p>
                       <p className="mt-1 text-xs font-semibold text-[var(--fg)]">Describe it</p>
                       <p className="mt-0.5 text-[11px] leading-relaxed text-[var(--fg-faint)]">Write who gets paid and how much, in plain words.</p>
                     </div>
-                    <div className="border border-[var(--line)] bg-black/[0.03] px-3.5 py-3">
+                    <div className="rounded-lg border border-[var(--line)] bg-black/[0.03] px-3.5 py-3">
                       <p className="font-mono text-[11px] font-semibold text-[var(--accent)]">02</p>
                       <p className="mt-1 text-xs font-semibold text-[var(--fg)]">The agent drafts it</p>
                       <p className="mt-0.5 text-[11px] leading-relaxed text-[var(--fg-faint)]">It fills the batch below for you. Nothing is sent.</p>
                     </div>
-                    <div className="border border-[var(--line)] bg-black/[0.03] px-3.5 py-3">
+                    <div className="rounded-lg border border-[var(--line)] bg-black/[0.03] px-3.5 py-3">
                       <p className="font-mono text-[11px] font-semibold text-[var(--accent)]">03</p>
                       <p className="mt-1 text-xs font-semibold text-[var(--fg)]">You review and sign</p>
                       <p className="mt-0.5 text-[11px] leading-relaxed text-[var(--fg-faint)]">Check every row, then sign once in your wallet.</p>
@@ -540,7 +540,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     disabled={agentLoading}
                     placeholder="Pay Alice 500 USDC at 0x... and Bob 300 USDC at 0x..."
                     rows={3}
-                    className="w-full min-h-24 border border-[var(--line)] bg-transparent px-4 py-3 text-base leading-relaxed text-[var(--fg)] placeholder:text-[var(--fg-faint)] focus:outline-none focus:border-[var(--fg-muted)] transition-colors resize-none disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="w-full min-h-24 rounded-lg border border-[var(--line)] bg-transparent px-4 py-3 text-base leading-relaxed text-[var(--fg)] placeholder:text-[var(--fg-faint)] focus:outline-none focus:border-[var(--fg-muted)] transition-colors resize-none disabled:opacity-40 disabled:cursor-not-allowed"
                   />
 
                   {/* Example chips */}
@@ -551,7 +551,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                         type="button"
                         onClick={() => handleExampleClick(prompt)}
                         disabled={agentLoading}
-                        className="text-[11px] text-[var(--fg-faint)] hover:text-[var(--fg)] border border-[var(--line)] hover:border-[var(--line-strong)] bg-black/[0.03] hover:bg-black/[0.04] px-3 py-1.5 transition-colors duration-200 truncate max-w-[260px] disabled:opacity-40 disabled:cursor-not-allowed"
+                        className="inline-flex min-h-11 max-w-[260px] items-center truncate rounded-full border border-[var(--line)] bg-black/[0.03] px-3.5 py-1.5 text-[11px] text-[var(--fg-faint)] transition-colors duration-200 hover:border-[var(--line-strong)] hover:bg-black/[0.04] hover:text-[var(--fg)] disabled:cursor-not-allowed disabled:opacity-40"
                       >
                         {prompt.slice(0, 50)}
                         {prompt.length > 50 ? "..." : ""}
@@ -569,7 +569,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     onClick={handleParseAgent}
                     disabled={agentLoading || !agentInput.trim()}
                     className={
-                      "w-full mt-4 px-6 py-3.5 text-sm font-semibold transition-colors duration-200 " +
+                      "w-full mt-4 rounded-full px-6 py-3.5 text-sm font-semibold transition-colors duration-200 " +
                       (agentLoading || !agentInput.trim()
                         ? "bg-black/[0.04] text-[var(--fg-faint)] cursor-not-allowed"
                         : "bg-[var(--fg)] text-[var(--bg)]")
@@ -628,7 +628,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
 
                   {/* Error state */}
                   {agentError && !agentLoading ? (
-                    <div className="mt-4 border border-rose-500/20 bg-rose-500/[0.06] px-4 py-3">
+                    <div className="mt-4 rounded-lg border border-rose-500/20 bg-rose-500/[0.06] px-4 py-3">
                       <div className="flex items-start gap-2.5">
                         <svg
                           className="mt-0.5 shrink-0"
@@ -682,7 +682,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                 </span>
               </div>
 
-              <div className="divide-y divide-[var(--line)] border border-[var(--line)] bg-[var(--bg-raised)]">
+              <div className="divide-y divide-[var(--line)] overflow-hidden rounded-[var(--radius)] border border-[var(--line)] bg-[var(--bg-raised)]">
                 {recipients.map((recipient, i) => (
                   <RecipientRow
                     key={recipient.id}
@@ -705,7 +705,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                 onClick={addRecipient}
                 disabled={atMaxRecipients || isSending}
                 className={
-                  "w-full mt-3 border border-dashed py-4 " +
+                  "w-full mt-3 rounded-[var(--radius)] border border-dashed py-4 " +
                   "text-sm font-medium transition-colors duration-300 " +
                   (atMaxRecipients || isSending
                     ? "border-[var(--line)] bg-black/[0.03] text-[var(--fg-faint)] cursor-not-allowed"
@@ -726,7 +726,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                   onChange={(e) => setMemo(e.target.value)}
                   maxLength={100}
                   placeholder="e.g. March payroll"
-                  className="w-full border border-[var(--line)] bg-transparent px-4 py-3 text-base text-[var(--fg)] placeholder:text-[var(--fg-faint)] focus:outline-none focus:border-[var(--fg-muted)] transition-colors"
+                  className="w-full rounded-lg border border-[var(--line)] bg-transparent px-4 py-3 text-base text-[var(--fg)] placeholder:text-[var(--fg-faint)] focus:outline-none focus:border-[var(--fg-muted)] transition-colors"
                 />
                 <label className="mt-3 flex cursor-pointer items-start gap-2.5 text-xs leading-relaxed text-[var(--fg-muted)]">
                   <input
@@ -748,7 +748,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
               </div>
 
               {/* Summary + actions */}
-              <div className="mt-6 border border-[var(--line)] bg-[var(--glass)] p-5">
+              <div className="mt-6 rounded-[var(--radius)] border border-[var(--line)] bg-[var(--glass)] p-5">
                 <div className="flex flex-wrap gap-x-10 gap-y-3">
                   <div>
                     <span className="mono-label block mb-1">Total</span>
@@ -780,7 +780,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                 </div>
 
                 {status === "error" && error ? (
-                  <div className="mt-4 border border-rose-500/20 bg-rose-500/[0.06] px-4 py-3">
+                  <div className="mt-4 rounded-lg border border-rose-500/20 bg-rose-500/[0.06] px-4 py-3">
                     <p className="text-xs text-rose-600/90 leading-relaxed">{error}</p>
                   </div>
                 ) : null}
@@ -828,7 +828,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                       {validRecipients.map((r, i) => (
                         <div
                           key={"ai-review-" + r.id}
-                          className="bg-black/[0.03] border border-[var(--line)] px-4 py-3"
+                          className="rounded-lg bg-black/[0.03] border border-[var(--line)] px-4 py-3"
                         >
                           <div className="flex items-center gap-3">
                             <span className="text-[11px] text-[var(--fg-faint)] font-mono w-5 shrink-0">
@@ -854,7 +854,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                             maxLength={100}
                             placeholder="Memo (optional, public onchain)"
                             aria-label={`Memo for ${r.name || "recipient"}`}
-                            className="mt-2 w-full border border-[var(--line)] bg-transparent px-2.5 py-1.5 text-xs text-[var(--fg-muted)] placeholder:text-[var(--fg-faint)] focus:outline-none focus:border-[var(--accent)] disabled:opacity-40"
+                            className="mt-2 w-full rounded-md border border-[var(--line)] bg-transparent px-2.5 py-2 text-base text-[var(--fg-muted)] placeholder:text-[var(--fg-faint)] focus:outline-none focus:border-[var(--accent)] disabled:opacity-40 sm:text-xs"
                           />
                         </div>
                       ))}
@@ -864,7 +864,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                         type="button"
                         onClick={() => setShowReview(false)}
                         disabled={isSending}
-                        className="px-5 py-3 text-sm font-medium text-[var(--fg-muted)] hover:text-[var(--fg)] border border-[var(--line)] hover:border-[var(--line-strong)] transition-colors duration-200 disabled:opacity-40"
+                        className="rounded-full border border-[var(--line)] px-5 py-3 text-sm font-medium text-[var(--fg-muted)] transition-colors duration-200 hover:border-[var(--line-strong)] hover:text-[var(--fg)] disabled:opacity-40"
                       >
                         Back to edit
                       </button>
@@ -873,7 +873,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                         onClick={handleConfirm}
                         disabled={isSending || !canSend}
                         className={
-                          "flex-1 px-6 py-3 text-sm font-semibold transition-colors duration-200 " +
+                          "flex-1 rounded-full px-6 py-3 text-sm font-semibold transition-colors duration-200 " +
                           (isSending || !canSend
                             ? "bg-black/[0.04] text-[var(--fg-faint)] cursor-not-allowed"
                             : "bg-[var(--accent)] text-white hover:opacity-90")
