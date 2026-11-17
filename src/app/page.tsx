@@ -28,7 +28,7 @@ const FEATURES = [
     fig: "FIG 02",
     sys: "SYS.BATCH",
     title: "Bulk Pay",
-    body: "Up to 100 recipients in one transaction, one signature, zero token approvals. The batch is simulated first, so a failing payment stops everything and names the address.",
+    body: "Up to 1,000 recipients in one batch, with an exact-total approval that is never unlimited. The batch is simulated first, so a failing payment stops everything and names the address.",
     tag: "Live now",
     accent: "data" as const,
   },
@@ -76,8 +76,8 @@ const STEPS = [
   {
     fig: "STEP 02",
     title: "Add recipients",
-    body: "Type it in plain words for the agent, add rows by hand, or upload a CSV. Up to 100 people per batch.",
-    points: ["Natural language input", "Percentage splits", "Up to 100 recipients per batch"],
+    body: "Type it in plain words for the agent, add rows by hand, or upload a CSV. Up to 1,000 people per batch.",
+    points: ["Natural language input", "Percentage splits", "Up to 1,000 recipients per batch"],
   },
   {
     fig: "STEP 03",
@@ -320,7 +320,7 @@ export default function VibeFlowLanding() {
               <span className="mono-label !text-[var(--accent)]">SYS.BATCH · BULK PAY</span>
               <h3 className="mt-4 text-3xl font-bold tracking-[-0.02em] sm:text-4xl">Pay the whole team in one signature.</h3>
               <p className="mt-4 max-w-md text-base leading-relaxed text-[var(--fg-muted)]">
-                Add up to 100 recipients by hand, by CSV, or by describing the payment to the agent. The batch is simulated before your wallet opens: if one address would fail, nothing moves and you see exactly which one.
+                Add up to 1,000 recipients by hand, by CSV, or by describing the payment to the agent. The batch is simulated before it is signed: if one address would fail, nothing moves and you see exactly which one.
               </p>
               <div className="mt-6 flex items-center gap-3">
                 <span className="h-1.5 w-1.5 rounded-full bg-[var(--success)]" />

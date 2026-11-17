@@ -1,13 +1,18 @@
 "use client";
 
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import Papa from "papaparse";
 import { isAddress, parseUnits } from "viem";
 import Link from "next/link";
 import { useAccount } from "wagmi";
 import BulkPaySuccess from "@/components/bulk-pay/BulkPaySuccess";
+import ReviewFlags from "@/components/bulk-pay/ReviewFlags";
+import ExactTotalCard from "@/components/bulk-pay/ExactTotalCard";
 import { useBulkPay } from "@/hooks/useBulkPay";
 import { TOKENS } from "@/constants/tokens";
+import { BATCHPAY_CHUNK_SIZE } from "@/services/bulkPayService";
+import { loadPaidRecipientAddresses } from "@/lib/paidHistory";
+import type { ReviewLine } from "@/lib/bulkPayReview";
 import { useArcNetwork } from "@/hooks/useArcNetwork";
 import { useTokenBalance } from "@/hooks/useTokenBalance";
 
@@ -101,10 +106,11 @@ function collectRows(data: string[][]): {
 export default function CSVUploadForm() {
   const { address } = useAccount();
   const { isCorrectNetwork, switchToArc: switchToArcNetwork } = useArcNetwork();
-  const { status, txHash, error: txError, executeBulkPay, reset } = useBulkPay();
+  const { status, txHash, result, error: txError, executeBulkPay, reset } = useBulkPay();
 
   const [selectedSymbol, setSelectedSymbol] = useState<TokenSymbol>("USDC");
   const [memo, setMemo] = useState("");
+  const [nameAsMemo, setNameAsMemo] = useState(true);
   const [isDragging, setIsDragging] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
   const [rows, setRows] = useState<ParsedRow[]>([]);
@@ -123,6 +129,27 @@ export default function CSVUploadForm() {
   const totalAmount = rows.reduce((s, r) => s + r.rawAmount, 0);
   const PREVIEW_LIMIT = 10;
   const previewRows = showAll ? rows : rows.slice(0, PREVIEW_LIMIT);
+
+  /* ---- Review-step data: flags, exact total, chunk count ---- */
+  const reviewFee = Math.max(totalAmount * 0.002, 0.01);
+  const reviewLines: ReviewLine[] = useMemo(
+    () =>
+      rows.map((r, i) => ({
+        row: i + 1,
+        name: r.name || "",
+        address: r.address,
+        amount: r.rawAmount,
+      })),
+    [rows],
+  );
+  const knownAddresses = useMemo(
+    () => (rows.length > 0 ? loadPaidRecipientAddresses() : new Set<string>()),
+    [rows],
+  );
+  const reviewChunkCount = Math.max(
+    1,
+    Math.ceil(rows.length / BATCHPAY_CHUNK_SIZE),
+  );
 
   // ── CSV parser ────────────────────────────────────────────────────────────
 
@@ -199,6 +226,12 @@ export default function CSVUploadForm() {
       address: r.address as `0x${string}`,
       amount: parseUnits(r.amount, decimals),
       name: r.name,
+      // The placeholder name from 2-column files is not a real name;
+      // never write it onchain as a memo.
+      memo:
+        nameAsMemo && r.name && r.name !== "Recipient"
+          ? r.name
+          : undefined,
     }));
 
     const totalAmountBig = recipients.reduce((s, r) => s + r.amount, 0n);
@@ -207,7 +240,7 @@ export default function CSVUploadForm() {
       token,
       totalAmount: totalAmountBig,
       recipients,
-      memo: memo.trim() || undefined,
+      batchMemo: memo.trim() || undefined,
     });
   };
 
@@ -226,11 +259,16 @@ export default function CSVUploadForm() {
           setShowAll(false);
         }}
         tokenSymbol={selectedSymbol}
+        result={result}
       />
     );
   }
 
-  const isSending = status === "preparing" || status === "sending";
+  const isSending =
+    status === "preparing" ||
+    status === "approving" ||
+    status === "sending" ||
+    status === "reconciling";
   const canSend = !!address && isCorrectNetwork && rows.length > 0 && !isSending;
 
   // ── Render ────────────────────────────────────────────────────────────────
@@ -248,7 +286,7 @@ export default function CSVUploadForm() {
               </span>
             </h1>
             <p className="text-sm text-[var(--fg-faint)] mt-2 max-w-md">
-              Upload a CSV to pay 100+ recipients in one transaction
+              Upload a CSV to pay up to 1,000 recipients in one batch
             </p>
             {/* Token pills */}
             <div className="flex items-center gap-2 mt-4">
@@ -391,7 +429,7 @@ export default function CSVUploadForm() {
                   ) : (
                     <div className="text-center">
                       <p className="text-sm font-semibold text-[var(--fg-muted)] group-hover:text-[var(--fg)] transition-colors">
-                        Upload CSV &mdash; Add 100+ Recipients
+                        Upload CSV &mdash; Add up to 1,000 Recipients
                       </p>
                       <p className="text-xs text-[var(--fg-faint)] mt-1">
                         Drag & drop or click to browse &mdash; .csv files only
@@ -541,6 +579,22 @@ export default function CSVUploadForm() {
             {memo.length > 0 && (
               <p className="mt-1.5 text-[11px] text-[var(--fg-faint)] text-right">{memo.length}/120 · stored onchain</p>
             )}
+            <label className="mt-4 flex cursor-pointer items-start gap-2.5 text-xs leading-relaxed text-[var(--fg-muted)]">
+              <input
+                type="checkbox"
+                checked={nameAsMemo}
+                onChange={(e) => setNameAsMemo(e.target.checked)}
+                disabled={isSending}
+                className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--accent)]"
+              />
+              <span>
+                Use each row&apos;s name as that payment&apos;s memo.{" "}
+                <span className="text-[var(--fg-faint)]">
+                  Memos are written onchain with the payment and are public
+                  forever.
+                </span>
+              </span>
+            </label>
           </div>
 
           {/* ── Footer: error + wallet state + send ────────────────────── */}
@@ -593,6 +647,25 @@ export default function CSVUploadForm() {
               </div>
             )}
 
+            {/* Review: exact total + flags, above the send action */}
+            {rows.length > 0 && (
+              <div className="mb-4">
+                <ExactTotalCard
+                  total={totalAmount}
+                  fee={reviewFee}
+                  count={rows.length}
+                  symbol={selectedSymbol}
+                  currencySymbol={selectedSymbol === "USDC" ? "$" : "€"}
+                  chunkCount={reviewChunkCount}
+                />
+                <ReviewFlags
+                  lines={reviewLines}
+                  knownAddresses={knownAddresses}
+                  currencySymbol={selectedSymbol === "USDC" ? "$" : "€"}
+                />
+              </div>
+            )}
+
             {/* Send button */}
             <button
               type="button"
@@ -611,7 +684,15 @@ export default function CSVUploadForm() {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
                   </svg>
-                  <span>{status === "preparing" ? "Preparing…" : "Sending…"}</span>
+                  <span>
+                    {status === "preparing"
+                      ? "Preparing…"
+                      : status === "approving"
+                        ? "Approve the exact total…"
+                        : status === "reconciling"
+                          ? "Verifying payments onchain…"
+                          : "Sending…"}
+                  </span>
                 </>
               ) : (
                 <>
@@ -628,7 +709,9 @@ export default function CSVUploadForm() {
             </button>
 
             <p className="mt-3 text-center text-[11px] text-[var(--fg-faint)]">
-              One MetaMask popup &mdash; all {rows.length > 0 ? rows.length : ""} transfers execute atomically via Multicall3From
+              Sent through the VibeFlow BatchPay contract on Arc. Batches
+              over 250 recipients go in chunks of 250; every transaction is
+              atomic, and every line is verified onchain afterwards.
             </p>
           </div>
 

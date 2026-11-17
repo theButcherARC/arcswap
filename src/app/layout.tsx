@@ -109,7 +109,7 @@ const jsonLd = {
           name: 'How many people can I pay at once?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'Up to 100 recipients in a single batch, settled with one signature and zero token approvals.',
+            text: 'Up to 1,000 recipients in a single batch. You approve exactly the batch total for the BatchPay contract, never an unlimited approval.',
           },
         },
         {

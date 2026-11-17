@@ -13,7 +13,7 @@ const FAQS = [
   },
   {
     q: "How many people can I pay at once?",
-    a: "Up to 100 recipients in a single batch, settled with one signature. No ERC20 approval step needed.",
+    a: "Up to 1,000 recipients in a single batch. You approve exactly the batch total for the BatchPay contract, never an unlimited approval.",
   },
   {
     q: "Do I keep custody of my funds?",

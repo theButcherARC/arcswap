@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 const LIVE = [
-  ["Bulk Pay", "Up to 100 recipients in one transaction, one signature, simulated before your wallet opens."],
+  ["Bulk Pay", "Up to 1,000 recipients in one batch, exact-total approval, simulated before signing."],
   ["CSV Upload", "A spreadsheet becomes a batch payment, checked row by row."],
   ["AI Payment Agent", "Describe a payment in plain words, the agent builds it for your review."],
   ["Scheduled Payments", "Save a batch with a date, review and sign when it is due. Non-custodial."],
