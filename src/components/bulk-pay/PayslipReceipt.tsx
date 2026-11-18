@@ -99,7 +99,7 @@ export default function PayslipReceipt({
   return (
     <div
       className={
-        "relative mt-8 bg-[var(--bg-raised)] text-left " + serifDisplay.variable
+        "relative mt-8 animate-settle-in bg-[var(--bg-raised)] text-left " + serifDisplay.variable
       }
       style={{ border: "1px solid var(--line)" }}
     >
@@ -259,7 +259,7 @@ export default function PayslipReceipt({
         <button
           type="button"
           onClick={handleCopy}
-          className="mt-5 w-full border border-[var(--line)] bg-black/[0.03] px-4 py-3 text-sm font-medium text-[var(--fg-muted)] transition-colors hover:border-[var(--line-strong)] hover:text-[var(--fg)]"
+          className="mt-5 w-full border border-[var(--line)] bg-black/[0.03] px-4 py-3 text-sm font-medium text-[var(--fg-muted)] pressable hover:border-[var(--line-strong)] hover:text-[var(--fg)]"
         >
           {copied ? "Receipt copied" : "Copy receipt"}
         </button>

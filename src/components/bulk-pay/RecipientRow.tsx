@@ -272,7 +272,7 @@ export default function RecipientRow({
           type="button"
           onClick={() => onRemove(recipient.id)}
           disabled={isDisabled}
-          className="mt-4 flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-[var(--line)] bg-black/[0.03] text-[var(--fg-faint)] transition-all duration-200 hover:border-rose-500/30 hover:bg-rose-500/10 hover:text-rose-600 active:scale-90 disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:border-[var(--line-strong)] disabled:hover:bg-black/[0.04] disabled:hover:text-[var(--fg-faint)]"
+          className="mt-4 flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-[var(--line)] bg-black/[0.03] text-[var(--fg-faint)] pressable hover:border-rose-500/30 hover:bg-rose-500/10 hover:text-rose-600 disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:border-[var(--line-strong)] disabled:hover:bg-black/[0.04] disabled:hover:text-[var(--fg-faint)]"
           aria-label={"Remove recipient " + rowNumber}
         >
           <svg

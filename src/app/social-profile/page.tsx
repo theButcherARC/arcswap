@@ -281,7 +281,7 @@ export default function SocialProfilePage() {
                   <div className="flex shrink-0 items-center gap-3">
                     <button
                       onClick={() => { setForm(extras); setEditing(v => !v) }}
-                      className="min-h-[44px] rounded-lg border border-[var(--line)] bg-[var(--bg-raised)] px-4 text-sm font-semibold text-[var(--fg)] transition-colors hover:border-[var(--accent)]"
+                      className="min-h-[44px] rounded-lg border border-[var(--line)] bg-[var(--bg-raised)] px-4 text-sm font-semibold text-[var(--fg)] pressable hover:border-[var(--accent)]"
                     >
                       Edit profile
                     </button>
@@ -358,7 +358,7 @@ export default function SocialProfilePage() {
                       <button
                         onClick={handleSaveProfile}
                         disabled={saving}
-                        className="min-h-[44px] rounded-lg bg-[var(--accent)] px-6 text-sm font-semibold text-white transition-opacity hover:opacity-85 disabled:opacity-60"
+                        className="min-h-[44px] rounded-lg bg-[var(--accent)] px-6 text-sm font-semibold text-white pressable hover:opacity-85 disabled:opacity-60"
                       >
                         {saving ? 'Saving...' : 'Save profile'}
                       </button>
@@ -384,7 +384,7 @@ export default function SocialProfilePage() {
                 <div className="min-w-0 flex-1 truncate rounded-lg border border-[var(--line)] bg-[var(--bg-raised)] px-3.5 py-3 font-mono text-sm text-[var(--fg)]">{publicUrl}</div>
                 <button
                   onClick={() => copyText('link', 'https://' + publicUrl)}
-                  className="min-h-[44px] shrink-0 rounded-lg border border-[var(--line)] bg-[var(--bg-raised)] px-4 text-sm font-semibold text-[var(--fg)] transition-colors hover:border-[var(--accent)]"
+                  className="min-h-[44px] shrink-0 rounded-lg border border-[var(--line)] bg-[var(--bg-raised)] px-4 text-sm font-semibold text-[var(--fg)] pressable hover:border-[var(--accent)]"
                 >
                   {copied === 'link' ? 'Copied' : 'Copy'}
                 </button>
@@ -420,7 +420,7 @@ export default function SocialProfilePage() {
                     <button
                       onClick={() => copyText('vibe', profile.vibeId)}
                       title="Copy VibeID"
-                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-[rgba(39,117,202,0.3)] bg-[var(--bg-raised)] text-[var(--accent)] transition-colors hover:bg-[var(--accent-soft)]"
+                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-[rgba(39,117,202,0.3)] bg-[var(--bg-raised)] text-[var(--accent)] pressable hover:bg-[var(--accent-soft)]"
                     >
                       {copied === 'vibe' ? (
                         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
@@ -457,7 +457,7 @@ export default function SocialProfilePage() {
                 </div>
                 <button
                   onClick={() => copyText('wallet', address ?? '')}
-                  className="min-h-[44px] shrink-0 rounded-lg border border-[var(--line)] bg-[var(--bg-raised)] px-4 text-sm font-semibold text-[var(--fg)] transition-colors hover:border-[var(--accent)]"
+                  className="min-h-[44px] shrink-0 rounded-lg border border-[var(--line)] bg-[var(--bg-raised)] px-4 text-sm font-semibold text-[var(--fg)] pressable hover:border-[var(--accent)]"
                 >
                   {copied === 'wallet' ? 'Copied' : 'Copy'}
                 </button>
@@ -509,7 +509,7 @@ export default function SocialProfilePage() {
                 <button
                   onClick={handleLinkWallet}
                   disabled={!canLink}
-                  className={'flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-semibold transition-colors ' + (canLink ? 'bg-[#0f1419] text-white hover:opacity-85' : 'cursor-not-allowed bg-[var(--glass-strong)] text-[var(--fg-faint)]')}
+                  className={'flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-semibold pressable ' + (canLink ? 'bg-[#0f1419] text-white hover:opacity-85' : 'cursor-not-allowed bg-[var(--glass-strong)] text-[var(--fg-faint)]')}
                 >
                   {status === 'linking' && (
                     <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">

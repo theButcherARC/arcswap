@@ -564,7 +564,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     onClick={() => setSelectedSymbol("USDC")}
                     aria-pressed={selectedSymbol === "USDC"}
                     className={
-                      "flex min-h-11 items-center justify-center rounded-md px-3.5 py-1.5 text-xs font-semibold transition-colors duration-200 " +
+                      "flex min-h-11 items-center justify-center rounded-md px-3.5 py-1.5 text-xs font-semibold pressable " +
                       (selectedSymbol === "USDC"
                         ? "bg-[var(--fg)] text-[var(--bg)]"
                         : "text-[var(--fg-muted)] hover:text-[var(--fg)]")
@@ -577,7 +577,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     onClick={() => setSelectedSymbol("EURC")}
                     aria-pressed={selectedSymbol === "EURC"}
                     className={
-                      "flex min-h-11 items-center justify-center rounded-md px-3.5 py-1.5 text-xs font-semibold transition-colors duration-200 " +
+                      "flex min-h-11 items-center justify-center rounded-md px-3.5 py-1.5 text-xs font-semibold pressable " +
                       (selectedSymbol === "EURC"
                         ? "bg-[var(--fg)] text-[var(--bg)]"
                         : "text-[var(--fg-muted)] hover:text-[var(--fg)]")
@@ -620,7 +620,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                   disabled={isSending}
                   aria-pressed={inputMode === "percentage"}
                   className={
-                    "flex min-h-11 items-center justify-center rounded-md px-4 py-1.5 text-xs font-semibold transition-colors duration-200 " +
+                    "flex min-h-11 items-center justify-center rounded-md px-4 py-1.5 text-xs font-semibold pressable " +
                     (inputMode === "percentage"
                       ? "bg-[var(--fg)] text-[var(--bg)]"
                       : "text-[var(--fg-muted)] hover:text-[var(--fg)]")
@@ -634,7 +634,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                   disabled={isSending}
                   aria-pressed={inputMode === "amount"}
                   className={
-                    "flex min-h-11 items-center justify-center rounded-md px-4 py-1.5 text-xs font-semibold transition-colors duration-200 " +
+                    "flex min-h-11 items-center justify-center rounded-md px-4 py-1.5 text-xs font-semibold pressable " +
                     (inputMode === "amount"
                       ? "bg-[var(--fg)] text-[var(--bg)]"
                       : "text-[var(--fg-muted)] hover:text-[var(--fg)]")
@@ -823,10 +823,10 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                 disabled={atMaxRecipients || isSending}
                 className={
                   "w-full mt-3 rounded-[var(--radius)] border border-dashed py-4 " +
-                  "text-sm font-medium transition-colors duration-300 " +
+                  "text-sm font-medium pressable " +
                   (atMaxRecipients || isSending
                     ? "border-[var(--line)] bg-black/[0.03] text-[var(--fg-faint)] cursor-not-allowed"
-                    : "animate-add-btn-pulse border-[rgba(39,117,202,0.3)] bg-black/[0.03] text-[var(--fg-muted)] hover:text-[var(--data)] hover:bg-[var(--accent-soft)] hover:border-[var(--accent)] active:scale-[0.99]")
+                    : "animate-add-btn-pulse border-[rgba(39,117,202,0.3)] bg-black/[0.03] text-[var(--fg-muted)] hover:text-[var(--data)] hover:bg-[var(--accent-soft)] hover:border-[var(--accent)]")
                 }
               >
                 {atMaxRecipients ? (
@@ -1226,7 +1226,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                   type="button"
                   onClick={refreshGas}
                   title="Refresh gas estimate"
-                  className="ml-auto flex h-8 w-8 shrink-0 items-center justify-center rounded hover:bg-black/[0.04] transition-colors duration-150"
+                  className="ml-auto flex h-8 w-8 shrink-0 items-center justify-center rounded hover:bg-black/[0.04] pressable"
                 >
                   <svg
                     width="10"
@@ -1247,7 +1247,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                 type="submit"
                 disabled={!canSend}
                 className={
-                  "w-full rounded-full px-6 py-3.5 text-sm font-semibold transition-colors duration-300 " +
+                  "w-full rounded-full px-6 py-3.5 text-sm font-semibold pressable " +
                   (canSend
                     ? "bg-[var(--fg)] text-[var(--bg)] hover:opacity-85"
                     : "bg-black/[0.04] text-[var(--fg-faint)] cursor-not-allowed")

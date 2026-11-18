@@ -52,7 +52,7 @@ function AgentPreview({
   onDiscard: () => void;
 }) {
   return (
-    <div className="mt-4 rounded-[var(--radius)] border border-[rgba(39,117,202,0.25)] bg-[rgba(39,117,202,0.05)] p-5">
+    <div className="mt-4 animate-pop-in rounded-[var(--radius)] border border-[rgba(39,117,202,0.25)] bg-[rgba(39,117,202,0.05)] p-5">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2.5">
           <div className="h-2 w-2 rounded-full bg-[var(--accent)] animate-pulse" />
@@ -65,14 +65,14 @@ function AgentPreview({
           <button
             type="button"
             onClick={onDiscard}
-            className="inline-flex min-h-11 items-center rounded-full border border-[var(--line)] bg-black/[0.03] px-4 py-1.5 text-xs font-medium text-[var(--fg-muted)] transition-colors duration-200 hover:border-[var(--line-strong)] hover:text-[var(--fg)] active:scale-95"
+            className="inline-flex min-h-11 items-center rounded-full border border-[var(--line)] bg-black/[0.03] px-4 py-1.5 text-xs font-medium text-[var(--fg-muted)] pressable hover:border-[var(--line-strong)] hover:text-[var(--fg)]"
           >
             Discard
           </button>
           <button
             type="button"
             onClick={onApply}
-            className="inline-flex min-h-11 items-center rounded-full bg-[var(--accent)] px-5 py-1.5 text-xs font-semibold text-white transition-colors duration-200 hover:opacity-90 active:scale-95"
+            className="inline-flex min-h-11 items-center rounded-full bg-[var(--accent)] px-5 py-1.5 text-xs font-semibold text-white pressable hover:opacity-90"
           >
             Apply All
           </button>
@@ -456,7 +456,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     onClick={() => setSelectedSymbol("USDC")}
                     aria-pressed={selectedSymbol === "USDC"}
                     className={
-                      "flex min-h-11 items-center justify-center rounded-md px-3.5 py-1.5 text-xs font-semibold transition-colors duration-200 " +
+                      "flex min-h-11 items-center justify-center rounded-md px-3.5 py-1.5 text-xs font-semibold pressable " +
                       (selectedSymbol === "USDC"
                         ? "bg-[var(--fg)] text-[var(--bg)]"
                         : "text-[var(--fg-muted)] hover:text-[var(--fg)]")
@@ -469,7 +469,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     onClick={() => setSelectedSymbol("EURC")}
                     aria-pressed={selectedSymbol === "EURC"}
                     className={
-                      "flex min-h-11 items-center justify-center rounded-md px-3.5 py-1.5 text-xs font-semibold transition-colors duration-200 " +
+                      "flex min-h-11 items-center justify-center rounded-md px-3.5 py-1.5 text-xs font-semibold pressable " +
                       (selectedSymbol === "EURC"
                         ? "bg-[var(--fg)] text-[var(--bg)]"
                         : "text-[var(--fg-muted)] hover:text-[var(--fg)]")
@@ -551,7 +551,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                         type="button"
                         onClick={() => handleExampleClick(prompt)}
                         disabled={agentLoading}
-                        className="inline-flex min-h-11 max-w-[260px] items-center truncate rounded-full border border-[var(--line)] bg-black/[0.03] px-3.5 py-1.5 text-[11px] text-[var(--fg-faint)] transition-colors duration-200 hover:border-[var(--line-strong)] hover:bg-black/[0.04] hover:text-[var(--fg)] disabled:cursor-not-allowed disabled:opacity-40"
+                        className="inline-flex min-h-11 max-w-[260px] items-center truncate rounded-full border border-[var(--line)] bg-black/[0.03] px-3.5 py-1.5 text-[11px] text-[var(--fg-faint)] transition-colors duration-200 hover:border-[var(--line-strong)] hover:bg-black/[0.04] hover:text-[var(--fg)] pressable disabled:cursor-not-allowed disabled:opacity-40"
                       >
                         {prompt.slice(0, 50)}
                         {prompt.length > 50 ? "..." : ""}
@@ -569,7 +569,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     onClick={handleParseAgent}
                     disabled={agentLoading || !agentInput.trim()}
                     className={
-                      "w-full mt-4 rounded-full px-6 py-3.5 text-sm font-semibold transition-colors duration-200 " +
+                      "w-full mt-4 rounded-full px-6 py-3.5 text-sm font-semibold pressable " +
                       (agentLoading || !agentInput.trim()
                         ? "bg-black/[0.04] text-[var(--fg-faint)] cursor-not-allowed"
                         : "bg-[var(--fg)] text-[var(--bg)]")
@@ -706,10 +706,10 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                 disabled={atMaxRecipients || isSending}
                 className={
                   "w-full mt-3 rounded-[var(--radius)] border border-dashed py-4 " +
-                  "text-sm font-medium transition-colors duration-300 " +
+                  "text-sm font-medium pressable " +
                   (atMaxRecipients || isSending
                     ? "border-[var(--line)] bg-black/[0.03] text-[var(--fg-faint)] cursor-not-allowed"
-                    : "border-[rgba(39,117,202,0.3)] bg-black/[0.03] text-[var(--fg-muted)] hover:text-[var(--data)] hover:bg-[var(--accent-soft)] hover:border-[var(--accent)] active:scale-[0.99]")
+                    : "border-[rgba(39,117,202,0.3)] bg-black/[0.03] text-[var(--fg-muted)] hover:text-[var(--data)] hover:bg-[var(--accent-soft)] hover:border-[var(--accent)]")
                 }
               >
                 {atMaxRecipients ? "Recipient limit reached" : "Add recipient"}
@@ -791,7 +791,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     onClick={() => setShowReview(true)}
                     disabled={!canSend}
                     className={
-                      "w-full mt-5 px-6 py-3.5 text-sm font-semibold transition-colors duration-200 " +
+                      "w-full mt-5 px-6 py-3.5 text-sm font-semibold pressable " +
                       (!canSend
                         ? "bg-black/[0.04] text-[var(--fg-faint)] cursor-not-allowed"
                         : "bg-[var(--fg)] text-[var(--bg)]")
@@ -864,7 +864,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                         type="button"
                         onClick={() => setShowReview(false)}
                         disabled={isSending}
-                        className="rounded-full border border-[var(--line)] px-5 py-3 text-sm font-medium text-[var(--fg-muted)] transition-colors duration-200 hover:border-[var(--line-strong)] hover:text-[var(--fg)] disabled:opacity-40"
+                        className="rounded-full border border-[var(--line)] px-5 py-3 text-sm font-medium text-[var(--fg-muted)] pressable hover:border-[var(--line-strong)] hover:text-[var(--fg)] disabled:opacity-40"
                       >
                         Back to edit
                       </button>
@@ -873,7 +873,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                         onClick={handleConfirm}
                         disabled={isSending || !canSend}
                         className={
-                          "flex-1 rounded-full px-6 py-3 text-sm font-semibold transition-colors duration-200 " +
+                          "flex-1 rounded-full px-6 py-3 text-sm font-semibold pressable " +
                           (isSending || !canSend
                             ? "bg-black/[0.04] text-[var(--fg-faint)] cursor-not-allowed"
                             : "bg-[var(--accent)] text-white hover:opacity-90")

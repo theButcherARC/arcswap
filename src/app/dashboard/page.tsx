@@ -283,7 +283,7 @@ export default function DashboardPage() {
                 onClick={handleSync}
                 disabled={syncLoading || isLoading || !isConnected}
                 title={!isConnected ? "Connect your wallet to sync" : "Refresh dashboard data"}
-                className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-[var(--line)] bg-black/[0.03] px-3.5 py-2 text-xs font-medium text-[var(--fg-muted)] transition-colors hover:border-[var(--line-strong)] hover:bg-black/[0.04] disabled:opacity-50 disabled:cursor-not-allowed"
+                className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-[var(--line)] bg-black/[0.03] px-3.5 py-2 text-xs font-medium text-[var(--fg-muted)] pressable hover:border-[var(--line-strong)] hover:bg-black/[0.04] disabled:opacity-50 disabled:cursor-not-allowed"
                 aria-label="Refresh dashboard data"
               >
                 <svg

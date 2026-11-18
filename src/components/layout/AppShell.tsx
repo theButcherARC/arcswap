@@ -226,11 +226,44 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const [shown, setShown] = useState(false);
   const pathname = usePathname();
 
+  // Hard close on navigation: the page changes underneath, so the
+  // drawer must not animate out over a new screen.
   useEffect(() => {
     setOpen(false);
+    setMounted(false);
+    setShown(false);
   }, [pathname]);
+
+  // Drawer motion (Apple-style, interruptible): mount in the closed
+  // position, flip to shown on the next frame so the transition runs
+  // from the off-screen value; closing reverses along the same path
+  // and unmounts when the slide finishes (timeout is a fallback for a
+  // missed transitionend). Reopening mid-close reverses from the
+  // current on-screen position, and the wrapper stops taking input
+  // the moment closing starts, so input is never locked out.
+  useEffect(() => {
+    if (open) {
+      setMounted(true);
+      let raf2 = 0;
+      const raf1 = requestAnimationFrame(() => {
+        raf2 = requestAnimationFrame(() => setShown(true));
+      });
+      return () => {
+        cancelAnimationFrame(raf1);
+        cancelAnimationFrame(raf2);
+      };
+    }
+    setShown(false);
+    if (mounted) {
+      const t = setTimeout(() => setMounted(false), 420);
+      return () => clearTimeout(t);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open ]);
 
   return (
     <div className="min-h-screen bg-[var(--bg)]">
@@ -249,7 +282,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           type="button"
           onClick={() => setOpen(true)}
           aria-label="Open menu"
-          className="flex h-11 w-11 items-center justify-center rounded-lg border border-[var(--line)] text-[var(--fg-muted)] transition-colors hover:text-[var(--fg)] active:bg-black/[0.04]"
+          className="flex h-11 w-11 items-center justify-center rounded-lg border border-[var(--line)] text-[var(--fg-muted)] transition-colors hover:text-[var(--fg)] active:bg-black/[0.04] pressable"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             <path d="M4 7h16M4 12h16M4 17h16" />
@@ -257,20 +290,32 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </button>
       </div>
 
-      {/* Mobile drawer */}
-      {open ? (
-        <div className="fixed inset-0 z-50 lg:hidden">
+      {/* Mobile drawer: stays mounted through its exit so closing
+          slides back along the same path it entered (spatial
+          consistency). Pointer events follow `shown`, never the
+          animation, so the UI is usable the moment closing starts. */}
+      {mounted ? (
+        <div
+          className={
+            "fixed inset-0 z-50 lg:hidden" + (shown ? "" : " pointer-events-none")
+          }
+          aria-hidden={!shown}
+        >
           <div
-            className="absolute inset-0 bg-black/60"
+            className="drawer-scrim absolute inset-0 bg-black/60"
+            style={{ opacity: shown ? 1 : 0 }}
             onClick={() => setOpen(false)}
             aria-hidden="true"
           />
-          <aside className="absolute inset-y-0 left-0 w-64 border-r border-[var(--line)] bg-[var(--bg-raised)]">
+          <aside
+            className="drawer-panel absolute inset-y-0 left-0 w-64 border-r border-[var(--line)] bg-[var(--bg-raised)]"
+            style={{ transform: shown ? "translateX(0)" : "translateX(-100%)" }}
+          >
             <button
               type="button"
               onClick={() => setOpen(false)}
               aria-label="Close menu"
-              className="absolute right-3 top-2.5 z-10 flex h-11 w-11 items-center justify-center text-[var(--fg-muted)] transition-colors hover:text-[var(--fg)]"
+              className="absolute right-3 top-2.5 z-10 flex h-11 w-11 items-center justify-center text-[var(--fg-muted)] transition-colors hover:text-[var(--fg)] pressable"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
                 <path d="M6 6l12 12M18 6L6 18" />

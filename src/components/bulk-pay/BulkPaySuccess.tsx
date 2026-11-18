@@ -20,7 +20,7 @@ export default function BulkPaySuccess({ txHash, onReset, tokenSymbol = "USDC", 
     <div className="min-h-screen bg-[var(--bg)] flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-lg">
         {/* Success card */}
-        <div className="border border-emerald-500/20 bg-black/[0.03] backdrop-blur-2xl p-8 sm:p-10 text-center shadow-[0_0_60px_rgba(16,185,129,0.08)]">
+        <div className="animate-settle-in border border-emerald-500/20 bg-black/[0.03] backdrop-blur-2xl p-8 sm:p-10 text-center shadow-[0_0_60px_rgba(16,185,129,0.08)]">
           {/* Animated checkmark circle */}
           <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full border-2 border-emerald-500/30 bg-emerald-500/[0.08]">
             <svg
@@ -107,7 +107,7 @@ export default function BulkPaySuccess({ txHash, onReset, tokenSymbol = "USDC", 
               href={explorerUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 inline-flex items-center justify-center gap-2 border border-[var(--line)] bg-black/[0.03] px-5 py-3.5 text-sm font-medium text-[var(--fg-muted)] hover:text-[var(--fg)] hover:border-[var(--line-strong)] hover:bg-black/[0.04] transition-all duration-200"
+              className="flex-1 inline-flex items-center justify-center gap-2 border border-[var(--line)] bg-black/[0.03] px-5 py-3.5 text-sm font-medium text-[var(--fg-muted)] hover:text-[var(--fg)] hover:border-[var(--line-strong)] hover:bg-black/[0.04] pressable"
             >
               <svg
                 width="16"
@@ -129,7 +129,7 @@ export default function BulkPaySuccess({ txHash, onReset, tokenSymbol = "USDC", 
             <button
               type="button"
               onClick={onReset}
-              className="flex-1 inline-flex items-center justify-center gap-2 bg-[var(--fg)] text-[var(--bg)] px-5 py-3.5 text-sm font-semibold text-[var(--fg)] transition-all duration-200"
+              className="flex-1 inline-flex items-center justify-center gap-2 bg-[var(--fg)] text-[var(--bg)] px-5 py-3.5 text-sm font-semibold text-[var(--fg)] pressable"
             >
               <svg
                 width="16"

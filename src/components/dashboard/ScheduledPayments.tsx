@@ -88,7 +88,7 @@ export function ScheduledPayments() {
           </div>
           <Link
             href="/bulk-pay"
-            className="inline-flex min-h-11 items-center px-2 text-xs font-medium text-[var(--data)] transition-colors hover:text-[var(--fg)]"
+            className="inline-flex min-h-11 items-center px-2 text-xs font-medium text-[var(--data)] transition-colors hover:text-[var(--fg)] active:opacity-60"
           >
             New batch
           </Link>
@@ -149,7 +149,7 @@ export function ScheduledPayments() {
                       <>
                         <Link
                           href={"/bulk-pay?schedule=" + item.id}
-                          className="inline-flex min-h-11 items-center px-1 text-xs font-semibold text-[var(--data)] transition-colors hover:text-[var(--fg)]"
+                          className="inline-flex min-h-11 items-center px-1 text-xs font-semibold text-[var(--data)] transition-colors hover:text-[var(--fg)] active:opacity-60"
                         >
                           Review and pay
                         </Link>
@@ -157,7 +157,7 @@ export function ScheduledPayments() {
                           type="button"
                           onClick={() => handleCancel(item.id)}
                           disabled={cancellingId === item.id}
-                          className="inline-flex min-h-11 items-center px-1 text-xs text-[var(--fg-faint)] transition-colors hover:text-rose-600 disabled:opacity-40"
+                          className="inline-flex min-h-11 items-center px-1 text-xs text-[var(--fg-faint)] transition-colors hover:text-rose-600 active:opacity-60 disabled:opacity-40"
                         >
                           {cancellingId === item.id
                             ? "Cancelling..."

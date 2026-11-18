@@ -61,7 +61,7 @@ export function ConnectButton() {
           Connect Wallet
         </Button>
         {note ? (
-          <p className="absolute right-0 top-full z-50 mt-2 w-60 border border-[var(--line)] bg-white p-3 text-left text-[11px] leading-relaxed text-[var(--fg-muted)] shadow-xl">
+          <p className="absolute right-0 top-full z-50 mt-2 w-60 animate-pop-in border border-[var(--line)] bg-white p-3 text-left text-[11px] leading-relaxed text-[var(--fg-muted)] shadow-xl [transform-origin:top_right]">
             {note}
           </p>
         ) : null}
@@ -85,7 +85,7 @@ export function ConnectButton() {
   return (
     <button
       onClick={() => disconnect()}
-      className="flex items-center gap-2 border border-[var(--line)] bg-[var(--glass)] px-3.5 py-1.5 text-xs font-medium text-[var(--fg)] hover:bg-[var(--glass-strong)] transition-colors"
+      className="flex items-center gap-2 border border-[var(--line)] bg-[var(--glass)] px-3.5 py-1.5 text-xs font-medium text-[var(--fg)] hover:bg-[var(--glass-strong)] pressable"
     >
       <span className="h-1.5 w-1.5 bg-emerald-400" aria-hidden="true" />
       {truncateAddress(address ?? "")}
