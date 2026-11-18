@@ -166,6 +166,10 @@ export default function RecipientRow({
               onChange={(e) => handleAddressInput(e.target.value)}
               disabled={isDisabled}
               placeholder="0x..., @username, or VIBE-XXXXXX"
+              autoCapitalize="none"
+              autoCorrect="off"
+              spellCheck={false}
+              autoComplete="off"
               className={addressClasses + " pr-9"}
             />
             {addressValid && (

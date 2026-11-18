@@ -117,9 +117,11 @@
   background: var(--glass);
   transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
-.btn-brutal:hover {
-  background: var(--glass-strong);
-  border-color: var(--fg-faint);
+@media (hover: hover) and (pointer: fine) {
+  .btn-brutal:hover {
+    background: var(--glass-strong);
+    border-color: var(--fg-faint);
+  }
 }
 
 /* Depth glow for spatial layering */
@@ -554,13 +556,15 @@ button:focus-visible {
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
 }
 
-.hover-lift:hover {
-  transform: translateY(-3px);
-  border-color: rgba(39, 117, 202, 0.25);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.06),
-    0 12px 40px rgba(0, 0, 0, 0.35),
-    0 0 24px rgba(39, 117, 202, 0.12);
+@media (hover: hover) and (pointer: fine) {
+  .hover-lift:hover {
+    transform: translateY(-3px);
+    border-color: rgba(39, 117, 202, 0.25);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.06),
+      0 12px 40px rgba(0, 0, 0, 0.35),
+      0 0 24px rgba(39, 117, 202, 0.12);
+  }
 }
 
 /* Skeleton shimmer for loading states */
@@ -647,6 +651,25 @@ select:focus-visible {
 }
 html {
   -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Mobile-native baseline (phone feel): no scroll chaining or
+   pull-to-refresh hijack, no double-tap delay on controls, and no
+   long-press text selection or callout on controls. Content text
+   (addresses, memos, amounts) stays selectable and copyable. */
+html, body {
+  overscroll-behavior: none;
+}
+button, a, [role="button"] {
+  touch-action: manipulation;
+}
+button, [role="button"] {
+  user-select: none;
+  -webkit-user-select: none;
+}
+a, button, [role="button"] {
+  -webkit-touch-callout: none;
 }
 :focus-visible {
   outline: 2px solid var(--accent);

@@ -170,7 +170,7 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 overflow-y-auto px-3 py-5" aria-label="App">
+      <nav className="flex-1 overflow-y-auto overscroll-contain px-3 py-5" aria-label="App">
         {NAV_GROUPS.map((g) => (
           <div key={g.group} className="mb-6 last:mb-0">
             <p className="mono-label px-2 pb-2">{g.group}</p>
@@ -204,7 +204,7 @@ function NavContent({ onNavigate }: { onNavigate?: () => void }) {
       </nav>
 
       {/* Wallet + back */}
-      <div className="border-t border-[var(--line)] px-4 py-4">
+      <div className="border-t border-[var(--line)] px-4 pb-[calc(1rem+env(safe-area-inset-bottom,0px))] pt-4">
         <div className="flex flex-col items-stretch gap-2.5">
           <NetworkSwitcher />
           <ConnectButton />
@@ -266,7 +266,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   }, [open ]);
 
   return (
-    <div className="min-h-screen bg-[var(--bg)]">
+    <div className="min-h-dvh bg-[var(--bg)]">
       {/* Desktop sidebar */}
       <aside className="fixed inset-y-0 left-0 z-40 hidden w-60 border-r border-[var(--line)] bg-[var(--bg-raised)] lg:block">
         <NavContent />

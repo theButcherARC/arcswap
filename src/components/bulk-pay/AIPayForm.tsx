@@ -539,6 +539,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                       setAgentError("");
                     }}
                     disabled={agentLoading}
+                    enterKeyHint="done"
                     placeholder="Pay Alice 500 USDC at 0x... and Bob 300 USDC at 0x..."
                     rows={3}
                     className="w-full min-h-24 rounded-lg border border-[var(--line)] bg-transparent px-4 py-3 text-base leading-relaxed text-[var(--fg)] placeholder:text-[var(--fg-faint)] focus:outline-none focus:border-[var(--fg-muted)] transition-colors resize-none disabled:opacity-40 disabled:cursor-not-allowed"

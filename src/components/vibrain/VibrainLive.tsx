@@ -429,7 +429,10 @@ function FreezePanel() {
             onChange={(e) => setAddr(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && runCheck()}
             placeholder="0x..."
+            autoCapitalize="none"
+            autoCorrect="off"
             spellCheck={false}
+            autoComplete="off"
             className="min-h-[44px] min-w-0 flex-1 rounded-full border border-[var(--line)] bg-[var(--bg-raised)] px-4 font-mono text-base text-[var(--fg)] outline-none focus:border-[var(--accent)] sm:text-sm"
           />
           <button
