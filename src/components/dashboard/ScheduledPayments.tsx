@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 interface ScheduledRecipient {
   name: string;
@@ -32,7 +33,6 @@ function formatWhen(iso: string): string {
 export function ScheduledPayments() {
   const [items, setItems] = useState<ScheduledBatch[] | null>(null);
   const [hidden, setHidden] = useState(false);
-  const [cancellingId, setCancellingId] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     try {
@@ -53,21 +53,58 @@ export function ScheduledPayments() {
   }, [load]);
 
   const handleCancel = useCallback(
-    async (id: string) => {
-      setCancellingId(id);
-      try {
-        await fetch("/api/scheduled-batches/" + id, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ status: "cancelled" }),
-        });
+    (id: string) => {
+      const item = items?.find((i) => i.id === id);
+      if (!item || item.status !== "pending") return;
+      // Optimistic cancel with an undo window: the row shows as
+      // cancelled immediately, but the PATCH is only sent when the
+      // toast closes without Undo. Undo restores the row and no
+      // request is ever sent.
+      setItems((prev) =>
+        prev
+          ? prev.map((i) => (i.id === id ? { ...i, status: "cancelled" } : i))
+          : prev,
+      );
+      let settled = false;
+      const commit = async () => {
+        if (settled) return;
+        settled = true;
+        try {
+          await fetch("/api/scheduled-batches/" + id, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status: "cancelled" }),
+          });
+        } catch {
+          // list refresh below will show the current state
+        }
         await load();
-      } catch {
-        // list refresh will show the current state
-      }
-      setCancellingId(null);
+      };
+      toast("Scheduled payment cancelled", {
+        id: `undo-cancel-${id}`,
+        duration: 5000,
+        action: {
+          label: "Undo",
+          onClick: () => {
+            settled = true;
+            setItems((prev) =>
+              prev
+                ? prev.map((i) =>
+                    i.id === id ? { ...i, status: item.status } : i,
+                  )
+                : prev,
+            );
+          },
+        },
+        onAutoClose: () => {
+          void commit();
+        },
+        onDismiss: () => {
+          void commit();
+        },
+      });
     },
-    [load],
+    [items, load],
   );
 
   // Signed out or API unavailable: show nothing, the dashboard keeps its normal flow
@@ -122,26 +159,26 @@ export function ScheduledPayments() {
                           (item.recipients.length !== 1 ? "s" : "")}
                       </span>
                     </p>
-                    <p className="text-[11px] text-[var(--fg-faint)] mt-0.5">
+                    <p className="text-[0.6875rem] text-[var(--fg-faint)] mt-0.5">
                       {formatWhen(item.scheduledFor)}
                       {item.memo ? " · " + item.memo : ""}
                     </p>
                   </div>
                   <div className="flex items-center gap-3 shrink-0">
                     {item.status === "sent" ? (
-                      <span className="text-[11px] font-medium text-[var(--data)]">
+                      <span className="text-[0.6875rem] font-medium text-[var(--data)]">
                         Sent
                       </span>
                     ) : item.status === "cancelled" ? (
-                      <span className="text-[11px] font-medium text-[var(--fg-faint)]">
+                      <span className="text-[0.6875rem] font-medium text-[var(--fg-faint)]">
                         Cancelled
                       </span>
                     ) : due ? (
-                      <span className="text-[11px] font-medium text-amber-600">
+                      <span className="text-[0.6875rem] font-medium text-amber-600">
                         Due now
                       </span>
                     ) : (
-                      <span className="text-[11px] font-medium text-[var(--fg-faint)]">
+                      <span className="text-[0.6875rem] font-medium text-[var(--fg-faint)]">
                         Scheduled
                       </span>
                     )}
@@ -156,12 +193,9 @@ export function ScheduledPayments() {
                         <button
                           type="button"
                           onClick={() => handleCancel(item.id)}
-                          disabled={cancellingId === item.id}
-                          className="inline-flex min-h-11 items-center px-1 text-xs text-[var(--fg-faint)] transition-colors hover:text-rose-600 active:opacity-60 disabled:opacity-40"
+                          className="inline-flex min-h-11 items-center px-1 text-xs text-[var(--fg-faint)] transition-colors hover:text-rose-600 active:opacity-60"
                         >
-                          {cancellingId === item.id
-                            ? "Cancelling..."
-                            : "Cancel"}
+                          Cancel
                         </button>
                       </>
                     ) : null}

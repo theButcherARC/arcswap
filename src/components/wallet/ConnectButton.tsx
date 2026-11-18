@@ -136,7 +136,7 @@ export function ConnectButton() {
         {note ? (
           <p
             className={
-              "absolute right-0 top-full z-50 mt-2 w-60 border border-[var(--line)] bg-white p-3 text-left text-[11px] leading-relaxed text-[var(--fg-muted)] shadow-xl [transform-origin:top_right] " +
+              "absolute right-0 top-full z-50 mt-2 w-60 border border-[var(--line)] bg-white p-3 text-left text-[0.6875rem] leading-relaxed text-[var(--fg-muted)] shadow-xl [transform-origin:top_right] " +
               (noteClosing ? "animate-pop-out" : "animate-pop-in")
             }
           >

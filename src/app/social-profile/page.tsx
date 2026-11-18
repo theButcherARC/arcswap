@@ -263,7 +263,7 @@ export default function SocialProfilePage() {
                         {profile?.username ? '@' + profile.username : 'Connecting X...'}
                       </p>
                       {profile?.vibeId && (
-                        <span className="mt-2 inline-block rounded-md bg-[var(--accent-soft)] px-2 py-0.5 font-mono text-[11px] font-semibold tracking-wider text-[var(--accent)]">
+                        <span className="mt-2 inline-block rounded-md bg-[var(--accent-soft)] px-2 py-0.5 font-mono text-[0.6875rem] font-semibold tracking-wider text-[var(--accent)]">
                           {profile.vibeId}
                         </span>
                       )}
@@ -342,7 +342,7 @@ export default function SocialProfilePage() {
                         placeholder="What do you build, trade or create?"
                         className="w-full resize-none rounded-lg border border-[var(--line)] bg-[var(--bg-raised)] px-3.5 py-3 text-base text-[var(--fg)] outline-none focus:border-[var(--accent)]"
                       />
-                      <p className="mt-1 text-right text-[11px] text-[var(--fg-faint)]">{form.bio.length}/160</p>
+                      <p className="mt-1 text-right text-[0.6875rem] text-[var(--fg-faint)]">{form.bio.length}/160</p>
                     </div>
                     <div>
                       <label className="mb-1.5 block text-xs font-semibold text-[var(--fg-muted)]">Telegram</label>

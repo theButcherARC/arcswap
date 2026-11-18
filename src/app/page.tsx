@@ -205,7 +205,7 @@ export default function VibeFlowLanding() {
                       </span>
                       <div className="min-w-0">
                         <p className="truncate text-sm font-medium text-[var(--fg)]">{name}</p>
-                        <p className="font-mono text-[11px] text-[var(--fg-faint)]">{addr}</p>
+                        <p className="font-mono text-[0.6875rem] text-[var(--fg-faint)]">{addr}</p>
                       </div>
                     </div>
                     <span className="flex items-center gap-2 text-sm font-semibold text-[var(--fg)]">
@@ -248,7 +248,7 @@ export default function VibeFlowLanding() {
               </span>
               <div>
                 <p className="text-xs font-semibold text-[var(--fg)]">Batch settled</p>
-                <p className="font-mono text-[10px] text-[var(--fg-faint)]">0.4s on Arc</p>
+                <p className="font-mono text-[0.625rem] text-[var(--fg-faint)]">0.4s on Arc</p>
               </div>
             </div>
             </div>
@@ -261,7 +261,7 @@ export default function VibeFlowLanding() {
               </span>
               <div>
                 <p className="text-xs font-semibold text-[var(--fg)]">Scheduled</p>
-                <p className="font-mono text-[10px] text-[var(--fg-faint)]">Pays out Oct 31, 9:00 AM</p>
+                <p className="font-mono text-[0.625rem] text-[var(--fg-faint)]">Pays out Oct 31, 9:00 AM</p>
               </div>
             </div>
             </div>
@@ -428,7 +428,7 @@ export default function VibeFlowLanding() {
                   <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--accent)] font-mono text-sm font-bold text-white">N</span>
                   <div>
                     <p className="text-sm font-semibold">noob</p>
-                    <p className="font-mono text-[11px] text-[var(--fg-faint)]">VibeID · VIBE-XEGGDV</p>
+                    <p className="font-mono text-[0.6875rem] text-[var(--fg-faint)]">VibeID · VIBE-XEGGDV</p>
                   </div>
                 </div>
                 <p className="mt-4 text-sm leading-relaxed">
@@ -633,7 +633,7 @@ export default function VibeFlowLanding() {
                 href="https://explorer.arc.io/address/0x522fAf9A91c41c443c66765030741e4AaCe147D0"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="break-all font-mono text-[11px] text-[var(--fg-faint)] transition-colors hover:text-[var(--data)]"
+                className="break-all font-mono text-[0.6875rem] text-[var(--fg-faint)] transition-colors hover:text-[var(--data)]"
               >
                 Batch 0x522fAf9A91c41c443c66765030741e4AaCe147D0
               </a>
@@ -641,7 +641,7 @@ export default function VibeFlowLanding() {
                 href="https://explorer.arc.io/address/0x5294E9927c3306DcBaDb03fe70b92e01cCede505"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="break-all font-mono text-[11px] text-[var(--fg-faint)] transition-colors hover:text-[var(--data)]"
+                className="break-all font-mono text-[0.6875rem] text-[var(--fg-faint)] transition-colors hover:text-[var(--data)]"
               >
                 Memo 0x5294E9927c3306DcBaDb03fe70b92e01cCede505
               </a>

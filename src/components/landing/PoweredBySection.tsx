@@ -40,7 +40,7 @@ export default function PoweredBySection() {
           <div className="flex justify-center mb-6">
             <div className="inline-flex items-center gap-2 border border-[var(--line)] bg-[var(--glass)] px-5 py-1.5">
               <span className="h-1.5 w-1.5 bg-[var(--fg-faint)] animate-pulse" />
-              <span className="text-[11px] font-semibold text-[var(--fg-faint)] tracking-[0.18em] uppercase">
+              <span className="text-[0.6875rem] font-semibold text-[var(--fg-faint)] tracking-[0.18em] uppercase">
                 Powered by
               </span>
             </div>
