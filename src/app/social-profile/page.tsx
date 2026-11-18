@@ -250,7 +250,7 @@ export default function SocialProfilePage() {
                       />
                     ) : (
                       <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-[var(--accent-soft)] text-2xl font-bold text-[var(--accent)]">
-                        {(displayName || 'V').slice(0, 1).toUpperCase()}
+                        {(Array.from((displayName || "V").trim())[0] || "V").toUpperCase()}
                       </div>
                     )}
                     <div className="min-w-0">
