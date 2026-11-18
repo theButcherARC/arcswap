@@ -70,18 +70,34 @@ export function computeReviewFlags(
   return { firstTime, outliers, duplicates };
 }
 
+/** Memos are capped at 100 characters onchain. */
+export const MEMO_MAX_LENGTH = 100;
+
+/**
+ * Cap a memo at the onchain limit. Sliced by code point so a
+ * multi-byte character at the boundary is never split in half.
+ */
+export function capMemo(memo: string): string {
+  const chars = Array.from(memo);
+  return chars.length > MEMO_MAX_LENGTH
+    ? chars.slice(0, MEMO_MAX_LENGTH).join("")
+    : memo;
+}
+
 /**
  * The memo a line will actually carry onchain: an explicit memo typed in
  * the review wins; otherwise the recipient's name when the name-as-memo
- * toggle is on; otherwise no memo.
+ * toggle is on; otherwise no memo. The 100-char cap is enforced HERE, in
+ * one place, so every send path (Quick Pay, AI, CSV) inherits it even
+ * when the memo came from an uncapped name.
  */
 export function effectiveMemo(
   name: string,
   explicitMemo: string | undefined,
   nameAsMemo: boolean,
 ): string {
-  if (explicitMemo !== undefined) return explicitMemo.trim();
-  if (nameAsMemo) return name.trim();
+  if (explicitMemo !== undefined) return capMemo(explicitMemo.trim());
+  if (nameAsMemo) return capMemo(name.trim());
   return "";
 }
 

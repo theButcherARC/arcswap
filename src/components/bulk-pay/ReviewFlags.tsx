@@ -6,6 +6,7 @@ import {
   shortAddress,
   type ReviewLine,
 } from "@/lib/bulkPayReview";
+import { formatMoney } from "@/lib/money";
 
 interface ReviewFlagsProps {
   lines: ReviewLine[];
@@ -20,6 +21,16 @@ interface ReviewFlagsProps {
  * screen is the product. Flags sit ABOVE the recipient list so the
  * rows a human would never scroll to are named up front.
  */
+/** Row lists are capped like the first-time flag below: first 6, then a count. */
+const MAX_LISTED = 6;
+
+function listRows(rows: number[]): string {
+  return rows.length > MAX_LISTED
+    ? rows.slice(0, MAX_LISTED).join(", ") +
+        ` and ${rows.length - MAX_LISTED} more`
+    : rows.join(", ");
+}
+
 export default function ReviewFlags({
   lines,
   knownAddresses,
@@ -46,7 +57,7 @@ export default function ReviewFlags({
           </span>
           {flags.duplicates.map((d) => (
             <p key={d.address} className="text-xs leading-relaxed text-rose-700">
-              {shortAddress(d.address)} appears on rows {d.rows.join(", ")}.
+              {shortAddress(d.address)} appears on rows {listRows(d.rows)}.
               The same person would be paid {d.rows.length} times in this
               batch.
             </p>
@@ -59,14 +70,21 @@ export default function ReviewFlags({
           <span className="mono-label block mb-1 !text-amber-600">
             Check before you sign / Unusual amount
           </span>
-          {flags.outliers.map((l) => (
+          {flags.outliers.slice(0, MAX_LISTED).map((l) => (
             <p key={l.row} className="text-xs leading-relaxed text-amber-700">
               Row {l.row} ({l.name || "Recipient"}, {shortAddress(l.address)})
               gets {currencySymbol}
-              {l.amount.toFixed(2)}, at least 10x the typical row in this
+              {formatMoney(l.amount)}, at least 10x the typical row in this
               batch. If that is not on purpose, fix it before signing.
             </p>
           ))}
+          {flags.outliers.length > MAX_LISTED ? (
+            <p className="text-xs leading-relaxed text-amber-700">
+              And {flags.outliers.length - MAX_LISTED} more row
+              {flags.outliers.length - MAX_LISTED !== 1 ? "s" : ""} with
+              unusual amounts.
+            </p>
+          ) : null}
         </div>
       ) : null}
 

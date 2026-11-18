@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { Button } from "@/components/ui/Button";
 import { truncateAddress } from "@/utils/address";
@@ -19,6 +19,42 @@ export function ConnectButton() {
   const { disconnect } = useDisconnect();
   const { isCorrectNetwork, isSwitching, switchToArc } = useArcNetwork();
   const [note, setNote] = useState<string | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // The account menu closes on any outside press or Escape.
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onPointerDown = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    document.addEventListener("mousedown", onPointerDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onPointerDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [menuOpen]);
+
+  const handleCopyAddress = async () => {
+    if (!address) return;
+    try {
+      await navigator.clipboard.writeText(address);
+      setCopied(true);
+      setTimeout(() => {
+        setCopied(false);
+        setMenuOpen(false);
+      }, 1200);
+    } catch {
+      setMenuOpen(false);
+    }
+  };
 
   // Try the configured MetaMask connector first, then fall back to any
   // other injected wallet. Either way, a failed attempt must SAY something:
@@ -82,13 +118,45 @@ export function ConnectButton() {
     );
   }
 
+  // Connected: the address button opens a small menu. It must never
+  // disconnect on click: copying the address is the common intent, and
+  // an instant disconnect reads as a trap. Disconnect is the explicit
+  // second item in the menu.
   return (
-    <button
-      onClick={() => disconnect()}
-      className="flex items-center gap-2 border border-[var(--line)] bg-[var(--glass)] px-3.5 py-1.5 text-xs font-medium text-[var(--fg)] hover:bg-[var(--glass-strong)] pressable"
-    >
-      <span className="h-1.5 w-1.5 bg-emerald-400" aria-hidden="true" />
-      {truncateAddress(address ?? "")}
-    </button>
+    <div className="relative" ref={menuRef}>
+      <button
+        onClick={() => setMenuOpen((open) => !open)}
+        aria-haspopup="menu"
+        aria-expanded={menuOpen}
+        className="flex items-center gap-2 border border-[var(--line)] bg-[var(--glass)] px-3.5 py-1.5 text-xs font-medium text-[var(--fg)] hover:bg-[var(--glass-strong)] pressable"
+      >
+        <span className="h-1.5 w-1.5 bg-emerald-400" aria-hidden="true" />
+        {truncateAddress(address ?? "")}
+      </button>
+      {menuOpen ? (
+        <div
+          role="menu"
+          className="absolute right-0 top-full z-50 mt-2 w-48 animate-pop-in border border-[var(--line)] bg-white p-1.5 text-left shadow-xl [transform-origin:top_right]"
+        >
+          <button
+            role="menuitem"
+            onClick={handleCopyAddress}
+            className="w-full px-2.5 py-2 text-left text-xs font-medium text-[var(--fg)] hover:bg-[var(--glass-strong)] pressable"
+          >
+            {copied ? "Copied" : "Copy address"}
+          </button>
+          <button
+            role="menuitem"
+            onClick={() => {
+              setMenuOpen(false);
+              disconnect();
+            }}
+            className="w-full px-2.5 py-2 text-left text-xs font-medium text-rose-600 hover:bg-rose-500/[0.06] pressable"
+          >
+            Disconnect
+          </button>
+        </div>
+      ) : null}
+    </div>
   );
 }

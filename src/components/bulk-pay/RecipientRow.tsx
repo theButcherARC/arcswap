@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState, useRef } from "react";
 import { isValidAddress } from "@/utils/address";
+import { formatMoney } from "@/lib/money";
 import type { Recipient, InputMode } from "@/types/bulkPay";
 
 interface RecipientRowProps {
@@ -99,7 +100,7 @@ export default function RecipientRow({
     if (recipient.percentage === null || recipient.percentage <= 0) return null;
     if (totalAmount <= 0) return null;
     const dollars = (totalAmount * recipient.percentage) / 100;
-    return "$" + dollars.toFixed(2);
+    return "$" + formatMoney(dollars);
   }, [inputMode, recipient.percentage, totalAmount]);
 
   const activeValue =
@@ -131,8 +132,8 @@ export default function RecipientRow({
   return (
     <div className="group animate-slide-in-top px-4 py-4 transition-colors duration-200 hover:bg-black/[0.02]">
       <div className="flex flex-wrap items-start gap-3">
-        {/* Row number badge */}
-        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--accent-soft)] mt-3">
+        {/* Row number badge: a pill, so 4-digit row numbers (1000) fit. */}
+        <div className="flex h-7 min-w-7 shrink-0 items-center justify-center rounded-full bg-[var(--accent-soft)] px-1.5 mt-3">
           <span className="text-[11px] font-bold text-[var(--accent)]">
             {rowNumber}
           </span>

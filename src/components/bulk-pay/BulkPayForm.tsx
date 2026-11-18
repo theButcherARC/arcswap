@@ -15,6 +15,7 @@ import { DEFAULT_CHAIN } from "@/constants/chains";
 import { BATCHPAY_CHUNK_SIZE } from "@/services/bulkPayService";
 import { loadPaidRecipientAddresses } from "@/lib/paidHistory";
 import { effectiveMemo, type ReviewLine } from "@/lib/bulkPayReview";
+import { formatMoney } from "@/lib/money";
 import BulkPaySuccess from "./BulkPaySuccess";
 import RecipientRow from "./RecipientRow";
 import ReviewFlags from "./ReviewFlags";
@@ -204,7 +205,7 @@ export default function BulkPayForm() {
     if (inputMode === "amount") {
       total = recipients.reduce((sum, r) => sum + (r.amount || 0), 0);
       allocatedValue = total;
-      allocatedLabel = "$" + total.toFixed(2);
+      allocatedLabel = "$" + formatMoney(total);
       isFullyAllocated = recipients.every(
         (r) => r.amount !== null && r.amount > 0
       );
@@ -705,7 +706,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                       />
                     </svg>
                     <span className="text-[11px] text-[var(--fg-faint)]">
-                      Protocol fee: {summaryData.fee.toFixed(2)} USDC (0.2%)
+                      Protocol fee: {formatMoney(summaryData.fee)} USDC (0.2%)
                     </span>
                   </div>
                 ) : null}
@@ -926,12 +927,13 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                   currencySymbol={selectedSymbol === "EURC" ? "€" : "$"}
                 />
 
-                <div className="divide-y divide-[var(--line)] overflow-hidden rounded-lg border border-[var(--line)]">
+                <div className="overflow-hidden rounded-lg border border-[var(--line)]">
+                  <div className="max-h-96 divide-y divide-[var(--line)] overflow-y-auto">
                   {reviewRecipients.map((r) => (
                     <div key={r.id} className="px-3.5 py-2.5">
                       <div className="flex items-center justify-between gap-4">
                         <div className="min-w-0">
-                          <p className="text-sm text-[var(--fg)] truncate">
+                          <p className="text-sm text-[var(--fg)] truncate" title={r.name || "Recipient"}>
                             {r.name || "Recipient"}
                           </p>
                           <p className="text-[11px] text-[var(--fg-faint)] font-mono">
@@ -944,7 +946,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                         </div>
                         <span className="text-sm font-semibold text-[var(--fg)] whitespace-nowrap">
                           {(selectedSymbol === "EURC" ? "€" : "$") +
-                            r.displayAmount.toFixed(2)}
+                            formatMoney(r.displayAmount)}
                           <span className="text-[var(--fg-faint)] font-normal ml-1">
                             {selectedSymbol}
                           </span>
@@ -962,6 +964,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                       />
                     </div>
                   ))}
+                  </div>
                 </div>
 
                 {summaryData.count > summaryData.validCount ? (
@@ -1079,9 +1082,9 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     </span>
                     <span className="text-sm font-semibold text-[var(--fg)]">
                       {inputMode === "amount"
-                        ? "$" + summaryData.total.toFixed(2)
+                        ? "$" + formatMoney(summaryData.total)
                         : totalAmountInput
-                          ? "$" + (parseFloat(totalAmountInput) || 0).toFixed(2)
+                          ? "$" + formatMoney(parseFloat(totalAmountInput) || 0)
                           : "$0.00"}
                       <span className="text-[var(--fg-faint)] font-normal ml-1">
                         USDC
@@ -1111,7 +1114,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                       Protocol Fee
                     </span>
                     <span className="text-sm font-semibold text-[var(--fg-muted)]">
-                      ${summaryData.fee.toFixed(2)}
+                      ${formatMoney(summaryData.fee)}
                       <span className="text-[var(--fg-faint)] font-normal ml-1">
                         (0.2%)
                       </span>
@@ -1138,7 +1141,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     >
                       {inputMode === "percentage"
                         ? summaryData.allocatedLabel
-                        : "$" + summaryData.total.toFixed(2)}
+                        : "$" + formatMoney(summaryData.total)}
                       {inputMode === "percentage" &&
                       summaryData.isFullyAllocated &&
                       !summaryData.isOverAllocated ? (
@@ -1319,9 +1322,11 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     </span>
                     <span className="text-xs font-normal opacity-60 mt-0.5">
                       {(selectedSymbol === "EURC" ? "€" : "$") +
-                        (inputMode === "amount"
-                          ? summaryData.total.toFixed(2)
-                          : (parseFloat(totalAmountInput) || 0).toFixed(2))}{" "}
+                        formatMoney(
+                          inputMode === "amount"
+                            ? summaryData.total
+                            : parseFloat(totalAmountInput) || 0,
+                        )}{" "}
                       {selectedSymbol}
                     </span>
                   </span>
