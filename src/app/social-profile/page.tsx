@@ -351,6 +351,10 @@ export default function SocialProfilePage() {
                         onChange={e => setForm({ ...form, telegram: e.target.value })}
                         maxLength={40}
                         placeholder="username, without @"
+                        autoCapitalize="none"
+                        autoCorrect="off"
+                        spellCheck={false}
+                        autoComplete="off"
                         className="min-h-[44px] w-full rounded-lg border border-[var(--line)] bg-[var(--bg-raised)] px-3.5 py-3 text-base text-[var(--fg)] outline-none focus:border-[var(--accent)]"
                       />
                     </div>
