@@ -321,7 +321,7 @@ export default function SocialProfilePage() {
                 )}
 
                 {editing && (
-                  <div className="mt-5 flex flex-col gap-4 border-t border-[var(--line)] pt-5">
+                  <div className="mt-5 flex animate-pop-in flex-col gap-4 border-t border-[var(--line)] pt-5">
                     <div>
                       <label className="mb-1.5 block text-xs font-semibold text-[var(--fg-muted)]">Display name</label>
                       <input
