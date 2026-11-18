@@ -467,7 +467,7 @@ export default function CSVUploadForm() {
                       <p className="text-xs text-[var(--fg-faint)] mt-1">
                         Drag & drop or click to browse &mdash; .csv files only
                       </p>
-                      <p className="text-[11px] text-[var(--fg-faint)] mt-3 font-mono">
+                      <p className="text-[0.6875rem] text-[var(--fg-faint)] mt-3 font-mono">
                         Alice, 0x1234...abcd, 100.50
                       </p>
                     </div>
@@ -483,7 +483,7 @@ export default function CSVUploadForm() {
                 />
 
                 {/* Format hint */}
-                <p className="mt-4 text-[11px] text-[var(--fg-faint)] text-center leading-relaxed">
+                <p className="mt-4 text-[0.6875rem] text-[var(--fg-faint)] text-center leading-relaxed">
                   Columns: <span className="font-mono text-[var(--fg-faint)]">name, address, amount</span>
                   &nbsp;&mdash;&nbsp;or just&nbsp;
                   <span className="font-mono text-[var(--fg-faint)]">address, amount</span>
@@ -501,7 +501,7 @@ export default function CSVUploadForm() {
                     placeholder="Paste CSV content here - name, address, amount per line"
                     className="w-full h-48 rounded-lg bg-black/[0.03] border border-[var(--line)] text-[var(--fg)] placeholder:text-[var(--fg-faint)] px-4 py-3 text-base focus:outline-none sm:text-sm focus:border-[var(--accent)] focus:bg-black/[0.03] focus:shadow-[0_0_0_3px_rgba(39,117,202,0.15)] transition-colors duration-200 font-mono hover:border-[var(--line-strong)] hover:bg-black/[0.04] resize-none"
                   />
-                  <p className="text-[11px] text-[var(--fg-faint)] leading-relaxed">
+                  <p className="text-[0.6875rem] text-[var(--fg-faint)] leading-relaxed">
                     Format: <span className="font-mono text-[var(--fg-faint)]">name, address, amount</span> or <span className="font-mono text-[var(--fg-faint)]">address, amount</span> - one row per line, no header required
                   </p>
                 </div>
@@ -511,7 +511,7 @@ export default function CSVUploadForm() {
 
           {/* ── Parse errors ───────────────────────────────────────────── */}
           {parseErrors.length > 0 && (
-            <div className="px-6 sm:px-8 py-4 border-b border-[var(--line)] bg-amber-500/[0.03]">
+            <div role="alert" className="px-6 sm:px-8 py-4 border-b border-[var(--line)] bg-amber-500/[0.03]">
               <div className="flex items-start gap-3">
                 <div className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center border border-amber-500/30 bg-amber-500/10">
                   <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
@@ -524,10 +524,10 @@ export default function CSVUploadForm() {
                   </p>
                   <ul className="space-y-0.5">
                     {parseErrors.slice(0, 5).map((e, i) => (
-                      <li key={i} className="text-[11px] text-[var(--fg-faint)] font-mono truncate">{e.message}</li>
+                      <li key={i} className="text-[0.6875rem] text-[var(--fg-faint)] font-mono truncate">{e.message}</li>
                     ))}
                     {parseErrors.length > 5 && (
-                      <li className="text-[11px] text-[var(--fg-faint)]">…and {parseErrors.length - 5} more</li>
+                      <li className="text-[0.6875rem] text-[var(--fg-faint)]">…and {parseErrors.length - 5} more</li>
                     )}
                   </ul>
                 </div>
@@ -543,7 +543,7 @@ export default function CSVUploadForm() {
                   <h2 className="text-sm font-semibold text-[var(--fg)]">
                     Recipients
                   </h2>
-                  <span className="inline-flex items-center border border-[var(--accent)]/25 bg-[var(--accent-soft)] px-2.5 py-0.5 text-[11px] font-semibold text-[var(--accent)]">
+                  <span className="inline-flex items-center border border-[var(--accent)]/25 bg-[var(--accent-soft)] px-2.5 py-0.5 text-[0.6875rem] font-semibold text-[var(--accent)]">
                     {rows.length} loaded
                   </span>
                 </div>
@@ -557,9 +557,9 @@ export default function CSVUploadForm() {
               <div className="border border-[var(--line)] overflow-hidden">
                 {/* Table header */}
                 <div className="grid grid-cols-[1fr_2fr_auto] gap-0 border-b border-[var(--line)] bg-black/[0.03]">
-                  <div className="px-4 py-2.5 text-[10px] font-semibold text-[var(--fg-faint)] uppercase tracking-wider">Name</div>
-                  <div className="px-4 py-2.5 text-[10px] font-semibold text-[var(--fg-faint)] uppercase tracking-wider">Address</div>
-                  <div className="px-4 py-2.5 text-[10px] font-semibold text-[var(--fg-faint)] uppercase tracking-wider text-right">Amount</div>
+                  <div className="px-4 py-2.5 text-[0.625rem] font-semibold text-[var(--fg-faint)] uppercase tracking-wider">Name</div>
+                  <div className="px-4 py-2.5 text-[0.625rem] font-semibold text-[var(--fg-faint)] uppercase tracking-wider">Address</div>
+                  <div className="px-4 py-2.5 text-[0.625rem] font-semibold text-[var(--fg-faint)] uppercase tracking-wider text-right">Amount</div>
                 </div>
 
                 {/* Rows */}
@@ -610,7 +610,7 @@ export default function CSVUploadForm() {
               className="w-full rounded-lg bg-black/[0.03] border border-[var(--line)] text-[var(--fg)] placeholder:text-[var(--fg-faint)] px-4 py-3 text-base focus:outline-none sm:text-sm focus:border-[var(--accent)] focus:bg-black/[0.03] focus:shadow-[0_0_0_3px_rgba(39,117,202,0.15)] transition-colors duration-200 hover:border-[var(--line-strong)]"
             />
             {memo.length > 0 && (
-              <p className="mt-1.5 text-[11px] text-[var(--fg-faint)] text-right">{memo.length}/120 · stored onchain</p>
+              <p className="mt-1.5 text-[0.6875rem] text-[var(--fg-faint)] text-right">{memo.length}/120 · stored onchain</p>
             )}
             <label className="mt-4 flex cursor-pointer items-start gap-2.5 text-xs leading-relaxed text-[var(--fg-muted)]">
               <input
@@ -634,7 +634,7 @@ export default function CSVUploadForm() {
           <div className="px-6 sm:px-8 py-6">
             {/* Tx error */}
             {txError && (
-              <div className="mb-4 rounded-lg border border-rose-500/20 bg-rose-500/[0.06] px-4 py-3 text-xs text-rose-600">
+              <div role="alert" className="mb-4 rounded-lg border border-rose-500/20 bg-rose-500/[0.06] px-4 py-3 text-xs text-rose-600">
                 {txError}
               </div>
             )}
@@ -660,19 +660,19 @@ export default function CSVUploadForm() {
             {/* Stats bar */}
             {rows.length > 0 && (
               <div className="mb-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 rounded-lg border border-[var(--line)] bg-black/[0.03] px-4 py-2.5">
-                <span className="text-[11px] text-[var(--fg-faint)] whitespace-nowrap">
+                <span className="text-[0.6875rem] text-[var(--fg-faint)] whitespace-nowrap">
                   Recipients: <span className="text-[var(--fg-muted)] font-medium">{rows.length}</span>
                 </span>
-                <span className="text-[var(--fg-faint)] text-[11px]">|</span>
-                <span className="text-[11px] text-[var(--fg-faint)] whitespace-nowrap">
+                <span className="text-[var(--fg-faint)] text-[0.6875rem]">|</span>
+                <span className="text-[0.6875rem] text-[var(--fg-faint)] whitespace-nowrap">
                   Total: <span className="text-[var(--fg-muted)] font-medium">
                     {selectedSymbol === "USDC" ? "$" : "€"}{formatMoney(totalAmount)} {selectedSymbol}
                   </span>
                 </span>
                 {parseErrors.length > 0 && (
                   <>
-                    <span className="text-[var(--fg-faint)] text-[11px]">|</span>
-                    <span className="text-[11px] text-amber-500/70 whitespace-nowrap">
+                    <span className="text-[var(--fg-faint)] text-[0.6875rem]">|</span>
+                    <span className="text-[0.6875rem] text-amber-500/70 whitespace-nowrap">
                       {parseErrors.length} row{parseErrors.length !== 1 ? "s" : ""} skipped
                     </span>
                   </>
@@ -704,6 +704,7 @@ export default function CSVUploadForm() {
               type="button"
               onClick={handleSend}
               disabled={!canSend}
+              aria-live="polite"
               className={
                 "w-full rounded-full px-6 py-3.5 text-sm font-semibold pressable flex items-center justify-center gap-2.5 " +
                 (canSend
@@ -741,7 +742,7 @@ export default function CSVUploadForm() {
               )}
             </button>
 
-            <p className="mt-3 text-center text-[11px] text-[var(--fg-faint)]">
+            <p className="mt-3 text-center text-[0.6875rem] text-[var(--fg-faint)]">
               Sent through the VibeFlow BatchPay contract on Arc. Batches
               over 250 recipients go in chunks of 250; every transaction is
               atomic, and every line is verified onchain afterwards.
