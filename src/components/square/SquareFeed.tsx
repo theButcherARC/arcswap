@@ -14,6 +14,7 @@ type Post = {
 };
 
 const MAX_CONTENT = 500;
+const PAGE_SIZE = 50;
 
 function shortAddr(a: string): string {
   return a.slice(0, 6) + "..." + a.slice(-4);
@@ -30,6 +31,7 @@ export function SquareFeed() {
   const { address, isConnected } = useAccount();
   const { signMessageAsync } = useSignMessage();
   const [posts, setPosts] = useState<Post[]>([]);
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [loaded, setLoaded] = useState(false);
   const [draft, setDraft] = useState("");
   const [busy, setBusy] = useState(false);
@@ -151,18 +153,22 @@ export function SquareFeed() {
         </div>
       )}
       {posts.length > 0 && (
+      <>
       <div className="divide-y divide-[var(--line)] border-y border-[var(--line)]">
-        {posts.map((p) => (
+        {posts.slice(0, visibleCount).map((p) => (
           <article key={p.id} className="py-5">
             <div className="mb-1.5 flex items-center gap-2">
-              <span className="text-sm font-semibold text-[var(--fg)]">
+              <span
+                className="min-w-0 truncate text-sm font-semibold text-[var(--fg)]"
+                title={p.handle ? "@" + p.handle : p.walletAddress}
+              >
                 {p.handle ? "@" + p.handle : shortAddr(p.walletAddress)}
               </span>
-              <span className="text-xs text-[var(--fg-faint)]">
+              <span className="shrink-0 text-xs text-[var(--fg-faint)]">
                 {timeAgo(p.createdAt)}
               </span>
             </div>
-            <p className="whitespace-pre-wrap text-[15px] leading-relaxed text-[var(--fg)]">
+            <p className="whitespace-pre-wrap [overflow-wrap:anywhere] text-[15px] leading-relaxed text-[var(--fg)]">
               {p.content}
             </p>
             <div className="mt-3">
@@ -171,6 +177,16 @@ export function SquareFeed() {
           </article>
         ))}
       </div>
+      {posts.length > visibleCount && (
+        <button
+          onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
+          className="w-full py-3 text-xs text-[var(--fg-faint)] transition-colors hover:text-[var(--fg)] pressable"
+        >
+          Show more ({posts.length - visibleCount} more post
+          {posts.length - visibleCount !== 1 ? "s" : ""})
+        </button>
+      )}
+      </>
       )}
     </div>
   );

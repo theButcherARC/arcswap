@@ -97,12 +97,12 @@ export default function PublicProfilePage() {
                 />
               ) : (
                 <div className="flex h-[88px] w-[88px] items-center justify-center rounded-full bg-[var(--accent-soft)] text-3xl font-bold text-[var(--accent)]">
-                  {(data.name || data.username || 'V').slice(0, 1).toUpperCase()}
+                  {(Array.from((data.name || data.username || "V").trim())[0] || "V").toUpperCase()}
                 </div>
               )}
               <h1 className="mt-4 text-2xl font-bold tracking-tight text-[var(--fg)]">{data.name || '@' + data.username}</h1>
               <p className="mt-0.5 text-sm text-[var(--fg-muted)]">@{data.username}</p>
-              {data.bio && <p className="mt-3 max-w-sm text-sm leading-relaxed text-[var(--fg)]">{data.bio}</p>}
+              {data.bio && <p className="mt-3 max-w-sm text-sm leading-relaxed text-[var(--fg)] [overflow-wrap:anywhere]">{data.bio}</p>}
 
               {data.vibeId && (
                 <button
