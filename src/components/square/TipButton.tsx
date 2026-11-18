@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   useAccount,
   useWaitForTransactionReceipt,
@@ -32,6 +32,8 @@ export function TipButton({
 }) {
   const { address, isConnected } = useAccount();
   const [open, setOpen] = useState(false);
+  const [closing, setClosing] = useState(false);
+  const closeTimer = useRef<number | null>(null);
   const [amount, setAmount] = useState("1");
   const [note, setNote] = useState<string | null>(null);
   const { writeContract, data: hash, isPending } = useWriteContract();
@@ -39,9 +41,43 @@ export function TipButton({
     hash,
   });
 
+  useEffect(() => {
+    return () => {
+      if (closeTimer.current !== null) {
+        window.clearTimeout(closeTimer.current);
+      }
+    };
+  }, []);
+
   const isSelf =
     !!address && address.toLowerCase() === to.toLowerCase();
   if (isSelf) return null;
+
+  // The composer leaves along the path it entered (drawer pattern):
+  // it stays mounted through the pop-out, and reopening mid-exit
+  // clears the pending unmount so it never vanishes under the user.
+  const clearCloseTimer = () => {
+    if (closeTimer.current !== null) {
+      window.clearTimeout(closeTimer.current);
+      closeTimer.current = null;
+    }
+  };
+
+  const openComposer = () => {
+    clearCloseTimer();
+    setClosing(false);
+    setOpen(true);
+  };
+
+  const closeComposer = () => {
+    setClosing(true);
+    clearCloseTimer();
+    closeTimer.current = window.setTimeout(() => {
+      closeTimer.current = null;
+      setOpen(false);
+      setClosing(false);
+    }, 200);
+  };
 
   function send() {
     setNote(null);
@@ -96,10 +132,10 @@ export function TipButton({
         onClick={() => {
           if (!isConnected) {
             setNote("Connect your wallet first to tip.");
-            setOpen(true);
+            openComposer();
             return;
           }
-          setOpen(true);
+          openComposer();
         }}
         className="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-[var(--line)] px-4 py-3 text-xs font-medium text-[var(--fg-muted)] pressable hover:border-[var(--accent)] hover:text-[var(--fg)]"
       >
@@ -110,7 +146,12 @@ export function TipButton({
   }
 
   return (
-    <div className="flex flex-wrap animate-pop-in items-center gap-2">
+    <div
+      className={
+        "flex flex-wrap items-center gap-2 " +
+        (closing ? "animate-pop-out" : "animate-pop-in")
+      }
+    >
       <div className="flex items-center gap-1.5">
         {["1", "5", "10"].map((preset) => (
           <button
@@ -149,7 +190,7 @@ export function TipButton({
             : "Send tip" + (handle ? " to @" + handle : "")}
       </button>
       <button
-        onClick={() => setOpen(false)}
+        onClick={closeComposer}
         className="inline-flex min-h-[44px] items-center px-2 text-xs text-[var(--fg-faint)] transition-opacity hover:text-[var(--fg)] active:opacity-60"
       >
         Cancel

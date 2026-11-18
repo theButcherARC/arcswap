@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ConnectButton } from "@/components/wallet/ConnectButton";
 import { NetworkSwitcher } from "@/components/wallet/NetworkSwitcher";
 import { LogoMark } from "@/components/brand/Logo";
@@ -228,6 +228,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [shown, setShown] = useState(false);
+  const drawerRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 
   // Hard close on navigation: the page changes underneath, so the
@@ -241,8 +242,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   // Drawer motion (Apple-style, interruptible): mount in the closed
   // position, flip to shown on the next frame so the transition runs
   // from the off-screen value; closing reverses along the same path
-  // and unmounts when the slide finishes (timeout is a fallback for a
-  // missed transitionend). Reopening mid-close reverses from the
+  // and unmounts on the 420ms timeout below, which is the only
+  // unmount mechanism (it simply outlasts the 350ms transition).
+  // Reopening mid-close clears the timeout and reverses from the
   // current on-screen position, and the wrapper stops taking input
   // the moment closing starts, so input is never locked out.
   useEffect(() => {
@@ -264,6 +266,17 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open ]);
+
+  // aria-hidden alone leaves the drawer's links and buttons focusable
+  // during the 420ms exit; inert takes them out of the tab order
+  // whenever the drawer is not shown. Set as a DOM property, not a
+  // JSX prop: React 18 renders inert={false} as an attribute that
+  // still enables inert in the browser.
+  useEffect(() => {
+    if (drawerRef.current) {
+      drawerRef.current.inert = !shown;
+    }
+  }, [shown, mounted]);
 
   return (
     <div className="min-h-dvh bg-[var(--bg)]">
@@ -296,6 +309,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           animation, so the UI is usable the moment closing starts. */}
       {mounted ? (
         <div
+          ref={drawerRef}
           className={
             "fixed inset-0 z-50 lg:hidden" + (shown ? "" : " pointer-events-none")
           }

@@ -19,6 +19,8 @@ export function ConnectButton() {
   const { disconnect } = useDisconnect();
   const { isCorrectNetwork, isSwitching, switchToArc } = useArcNetwork();
   const [note, setNote] = useState<string | null>(null);
+  const [noteClosing, setNoteClosing] = useState(false);
+  const noteTimer = useRef<number | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -42,6 +44,41 @@ export function ConnectButton() {
     };
   }, [menuOpen]);
 
+  // The note leaves along the path it entered (drawer pattern): it
+  // stays mounted through the pop-out, then clears. Showing a fresh
+  // note cancels a pending exit, so a fast retry never loses it.
+  const clearNoteTimer = () => {
+    if (noteTimer.current !== null) {
+      window.clearTimeout(noteTimer.current);
+      noteTimer.current = null;
+    }
+  };
+
+  const dismissNote = () => {
+    if (!note) return;
+    setNoteClosing(true);
+    clearNoteTimer();
+    noteTimer.current = window.setTimeout(() => {
+      noteTimer.current = null;
+      setNote(null);
+      setNoteClosing(false);
+    }, 200);
+  };
+
+  const showNote = (text: string) => {
+    clearNoteTimer();
+    setNoteClosing(false);
+    setNote(text);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (noteTimer.current !== null) {
+        window.clearTimeout(noteTimer.current);
+      }
+    };
+  }, []);
+
   const handleCopyAddress = async () => {
     if (!address) return;
     try {
@@ -60,12 +97,12 @@ export function ConnectButton() {
   // other injected wallet. Either way, a failed attempt must SAY something:
   // a silent no-op reads as "the site is broken" to a first-time user.
   const handleConnect = () => {
-    setNote(null);
+    dismissNote();
     const metaMaskConnector = connectors.find((c) => c.id === "metaMask");
     const injectedConnector = connectors.find((c) => c.id === "injected");
     const first = metaMaskConnector ?? injectedConnector ?? connectors[0];
     if (!first) {
-      setNote(NO_WALLET_NOTE);
+      showNote(NO_WALLET_NOTE);
       return;
     }
     connect(
@@ -75,10 +112,10 @@ export function ConnectButton() {
           if (injectedConnector && first !== injectedConnector) {
             connect(
               { connector: injectedConnector },
-              { onError: () => setNote(NO_WALLET_NOTE) },
+              { onError: () => showNote(NO_WALLET_NOTE) },
             );
           } else {
-            setNote(NO_WALLET_NOTE);
+            showNote(NO_WALLET_NOTE);
           }
         },
       },
@@ -97,7 +134,12 @@ export function ConnectButton() {
           Connect Wallet
         </Button>
         {note ? (
-          <p className="absolute right-0 top-full z-50 mt-2 w-60 animate-pop-in border border-[var(--line)] bg-white p-3 text-left text-[11px] leading-relaxed text-[var(--fg-muted)] shadow-xl [transform-origin:top_right]">
+          <p
+            className={
+              "absolute right-0 top-full z-50 mt-2 w-60 border border-[var(--line)] bg-white p-3 text-left text-[11px] leading-relaxed text-[var(--fg-muted)] shadow-xl [transform-origin:top_right] " +
+              (noteClosing ? "animate-pop-out" : "animate-pop-in")
+            }
+          >
             {note}
           </p>
         ) : null}
