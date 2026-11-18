@@ -152,7 +152,7 @@ export function SquareRequests() {
               <button
                 onClick={create}
                 disabled={busy || !amount.trim() || !noteText.trim()}
-                className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-[var(--accent)] px-5 text-sm font-semibold text-white transition-opacity hover:opacity-85 disabled:cursor-not-allowed disabled:opacity-40"
+                className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-[var(--accent)] px-5 text-sm font-semibold text-white pressable hover:opacity-85 disabled:cursor-not-allowed disabled:opacity-40"
               >
                 {busy ? "Signing..." : "Request USDC"}
               </button>
@@ -220,7 +220,7 @@ export function SquareRequests() {
                     <button
                       onClick={() => close(r)}
                       disabled={closingId === r.id}
-                      className="inline-flex min-h-[44px] items-center rounded-full border border-[var(--line)] px-5 text-xs font-medium text-[var(--fg-muted)] transition-colors hover:border-[var(--accent)] hover:text-[var(--fg)] disabled:cursor-not-allowed disabled:opacity-40"
+                      className="inline-flex min-h-[44px] items-center rounded-full border border-[var(--line)] px-5 text-xs font-medium text-[var(--fg-muted)] pressable hover:border-[var(--accent)] hover:text-[var(--fg)] disabled:cursor-not-allowed disabled:opacity-40"
                     >
                       {closingId === r.id ? "Signing..." : "Close request"}
                     </button>
