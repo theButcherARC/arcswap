@@ -594,6 +594,7 @@ select:focus-visible {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
@@ -783,4 +784,96 @@ html {
 @keyframes coinspin { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
 @media (prefers-reduced-motion: reduce) {
   .coin-spin { animation: none; }
+}
+
+/* ============================================
+   Apple-style motion pass (motion only, inside DESIGN.md)
+   - Response: press feedback lands on pointer-down, 100ms ease-out
+   - Springs: critically damped settle (damping 1.0, no overshoot),
+     approximated by a cubic-bezier curve; DESIGN.md bans bounce
+   - Performance: transform and opacity only, never `transition: all`
+   ============================================ */
+:root {
+  --ease-settle: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* Instant press feedback for buttons, pills and tappable controls.
+   transition-property names exactly what animates: transform answers
+   the press in 100ms, colors keep their calmer 200ms fades. */
+.pressable {
+  transition-property: transform, color, background-color, border-color, opacity;
+  transition-duration: 100ms, 200ms, 200ms, 200ms, 200ms;
+  transition-timing-function: ease-out, ease, ease, ease, ease;
+}
+.pressable:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+/* Mobile drawer (AppShell): one path in and out. CSS transitions run
+   from the current on-screen value, so a mid-flight reversal never
+   jumps and input is never locked during the move. */
+.drawer-scrim {
+  transition: opacity 350ms var(--ease-settle);
+}
+.drawer-panel {
+  transition: transform 350ms var(--ease-settle);
+}
+
+/* Success and payslip reveal: a critically damped settle with no
+   bounce, because no momentum gesture precedes it. */
+@keyframes settle-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.animate-settle-in {
+  animation: settle-in 450ms var(--ease-settle) both;
+}
+
+/* Small anchored surfaces (tip composer, AI parse preview, wallet
+   note): the same settle, shorter travel, from the trigger side. */
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.animate-pop-in {
+  animation: pop-in 250ms var(--ease-settle) both;
+}
+
+@keyframes settle-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Reduced motion: no scale, no travel. Reveals become a short opacity
+   cross-fade; state changes stay instant (the global reduced-motion
+   rule above already collapses transitions, this restores the fade
+   for reveal surfaces and removes the press scale). */
+@media (prefers-reduced-motion: reduce) {
+  .pressable:active:not(:disabled) {
+    transform: none;
+  }
+  .animate-settle-in,
+  .animate-pop-in {
+    animation: settle-fade 150ms ease both !important;
+  }
+  .drawer-scrim,
+  .drawer-panel {
+    transition-duration: 0.01ms !important;
+  }
 }
