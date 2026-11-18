@@ -28,6 +28,22 @@ import type {
 } from "@/types/bulkPay";
 
 /**
+ * Commit-moment haptics: one short pulse when a send confirms, a
+ * distinct broken pattern when it fails. iOS Safari has no Vibration
+ * API, so this silently no-ops there. Haptics are used nowhere else
+ * in the app.
+ */
+function vibrate(pattern: number | number[]) {
+  try {
+    if (typeof navigator !== "undefined" && "vibrate" in navigator) {
+      navigator.vibrate(pattern);
+    }
+  } catch {
+    // Haptics are decoration; never let them break a send.
+  }
+}
+
+/**
  * BatchPay v2 send path.
  *
  * 1. Preflight: the sender's balance must cover total + fee. No wallet
@@ -215,6 +231,7 @@ export function useBulkPay() {
           summary,
         });
         setBulkStatus("success");
+        vibrate(12);
       } catch (err) {
         if (sentChunks.length > 0) {
           // Part of the batch is already onchain. Say so plainly and name
@@ -231,6 +248,7 @@ export function useBulkPay() {
           setError(isUserRejection(err) ? APP_ERRORS.TX_REJECTED : getErrorMessage(err));
         }
         setBulkStatus("error");
+        vibrate([20, 40, 20]);
       }
     },
     [address, isCorrectNetwork, publicClient, writeContractAsync, targetChainId],

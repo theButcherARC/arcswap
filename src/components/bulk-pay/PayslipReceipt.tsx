@@ -120,7 +120,7 @@ export default function PayslipReceipt({
                   {tokenSymbol}
                 </span>
               </p>
-              <p className="mt-2 text-[11px] text-[var(--fg-faint)]">
+              <p className="mt-2 text-[0.6875rem] text-[var(--fg-faint)]">
                 Total out, including the protocol fee
               </p>
             </div>
@@ -174,14 +174,14 @@ export default function PayslipReceipt({
           <div className="divide-y" style={{ borderColor: "var(--line)" }}>
             {summary.lines.map((l) => (
               <div key={l.row} className="flex items-center gap-3 py-2.5" style={{ borderColor: "var(--line)" }}>
-                <span className="w-7 shrink-0 font-mono text-[11px] text-[var(--fg-faint)]">
+                <span className="w-7 shrink-0 font-mono text-[0.6875rem] text-[var(--fg-faint)]">
                   {String(l.row).padStart(2, "0")}
                 </span>
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm text-[var(--fg)]" title={l.name || "Recipient"}>
                     {l.name || "Recipient"}
                   </p>
-                  <p className="font-mono text-[11px] text-[var(--fg-faint)]">
+                  <p className="font-mono text-[0.6875rem] text-[var(--fg-faint)]">
                     {shortAddress(l.address)}
                     {l.status === "mismatch" && l.observedAmount !== undefined
                       ? ` / chain shows ${fmt(l.observedAmount, decimals)}`
@@ -193,17 +193,17 @@ export default function PayslipReceipt({
                 </span>
                 {l.status === "matched" ? (
                   <span
-                    className="shrink-0 px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider"
+                    className="shrink-0 px-2 py-0.5 font-mono text-[0.625rem] font-semibold uppercase tracking-wider"
                     style={PASS_STYLE}
                   >
                     Pass
                   </span>
                 ) : l.status === "mismatch" ? (
-                  <span className="shrink-0 border border-amber-500/40 bg-amber-500/10 px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-amber-700">
+                  <span className="shrink-0 border border-amber-500/40 bg-amber-500/10 px-2 py-0.5 font-mono text-[0.625rem] font-semibold uppercase tracking-wider text-amber-700">
                     Check
                   </span>
                 ) : (
-                  <span className="shrink-0 border border-rose-500/40 bg-rose-500/10 px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-rose-700">
+                  <span className="shrink-0 border border-rose-500/40 bg-rose-500/10 px-2 py-0.5 font-mono text-[0.625rem] font-semibold uppercase tracking-wider text-rose-700">
                     Missing
                   </span>
                 )}
@@ -212,7 +212,7 @@ export default function PayslipReceipt({
                     href={`${explorerBase}/tx/${l.txHash}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="shrink-0 font-mono text-[11px] text-[var(--accent)] hover:opacity-80"
+                    className="shrink-0 font-mono text-[0.6875rem] text-[var(--accent)] hover:opacity-80"
                   >
                     TX
                   </a>
@@ -259,7 +259,7 @@ export default function PayslipReceipt({
         >
           {copied ? "Receipt copied" : "Copy receipt"}
         </button>
-        <p className="mt-3 text-center text-[11px] text-[var(--fg-faint)]">
+        <p className="mt-3 text-center text-[0.6875rem] text-[var(--fg-faint)]">
           Settled on Arc through the VibeFlow BatchPay contract. Memos and
           amounts on this payslip are read from the chain, not typed in.
         </p>
