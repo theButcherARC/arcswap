@@ -6,6 +6,7 @@ import type { Address } from "viem";
 import { useAccount } from "wagmi";
 import { ConnectButton } from "@/components/wallet/ConnectButton";
 import { useBulkPay } from "@/hooks/useBulkPay";
+import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
 import { toChecksumAddress } from "@/utils/address";
 import { isValidAddress } from "@/utils/address";
@@ -334,12 +335,32 @@ export default function BulkPayForm() {
     });
   }, []);
 
-  const removeRecipient = useCallback((id: string) => {
-    setRecipients((prev) => {
-      if (prev.length <= 1) return prev;
-      return prev.filter((r) => r.id !== id);
-    });
-  }, []);
+  const removeRecipient = useCallback(
+    (id: string) => {
+      if (recipients.length <= 1) return;
+      const index = recipients.findIndex((r) => r.id === id);
+      if (index === -1) return;
+      const removed = recipients[index];
+      setRecipients(recipients.filter((r) => r.id !== id));
+      // Undo window: the row is restorable until the toast closes.
+      toast("Recipient removed", {
+        id: `undo-remove-${removed.id}`,
+        duration: 5000,
+        action: {
+          label: "Undo",
+          onClick: () => {
+            setRecipients((current) => {
+              if (current.some((r) => r.id === removed.id)) return current;
+              const next = [...current];
+              next.splice(Math.min(index, next.length), 0, removed);
+              return next;
+            });
+          },
+        },
+      });
+    },
+    [recipients],
+  );
 
   const handleNameChange = useCallback((id: string, value: string) => {
     setRecipients((prev) =>
@@ -647,7 +668,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
             </div>
 
             {/* Mode hint in plain words */}
-            <p className="px-6 -mt-3 mb-6 text-[11px] text-[var(--fg-faint)] leading-relaxed">
+            <p className="px-6 -mt-3 mb-6 text-[0.6875rem] text-[var(--fg-faint)] leading-relaxed">
               {inputMode === "percentage"
                 ? "Split mode: enter one total below, then give each person a percentage of it. The percentages must add up to 100%."
                 : "Amount mode: type the exact amount each person should receive."}
@@ -705,7 +726,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                         className="text-[var(--fg-faint)]"
                       />
                     </svg>
-                    <span className="text-[11px] text-[var(--fg-faint)]">
+                    <span className="text-[0.6875rem] text-[var(--fg-faint)]">
                       Protocol fee: {formatMoney(summaryData.fee)} USDC (0.2%)
                     </span>
                   </div>
@@ -715,7 +736,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
 
             {/* ===================== SECTION 5: RECIPIENTS ===================== */}
             <div className="mb-6">
-              <p className="px-4 mb-3 text-[11px] text-[var(--fg-faint)] leading-relaxed">
+              <p className="px-4 mb-3 text-[0.6875rem] text-[var(--fg-faint)] leading-relaxed">
                 Paste each person&apos;s wallet address (it starts with 0x).
                 If they have a VibeID, you can type their @handle instead and
                 the address fills in for you.
@@ -789,7 +810,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     (isSending ? "opacity-50 cursor-not-allowed" : "")
                   }
                 />
-                <p className="mt-1.5 text-[11px] text-[var(--fg-faint)]">
+                <p className="mt-1.5 text-[0.6875rem] text-[var(--fg-faint)]">
                   Stored onchain with your transaction
                   {memo.length > 0 && (
                     <span className="ml-2 text-[var(--fg-faint)]">{memo.length}/100</span>
@@ -877,7 +898,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
               </button>
               {inputMode === "percentage" ? (
                 <div className="mt-3 flex items-center justify-between rounded-lg border border-[var(--line)] bg-black/[0.03] px-4 py-2.5">
-                  <span className="text-[11px] text-[var(--fg-faint)]">
+                  <span className="text-[0.6875rem] text-[var(--fg-faint)]">
                     Total allocated (must equal 100%)
                   </span>
                   <span
@@ -936,7 +957,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                           <p className="text-sm text-[var(--fg)] truncate" title={r.name || "Recipient"}>
                             {r.name || "Recipient"}
                           </p>
-                          <p className="text-[11px] text-[var(--fg-faint)] font-mono">
+                          <p className="text-[0.6875rem] text-[var(--fg-faint)] font-mono">
                             {r.address
                               ? r.address.slice(0, 6) +
                                 "..." +
@@ -1097,7 +1118,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     <span className="mono-label block mb-1.5">
                       Valid Recipients
                     </span>
-                    <span className="block text-[10px] text-[var(--fg-faint)] mb-1">
+                    <span className="block text-[0.625rem] text-[var(--fg-faint)] mb-1">
                       Needs a valid address and an amount above $0
                     </span>
                     <span className="text-sm font-semibold text-[var(--fg)]">
@@ -1177,7 +1198,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
 
               {/* Error display */}
               {status === "error" && error ? (
-                <div className="rounded-lg border border-rose-500/20 bg-rose-500/[0.06] px-4 py-3.5">
+                <div role="alert" className="rounded-lg border border-rose-500/20 bg-rose-500/[0.06] px-4 py-3.5">
                   <div className="flex items-start gap-3">
                     <svg
                       className="mt-0.5 shrink-0"
@@ -1215,7 +1236,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
               ) : null}
 
               {/* Gas line */}
-              <div className="flex items-center gap-2 text-[11px] text-[var(--fg-faint)]">
+              <div className="flex items-center gap-2 text-[0.6875rem] text-[var(--fg-faint)]">
                 <span>
                   Gas{" "}
                   <span key={gasUsd?.toFixed(4)} className="font-medium text-[var(--data)] animate-value-flash">
@@ -1249,6 +1270,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
               <button
                 type="submit"
                 disabled={!canSend}
+                aria-live="polite"
                 className={
                   "w-full rounded-full px-6 py-3.5 text-sm font-semibold pressable " +
                   (canSend
@@ -1350,7 +1372,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                   <span className="mono-label !text-[var(--accent)]">{step}</span>
                   <div>
                     <p className="text-sm font-medium text-[var(--fg)]">{title}</p>
-                    <p className="mt-0.5 text-[11px] leading-relaxed text-[var(--fg-faint)]">{body}</p>
+                    <p className="mt-0.5 text-[0.6875rem] leading-relaxed text-[var(--fg-faint)]">{body}</p>
                   </div>
                 </div>
               ))}
