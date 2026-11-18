@@ -900,7 +900,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
             {showReview ? (
               <div
                 ref={reviewRef}
-                className="mt-10 rounded-[var(--radius)] border border-[rgba(39,117,202,0.3)] bg-[var(--bg-raised)] p-5"
+                className="mt-10 animate-pop-in rounded-[var(--radius)] border border-[rgba(39,117,202,0.3)] bg-[var(--bg-raised)] p-5"
               >
                 <span className="mono-label block mb-2">
                   SYS.REVIEW / BEFORE YOU SIGN
