@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { parseUnits } from "viem";
 import type { Address } from "viem";
 import { useAccount } from "wagmi";
@@ -47,13 +47,20 @@ function AgentPreview({
   result,
   onApply,
   onDiscard,
+  leaving = false,
 }: {
   result: ParsedBulkPay;
   onApply: () => void;
   onDiscard: () => void;
+  leaving?: boolean;
 }) {
   return (
-    <div className="mt-4 animate-pop-in rounded-[var(--radius)] border border-[rgba(39,117,202,0.25)] bg-[rgba(39,117,202,0.05)] p-5">
+    <div
+      className={
+        "mt-4 rounded-[var(--radius)] border border-[rgba(39,117,202,0.25)] bg-[rgba(39,117,202,0.05)] p-5 " +
+        (leaving ? "animate-pop-out" : "animate-pop-in")
+      }
+    >
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2.5">
           <div className="h-2 w-2 rounded-full bg-[var(--accent)] animate-pulse" />
@@ -66,6 +73,7 @@ function AgentPreview({
           <button
             type="button"
             onClick={onDiscard}
+            disabled={leaving}
             className="inline-flex min-h-11 items-center rounded-full border border-[var(--line)] bg-black/[0.03] px-4 py-1.5 text-xs font-medium text-[var(--fg-muted)] pressable hover:border-[var(--line-strong)] hover:text-[var(--fg)]"
           >
             Discard
@@ -73,6 +81,7 @@ function AgentPreview({
           <button
             type="button"
             onClick={onApply}
+            disabled={leaving}
             className="inline-flex min-h-11 items-center rounded-full bg-[var(--accent)] px-5 py-1.5 text-xs font-semibold text-white pressable hover:opacity-90"
           >
             Apply All
@@ -174,6 +183,8 @@ export default function AIPayForm() {
   const [agentLoading, setAgentLoading] = useState(false);
   const [agentError, setAgentError] = useState("");
   const [agentResult, setAgentResult] = useState<ParsedBulkPay | null>(null);
+  const [previewLeaving, setPreviewLeaving] = useState(false);
+  const previewExitTimer = useRef<number | null>(null);
   const [recipients, setRecipients] = useState<Recipient[]>([]);
   const [memo, setMemo] = useState("");
   const [nameAsMemo, setNameAsMemo] = useState(true);
@@ -188,10 +199,39 @@ export default function AIPayForm() {
   const { isConnected } = useAccount();
 
   /* ---- Agent handlers ---- */
+  // The preview leaves along the path it entered (drawer pattern):
+  // Apply and Discard run their state changes immediately, but the
+  // preview itself stays mounted through the pop-out and only then
+  // unmounts. A fresh parse cancels a pending exit.
+  const startPreviewExit = useCallback(() => {
+    setPreviewLeaving(true);
+    if (previewExitTimer.current !== null) {
+      window.clearTimeout(previewExitTimer.current);
+    }
+    previewExitTimer.current = window.setTimeout(() => {
+      previewExitTimer.current = null;
+      setAgentResult(null);
+      setPreviewLeaving(false);
+    }, 200);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (previewExitTimer.current !== null) {
+        window.clearTimeout(previewExitTimer.current);
+      }
+    };
+  }, []);
+
   const handleParseAgent = useCallback(async () => {
     if (!agentInput.trim() || agentLoading) return;
     setAgentLoading(true);
     setAgentError("");
+    if (previewExitTimer.current !== null) {
+      window.clearTimeout(previewExitTimer.current);
+      previewExitTimer.current = null;
+    }
+    setPreviewLeaving(false);
     setAgentResult(null);
     try {
       const result = await parsePaymentInstruction(agentInput.trim());
@@ -243,14 +283,14 @@ export default function AIPayForm() {
     if (parsedBatchMemo) {
       setMemo(parsedBatchMemo);
     }
-    setAgentResult(null);
+    startPreviewExit();
     setAgentInput("");
     setShowReview(false);
-  }, [agentResult]);
+  }, [agentResult, startPreviewExit]);
 
   const handleDiscardAgent = useCallback(() => {
-    setAgentResult(null);
-  }, []);
+    startPreviewExit();
+  }, [startPreviewExit]);
 
   const handleExampleClick = useCallback((prompt: string) => {
     setAgentInput(prompt);
@@ -553,7 +593,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                         type="button"
                         onClick={() => handleExampleClick(prompt)}
                         disabled={agentLoading}
-                        className="inline-flex min-h-11 max-w-[260px] items-center truncate rounded-full border border-[var(--line)] bg-black/[0.03] px-3.5 py-1.5 text-[11px] text-[var(--fg-faint)] transition-colors duration-200 hover:border-[var(--line-strong)] hover:bg-black/[0.04] hover:text-[var(--fg)] pressable disabled:cursor-not-allowed disabled:opacity-40"
+                        className="inline-flex min-h-11 max-w-[260px] items-center truncate rounded-full border border-[var(--line)] bg-black/[0.03] px-3.5 py-1.5 text-[11px] text-[var(--fg-faint)] hover:border-[var(--line-strong)] hover:bg-black/[0.04] hover:text-[var(--fg)] pressable disabled:cursor-not-allowed disabled:opacity-40"
                       >
                         {prompt.slice(0, 50)}
                         {prompt.length > 50 ? "..." : ""}
@@ -668,6 +708,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                       result={agentResult}
                       onApply={handleApplyAgent}
                       onDiscard={handleDiscardAgent}
+                      leaving={previewLeaving}
                     />
                   ) : null}
               </div>
@@ -802,7 +843,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     Review batch
                   </button>
                 ) : (
-                  <div className="mt-5 border-t border-[var(--line)] pt-5">
+                  <div className="mt-5 animate-pop-in border-t border-[var(--line)] pt-5">
                     <p className="mono-label mb-3">Review before you sign</p>
                     {memo.trim() ? (
                       <p className="mb-3 text-xs text-[var(--fg-muted)]">
