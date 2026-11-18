@@ -46,7 +46,7 @@ export function HeaderVolume() {
       <span className="font-mono text-sm font-semibold tabular-nums text-[var(--fg)]">
         {moved === null ? "..." : fmt(moved)}
       </span>
-      <span className="hidden text-[11px] font-medium text-[var(--fg-faint)] sm:inline">
+      <span className="hidden text-[0.6875rem] font-medium text-[var(--fg-faint)] sm:inline">
         USDC · last ~10 min
       </span>
     </div>

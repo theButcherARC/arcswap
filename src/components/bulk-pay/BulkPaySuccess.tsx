@@ -59,20 +59,20 @@ export default function BulkPaySuccess({ txHash, onReset, tokenSymbol = "USDC", 
           <div className="mb-2 flex justify-center">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-500/10 px-4 py-1.5 shadow-[0_0_14px_rgba(52,211,153,0.25)]">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-xs font-semibold text-emerald-300 tracking-wide">
+              <span className="text-xs font-semibold text-[#0E7A5F] tracking-wide">
                 Settled in {"<"}1s
               </span>
             </span>
           </div>
 
           {/* Comparison text */}
-          <p className="text-[11px] text-[var(--fg-faint)] mb-8">
+          <p className="text-[0.6875rem] text-[var(--fg-faint)] mb-8">
             {"Ethereum L1: ~13 min\u2002|\u2002L2s: up to 7 days"}
           </p>
 
           {/* Transaction hash */}
           <div className="border border-[var(--line)] bg-black/[0.03] p-4 mb-6">
-            <span className="block text-[10px] font-medium text-[var(--fg-faint)] uppercase tracking-wider mb-2">
+            <span className="block text-[0.625rem] font-medium text-[var(--fg-faint)] uppercase tracking-wider mb-2">
               Transaction Hash
             </span>
             <a
@@ -88,13 +88,13 @@ export default function BulkPaySuccess({ txHash, onReset, tokenSymbol = "USDC", 
           {/* Info rows */}
           <div className="grid grid-cols-2 gap-3 mb-8">
             <div className="border border-[var(--line)] bg-black/[0.03] p-3.5">
-              <span className="block text-[10px] text-[var(--fg-faint)] uppercase tracking-wider mb-1">
+              <span className="block text-[0.625rem] text-[var(--fg-faint)] uppercase tracking-wider mb-1">
                 Network
               </span>
               <span className="text-sm font-medium text-[var(--fg-muted)]">Arc</span>
             </div>
             <div className="border border-[var(--line)] bg-black/[0.03] p-3.5">
-              <span className="block text-[10px] text-[var(--fg-faint)] uppercase tracking-wider mb-1">
+              <span className="block text-[0.625rem] text-[var(--fg-faint)] uppercase tracking-wider mb-1">
                 Asset
               </span>
               <span className="text-sm font-medium text-[var(--fg-muted)]">{tokenSymbol}</span>

@@ -13,7 +13,7 @@ export function StudioBadge() {
           "color-mix(in srgb, var(--accent) 10%, var(--bg-raised))",
       }}
     >
-      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[var(--accent)] text-[11px] font-bold text-white">
+      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[var(--accent)] text-[0.6875rem] font-bold text-white">
         A
       </span>
       <span className="mono-label !text-[var(--fg)]">Built with Arc Studio</span>
