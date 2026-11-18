@@ -7,6 +7,7 @@ import { ConnectButton } from "@/components/wallet/ConnectButton";
 import { NetworkSwitcher } from "@/components/wallet/NetworkSwitcher";
 import { LogoMark } from "@/components/brand/Logo";
 import { StudioBadge } from "@/components/brand/StudioBadge";
+import { Toaster } from "sonner";
 import { ROUTES } from "@/constants/routes";
 
 type NavItem = {
@@ -344,6 +345,24 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <div className="lg:pl-60">{children}</div>
 
       <StudioBadge />
+
+      {/* Toasts: undo windows for destructive actions only (row remove,
+          scheduled cancel). Top-center clears the StudioBadge and the
+          drawer; light theme pinned (never "system") and richColors off
+          so toasts stay inside the locked design tokens. */}
+      <Toaster
+        position="top-center"
+        theme="light"
+        richColors={false}
+        toastOptions={{
+          classNames: {
+            toast:
+              "!bg-[var(--bg-raised)] !border-[var(--line)] !text-[var(--fg)] !shadow-none",
+            description: "!text-[var(--fg-muted)]",
+            actionButton: "!bg-[var(--accent)] !text-white",
+          },
+        }}
+      />
     </div>
   );
 }

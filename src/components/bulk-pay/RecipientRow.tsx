@@ -134,7 +134,7 @@ export default function RecipientRow({
       <div className="flex flex-wrap items-start gap-3">
         {/* Row number badge: a pill, so 4-digit row numbers (1000) fit. */}
         <div className="flex h-7 min-w-7 shrink-0 items-center justify-center rounded-full bg-[var(--accent-soft)] px-1.5 mt-3">
-          <span className="text-[11px] font-bold text-[var(--accent)]">
+          <span className="text-[0.6875rem] font-bold text-[var(--accent)]">
             {rowNumber}
           </span>
         </div>
@@ -209,13 +209,13 @@ export default function RecipientRow({
           </div>
           {/* Handle resolution feedback */}
           {handleState === 'resolving' && (
-            <p className="mt-1.5 text-[11px] text-[var(--fg-faint)] animate-pulse">Resolving handle...</p>
+            <p className="mt-1.5 text-[0.6875rem] text-[var(--fg-faint)] animate-pulse">Resolving handle...</p>
           )}
           {handleState === 'resolved' && (
-            <p className="mt-1.5 text-[11px] text-emerald-600 font-mono">{handleText}</p>
+            <p className="mt-1.5 text-[0.6875rem] text-emerald-600 font-mono">{handleText}</p>
           )}
           {handleState === 'not_found' && (
-            <p className="mt-1.5 text-[11px] text-amber-600">
+            <p className="mt-1.5 text-[0.6875rem] text-amber-600">
               {handleText} &mdash;{' '}
               <button
                 type="button"
@@ -230,7 +230,7 @@ export default function RecipientRow({
             </p>
           )}
           {handleState === 'error' && (
-            <p className="mt-1.5 text-[11px] text-rose-600">{handleText}</p>
+            <p className="mt-1.5 text-[0.6875rem] text-rose-600">{handleText}</p>
           )}
         </div>
 
@@ -264,7 +264,7 @@ export default function RecipientRow({
           </div>
           {/* Cross-calculation hint */}
           {(percentageHint || dollarHint) && (
-            <p className="mt-1.5 text-[11px] text-[var(--fg-faint)] text-right font-mono">
+            <p className="mt-1.5 text-[0.6875rem] text-[var(--fg-faint)] text-right font-mono">
               {inputMode === "amount"
                 ? "= " + percentageHint
                 : "= " + dollarHint}
