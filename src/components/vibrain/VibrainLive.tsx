@@ -413,7 +413,7 @@ function FreezePanel() {
               key={c}
               onClick={() => setChain(c)}
               className={
-                "inline-flex min-h-[44px] items-center rounded-full px-4 text-xs font-semibold transition-colors " +
+                "inline-flex min-h-[44px] items-center rounded-full px-4 text-xs font-semibold pressable " +
                 (chain === c
                   ? "bg-[var(--accent)] text-white"
                   : "border border-[var(--line)] text-[var(--fg-muted)] hover:border-[var(--accent)] hover:text-[var(--fg)]")
@@ -435,7 +435,7 @@ function FreezePanel() {
           <button
             onClick={runCheck}
             disabled={checking}
-            className="min-h-[44px] shrink-0 rounded-full bg-[var(--accent)] px-5 text-sm font-semibold text-white disabled:opacity-50"
+            className="min-h-[44px] shrink-0 rounded-full bg-[var(--accent)] px-5 text-sm font-semibold text-white pressable disabled:opacity-50"
           >
             {checking ? "Checking..." : "Check"}
           </button>
