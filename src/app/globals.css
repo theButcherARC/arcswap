@@ -38,6 +38,7 @@
     background-color: var(--bg);
     color: var(--fg);
     font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+    font-optical-sizing: auto;
   }
 
   input[type="number"]::-webkit-inner-spin-button,
@@ -55,18 +56,6 @@
    Brutalist Grid Utilities
    ============================================ */
 
-/* Exposed vertical grid lines backdrop */
-.grid-lines {
-  background-image: linear-gradient(to right, var(--line) 1px, transparent 1px);
-  background-size: calc(100% / 6) 100%;
-}
-
-@media (min-width: 768px) {
-  .grid-lines {
-    background-size: calc(100% / 12) 100%;
-  }
-}
-
 /* Hairline-ruled glass panel — the core surface */
 .glass-panel {
   background: var(--glass);
@@ -74,17 +63,6 @@
   border-radius: var(--radius);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-}
-
-.glass-panel-strong {
-  background: var(--glass-strong);
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.7),
-    0 24px 48px rgba(11, 13, 22, 0.1);
 }
 
 /* Mono micro-label — FIG/SYS style annotations */
@@ -124,41 +102,6 @@
   }
 }
 
-/* Depth glow for spatial layering */
-.depth-glow {
-  box-shadow:
-    0 0 0 1px var(--line),
-    0 16px 40px rgba(11, 13, 22, 0.12),
-    0 0 80px var(--accent-soft);
-}
-
-/* ============================================
-   Legacy glass card (kept for existing components)
-   ============================================ */
-@keyframes float1 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(100px, -50px) scale(1.1); }
-  66% { transform: translate(-50px, 50px) scale(0.9); }
-}
-@keyframes float2 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(-80px, 60px) scale(0.9); }
-  66% { transform: translate(60px, -40px) scale(1.1); }
-}
-@keyframes float3 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(50px, 80px) scale(1.1); }
-  66% { transform: translate(-70px, -30px) scale(0.95); }
-}
-.orb-1 {
-  animation: float1 15s ease-in-out infinite;
-}
-.orb-2 {
-  animation: float2 18s ease-in-out infinite;
-}
-.orb-3 {
-  animation: float3 20s ease-in-out infinite;
-}
 /* ============================================
    VibeFlow Landing Page - CSS Animations
    ============================================ */
@@ -177,154 +120,12 @@
   }
 }
 
-/* --- Fade In Down (for nav) --- */
-@keyframes fade-in-down {
-  0% {
-    opacity: 0;
-    transform: translateY(-16px);
-    filter: blur(4px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-    filter: blur(0px);
-  }
-}
-
-/* --- Fade In --- */
-@keyframes fade-in {
-  0% {
-    opacity: 0;
-    filter: blur(4px);
-  }
-  100% {
-    opacity: 1;
-    filter: blur(0px);
-  }
-}
-
-/* --- Scale In --- */
-@keyframes scale-in {
-  0% {
-    opacity: 0;
-    transform: scale(0.95);
-    filter: blur(4px);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-    filter: blur(0px);
-  }
-}
-
-/* --- Gradient X Shift (for animated gradient text) --- */
-@keyframes gradient-x {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-/* --- Pulse Glow --- */
-@keyframes pulse-glow {
-  0%,
-  100% {
-    box-shadow: 0 0 20px rgba(39, 117, 202, 0.15),
-      0 0 60px rgba(39, 117, 202, 0.05);
-  }
-  50% {
-    box-shadow: 0 0 30px rgba(39, 117, 202, 0.25),
-      0 0 80px rgba(39, 117, 202, 0.1);
-  }
-}
-
-/* --- Shimmer (for buttons and cards) --- */
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
-}
-
-/* --- Float --- */
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
-}
-
-/* --- Subtle Rotate --- */
-@keyframes subtle-rotate {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-/* --- Border Glow Pulse --- */
-@keyframes border-glow-pulse {
-  0%,
-  100% {
-    border-color: rgba(39, 117, 202, 0.15);
-  }
-  50% {
-    border-color: rgba(39, 117, 202, 0.35);
-  }
-}
-
 /* ============================================
    Animation Utility Classes
    ============================================ */
 
 .animate-fade-in-up {
   animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.animate-fade-in-down {
-  animation: fade-in-down 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.animate-fade-in {
-  animation: fade-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.animate-scale-in {
-  animation: scale-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.animate-gradient-x {
-  background-size: 200% 200%;
-  animation: gradient-x 6s ease infinite;
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 3s ease-in-out infinite;
-}
-
-.animate-shimmer {
-  background-size: 200% 100%;
-  animation: shimmer 3s linear infinite;
-}
-
-.animate-float {
-  animation: float 4s ease-in-out infinite;
-}
-
-.animate-border-glow {
-  animation: border-glow-pulse 3s ease-in-out infinite;
 }
 
 /* ============================================
@@ -380,28 +181,6 @@
 }
 
 /* ============================================
-   Scroll-driven Animation Fallbacks
-   (for browsers without animation-timeline)
-   ============================================ */
-
-/* Sections below the fold use longer durations
-   and are triggered by their position in the
-   animation-delay chain for a cascading effect */
-
-@keyframes fade-in-up-slow {
-  0% {
-    opacity: 0;
-    transform: translateY(32px);
-    filter: blur(6px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-    filter: blur(0px);
-  }
-}
-
-/* ============================================
    Custom Scrollbar (light theme)
    ============================================ */
 
@@ -448,15 +227,6 @@ button:focus-visible {
   outline: 2px solid rgba(39, 117, 202, 0.6);
   outline-offset: 2px;
   border-radius: 8px;
-}
-
-/* ============================================
-   Py-4.5 Utility (Tailwind extension fallback)
-   ============================================ */
-
-.py-4\.5 {
-  padding-top: 1.125rem;
-  padding-bottom: 1.125rem;
 }
 
 /* ============================================
@@ -509,13 +279,6 @@ button:focus-visible {
   animation: add-btn-pulse 2.5s ease-in-out infinite;
 }
 
-/* AI card animated gradient border */
-@keyframes gradient-border-flow {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
 /* Number count-up flash */
 @keyframes value-flash {
   0% { color: rgba(110, 168, 236, 0.9); }
@@ -526,46 +289,9 @@ button:focus-visible {
   animation: value-flash 0.5s ease-out forwards;
 }
 
-/* Token pill slide indicator */
-@keyframes pill-slide-in {
-  0% { opacity: 0; transform: scale(0.92); }
-  100% { opacity: 1; transform: scale(1); }
-}
-
-.animate-pill-active {
-  animation: pill-slide-in 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
 /* ============================================
    Premium Polish Utilities
    ============================================ */
-
-/* Glass card - consistent premium surface */
-.glass-card {
-  background: var(--glass);
-  border: 1px solid var(--line);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.05),
-    0 8px 32px rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-}
-
-/* Hover lift - satisfying card elevation */
-.hover-lift {
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .hover-lift:hover {
-    transform: translateY(-3px);
-    border-color: rgba(39, 117, 202, 0.25);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.06),
-      0 12px 40px rgba(0, 0, 0, 0.35),
-      0 0 24px rgba(39, 117, 202, 0.12);
-  }
-}
 
 /* Skeleton shimmer for loading states */
 @keyframes skeleton-shimmer {
@@ -630,18 +356,6 @@ select:focus-visible {
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.8),
     0 24px 48px rgba(11, 13, 22, 0.1);
-}
-
-@keyframes hero-float {
-  from { transform: translateY(0) scale(1.06); }
-  to { transform: translateY(-18px) scale(1.06); }
-}
-.hero-visual {
-  animation: hero-float 7s ease-in-out infinite alternate;
-  will-change: transform;
-}
-@media (prefers-reduced-motion: reduce) {
-  .hero-visual { animation: none; }
 }
 
 /* App-wide polish (design skills pass): browser surfaces themed from the palette */

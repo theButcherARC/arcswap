@@ -7,14 +7,12 @@ const config: Config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-  safelist: [
-    {
-      pattern: /^(bg|text|border|ring|from|to)-(arc|surface|gold)-(50|100|200|300|400|500|600|700|800|900|950|0)$/,
-    },
-  ],
   theme: {
     extend: {
       colors: {
+        // Legacy palettes from the superseded dark theme. Still referenced
+        // by live components, so they stay until those migrate to tokens:
+        // arc-500 (Spinner border), surface-800 (NetworkGuard text).
         // Premium deep-indigo / midnight palette
         arc: {
           50:  "#f0f0ff",
@@ -28,17 +26,6 @@ const config: Config = {
           800: "#291f86",
           900: "#1b1559",
           950: "#100d38",
-        },
-        // Warm gold accent for highlights / success states
-        gold: {
-          50:  "#fdf8ef",
-          100: "#faecd1",
-          200: "#f3d79e",
-          300: "#eabd66",
-          400: "#dfa23c",
-          500: "#c9882a", // accent
-          600: "#a66b21",
-          700: "#7d501c",
         },
         // Neutral surface palette — softer, warmer dark
         surface: {
@@ -60,13 +47,6 @@ const config: Config = {
       borderRadius: {
         "2xl": "1rem",
         "3xl": "1.5rem",
-      },
-      boxShadow: {
-        premium: "0 1px 2px rgba(16,13,56,0.04), 0 8px 24px -4px rgba(16,13,56,0.10)",
-        "premium-lg": "0 4px 12px rgba(16,13,56,0.06), 0 16px 40px -8px rgba(16,13,56,0.14)",
-      },
-      backgroundImage: {
-        "premium-radial": "radial-gradient(120% 120% at 50% -10%, #f0f0ff 0%, #f7f7fb 55%, #ffffff 100%)",
       },
     },
   },
