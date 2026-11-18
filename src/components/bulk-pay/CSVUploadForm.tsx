@@ -9,10 +9,11 @@ import BulkPaySuccess from "@/components/bulk-pay/BulkPaySuccess";
 import ReviewFlags from "@/components/bulk-pay/ReviewFlags";
 import ExactTotalCard from "@/components/bulk-pay/ExactTotalCard";
 import { useBulkPay } from "@/hooks/useBulkPay";
-import { TOKENS } from "@/constants/tokens";
+import { TOKENS, BULK_PAY_MAX_RECIPIENTS } from "@/constants/tokens";
 import { BATCHPAY_CHUNK_SIZE } from "@/services/bulkPayService";
 import { loadPaidRecipientAddresses } from "@/lib/paidHistory";
-import type { ReviewLine } from "@/lib/bulkPayReview";
+import { capMemo, type ReviewLine } from "@/lib/bulkPayReview";
+import { formatMoney } from "@/lib/money";
 import { useArcNetwork } from "@/hooks/useArcNetwork";
 import { useTokenBalance } from "@/hooks/useTokenBalance";
 
@@ -33,6 +34,9 @@ interface ParseError {
 type TokenSymbol = "USDC" | "EURC";
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
+
+/** Upload size guard: parsing happens on the main thread. */
+const MAX_CSV_FILE_BYTES = 2 * 1024 * 1024;
 
 function validateRow(
   raw: string[],
@@ -73,6 +77,8 @@ function validateRow(
 // Shared row collection for both upload paths: validates each row, then
 // drops later rows that repeat an address already used (case-insensitive),
 // so a copy-paste slip can never pay the same person twice in one batch.
+// Valid rows are capped at the published batch limit; anything beyond it
+// is reported once instead of being silently loaded.
 function collectRows(data: string[][]): {
   validRows: ParsedRow[];
   errors: ParseError[];
@@ -80,6 +86,7 @@ function collectRows(data: string[][]): {
   const validRows: ParsedRow[] = [];
   const errors: ParseError[] = [];
   const seen = new Map<string, number>();
+  let capReported = false;
   data.forEach((raw, i) => {
     const result = validateRow(raw, i + 1);
     if (!result.ok) {
@@ -96,6 +103,16 @@ function collectRows(data: string[][]): {
       return;
     }
     seen.set(key, i + 1);
+    if (validRows.length >= BULK_PAY_MAX_RECIPIENTS) {
+      if (!capReported) {
+        capReported = true;
+        errors.push({
+          row: i + 1,
+          message: `Only the first ${BULK_PAY_MAX_RECIPIENTS.toLocaleString()} recipients were loaded. Split the file and send the rest in a second batch.`,
+        });
+      }
+      return;
+    }
     validRows.push(result.row);
   });
   return { validRows, errors };
@@ -158,6 +175,13 @@ export default function CSVUploadForm() {
       setParseErrors([{ row: 0, message: "Only .csv files are accepted." }]);
       return;
     }
+    // PapaParse runs on the main thread; a huge file would freeze the tab.
+    if (file.size > MAX_CSV_FILE_BYTES) {
+      setParseErrors([
+        { row: 0, message: "That file is too large. Keep the CSV under 2 MB." },
+      ]);
+      return;
+    }
     setFileName(file.name);
     setRows([]);
     setParseErrors([]);
@@ -169,7 +193,11 @@ export default function CSVUploadForm() {
         const { validRows, errors } = collectRows(results.data);
 
         setRows(validRows);
-        setParseErrors(errors);
+        setParseErrors(
+          validRows.length === 0 && errors.length === 0
+            ? [{ row: 0, message: "No rows found in this file." }]
+            : errors,
+        );
       },
     });
   }, []);
@@ -200,7 +228,11 @@ export default function CSVUploadForm() {
         const { validRows, errors } = collectRows(results.data);
 
         setRows(validRows);
-        setParseErrors(errors);
+        setParseErrors(
+          validRows.length === 0 && errors.length === 0
+            ? [{ row: 0, message: "No rows found in the pasted CSV." }]
+            : errors,
+        );
       },
     });
   };
@@ -227,10 +259,11 @@ export default function CSVUploadForm() {
       amount: parseUnits(r.amount, decimals),
       name: r.name,
       // The placeholder name from 2-column files is not a real name;
-      // never write it onchain as a memo.
+      // never write it onchain as a memo. Real names are capped at the
+      // 100-char memo limit here, like every other send path.
       memo:
         nameAsMemo && r.name && r.name !== "Recipient"
-          ? r.name
+          ? capMemo(r.name) || undefined
           : undefined,
     }));
 
@@ -417,8 +450,8 @@ export default function CSVUploadForm() {
 
                   {/* Label */}
                   {fileName ? (
-                    <div className="text-center">
-                      <p className="text-sm font-semibold text-[var(--data)]">{fileName}</p>
+                    <div className="min-w-0 max-w-full text-center">
+                      <p className="truncate text-sm font-semibold text-[var(--data)]" title={fileName}>{fileName}</p>
                       <p className="text-xs text-[var(--fg-faint)] mt-1">
                         {rows.length} valid recipient{rows.length !== 1 ? "s" : ""} loaded
                         {parseErrors.length > 0 && `, ${parseErrors.length} row${parseErrors.length !== 1 ? "s" : ""} skipped`}
@@ -516,7 +549,7 @@ export default function CSVUploadForm() {
                 </div>
                 <span className="text-xs text-[var(--fg-faint)]">
                   Total: <span className="text-[var(--fg-muted)] font-medium">
-                    {selectedSymbol === "USDC" ? "$" : "€"}{totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {selectedSymbol}
+                    {selectedSymbol === "USDC" ? "$" : "€"}{formatMoney(totalAmount)} {selectedSymbol}
                   </span>
                 </span>
               </div>
@@ -541,7 +574,7 @@ export default function CSVUploadForm() {
                         {row.address.slice(0, 6)}…{row.address.slice(-4)}
                       </div>
                       <div className="px-4 py-3 text-xs font-semibold text-[var(--data)] text-right whitespace-nowrap">
-                        {selectedSymbol === "USDC" ? "$" : "€"}{Number(row.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        {selectedSymbol === "USDC" ? "$" : "€"}{formatMoney(Number(row.amount))}
                       </div>
                     </div>
                   ))}
@@ -633,7 +666,7 @@ export default function CSVUploadForm() {
                 <span className="text-[var(--fg-faint)] text-[11px]">|</span>
                 <span className="text-[11px] text-[var(--fg-faint)] whitespace-nowrap">
                   Total: <span className="text-[var(--fg-muted)] font-medium">
-                    {selectedSymbol === "USDC" ? "$" : "€"}{totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {selectedSymbol}
+                    {selectedSymbol === "USDC" ? "$" : "€"}{formatMoney(totalAmount)} {selectedSymbol}
                   </span>
                 </span>
                 {parseErrors.length > 0 && (
