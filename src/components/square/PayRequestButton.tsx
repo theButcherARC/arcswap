@@ -99,7 +99,7 @@ export function PayRequestButton({
       <button
         onClick={pay}
         disabled={isPending || confirming}
-        className="inline-flex min-h-[44px] items-center gap-2 rounded-full bg-[var(--accent)] px-5 text-xs font-semibold text-white transition-opacity hover:opacity-85 disabled:cursor-not-allowed disabled:opacity-40"
+        className="inline-flex min-h-[44px] items-center gap-2 rounded-full bg-[var(--accent)] px-5 text-xs font-semibold text-white pressable hover:opacity-85 disabled:cursor-not-allowed disabled:opacity-40"
       >
         <TokenCoin symbol="USDC" size={18} />
         {isPending

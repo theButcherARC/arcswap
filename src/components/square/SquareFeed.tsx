@@ -118,7 +118,7 @@ export function SquareFeed() {
               <button
                 onClick={publish}
                 disabled={busy || !draft.trim()}
-                className="rounded-full bg-[var(--accent)] px-5 py-3 text-sm font-semibold text-white transition-opacity hover:opacity-85 disabled:cursor-not-allowed disabled:opacity-40"
+                className="rounded-full bg-[var(--accent)] px-5 py-3 text-sm font-semibold text-white pressable hover:opacity-85 disabled:cursor-not-allowed disabled:opacity-40"
               >
                 {busy ? "Signing..." : "Post"}
               </button>

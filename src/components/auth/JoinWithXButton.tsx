@@ -37,7 +37,7 @@ export function JoinWithXButton({ variant = "header" }: { variant?: "header" | "
     return (
       <Link
         href={ROUTES.SOCIAL_PROFILE}
-        className={`items-center justify-center gap-2 border border-[var(--line)] bg-white font-semibold text-[var(--fg)] transition-colors hover:border-[var(--accent)] ${sizing}`}
+        className={`items-center justify-center gap-2 border border-[var(--line)] bg-white font-semibold text-[var(--fg)] pressable hover:border-[var(--accent)] ${sizing}`}
       >
         {user.image ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -62,7 +62,7 @@ export function JoinWithXButton({ variant = "header" }: { variant?: "header" | "
         }
       }}
       disabled={busy || isPending}
-      className={`items-center justify-center gap-2.5 bg-[#0f1419] font-semibold text-white transition-opacity duration-200 hover:opacity-85 disabled:opacity-60 ${sizing}`}
+      className={`items-center justify-center gap-2.5 bg-[#0f1419] font-semibold text-white pressable hover:opacity-85 disabled:opacity-60 ${sizing}`}
     >
       <XGlyph className={variant === "hero" ? "h-5 w-5" : "h-4 w-4"} />
       {busy ? "Opening X..." : "Join with X"}

@@ -129,7 +129,7 @@ export function HomeTop() {
           <Link
             key={a.label}
             href={a.href}
-            className="rounded-full border border-[var(--line)] px-4 py-3 text-sm text-[var(--fg-muted)] transition-colors hover:border-[var(--accent)] hover:text-[var(--fg)]"
+            className="rounded-full border border-[var(--line)] px-4 py-3 text-sm text-[var(--fg-muted)] pressable hover:border-[var(--accent)] hover:text-[var(--fg)]"
           >
             {a.label}
           </Link>
