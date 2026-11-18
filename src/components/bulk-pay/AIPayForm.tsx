@@ -7,6 +7,7 @@ import { useAccount } from "wagmi";
 import { ConnectButton } from "@/components/wallet/ConnectButton";
 import { LogoTile } from "@/components/brand/Logo";
 import { useBulkPay } from "@/hooks/useBulkPay";
+import { toast } from "sonner";
 import { TOKENS, BULK_PAY_MAX_RECIPIENTS } from "@/constants/tokens";
 import { isValidAddress, toChecksumAddress } from "@/utils/address";
 import { parsePaymentInstruction } from "@/services/agentService";
@@ -95,13 +96,13 @@ function AgentPreview({
             className="rounded-lg bg-black/[0.03] border border-[var(--line)] px-4 py-3"
           >
             <div className="flex items-center gap-3">
-              <span className="text-[11px] text-[var(--fg-faint)] font-mono w-5 shrink-0">
+              <span className="text-[0.6875rem] text-[var(--fg-faint)] font-mono w-5 shrink-0">
                 {i + 1}.
               </span>
               <span className="text-sm text-[var(--fg-muted)] flex-1 truncate font-medium">
                 {r.name || "Unnamed"}
               </span>
-              <span className="text-[11px] text-[var(--fg-faint)] font-mono truncate max-w-[120px]">
+              <span className="text-[0.6875rem] text-[var(--fg-faint)] font-mono truncate max-w-[120px]">
                 {r.address
                   ? r.address.slice(0, 6) + "..." + r.address.slice(-4)
                   : "No address"}
@@ -111,7 +112,7 @@ function AgentPreview({
               </span>
             </div>
             {r.memo ? (
-              <p className="mt-1.5 pl-8 text-[11px] text-[var(--fg-faint)]">
+              <p className="mt-1.5 pl-8 text-[0.6875rem] text-[var(--fg-faint)]">
                 Memo:{" "}
                 <span className="text-[var(--fg-muted)]">{r.memo}</span>
               </p>
@@ -120,7 +121,7 @@ function AgentPreview({
         ))}
       </div>
       {result.batchMemo ? (
-        <p className="mt-3 text-[11px] text-[var(--fg-faint)]">
+        <p className="mt-3 text-[0.6875rem] text-[var(--fg-faint)]">
           Batch memo:{" "}
           <span className="font-medium text-[var(--fg-muted)]">
             {result.batchMemo}
@@ -306,12 +307,32 @@ export default function AIPayForm() {
     });
   }, []);
 
-  const removeRecipient = useCallback((id: string) => {
-    setRecipients((prev) => {
-      if (prev.length <= 1) return prev;
-      return prev.filter((r) => r.id !== id);
-    });
-  }, []);
+  const removeRecipient = useCallback(
+    (id: string) => {
+      if (recipients.length <= 1) return;
+      const index = recipients.findIndex((r) => r.id === id);
+      if (index === -1) return;
+      const removed = recipients[index];
+      setRecipients(recipients.filter((r) => r.id !== id));
+      // Undo window: the row is restorable until the toast closes.
+      toast("Recipient removed", {
+        id: `undo-remove-${removed.id}`,
+        duration: 5000,
+        action: {
+          label: "Undo",
+          onClick: () => {
+            setRecipients((current) => {
+              if (current.some((r) => r.id === removed.id)) return current;
+              const next = [...current];
+              next.splice(Math.min(index, next.length), 0, removed);
+              return next;
+            });
+          },
+        },
+      });
+    },
+    [recipients],
+  );
 
   const handleNameChange = useCallback((id: string, value: string) => {
     setRecipients((prev) =>
@@ -557,19 +578,19 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
 {/* How it works */}
                   <div className="mb-4 grid gap-2 sm:grid-cols-3">
                     <div className="rounded-lg border border-[var(--line)] bg-black/[0.03] px-3.5 py-3">
-                      <p className="font-mono text-[11px] font-semibold text-[var(--accent)]">01</p>
+                      <p className="font-mono text-[0.6875rem] font-semibold text-[var(--accent)]">01</p>
                       <p className="mt-1 text-xs font-semibold text-[var(--fg)]">Describe it</p>
-                      <p className="mt-0.5 text-[11px] leading-relaxed text-[var(--fg-faint)]">Write who gets paid and how much, in plain words.</p>
+                      <p className="mt-0.5 text-[0.6875rem] leading-relaxed text-[var(--fg-faint)]">Write who gets paid and how much, in plain words.</p>
                     </div>
                     <div className="rounded-lg border border-[var(--line)] bg-black/[0.03] px-3.5 py-3">
-                      <p className="font-mono text-[11px] font-semibold text-[var(--accent)]">02</p>
+                      <p className="font-mono text-[0.6875rem] font-semibold text-[var(--accent)]">02</p>
                       <p className="mt-1 text-xs font-semibold text-[var(--fg)]">The agent drafts it</p>
-                      <p className="mt-0.5 text-[11px] leading-relaxed text-[var(--fg-faint)]">It fills the batch below for you. Nothing is sent.</p>
+                      <p className="mt-0.5 text-[0.6875rem] leading-relaxed text-[var(--fg-faint)]">It fills the batch below for you. Nothing is sent.</p>
                     </div>
                     <div className="rounded-lg border border-[var(--line)] bg-black/[0.03] px-3.5 py-3">
-                      <p className="font-mono text-[11px] font-semibold text-[var(--accent)]">03</p>
+                      <p className="font-mono text-[0.6875rem] font-semibold text-[var(--accent)]">03</p>
                       <p className="mt-1 text-xs font-semibold text-[var(--fg)]">You review and sign</p>
-                      <p className="mt-0.5 text-[11px] leading-relaxed text-[var(--fg-faint)]">Check every row, then sign once in your wallet.</p>
+                      <p className="mt-0.5 text-[0.6875rem] leading-relaxed text-[var(--fg-faint)]">Check every row, then sign once in your wallet.</p>
                     </div>
                   </div>
                   <textarea
@@ -593,7 +614,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                         type="button"
                         onClick={() => handleExampleClick(prompt)}
                         disabled={agentLoading}
-                        className="inline-flex min-h-11 max-w-[260px] items-center truncate rounded-full border border-[var(--line)] bg-black/[0.03] px-3.5 py-1.5 text-[11px] text-[var(--fg-faint)] hover:border-[var(--line-strong)] hover:bg-black/[0.04] hover:text-[var(--fg)] pressable disabled:cursor-not-allowed disabled:opacity-40"
+                        className="inline-flex min-h-11 max-w-[260px] items-center truncate rounded-full border border-[var(--line)] bg-black/[0.03] px-3.5 py-1.5 text-[0.6875rem] text-[var(--fg-faint)] hover:border-[var(--line-strong)] hover:bg-black/[0.04] hover:text-[var(--fg)] pressable disabled:cursor-not-allowed disabled:opacity-40"
                       >
                         {prompt.slice(0, 50)}
                         {prompt.length > 50 ? "..." : ""}
@@ -601,7 +622,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     ))}
                   </div>
 
-                  <p className="mt-3 text-[11px] leading-relaxed text-[var(--fg-faint)]">
+                  <p className="mt-3 text-[0.6875rem] leading-relaxed text-[var(--fg-faint)]">
                     The AI drafts the batch from your text. Nothing is sent until you review and sign.
                   </p>
 
@@ -823,7 +844,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                 </div>
 
                 {status === "error" && error ? (
-                  <div className="mt-4 rounded-lg border border-rose-500/20 bg-rose-500/[0.06] px-4 py-3">
+                  <div role="alert" className="mt-4 rounded-lg border border-rose-500/20 bg-rose-500/[0.06] px-4 py-3">
                     <p className="text-xs text-rose-600/90 leading-relaxed">{error}</p>
                   </div>
                 ) : null}
@@ -874,13 +895,13 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                           className="rounded-lg bg-black/[0.03] border border-[var(--line)] px-4 py-3"
                         >
                           <div className="flex items-center gap-3">
-                            <span className="text-[11px] text-[var(--fg-faint)] font-mono w-5 shrink-0">
+                            <span className="text-[0.6875rem] text-[var(--fg-faint)] font-mono w-5 shrink-0">
                               {i + 1}.
                             </span>
                             <span className="text-sm text-[var(--fg-muted)] flex-1 truncate font-medium">
                               {r.name || "Unnamed"}
                             </span>
-                            <span className="text-[11px] text-[var(--fg-faint)] font-mono truncate max-w-[120px]">
+                            <span className="text-[0.6875rem] text-[var(--fg-faint)] font-mono truncate max-w-[120px]">
                               {typeof r.address === "string" && r.address.length > 10
                                 ? r.address.slice(0, 6) + "..." + r.address.slice(-4)
                                 : r.address}
@@ -915,6 +936,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                         type="button"
                         onClick={handleConfirm}
                         disabled={isSending || !canSend}
+                        aria-live="polite"
                         className={
                           "flex-1 rounded-full px-6 py-3 text-sm font-semibold pressable " +
                           (isSending || !canSend
