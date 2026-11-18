@@ -296,7 +296,7 @@ export default function CSVUploadForm() {
                   type="button"
                   onClick={() => setSelectedSymbol(sym)}
                   className={
-                    "flex min-h-11 items-center gap-1.5 rounded-full border px-4 py-1.5 text-xs font-semibold transition-colors duration-200 active:scale-95 " +
+                    "flex min-h-11 items-center gap-1.5 rounded-full border px-4 py-1.5 text-xs font-semibold pressable " +
                     (selectedSymbol === sym
                       ? "bg-[var(--accent-soft)] border-[var(--accent)]/40 text-[var(--accent)]"
                       : "bg-black/[0.03] border-[var(--line)] text-[var(--fg-faint)] hover:text-[var(--fg)] hover:border-[rgba(39,117,202,0.3)] hover:bg-[var(--accent-soft)]")
@@ -355,7 +355,7 @@ export default function CSVUploadForm() {
               type="button"
               onClick={() => setInputMode("upload")}
               className={
-                "inline-flex min-h-11 items-center rounded-t-2xl px-5 py-3 text-xs font-semibold transition-colors duration-200 border-b-2 " +
+                "inline-flex min-h-11 items-center rounded-t-2xl px-5 py-3 text-xs font-semibold pressable border-b-2 " +
                 (inputMode === "upload"
                   ? "border-[var(--accent)] text-[var(--fg)] bg-black/[0.03]"
                   : "border-transparent text-[var(--fg-faint)] hover:text-[var(--fg)]")
@@ -367,7 +367,7 @@ export default function CSVUploadForm() {
               type="button"
               onClick={() => setInputMode("paste")}
               className={
-                "inline-flex min-h-11 items-center rounded-t-2xl px-5 py-3 text-xs font-semibold transition-colors duration-200 border-b-2 " +
+                "inline-flex min-h-11 items-center rounded-t-2xl px-5 py-3 text-xs font-semibold pressable border-b-2 " +
                 (inputMode === "paste"
                   ? "border-[var(--accent)] text-[var(--fg)] bg-black/[0.03]"
                   : "border-transparent text-[var(--fg-faint)] hover:text-[var(--fg)]")
@@ -618,7 +618,7 @@ export default function CSVUploadForm() {
               <button
                 type="button"
                 onClick={switchToArcNetwork}
-                className="w-full mb-4 min-h-11 rounded-lg border border-amber-500/25 bg-amber-500/[0.06] px-4 py-3 text-xs font-semibold text-amber-600 hover:bg-amber-500/10 transition-colors duration-200"
+                className="w-full mb-4 min-h-11 rounded-lg border border-amber-500/25 bg-amber-500/[0.06] px-4 py-3 text-xs font-semibold text-amber-600 hover:bg-amber-500/10 pressable"
               >
                 Switch to Arc
               </button>
@@ -672,7 +672,7 @@ export default function CSVUploadForm() {
               onClick={handleSend}
               disabled={!canSend}
               className={
-                "w-full rounded-full px-6 py-3.5 text-sm font-semibold transition-colors duration-300 flex items-center justify-center gap-2.5 " +
+                "w-full rounded-full px-6 py-3.5 text-sm font-semibold pressable flex items-center justify-center gap-2.5 " +
                 (canSend
                   ? "animate-send-pulse bg-[var(--fg)] text-[var(--bg)]"
                   : "bg-black/[0.04] text-[var(--fg-faint)] cursor-not-allowed")
