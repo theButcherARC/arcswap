@@ -445,7 +445,7 @@ function FreezePanel() {
         </div>
         {checkErr && <p className="mt-2 text-sm text-rose-600">{checkErr}</p>}
         {check && (
-          <div className="mt-3 rounded-2xl border border-[var(--line)] bg-[var(--bg-raised)] p-4">
+          <div className="mt-3 animate-pop-in rounded-2xl border border-[var(--line)] bg-[var(--bg-raised)] p-4">
             <p
               className={
                 "text-sm font-semibold " +
