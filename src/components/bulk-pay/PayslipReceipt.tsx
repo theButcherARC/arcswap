@@ -2,9 +2,9 @@
 
 import React, { useMemo, useState } from "react";
 import { Playfair_Display } from "next/font/google";
-import { formatUnits } from "viem";
 import { DEFAULT_CHAIN } from "@/constants/chains";
 import { shortAddress } from "@/lib/bulkPayReview";
+import { formatTokenAmount } from "@/lib/money";
 import type { BatchResult } from "@/types/bulkPay";
 
 /**
@@ -28,11 +28,7 @@ interface PayslipReceiptProps {
 }
 
 function fmt(raw: bigint, decimals: number): string {
-  const n = Number(formatUnits(raw, decimals));
-  return n.toLocaleString(undefined, {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
+  return formatTokenAmount(raw, decimals);
 }
 
 const PASS_STYLE: React.CSSProperties = {
@@ -182,7 +178,7 @@ export default function PayslipReceipt({
                   {String(l.row).padStart(2, "0")}
                 </span>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm text-[var(--fg)]">
+                  <p className="truncate text-sm text-[var(--fg)]" title={l.name || "Recipient"}>
                     {l.name || "Recipient"}
                   </p>
                   <p className="font-mono text-[11px] text-[var(--fg-faint)]">
