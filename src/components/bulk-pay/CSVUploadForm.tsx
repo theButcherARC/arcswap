@@ -411,7 +411,7 @@ export default function CSVUploadForm() {
           </div>
 
           {/* ── Drop zone / Paste mode ─────────────────────────────────── */}
-          <div className="p-6 sm:p-8 border-b border-[var(--line)]">
+          <div key={inputMode} className="tab-panel p-6 sm:p-8 border-b border-[var(--line)]">
             {inputMode === "upload" ? (
               <>
                 {/* Upload file mode */}
@@ -537,7 +537,7 @@ export default function CSVUploadForm() {
 
           {/* ── Preview table ──────────────────────────────────────────── */}
           {rows.length > 0 && (
-            <div className="px-6 sm:px-8 py-6 border-b border-[var(--line)]">
+            <div className="animate-pop-in px-6 sm:px-8 py-6 border-b border-[var(--line)]">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
                   <h2 className="text-sm font-semibold text-[var(--fg)]">

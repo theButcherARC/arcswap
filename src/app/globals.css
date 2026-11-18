@@ -811,7 +811,7 @@ a, button, [role="button"] {
 
 /* ============================================
    Apple-style motion pass (motion only, inside DESIGN.md)
-   - Response: press feedback lands on pointer-down, 100ms ease-out
+   - Response: press feedback lands on pointer-down, 100ms strong ease-out
    - Springs: critically damped settle (damping 1.0, no overshoot),
      approximated by a cubic-bezier curve; DESIGN.md bans bounce
    - Performance: transform and opacity only, never `transition: all`
@@ -826,7 +826,7 @@ a, button, [role="button"] {
 .pressable {
   transition-property: transform, color, background-color, border-color, opacity;
   transition-duration: 100ms, 200ms, 200ms, 200ms, 200ms;
-  transition-timing-function: ease-out, ease, ease, ease, ease;
+  transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1), ease, ease, ease, ease;
 }
 .pressable:active:not(:disabled) {
   transform: scale(0.97);
@@ -855,7 +855,7 @@ a, button, [role="button"] {
   }
 }
 .animate-settle-in {
-  animation: settle-in 450ms var(--ease-settle) both;
+  animation: settle-in 300ms var(--ease-settle) both;
 }
 
 /* Small anchored surfaces (tip composer, AI parse preview, wallet
@@ -874,12 +874,51 @@ a, button, [role="button"] {
   animation: pop-in 250ms var(--ease-settle) both;
 }
 
+/* Exit for the pop-in surfaces: the same path, reversed (spatial
+   consistency). The surface stays mounted while this runs, on the
+   drawer pattern, and unmounts when it ends. */
+@keyframes pop-out {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(4px) scale(0.98);
+  }
+}
+.animate-pop-out {
+  animation: pop-out 180ms var(--ease-settle) both;
+}
+
+/* Tab panels (CSV upload / paste): an opacity-only crossfade. The
+   panel remounts on switch (keyed by mode), so @starting-style
+   supplies the from state; browsers without it show the panel
+   immediately, which is the pre-existing behavior. */
+.tab-panel {
+  transition: opacity 150ms ease;
+}
+@starting-style {
+  .tab-panel {
+    opacity: 0;
+  }
+}
+
 @keyframes settle-fade {
   from {
     opacity: 0;
   }
   to {
     opacity: 1;
+  }
+}
+
+@keyframes settle-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
   }
 }
 
@@ -894,6 +933,9 @@ a, button, [role="button"] {
   .animate-settle-in,
   .animate-pop-in {
     animation: settle-fade 150ms ease both !important;
+  }
+  .animate-pop-out {
+    animation: settle-fade-out 150ms ease both !important;
   }
   .drawer-scrim,
   .drawer-panel {
