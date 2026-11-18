@@ -14,6 +14,7 @@ import type { ParsedBulkPay } from "@/services/agentService";
 import { BATCHPAY_CHUNK_SIZE } from "@/services/bulkPayService";
 import { loadPaidRecipientAddresses } from "@/lib/paidHistory";
 import { effectiveMemo, type ReviewLine } from "@/lib/bulkPayReview";
+import { formatMoney } from "@/lib/money";
 import BulkPaySuccess from "./BulkPaySuccess";
 import RecipientRow from "./RecipientRow";
 import ReviewFlags from "./ReviewFlags";
@@ -753,7 +754,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                   <div>
                     <span className="mono-label block mb-1">Total</span>
                     <span className="text-sm font-semibold text-[var(--fg)]">
-                      {"$" + total.toFixed(2)}
+                      {"$" + formatMoney(total)}
                       <span className="text-[var(--fg-faint)] font-normal ml-1">
                         {selectedSymbol}
                       </span>
@@ -762,7 +763,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                   <div>
                     <span className="mono-label block mb-1">Protocol Fee</span>
                     <span className="text-sm font-semibold text-[var(--fg-muted)]">
-                      {"$" + fee.toFixed(2)}
+                      {"$" + formatMoney(fee)}
                       <span className="text-[var(--fg-faint)] font-normal ml-1">
                         (0.2%)
                       </span>
@@ -843,7 +844,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                                 : r.address}
                             </span>
                             <span className="text-sm text-[var(--accent)] font-semibold shrink-0">
-                              {"$" + (r.amount || 0).toFixed(2)}
+                              {"$" + formatMoney(r.amount || 0)}
                             </span>
                           </div>
                           <input
