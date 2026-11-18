@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { formatMoney } from "@/lib/money";
 
 interface ExactTotalCardProps {
   /** Recipients total in whole token units. */
@@ -35,7 +36,7 @@ export default function ExactTotalCard({
       <span className="mono-label block mb-1.5">You approve exactly</span>
       <p className="text-2xl font-bold tracking-tight text-[var(--fg)]">
         {currencySymbol}
-        {grandTotal.toFixed(2)}{" "}
+        {formatMoney(grandTotal)}{" "}
         <span className="text-sm font-semibold text-[var(--fg-muted)]">
           {symbol}
         </span>
@@ -43,9 +44,9 @@ export default function ExactTotalCard({
       <div className="mt-2.5 space-y-1 text-xs text-[var(--fg-muted)] leading-relaxed">
         <p>
           {currencySymbol}
-          {total.toFixed(2)} to {count} recipient{count !== 1 ? "s" : ""} +{" "}
+          {formatMoney(total)} to {count} recipient{count !== 1 ? "s" : ""} +{" "}
           {currencySymbol}
-          {fee.toFixed(2)} protocol fee (0.2%, minimum $0.01).
+          {formatMoney(fee)} protocol fee (0.2%, minimum {currencySymbol}0.01).
         </p>
         <p>
           Your wallet approval is set to exactly this amount for the
