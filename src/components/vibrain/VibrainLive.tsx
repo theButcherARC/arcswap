@@ -120,7 +120,7 @@ function Sparkline({ points }: { points: HistoryPoint[] }) {
           vectorEffect="non-scaling-stroke"
         />
       </svg>
-      <div className="flex justify-between font-mono text-[10px] text-[var(--fg-faint)]">
+      <div className="flex justify-between font-mono text-[0.625rem] text-[var(--fg-faint)]">
         <span>{fmtBig(min)}</span>
         <span>{fmtBig(max)}</span>
       </div>
@@ -211,7 +211,7 @@ function ChainEvents({ c }: { c: ChainFreezes }) {
           >
             <span
               className={
-                "rounded-full px-2 py-0.5 text-[10px] font-semibold text-white " +
+                "rounded-full px-2 py-0.5 text-[0.625rem] font-semibold text-white " +
                 (e.kind === "freeze" ? "bg-rose-600" : "bg-emerald-600")
               }
             >
@@ -317,7 +317,7 @@ function FreezePanel() {
     <section className="mb-12 border-y border-[var(--line)] py-8">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="mono-label !text-rose-600">USDC FREEZES</p>
-        <span className="inline-flex items-center gap-2 rounded-full bg-[var(--glass-strong)] px-3 py-1.5 font-mono text-[11px] font-semibold text-[var(--fg-muted)]">
+        <span className="inline-flex items-center gap-2 rounded-full bg-[var(--glass-strong)] px-3 py-1.5 font-mono text-[0.6875rem] font-semibold text-[var(--fg-muted)]">
           <span className="relative flex h-2 w-2">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-60" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-600" />
@@ -384,7 +384,7 @@ function FreezePanel() {
             >
               {shortAddr(lf.address)}
             </a>
-            <span className="rounded-full bg-[var(--glass-strong)] px-2.5 py-1 text-[11px] font-semibold text-[var(--fg-muted)]">
+            <span className="rounded-full bg-[var(--glass-strong)] px-2.5 py-1 text-[0.6875rem] font-semibold text-[var(--fg-muted)]">
               {lf.chainName}
             </span>
             <span className="text-sm text-[var(--fg-muted)]">
@@ -785,30 +785,30 @@ export function VibrainLive() {
                         {sideText(t.fromLabel, t.from)} {" -> "}{" "}
                         {sideText(t.toLabel, t.to)}
                       </span>
-                      <span className="mt-0.5 block text-[11px] text-[var(--fg-faint)]">
+                      <span className="mt-0.5 block text-[0.6875rem] text-[var(--fg-faint)]">
                         block #{fmtInt(t.blockNumber)} .{" "}
                         {ago((data.latestBlock - t.blockNumber) * data.blockTimeSec)}
                       </span>
                     </span>
                     <span className="flex shrink-0 items-center gap-2">
                       {t.fromLabel === "New USDC (mint)" && (
-                        <span className="rounded-full bg-emerald-600 px-2 py-0.5 text-[10px] font-semibold text-white">
+                        <span className="rounded-full bg-emerald-600 px-2 py-0.5 text-[0.625rem] font-semibold text-white">
                           ISSUED
                         </span>
                       )}
                       {t.toLabel === "USDC (burn)" && (
-                        <span className="rounded-full bg-rose-600 px-2 py-0.5 text-[10px] font-semibold text-white">
+                        <span className="rounded-full bg-rose-600 px-2 py-0.5 text-[0.625rem] font-semibold text-white">
                           BURN
                         </span>
                       )}
                       {(t.fromLabel?.startsWith("VibeFlow") ||
                         t.toLabel?.startsWith("VibeFlow")) && (
-                        <span className="rounded-full bg-[var(--accent)] px-2 py-0.5 text-[10px] font-semibold text-white">
+                        <span className="rounded-full bg-[var(--accent)] px-2 py-0.5 text-[0.625rem] font-semibold text-white">
                           VIBEFLOW
                         </span>
                       )}
                       {t.amount >= LARGE_USDC && (
-                        <span className="rounded-full bg-[var(--accent)] px-2 py-0.5 text-[10px] font-semibold text-white">
+                        <span className="rounded-full bg-[var(--accent)] px-2 py-0.5 text-[0.625rem] font-semibold text-white">
                           LARGE
                         </span>
                       )}
