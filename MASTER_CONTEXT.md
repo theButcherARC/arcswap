@@ -30,11 +30,11 @@
 
 ### Contracts
 - **USDC** and **EURC** are Circle stablecoins pre-existing on Arc Testnet. Both have 6 decimals.
-- **Multicall3From** (0x522fAf9A91c41c443c66765030741e4AaCe147D0) batches all ERC-20 transfers in a single transaction while preserving the original caller's `msg.sender`.
-- **Memo Contract** (0x5294E9927c3306DcBaDb03fe70b92e01cCede505) stores onchain payroll labels and batch metadata.
+- **VibeFlowBatchPay** (0x85D9d1754f3Fff8d9757DEADcD701614199F7A2B), built with Arc Studio, is our own batch contract on Arc Mainnet: one disperse call settles a whole payment run in a single transaction.
+- **Memos** are emitted by the BatchPay contract itself with every payment; there is no separate memo contract. (The v1 path used Multicall3From + a Memo contract; retired.)
 
 ### Services
-- `bulkPayService.ts` — encodes ERC-20 transfers and builds Multicall3From call sequences. Supports 100+ recipients.
+- `bulkPayService.ts` — builds BatchPay v2 disperse calls (recipients, amounts, memos, fee) for batch payments. Supports 100+ recipients.
 - `agentService.ts` — uses Groq AI (llama-3.3-70b-versatile) to parse natural language payment instructions into structured recipient lists.
 
 ---
@@ -66,8 +66,7 @@ Update `src/constants/chains.ts` once confirmed.
 
 | Contract | Address | Purpose | Status |
 |----------|---------|---------|--------|
-| Multicall3From | `0x522fAf9A91c41c443c66765030741e4AaCe147D0` | Batch ERC-20 transfers, preserves msg.sender | ✅ Live |
-| Memo Contract | `0x5294E9927c3306DcBaDb03fe70b92e01cCede505` | Stores onchain payroll labels and metadata | ✅ Live |
+| VibeFlowBatchPay | `0x85D9d1754f3Fff8d9757DEADcD701614199F7A2B` | Batch payments with per-payment memos, Arc Mainnet. Built with Arc Studio | ✅ Live |
 
 ---
 
