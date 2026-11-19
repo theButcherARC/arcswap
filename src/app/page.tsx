@@ -627,23 +627,26 @@ export default function VibeFlowLanding() {
               <span className="text-xs text-[var(--fg-faint)]">
                 Public and verifiable on the explorer. Independent audit: not yet.
               </span>
+              <span className="text-xs text-[var(--fg-faint)]">
+                The BatchPay contract was built with Arc Studio.
+              </span>
             </div>
             <div className="flex flex-col gap-2">
               <a
-                href="https://explorer.arc.io/address/0x522fAf9A91c41c443c66765030741e4AaCe147D0"
+                href="https://explorer.arc.io/address/0x85D9d1754f3Fff8d9757DEADcD701614199F7A2B"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="break-all font-mono text-[0.6875rem] text-[var(--fg-faint)] transition-colors hover:text-[var(--data)]"
               >
-                Batch 0x522fAf9A91c41c443c66765030741e4AaCe147D0
+                VibeFlowBatchPay 0x85D9d1754f3Fff8d9757DEADcD701614199F7A2B
               </a>
               <a
-                href="https://explorer.arc.io/address/0x5294E9927c3306DcBaDb03fe70b92e01cCede505"
+                href="https://explorer.arc.io/tx/0xb252f440e632a2a34c69de604b4b947ecee80362ccb3d720221f662f711a480c"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="break-all font-mono text-[0.6875rem] text-[var(--fg-faint)] transition-colors hover:text-[var(--data)]"
               >
-                Memo 0x5294E9927c3306DcBaDb03fe70b92e01cCede505
+                Demo batch 0xb252f440e632a2a34c69de604b4b947ecee80362ccb3d720221f662f711a480c
               </a>
             </div>
           </div>

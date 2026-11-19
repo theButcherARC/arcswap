@@ -19,7 +19,7 @@ VibeFlow is programmable USDC batch payroll infrastructure on Arc. Describe a pa
 It is built around three ideas:
 
 1. **Agentic economic activity** — payments initiated by natural language, not forms. The AI agent is the interface; the chain is the settlement layer.
-2. **One transaction, thousands of recipients** — Arc's `Multicall3From` batches every transfer atomically while preserving `msg.sender`, so users sign once with zero token approvals.
+2. **One transaction, thousands of recipients** — our own `VibeFlowBatchPay` contract executes every transfer in a single transaction, so the whole batch settles with one signature.
 3. **Identity beyond addresses** — pay `@handles` via VibeID social resolution, and label every batch with an on-chain payroll memo (e.g. "July Salary") that lives on the chain forever.
 
 ---
@@ -29,10 +29,10 @@ It is built around three ideas:
 | Feature | Description |
 |---|---|
 | **AI Payment Agent** | Groq-powered natural-language parsing — type "pay 3 people $50 each" and recipient rows auto-populate. Runs server-side so keys never touch the client |
-| **Bulk Pay** | Batch USDC/EURC transfers to 100+ recipients in a single transaction via Multicall3From |
+| **Bulk Pay** | Batch USDC/EURC transfers to 100+ recipients in a single transaction via the VibeFlowBatchPay contract |
 | **CSV Upload** | Upload a recipient/amount CSV instead of entering rows manually |
 | **USDC + EURC Toggle** | Switch between Circle USD and EUR stablecoins before sending |
-| **Onchain Memo Labels** | Attach payroll tags (e.g. "July Salary") stored permanently onchain via the Memo contract |
+| **Onchain Memo Labels** | Attach payroll tags (e.g. "July Salary") stored permanently onchain, emitted by the BatchPay contract with each payment |
 | **Social Pay / VibeID** | Pay by @handle or VibeID instead of copying wallet addresses |
 | **X (Twitter) Linking** | Link an X account to a wallet; handles, names, and avatars resolve for payments |
 | **Dashboard** | Transaction history, balances, and explorer links pulled from the Arc explorer API |
@@ -58,14 +58,13 @@ It is built around three ideas:
 
 | Contract | Address | Purpose |
 |---|---|---|
-| **Multicall3From** | `0x522fAf9A91c41c443c66765030741e4AaCe147D0` | Batches all ERC-20 transfers into a single tx, preserving `msg.sender` |
-| **Memo Contract** | `0x5294E9927c3306DcBaDb03fe70b92e01cCede505` | Stores payroll labels onchain alongside each payment batch |
+| **VibeFlowBatchPay** | `0x85D9d1754f3Fff8d9757DEADcD701614199F7A2B` | Our own batch contract: settles a whole payment run in one tx, emits a memo with every payment, collects the protocol fee. Built with Arc Studio |
 | **USDC** | `0x3600000000000000000000000000000000000000` | Circle USD stablecoin (Arc native precompile) |
 | **EURC** | `0x89B50855Aa3bE2F677cD6303Cec089B5F319D72a` | Circle EUR stablecoin on Arc |
 
-### Why Multicall3From?
+### Why our own BatchPay contract?
 
-Standard `Multicall3` changes `msg.sender` to the contract itself, breaking ERC-20 `transferFrom` flows. Arc's `Multicall3From` is a custom extension that **preserves the original caller as `msg.sender`**, enabling a zero-approval, single-popup experience: the user signs once and all transfers execute atomically.
+VibeFlow v1 routed batch transfers through Arc's `Multicall3From`. BatchPay v2 is our own contract, `VibeFlowBatchPay`, built with Arc Studio and verified on Arc mainnet: one `disperse` call settles the entire run, emits a memo with every payment, and collects the protocol fee in the same transaction.
 
 ---
 
@@ -87,8 +86,8 @@ Standard `Multicall3` changes `msg.sender` to the contract itself, breaking ERC-
 │                                                             │
 │  4. (Optional) adds Payroll Label                           │
 │                                                             │
-│  5. Signs once → Multicall3From executes all transfers       │
-│     atomically → Memo contract stores the payroll label     │
+│  5. Signs once → VibeFlowBatchPay executes all transfers    │
+│     atomically, each payment carrying its onchain memo      │
 │                                                             │
 │  6. Sub-second finality → explorer confirmation             │
 └─────────────────────────────────────────────────────────────┘
