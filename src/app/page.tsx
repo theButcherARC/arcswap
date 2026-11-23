@@ -91,7 +91,7 @@ const CHIPS = [
   "0.2% flat fee · $0.01 min",
   "No code required",
   "Zero approval needed",
-  "AI-powered parsing",
+  "AI drafts the batch",
   "Sub-second finality",
 ];
 
@@ -100,7 +100,7 @@ export default function VibeFlowLanding() {
     <div className="relative min-h-screen bg-[var(--bg)] text-[var(--fg)]">
       {/* ==================== HERO ==================== */}
       {/* Live transfers ticker */}
-      <div className="relative z-20 mt-[72px]">
+      <div className="relative z-20 mt-[var(--header-h)]">
         <LiveTicker />
       </div>
 
@@ -237,7 +237,7 @@ export default function VibeFlowLanding() {
             {/* Floating widgets */}
             <div className="absolute -left-8 top-14 z-20 hidden lg:block" style={{ transform: "translateX(calc(var(--hp, 0) * -38px))" }}><div className="floaty-b flex h-24 w-24 flex-col items-center justify-center rounded-full bg-[var(--accent)] text-white">
               <span className="text-xl font-extrabold leading-none">0.2%</span>
-              <span className="mt-1 font-mono text-[9px] uppercase tracking-[0.14em] text-white/75">flat fee</span>
+              <span className="mono-label mt-1 !text-white/75">flat fee</span>
             </div>
             </div>
             <div className="absolute -top-6 right-4 z-20 hidden md:block" style={{ transform: "translateX(calc(var(--hp, 0) * 38px))" }}><div className="floaty flex items-center gap-3 border border-[var(--line)] bg-[var(--glass-strong)] px-4 py-3 backdrop-blur-xl">
@@ -464,7 +464,7 @@ export default function VibeFlowLanding() {
                 <p className="mb-8 text-sm leading-relaxed text-[var(--fg-muted)]">{f.body}</p>
                 <div className="flex items-center justify-between border-t border-[var(--line)] pt-4">
                   <span className="mono-label">{f.tag}</span>
-                  <span className={`h-1.5 w-1.5 transition-transform duration-300 group-hover:scale-150 ${f.accent === "accent" ? "bg-[var(--accent)]" : "bg-[var(--data)]"}`} />
+                  <span className={`h-1.5 w-1.5 ${f.accent === "accent" ? "bg-[var(--accent)]" : "bg-[var(--data)]"}`} />
                 </div>
               </div>
             ))}
@@ -487,7 +487,7 @@ export default function VibeFlowLanding() {
           <Reveal className="rv-group grid gap-12 md:grid-cols-3 md:gap-10">
             {STEPS.map((s, i) => (
               <div key={s.fig} className="rv-item">
-                <p className="font-mono text-6xl font-extrabold tracking-tight text-[var(--fg)]/10">
+                <p className="font-mono text-6xl font-bold tracking-tight text-[var(--fg)]/10">
                   {String(i + 1).padStart(2, "0")}
                 </p>
                 <h3 className="mt-4 text-xl font-semibold tracking-tight">{s.title}</h3>
