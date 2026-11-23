@@ -342,16 +342,16 @@ export default function DashboardPage() {
         {error && (
           <section
             aria-label="Data fetch error"
-            className="animate-settle-in glass-panel border-[rgba(244,63,94,0.3)] px-5 sm:px-6 py-4"
+            className="animate-settle-in glass-panel border-[color-mix(in_srgb,var(--danger)_30%,transparent)] px-5 sm:px-6 py-4"
           >
             <div className="flex items-start gap-3">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="flex-shrink-0 text-rose-600 mt-0.5" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="flex-shrink-0 text-[var(--danger)] mt-0.5" aria-hidden="true">
                 <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
                 <path d="M12 8v4M12 16h.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
               </svg>
               <div className="flex-1">
-                <p className="text-sm font-medium text-rose-600">Failed to load dashboard data</p>
-                <p className="mt-1 text-xs text-rose-600/70">{error instanceof Error ? error.message : "An error occurred while fetching your transaction history"}</p>
+                <p className="text-sm font-medium text-[var(--danger)]">Failed to load dashboard data</p>
+                <p className="mt-1 text-xs text-[color-mix(in_srgb,var(--danger)_70%,transparent)]">{error instanceof Error ? error.message : "An error occurred while fetching your transaction history"}</p>
               </div>
             </div>
           </section>
@@ -443,13 +443,13 @@ export default function DashboardPage() {
                     <Tooltip
                       cursor={{ fill: "rgba(39,117,202,0.08)" }}
                       contentStyle={{
-                        backgroundColor: "#ffffff",
-                        border: "1px solid rgba(11,13,22,0.1)",
+                        backgroundColor: "var(--bg-raised)",
+                        border: "1px solid color-mix(in srgb, var(--fg) 10%, transparent)",
                         borderRadius: "12px",
-                        color: "#0b0d16",
+                        color: "var(--fg)",
                         fontSize: "13px",
                       }}
-                      labelStyle={{ color: "#59637a" }}
+                      labelStyle={{ color: "var(--fg-muted)" }}
                     />
                     <Bar
                       dataKey="volume"
@@ -474,9 +474,12 @@ export default function DashboardPage() {
                     Last Bulk Payment
                   </h2>
                   {lastBulkPay ? (
-                    <p className="mono-label mt-0.5">
-                      {lastBulkPay.date} · {lastBulkPay.recipients.length}{" "}
-                      recipients · {formatUsdc(lastBulkPay.total)} USDC
+                    <p className="mono-label mt-0.5 flex flex-wrap items-center gap-x-2.5">
+                      <span>{lastBulkPay.date}</span>
+                      <span aria-hidden="true" className="inline-block h-3 w-px bg-[var(--line-strong)]" />
+                      <span>{lastBulkPay.recipients.length} recipients</span>
+                      <span aria-hidden="true" className="inline-block h-3 w-px bg-[var(--line-strong)]" />
+                      <span>{formatUsdc(lastBulkPay.total)} USDC</span>
                     </p>
                   ) : null}
                 </div>
@@ -499,7 +502,7 @@ export default function DashboardPage() {
                   <div className="skeleton h-10 w-2/3" />
                 </div>
               ) : error ? (
-                <div className="px-6 py-12 text-center text-sm text-rose-600">
+                <div className="px-6 py-12 text-center text-sm text-[var(--danger)]">
                   Failed to load data from ArcScan. Please try again later.
                 </div>
               ) : !lastBulkPay ? (
