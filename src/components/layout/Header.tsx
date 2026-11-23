@@ -13,7 +13,7 @@ export function Header() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-[var(--line)] bg-[rgba(255,255,255,0.86)] backdrop-blur-2xl">
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
-        <div className="flex h-[72px] items-center justify-between gap-6">
+        <div className="flex h-[var(--header-h)] items-center justify-between gap-6">
           {/* Logo */}
           <Link href={ROUTES.HOME} className="flex items-center gap-2.5 group">
             <span className="transition-opacity duration-300 group-hover:opacity-80">

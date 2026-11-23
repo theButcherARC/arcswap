@@ -109,7 +109,7 @@ export function SquareFeed() {
               onChange={(e) => setDraft(e.target.value)}
               maxLength={MAX_CONTENT}
               rows={3}
-              placeholder="Say it like you would on the timeline..."
+              placeholder="Post to the Square"
               className="w-full resize-none bg-transparent text-base leading-relaxed text-[var(--fg)] outline-none placeholder:text-[var(--fg-faint)]"
             />
             <div className="mt-3 flex items-center justify-between border-t border-[var(--line)] pt-3">
@@ -168,7 +168,7 @@ export function SquareFeed() {
                 {timeAgo(p.createdAt)}
               </span>
             </div>
-            <p className="whitespace-pre-wrap [overflow-wrap:anywhere] text-[15px] leading-relaxed text-[var(--fg)]">
+            <p className="whitespace-pre-wrap [overflow-wrap:anywhere] text-sm leading-relaxed text-[var(--fg)]">
               {p.content}
             </p>
             <div className="mt-3">

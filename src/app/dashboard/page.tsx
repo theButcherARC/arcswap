@@ -273,9 +273,9 @@ export default function DashboardPage() {
     <main className="relative min-h-screen bg-[var(--bg)] px-4 pb-16 pt-10 sm:px-6 lg:px-8">
       <div className="relative mx-auto flex w-full max-w-5xl flex-col gap-6">
         {/* Header */}
-        <header className="animate-fade-in-up flex flex-col gap-2">
+        <header className="animate-settle-in flex flex-col gap-2">
           <div className="flex items-center justify-between gap-3">
-            <h1 className="text-balance text-3xl font-bold uppercase tracking-tight text-[var(--fg)] sm:text-4xl">
+            <h1 className="text-balance text-3xl font-bold tracking-tight text-[var(--fg)] sm:text-4xl">
               Dashboard
             </h1>
             <div className="flex items-center gap-2">
@@ -313,12 +313,12 @@ export default function DashboardPage() {
                 <span>Sync</span>
               </button>
               {syncError && (
-                <div className="text-xs text-rose-600 animate-pulse max-w-xs truncate">
+                <div className="text-xs text-[var(--danger)] max-w-xs truncate">
                   Error: {syncError}
                 </div>
               )}
               {syncUpdated && !syncError && (
-                <div className="text-xs text-[var(--data)] animate-pulse">
+                <div className="text-xs text-[var(--data)]">
                   Updated just now
                 </div>
               )}
@@ -332,7 +332,7 @@ export default function DashboardPage() {
         {error && (
           <section
             aria-label="Data fetch error"
-            className="animate-fade-in-up glass-panel border-[rgba(244,63,94,0.3)] px-5 sm:px-6 py-4"
+            className="animate-settle-in glass-panel border-[rgba(244,63,94,0.3)] px-5 sm:px-6 py-4"
           >
             <div className="flex items-start gap-3">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="flex-shrink-0 text-rose-600 mt-0.5" aria-hidden="true">
@@ -350,7 +350,7 @@ export default function DashboardPage() {
         {!isConnected ? (
           <section
             aria-label="Wallet connection required"
-            className="animate-fade-in-up delay-100 glass-panel px-6 sm:px-8 py-16 sm:py-20 text-center"
+            className="animate-settle-in delay-100 glass-panel px-6 sm:px-8 py-16 sm:py-20 text-center"
           >
             <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center border border-[var(--line-strong)] bg-[var(--accent-soft)]">
               <svg className="animate-pulse" width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -372,7 +372,7 @@ export default function DashboardPage() {
         ) : (
           <>
             {/* Stats - one hairline strip, not four boxes */}
-            <section aria-label="Key statistics" className="animate-fade-in-up delay-100">
+            <section aria-label="Key statistics" className="animate-settle-in delay-100">
               <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[var(--radius)] border border-[var(--line)] bg-[var(--line)] lg:grid-cols-4">
                 {stats.map((stat) => (
                   <div
@@ -398,7 +398,7 @@ export default function DashboardPage() {
             {/* Volume chart */}
             <section
               aria-label="Volume over the last 7 days"
-              className="animate-fade-in-up delay-200 glass-panel p-5 sm:p-6"
+              className="animate-settle-in delay-200 glass-panel p-5 sm:p-6"
             >
               <div className="mb-6 flex items-center justify-between">
                 <h2 className="text-base font-semibold text-[var(--fg)] sm:text-lg">
@@ -456,7 +456,7 @@ export default function DashboardPage() {
             {/* Last bulk payment breakdown */}
             <section
               aria-label="Last bulk payment"
-              className="animate-fade-in-up delay-300 glass-panel"
+              className="animate-settle-in delay-300 glass-panel"
             >
               <div className="flex flex-col gap-2 border-b border-[var(--line)] px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
                 <div>

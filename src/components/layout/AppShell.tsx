@@ -17,12 +17,12 @@ type NavItem = {
 };
 
 const iconProps = {
-  width: 17,
-  height: 17,
+  width: 16,
+  height: 16,
   viewBox: "0 0 24 24",
   fill: "none",
   stroke: "currentColor",
-  strokeWidth: 1.8,
+  strokeWidth: 1.5,
   strokeLinecap: "round",
   strokeLinejoin: "round",
 } as const;
@@ -298,7 +298,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           aria-label="Open menu"
           className="flex h-11 w-11 items-center justify-center rounded-lg border border-[var(--line)] text-[var(--fg-muted)] transition-colors hover:text-[var(--fg)] active:bg-black/[0.04] pressable"
         >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
             <path d="M4 7h16M4 12h16M4 17h16" />
           </svg>
         </button>
@@ -332,7 +332,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               aria-label="Close menu"
               className="absolute right-3 top-2.5 z-10 flex h-11 w-11 items-center justify-center text-[var(--fg-muted)] transition-colors hover:text-[var(--fg)] pressable"
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
                 <path d="M6 6l12 12M18 6L6 18" />
               </svg>
             </button>

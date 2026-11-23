@@ -23,10 +23,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             id={inputId}
             className={[
-              "w-full rounded-[var(--radius)] border bg-[var(--bg-raised)] px-4 py-3 text-base text-[var(--fg)] transition-colors",
+              "w-full rounded-lg border bg-[var(--bg-raised)] px-4 py-3 text-base text-[var(--fg)] transition-colors",
               "placeholder:text-[var(--fg-faint)] focus:outline-none focus:ring-2",
               error
-                ? "border-rose-300 focus:ring-rose-200"
+                ? "border-[rgba(194,39,68,0.45)] focus:ring-[var(--danger-soft)]"
                 : "border-[var(--line)] focus:border-[var(--accent)] focus:ring-[var(--accent-soft)]",
               rightSlot ? "pr-28" : "",
               className,
@@ -35,7 +35,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           />
           {rightSlot && <div className="absolute right-2">{rightSlot}</div>}
         </div>
-        {error && <p className="text-xs text-rose-600">{error}</p>}
+        {error && <p className="text-xs text-[var(--danger)]">{error}</p>}
         {hint && !error && <p className="text-xs text-[var(--fg-faint)]">{hint}</p>}
       </div>
     );

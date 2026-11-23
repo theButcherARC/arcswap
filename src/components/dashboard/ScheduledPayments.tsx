@@ -114,7 +114,7 @@ export function ScheduledPayments() {
   const now = Date.now();
 
   return (
-    <section aria-label="Scheduled payments" className="animate-fade-in-up">
+    <section aria-label="Scheduled payments" className="animate-settle-in">
       <div className="glass-panel px-5 py-5 sm:px-6">
         <div className="flex items-center justify-between gap-3">
           <div>

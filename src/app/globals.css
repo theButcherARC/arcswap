@@ -20,10 +20,13 @@
   --accent-soft: rgba(39, 117, 202, 0.1);
   --data: #1f6fd0;
   --data-soft: rgba(39, 117, 202, 0.1);
-  --phase-1: #ce0e33;
-  --phase-3: #bc580c;
-  --phase-4: #6a3ec9;
   --success: #12805c;
+  --success-soft: rgba(18, 128, 92, 0.1);
+  --danger: #c22744;
+  --danger-soft: rgba(194, 39, 68, 0.08);
+  --warn: #a35a08;
+  --warn-soft: rgba(188, 88, 12, 0.1);
+  --header-h: 72px;
   --radius: 16px;
 }
 
@@ -249,36 +252,6 @@ button:focus-visible {
   animation: slide-in-from-top 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* Send button continuous pulse glow */
-@keyframes send-pulse {
-  0%, 100% {
-    box-shadow: 0 0 20px rgba(39, 117, 202, 0.35), 0 0 50px rgba(39, 117, 202, 0.15);
-  }
-  50% {
-    box-shadow: 0 0 35px rgba(39, 117, 202, 0.6), 0 0 80px rgba(39, 117, 202, 0.25);
-  }
-}
-
-.animate-send-pulse {
-  animation: send-pulse 2.4s ease-in-out infinite;
-}
-
-/* Add recipient button border pulse */
-@keyframes add-btn-pulse {
-  0%, 100% {
-    border-color: rgba(39, 117, 202, 0.25);
-    box-shadow: none;
-  }
-  50% {
-    border-color: rgba(39, 117, 202, 0.5);
-    box-shadow: none;
-  }
-}
-
-.animate-add-btn-pulse {
-  animation: add-btn-pulse 2.5s ease-in-out infinite;
-}
-
 /* Number count-up flash */
 @keyframes value-flash {
   0% { color: rgba(110, 168, 236, 0.9); }
@@ -408,10 +381,10 @@ a, button, [role="button"] {
 }
 .rj-pin {
   opacity: 0;
-  transform: scale(0.55);
+  transform: scale(0.96);
   transition:
-    opacity 0.45s ease,
-    transform 0.45s cubic-bezier(0.2, 1.4, 0.4, 1);
+    opacity 0.45s var(--ease-settle),
+    transform 0.45s var(--ease-settle);
 }
 .rj-pin.on {
   opacity: 1;

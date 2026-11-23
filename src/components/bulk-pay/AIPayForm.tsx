@@ -64,7 +64,7 @@ function AgentPreview({
     >
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2.5">
-          <div className="h-2 w-2 rounded-full bg-[var(--accent)] animate-pulse" />
+          <div className="h-2 w-2 rounded-full bg-[var(--accent)]" />
           <span className="text-sm font-medium text-[var(--data)]">
             Parsed {result.recipients.length} recipient
             {result.recipients.length !== 1 ? "s" : ""} successfully
@@ -694,7 +694,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     <div className="mt-4 rounded-lg border border-rose-500/20 bg-rose-500/[0.06] px-4 py-3">
                       <div className="flex items-start gap-2.5">
                         <svg
-                          className="mt-0.5 shrink-0"
+                          className="mt-0.5 shrink-0 text-[var(--danger)]"
                           width="14"
                           height="14"
                           viewBox="0 0 14 14"
@@ -705,16 +705,16 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                             cx="7"
                             cy="7"
                             r="6"
-                            stroke="#f43f5e"
+                            stroke="currentColor"
                             strokeWidth="1.5"
                           />
                           <path
                             d="M7 4V7.5"
-                            stroke="#f43f5e"
+                            stroke="currentColor"
                             strokeWidth="1.5"
                             strokeLinecap="round"
                           />
-                          <circle cx="7" cy="10" r="0.75" fill="#f43f5e" />
+                          <circle cx="7" cy="10" r="0.75" fill="currentColor" />
                         </svg>
                         <p className="text-xs text-rose-600/90 leading-relaxed">
                           {agentError}
