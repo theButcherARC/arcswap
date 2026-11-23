@@ -10,20 +10,20 @@ type Item = {
 };
 
 const ITEMS: Item[] = [
-  { phase: "Next", color: "var(--phase-1)", title: "BatchPay on mainnet", body: "The batch contract built in Arc Studio, tested for 1,000 recipients, goes live on Arc mainnet and the app moves onto it." },
-  { phase: "Next", color: "var(--phase-1)", title: "VibeID Registry on mainnet", body: "The identity registry built in Arc Studio, already live on testnet, deploys to mainnet." },
-  { phase: "The wallet era", color: "var(--accent)", title: "VibeWallet", body: "A wallet inside the app, created the moment you join with X. No seed phrase to lose, gas handled for you." },
-  { phase: "The wallet era", color: "var(--accent)", title: "Pay-in pages and invoice links", body: "Send anyone a link and get paid, whether they hold crypto or not. Built for freelancers first." },
-  { phase: "The wallet era", color: "var(--accent)", title: "Earn escrow, live", body: "Bounties with the budget locked in escrow you can verify on the explorer. Approval pays out instantly in USDC." },
-  { phase: "Automation", color: "var(--phase-3)", title: "Scheduled payments, automated", body: "Set a payment once with limits and an expiry you control. It executes on its own, and you can revoke it any time." },
-  { phase: "Automation", color: "var(--phase-3)", title: "Agent rails", body: "Hire agents inside the hub and let them pay within limits you set. Agentic payments, with your rules." },
-  { phase: "Money in and out", color: "var(--phase-4)", title: "CCTP", body: "Native USDC bridging into and out of Arc. Money arrives as USDC, not a wrapped copy." },
-  { phase: "Money in and out", color: "var(--phase-4)", title: "Swap", body: "A quiet swap inside your balance: USDC, EURC and cirBTC. No trading screen, no noise." },
-  { phase: "Growth", color: "var(--phase-1)", title: "Embeds", body: "VibeSquare tips and pay requests that any site or community can embed." },
-  { phase: "Growth", color: "var(--phase-1)", title: "Creator gigs", body: "Campaigns on Earn with apply-first curation: approved creators, escrowed budgets, instant settlement." },
-  { phase: "Later", color: "var(--accent)", title: "Mobile app", body: "VibeFlow in your pocket: Android and iOS, with your batches, schedules and balance wherever you are." },
-  { phase: "Growth", color: "var(--phase-1)", title: "$VIBE fee discount", body: "Holding $VIBE cuts the batch fee. The token serves the product, not the other way around." },
-  { phase: "Later", color: "var(--accent)", title: "Fiat last mile", body: "Bank and card payouts through licensed partners, once volume justifies it. Receiving stays instant on Arc." },
+  { phase: "Live", color: "var(--success)", title: "BatchPay on mainnet", body: "The batch contract built in Arc Studio, tested for 1,000 recipients, is live on Arc mainnet and the app runs on it. A demo batch has settled through it onchain." },
+  { phase: "Next", color: "var(--accent)", title: "VibeID Registry on mainnet", body: "The identity registry built in Arc Studio, already live on testnet, deploys to mainnet." },
+  { phase: "The wallet era", color: "var(--fg-muted)", title: "VibeWallet", body: "A wallet inside the app, created the moment you join with X. No seed phrase to lose, gas handled for you." },
+  { phase: "The wallet era", color: "var(--fg-muted)", title: "Pay-in pages and invoice links", body: "Send anyone a link and get paid, whether they hold crypto or not. Built for freelancers first." },
+  { phase: "The wallet era", color: "var(--fg-muted)", title: "Earn escrow, live", body: "Bounties with the budget locked in escrow you can verify on the explorer. Approval pays out instantly in USDC." },
+  { phase: "Automation", color: "var(--fg-muted)", title: "Scheduled payments, automated", body: "Set a payment once with limits and an expiry you control. It executes on its own, and you can revoke it any time." },
+  { phase: "Automation", color: "var(--fg-muted)", title: "Agent rails", body: "Hire agents inside the hub and let them pay within limits you set. Agentic payments, with your rules." },
+  { phase: "Money in and out", color: "var(--fg-muted)", title: "CCTP", body: "Native USDC bridging into and out of Arc. Money arrives as USDC, not a wrapped copy." },
+  { phase: "Money in and out", color: "var(--fg-muted)", title: "Swap", body: "A quiet swap inside your balance: USDC, EURC and cirBTC. No trading screen, no noise." },
+  { phase: "Growth", color: "var(--fg-muted)", title: "Embeds", body: "VibeSquare tips and pay requests that any site or community can embed." },
+  { phase: "Growth", color: "var(--fg-muted)", title: "Creator gigs", body: "Campaigns on Earn with apply-first curation: approved creators, escrowed budgets, instant settlement." },
+  { phase: "Later", color: "var(--fg-muted)", title: "Mobile app", body: "VibeFlow in your pocket: Android and iOS, with your batches, schedules and balance wherever you are." },
+  { phase: "Growth", color: "var(--fg-muted)", title: "$VIBE fee discount", body: "Holding $VIBE cuts the batch fee. The token serves the product, not the other way around." },
+  { phase: "Later", color: "var(--fg-muted)", title: "Fiat last mile", body: "Bank and card payouts through licensed partners, once volume justifies it. Receiving stays instant on Arc." },
   { phase: "Last", color: "var(--fg-faint)", title: "Prediction markets", body: "Last on this list, and only after a full legal review." },
 ];
 
@@ -163,7 +163,7 @@ export default function RoadJourney() {
                 <h3 className="text-lg font-bold leading-snug tracking-tight" style={{ color: titleColor(item) }}>
                   {item.title}
                 </h3>
-                <p className="mt-1.5 text-[13px] leading-relaxed text-[var(--fg-muted)]">{item.body}</p>
+                <p className="mt-1.5 text-sm leading-relaxed text-[var(--fg-muted)]">{item.body}</p>
               </div>
             </div>
           );
@@ -198,7 +198,7 @@ export default function RoadJourney() {
                 <h3 className="text-base font-bold leading-snug tracking-tight" style={{ color: titleColor(item) }}>
                   {item.title}
                 </h3>
-                <p className="mt-1 text-[13px] leading-relaxed text-[var(--fg-muted)]">{item.body}</p>
+                <p className="mt-1 text-sm leading-relaxed text-[var(--fg-muted)]">{item.body}</p>
               </div>
             </div>
           ))}

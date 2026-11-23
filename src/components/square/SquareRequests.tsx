@@ -145,7 +145,7 @@ export function SquareRequests() {
                 value={noteText}
                 onChange={(e) => setNoteText(e.target.value)}
                 maxLength={140}
-                placeholder="What is it for? Team dinner, design help, a bounty..."
+                placeholder="What is it for?"
                 aria-label="What the request is for"
                 className="min-h-[44px] flex-1 rounded-full border border-[var(--line)] bg-transparent px-4 text-base text-[var(--fg)] outline-none placeholder:text-[var(--fg-faint)]"
               />
