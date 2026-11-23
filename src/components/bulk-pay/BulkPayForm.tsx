@@ -614,7 +614,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
 
           {/* Wallet requirement banner (shown until connected) */}
           {!isConnected ? (
-            <div className="mb-7 flex flex-col gap-3 rounded-[var(--radius)] border border-[rgba(39,117,202,0.3)] bg-[var(--accent-soft)] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="mb-7 flex flex-col gap-3 rounded-[var(--radius)] border border-[color-mix(in_srgb,var(--accent)_30%,transparent)] bg-[var(--accent-soft)] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm text-[var(--fg-muted)]">
                 <span className="font-semibold text-[var(--fg)]">Connect your wallet to send.</span>{" "}
                 MetaMask on Arc Mainnet is required before you can submit a batch.
@@ -848,7 +848,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                   "text-sm font-medium pressable " +
                   (atMaxRecipients || isSending
                     ? "border-[var(--line)] bg-black/[0.03] text-[var(--fg-faint)] cursor-not-allowed"
-                    : "border-[rgba(39,117,202,0.3)] bg-black/[0.03] text-[var(--fg-muted)] hover:text-[var(--data)] hover:bg-[var(--accent-soft)] hover:border-[var(--accent)]")
+                    : "border-[color-mix(in_srgb,var(--accent)_30%,transparent)] bg-black/[0.03] text-[var(--fg-muted)] hover:text-[var(--data)] hover:bg-[var(--accent-soft)] hover:border-[var(--accent)]")
                 }
               >
                 {atMaxRecipients ? (
@@ -907,7 +907,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                       (summaryData.isFullyAllocated && !summaryData.isOverAllocated
                         ? "text-[var(--data)]"
                         : summaryData.isOverAllocated
-                          ? "text-rose-600"
+                          ? "text-[var(--danger)]"
                           : "text-[var(--fg-muted)]")
                     }
                   >
@@ -921,7 +921,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
             {showReview ? (
               <div
                 ref={reviewRef}
-                className="mt-10 animate-pop-in rounded-[var(--radius)] border border-[rgba(39,117,202,0.3)] bg-[var(--bg-raised)] p-5"
+                className="mt-10 animate-pop-in rounded-[var(--radius)] border border-[color-mix(in_srgb,var(--accent)_30%,transparent)] bg-[var(--bg-raised)] p-5"
               >
                 <span className="mono-label block mb-2">
                   SYS.REVIEW / BEFORE YOU SIGN
@@ -989,7 +989,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                 </div>
 
                 {summaryData.count > summaryData.validCount ? (
-                  <p className="mt-3 text-xs text-amber-600/80 leading-relaxed">
+                  <p className="mt-3 text-xs text-[color-mix(in_srgb,var(--warn)_80%,transparent)] leading-relaxed">
                     {summaryData.count - summaryData.validCount} of your rows
                     are not in this list. A row is only paid when it has a valid
                     address and an amount above $0. Go back and fix a row if
@@ -1045,7 +1045,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                           type="button"
                           onClick={handleSaveSchedule}
                           disabled={scheduleSaving || !scheduleDate}
-                          className="min-h-11 rounded-lg border border-[rgba(39,117,202,0.35)] bg-[var(--accent-soft)] px-4 py-2.5 text-sm font-medium text-[var(--data)] transition-colors hover:bg-[var(--accent-soft)] disabled:cursor-not-allowed disabled:opacity-40"
+                          className="min-h-11 rounded-lg border border-[color-mix(in_srgb,var(--accent)_35%,transparent)] bg-[var(--accent-soft)] px-4 py-2.5 text-sm font-medium text-[var(--data)] transition-colors hover:bg-[var(--accent-soft)] disabled:cursor-not-allowed disabled:opacity-40"
                         >
                           {scheduleSaving
                             ? "Saving..."
@@ -1058,7 +1058,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                         </p>
                       ) : null}
                       {scheduleError ? (
-                        <p className="mt-2 text-xs text-rose-600/80">
+                        <p className="mt-2 text-xs text-[color-mix(in_srgb,var(--danger)_80%,transparent)]">
                           {scheduleError}
                         </p>
                       ) : null}
@@ -1088,9 +1088,9 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                 className={
                   "rounded-[var(--radius)] border p-5 transition-colors duration-300 " +
                   (summaryData.isFullyAllocated && !summaryData.isOverAllocated
-                    ? "border-[rgba(39,117,202,0.35)] bg-[rgba(39,117,202,0.07)]"
+                    ? "border-[color-mix(in_srgb,var(--accent)_35%,transparent)] bg-[color-mix(in_srgb,var(--accent)_7%,transparent)]"
                     : summaryData.isOverAllocated
-                      ? "border-rose-500/25 bg-rose-500/[0.06]"
+                      ? "border-[color-mix(in_srgb,var(--danger)_25%,transparent)] bg-[color-mix(in_srgb,var(--danger)_6%,transparent)]"
                       : "border-[var(--line)] bg-[var(--glass-strong)]")
                 }
               >
@@ -1155,7 +1155,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                             !summaryData.isOverAllocated
                             ? "text-[var(--data)]"
                             : summaryData.isOverAllocated
-                              ? "text-rose-600"
+                              ? "text-[var(--danger)]"
                               : "text-[var(--fg-faint)]"
                           : "text-[var(--fg)]")
                       }
@@ -1198,7 +1198,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
 
               {/* Error display */}
               {status === "error" && error ? (
-                <div role="alert" className="rounded-lg border border-rose-500/20 bg-rose-500/[0.06] px-4 py-3.5">
+                <div role="alert" className="rounded-lg border border-[color-mix(in_srgb,var(--danger)_20%,transparent)] bg-[color-mix(in_srgb,var(--danger)_6%,transparent)] px-4 py-3.5">
                   <div className="flex items-start gap-3">
                     <svg
                       className="mt-0.5 shrink-0 text-[var(--danger)]"
@@ -1224,10 +1224,10 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                       <circle cx="8" cy="11" r="0.75" fill="currentColor" />
                     </svg>
                     <div>
-                      <p className="text-sm font-medium text-rose-600">
+                      <p className="text-sm font-medium text-[var(--danger)]">
                         Transaction Failed
                       </p>
-                      <p className="text-xs text-rose-600/70 mt-0.5 leading-relaxed">
+                      <p className="text-xs text-[color-mix(in_srgb,var(--danger)_70%,transparent)] mt-0.5 leading-relaxed">
                         {error}
                       </p>
                     </div>
