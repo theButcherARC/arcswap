@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import AnimatedNumber from "@/components/ui/AnimatedNumber";
 
 type Stats = {
   latestBlock: number;
@@ -46,21 +47,29 @@ export function LiveStats() {
     };
   }, []);
 
-  const cells = [
+  const cells: {
+    raw: number | null;
+    format: (n: number) => string;
+    label: string;
+  }[] = [
     {
-      value: data?.issued ? fmtBig(data.issued.total) : "...",
+      raw: data?.issued ? data.issued.total : null,
+      format: fmtBig,
       label: "USDC Issued on Arc, Live",
     },
     {
-      value: data ? "#" + fmtInt(data.latestBlock) : "...",
+      raw: data ? data.latestBlock : null,
+      format: (n) => "#" + fmtInt(Math.round(n)),
       label: "Latest Arc Block, Live",
     },
     {
-      value: data ? "$" + fmtUsd(data.stats.totalMoved) : "...",
+      raw: data ? data.stats.totalMoved : null,
+      format: (n) => "$" + fmtUsd(n),
       label: "USDC Moved, Last ~10 Min",
     },
     {
-      value: data ? fmtInt(data.stats.transferCount) : "...",
+      raw: data ? data.stats.transferCount : null,
+      format: (n) => fmtInt(Math.round(n)),
       label: "USDC Transfers, Last ~10 Min",
     },
   ];
@@ -74,9 +83,17 @@ export function LiveStats() {
               key={s.label}
               className="flex flex-col items-start justify-center bg-[var(--bg-raised)] px-6 py-10 sm:px-8"
             >
-              <span className="font-mono text-3xl font-bold tracking-tight text-[var(--fg)] sm:text-4xl">
-                {s.value}
-              </span>
+              {s.raw === null ? (
+                <span className="font-mono text-3xl font-bold tracking-tight text-[var(--fg)] sm:text-4xl">
+                  ...
+                </span>
+              ) : (
+                <AnimatedNumber
+                  value={s.raw}
+                  format={s.format}
+                  className="font-mono text-3xl font-bold tracking-tight text-[var(--fg)] sm:text-4xl"
+                />
+              )}
               <span className="mono-label mt-3">{s.label}</span>
             </div>
           ))}

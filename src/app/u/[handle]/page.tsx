@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { JoinWithXButton } from '@/components/auth/JoinWithXButton'
+import ShareSheet from '@/components/ui/ShareSheet'
 import { ROUTES } from '@/constants/routes'
 
 interface PublicProfile {
@@ -24,6 +25,11 @@ export default function PublicProfilePage() {
   const [state, setState] = useState<'loading' | 'found' | 'missing' | 'error'>('loading')
   const [copied, setCopied] = useState(false)
   const [imgStage, setImgStage] = useState(0)
+  const [origin, setOrigin] = useState('')
+
+  useEffect(() => {
+    setOrigin(window.location.origin)
+  }, [])
 
   useEffect(() => {
     setImgStage(0)
@@ -116,7 +122,7 @@ export default function PublicProfilePage() {
 
               <div className="mt-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-1.5 text-xs text-[var(--fg-muted)]">
                 {data.telegram && (
-                  <a href={'https://t.me/' + data.telegram} target="_blank" rel="noopener noreferrer" className="font-medium text-[var(--accent)] hover:underline">
+                  <a href={'https://t.me/' + data.telegram} target="_blank" rel="noopener noreferrer" className="link-sweep font-medium text-[var(--accent)]">
                     t.me/{data.telegram}
                   </a>
                 )}
@@ -125,7 +131,7 @@ export default function PublicProfilePage() {
                     href={'https://explorer.arc.io/address/' + data.walletAddress}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-mono hover:text-[var(--fg)]"
+                    className="link-sweep font-mono hover:text-[var(--fg)]"
                   >
                     {data.walletAddress.slice(0, 6)}...{data.walletAddress.slice(-4)} on Arc
                   </a>
@@ -139,6 +145,17 @@ export default function PublicProfilePage() {
             >
               Pay @{data.username}
             </Link>
+            {origin && (
+              <div className="mt-3">
+                <ShareSheet
+                  url={origin + '/u/' + handle}
+                  title={'Pay @' + data.username + ' on VibeFlow'}
+                  text={'Pay @' + data.username + ' in USDC on Arc via VibeFlow'}
+                  triggerLabel="Share pay link"
+                  triggerClassName="min-h-[52px] w-full rounded-none border-[var(--line)] bg-[var(--bg-raised)] px-6 text-base font-semibold text-[var(--fg)] hover:border-[var(--line-strong)]"
+                />
+              </div>
+            )}
             <p className="mt-3 text-center text-xs leading-relaxed text-[var(--fg-faint)]">
               Opens Bulk Pay with the handle as the recipient. You review everything and sign in your own wallet, nothing moves without your signature.
             </p>
