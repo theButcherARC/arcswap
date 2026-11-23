@@ -85,7 +85,7 @@ export function HomeTop() {
     <div className="mb-10">
       <div className="mb-6">
         <h1 className="text-3xl font-bold tracking-tight text-[var(--fg)] sm:text-4xl">
-          HOME
+          Home
         </h1>
         <p className="mt-2 text-sm text-[var(--fg-muted)]">
           Your money and your people, in one place.

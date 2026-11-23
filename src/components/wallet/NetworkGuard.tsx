@@ -24,7 +24,7 @@ export function NetworkGuard({ children }: NetworkGuardProps) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center px-4">
         <Card className="max-w-sm w-full text-center">
-          <p className="mb-4 text-sm text-surface-800">
+          <p className="mb-4 text-sm text-[var(--fg)]">
             Connect your wallet to use VibeFlow.
           </p>
           {/* ConnectButton handles the actual connection */}
@@ -37,7 +37,7 @@ export function NetworkGuard({ children }: NetworkGuardProps) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center px-4">
         <Card className="max-w-sm w-full text-center">
-          <p className="mb-1 font-semibold text-surface-800">Wrong Network</p>
+          <p className="mb-1 font-semibold text-[var(--fg)]">Wrong Network</p>
           <p className="mb-5 text-sm text-[var(--fg-muted)]">
             VibeFlow requires Arc Mainnet or Arc Testnet.
           </p>

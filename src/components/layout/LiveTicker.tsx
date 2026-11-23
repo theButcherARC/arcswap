@@ -49,7 +49,7 @@ export function LiveTicker() {
           href={"https://explorer.arc.io/tx/" + t.txHash}
           target="_blank"
           rel="noreferrer"
-          className="flex items-center gap-2 px-5 font-mono text-[11.5px] text-[var(--fg-muted)] transition-colors hover:text-[var(--fg)]"
+          className="flex items-center gap-2 px-5 font-mono text-xs text-[var(--fg-muted)] transition-colors hover:text-[var(--fg)]"
           tabIndex={keyPrefix === "b" ? -1 : 0}
         >
           <span className="font-semibold text-[var(--fg)]">${money(t.amount)}</span>
@@ -82,7 +82,7 @@ export function LiveTicker() {
       </div>
 
       {items.length === 0 ? (
-        <span className="pl-36 font-mono text-[11.5px] text-[var(--fg-faint)] sm:pl-44">
+        <span className="pl-36 font-mono text-xs text-[var(--fg-faint)] sm:pl-44">
           Reading Arc mainnet...
         </span>
       ) : (

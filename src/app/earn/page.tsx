@@ -32,7 +32,7 @@ export default function EarnPage() {
         <div className="mb-10">
           <div className="flex items-center gap-3">
             <h1 className="text-3xl font-bold tracking-tight text-[var(--fg)] sm:text-4xl">
-              EARN
+              Earn
             </h1>
             <span className="rounded-full border border-[var(--line)] px-2.5 py-1">
               <span className="mono-label !text-[var(--accent)]">V1 SOON</span>

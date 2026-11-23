@@ -19,36 +19,10 @@ export default async function OpengraphImage() {
           width: '100%',
           height: '100%',
           padding: '80px',
-          background: '#0b0d16',
+          background: '#f5f6fa',
           position: 'relative',
         }}
       >
-        {/* violet glow */}
-        <div
-          style={{
-            position: 'absolute',
-            top: '-160px',
-            right: '-120px',
-            width: '560px',
-            height: '560px',
-            borderRadius: '9999px',
-            background: 'rgba(139, 124, 246, 0.18)',
-            filter: 'blur(60px)',
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            bottom: '-200px',
-            left: '-140px',
-            width: '480px',
-            height: '480px',
-            borderRadius: '9999px',
-            background: 'rgba(34, 211, 238, 0.10)',
-            filter: 'blur(60px)',
-          }}
-        />
-
         {/* badge */}
         <div
           style={{
@@ -56,13 +30,13 @@ export default async function OpengraphImage() {
             alignItems: 'center',
             gap: '10px',
             alignSelf: 'flex-start',
-            border: '1px solid rgba(247, 248, 252, 0.14)',
+            border: '1px solid rgba(11, 13, 22, 0.12)',
             borderRadius: '9999px',
             padding: '10px 20px',
-            background: 'rgba(247, 248, 252, 0.04)',
+            background: '#ffffff',
             fontSize: '24px',
             fontWeight: 600,
-            color: '#f7f8fc',
+            color: '#0b0d16',
           }}
         >
           <div
@@ -70,7 +44,7 @@ export default async function OpengraphImage() {
               width: '14px',
               height: '14px',
               borderRadius: '9999px',
-              background: '#8b7cf6',
+              background: '#2775ca',
             }}
           />
           Built on Arc Blockchain
@@ -84,7 +58,7 @@ export default async function OpengraphImage() {
             fontSize: '120px',
             fontWeight: 800,
             letterSpacing: '-4px',
-            color: '#f7f8fc',
+            color: '#0b0d16',
             lineHeight: 1,
           }}
         >
@@ -98,11 +72,11 @@ export default async function OpengraphImage() {
             marginTop: '20px',
             fontSize: '52px',
             fontWeight: 600,
-            color: '#9ca5bd',
+            color: '#59637a',
             lineHeight: 1.15,
           }}
         >
-          Batch USDC payments. <span style={{ color: '#8b7cf6' }}>One signature.</span>
+          Batch USDC payments. <span style={{ color: '#2775ca' }}>One signature.</span>
         </div>
 
         {/* footer pills */}
@@ -117,13 +91,13 @@ export default async function OpengraphImage() {
             <div
               key={label}
               style={{
-                border: '1px solid rgba(139, 124, 246, 0.35)',
+                border: '1px solid rgba(39, 117, 202, 0.35)',
                 borderRadius: '9999px',
                 padding: '10px 22px',
-                background: 'rgba(139, 124, 246, 0.12)',
+                background: 'rgba(39, 117, 202, 0.08)',
                 fontSize: '24px',
                 fontWeight: 600,
-                color: '#8b7cf6',
+                color: '#2775ca',
               }}
             >
               {label}

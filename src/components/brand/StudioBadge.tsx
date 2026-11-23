@@ -7,7 +7,7 @@ export function StudioBadge() {
       target="_blank"
       rel="noreferrer"
       aria-label="Built with Arc Studio"
-      className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom,0px))] right-4 z-40 flex items-center gap-2 rounded-full border border-[var(--line)] py-2 pl-2 pr-3.5 shadow-[0_8px_24px_rgba(11,13,22,0.10)] transition-transform hover:-translate-y-0.5 pressable"
+      className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom,0px))] right-4 z-40 flex items-center gap-2 rounded-full border border-[var(--line)] py-2 pl-2 pr-3.5 shadow-[0_8px_24px_rgba(11,13,22,0.10)] pressable"
       style={{
         backgroundColor:
           "color-mix(in srgb, var(--accent) 10%, var(--bg-raised))",

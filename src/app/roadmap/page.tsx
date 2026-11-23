@@ -31,7 +31,7 @@ export default function RoadmapPage() {
 
         <div className="text-center">
           <h1 className="text-5xl leading-[0.98] tracking-[-0.03em] sm:text-6xl">
-            <span className="font-extrabold">The road</span>{" "}
+            <span className="font-bold">The road</span>{" "}
             <span className="font-light">ahead.</span>
           </h1>
           <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-[var(--fg-muted)] sm:text-base">

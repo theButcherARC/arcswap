@@ -20,9 +20,9 @@ export function NetworkSwitcher() {
             type="button"
             disabled={isPending || isActive}
             onClick={() => switchChain({ chainId: network.id })}
-            className={`rounded-lg px-2.5 py-1.5 text-[0.6875rem] font-semibold pressable sm:px-3 ${
+            className={`rounded-lg px-2.5 py-1.5 text-xs font-semibold pressable sm:px-3 ${
               isActive
-                ? "bg-[var(--accent)] text-white shadow-[0_6px_18px_rgba(39,117,202,0.25)]"
+                ? "bg-[var(--accent)] text-white"
                 : "text-[var(--fg-muted)] hover:bg-[var(--glass-strong)] hover:text-[var(--fg)]"
             } ${isPending ? "cursor-wait opacity-60" : ""}`}
           >
