@@ -257,7 +257,7 @@ export default function SocialProfilePage() {
                       {fetchingProfile && !profile ? (
                         <div className="h-6 w-40 animate-pulse rounded bg-[var(--glass-strong)]" />
                       ) : (
-                        <p className="truncate text-[22px] font-bold leading-tight text-[var(--fg)]">{displayName || 'VibeFlow user'}</p>
+                        <p className="truncate text-xl font-bold leading-tight text-[var(--fg)]">{displayName || 'VibeFlow user'}</p>
                       )}
                       <p className="mt-0.5 truncate text-sm text-[var(--fg-muted)]">
                         {profile?.username ? '@' + profile.username : 'Connecting X...'}
