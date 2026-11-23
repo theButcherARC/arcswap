@@ -691,10 +691,10 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                       onChange={(e) => setTotalAmountInput(e.target.value)}
                       disabled={isSending}
                       placeholder="0.00"
-                      className="w-full rounded-lg bg-black/[0.03] border border-[var(--line)] text-[var(--fg)] placeholder:text-[var(--fg-faint)] pl-9 pr-4 py-4 text-xl font-semibold focus:outline-none focus:border-[var(--accent)] transition-colors duration-200 hover:border-[var(--line-strong)] hover:bg-black/[0.04] disabled:opacity-40 disabled:cursor-not-allowed"
+                      className="w-full rounded-lg bg-[var(--bg-raised)] border border-[var(--line)] text-[var(--fg)] placeholder:text-[var(--fg-faint)] pl-9 pr-4 py-4 text-xl font-semibold focus:outline-none focus:border-[var(--accent)] transition-colors duration-200 hover:border-[var(--line-strong)] hover:bg-[var(--glass-strong)] disabled:opacity-40 disabled:cursor-not-allowed"
                     />
                   </div>
-                  <div className="flex items-center rounded-lg border border-[var(--line)] bg-black/[0.03] px-4 shrink-0">
+                  <div className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--bg-raised)] px-4 shrink-0">
                     <span className="text-sm font-semibold text-[var(--fg-muted)]">
                       USDC
                     </span>
@@ -715,13 +715,13 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                         cy="6"
                         r="5"
                         stroke="currentColor"
-                        strokeWidth="1"
+                        strokeWidth="1.5"
                         className="text-[var(--fg-faint)]"
                       />
                       <path
                         d="M6 3V6.5L8.5 8"
                         stroke="currentColor"
-                        strokeWidth="1"
+                        strokeWidth="1.5"
                         strokeLinecap="round"
                         className="text-[var(--fg-faint)]"
                       />
@@ -848,7 +848,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                   "text-sm font-medium pressable " +
                   (atMaxRecipients || isSending
                     ? "border-[var(--line)] bg-black/[0.03] text-[var(--fg-faint)] cursor-not-allowed"
-                    : "animate-add-btn-pulse border-[rgba(39,117,202,0.3)] bg-black/[0.03] text-[var(--fg-muted)] hover:text-[var(--data)] hover:bg-[var(--accent-soft)] hover:border-[var(--accent)]")
+                    : "border-[rgba(39,117,202,0.3)] bg-black/[0.03] text-[var(--fg-muted)] hover:text-[var(--data)] hover:bg-[var(--accent-soft)] hover:border-[var(--accent)]")
                 }
               >
                 {atMaxRecipients ? (
@@ -865,12 +865,12 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                         cy="7"
                         r="6"
                         stroke="currentColor"
-                        strokeWidth="1.2"
+                        strokeWidth="1.5"
                       />
                       <path
                         d="M7 4.5V9.5M4.5 7H9.5"
                         stroke="currentColor"
-                        strokeWidth="1.2"
+                        strokeWidth="1.5"
                         strokeLinecap="round"
                       />
                     </svg>
@@ -1201,7 +1201,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                 <div role="alert" className="rounded-lg border border-rose-500/20 bg-rose-500/[0.06] px-4 py-3.5">
                   <div className="flex items-start gap-3">
                     <svg
-                      className="mt-0.5 shrink-0"
+                      className="mt-0.5 shrink-0 text-[var(--danger)]"
                       width="16"
                       height="16"
                       viewBox="0 0 16 16"
@@ -1212,16 +1212,16 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                         cx="8"
                         cy="8"
                         r="6.5"
-                        stroke="#f43f5e"
+                        stroke="currentColor"
                         strokeWidth="1.5"
                       />
                       <path
                         d="M8 5V8.5"
-                        stroke="#f43f5e"
+                        stroke="currentColor"
                         strokeWidth="1.5"
                         strokeLinecap="round"
                       />
-                      <circle cx="8" cy="11" r="0.75" fill="#f43f5e" />
+                      <circle cx="8" cy="11" r="0.75" fill="currentColor" />
                     </svg>
                     <div>
                       <p className="text-sm font-medium text-rose-600">
@@ -1260,8 +1260,8 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                     xmlns="http://www.w3.org/2000/svg"
                     className={gasLoading ? "animate-spin text-[var(--accent)]" : "text-[var(--fg-faint)]"}
                   >
-                    <path d="M10.5 6A4.5 4.5 0 1 1 6 1.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-                    <path d="M6 1.5L8 3.5M6 1.5L8 0" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M10.5 6A4.5 4.5 0 1 1 6 1.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                    <path d="M6 1.5L8 3.5M6 1.5L8 0" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </button>
               </div>
