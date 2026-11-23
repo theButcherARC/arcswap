@@ -394,26 +394,28 @@ export default function ShareSheet({
                     type="button"
                     onClick={close}
                     aria-label="Close share dialog"
-                    className="pressable grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[var(--glass-strong)] text-[var(--fg-muted)] hover:text-[var(--fg)]"
+                    className="pressable -mr-2 grid h-11 w-11 shrink-0 place-items-center rounded-full text-[var(--fg-muted)] hover:text-[var(--fg)]"
                   >
-                    <LineIcon>
-                      <path d="M6 6l12 12M18 6 6 18" />
-                    </LineIcon>
+                    <span className="grid h-8 w-8 place-items-center rounded-full bg-[var(--glass-strong)]">
+                      <LineIcon>
+                        <path d="M6 6l12 12M18 6 6 18" />
+                      </LineIcon>
+                    </span>
                   </button>
                 </div>
-                <div className="mt-5 grid grid-cols-6 gap-1">
+                <div className="mt-5 grid grid-cols-3 gap-2">
                   {channels.map((c) => (
                     <button
                       key={c.id}
                       type="button"
                       disabled={!link}
                       onClick={c.action}
-                      className="pressable flex flex-col items-center gap-1.5 rounded-xl px-0.5 py-2 text-[var(--fg)] hover:bg-[var(--glass-strong)] disabled:cursor-not-allowed disabled:opacity-40"
+                      className="pressable flex flex-col items-center gap-2 rounded-xl px-2 py-3 text-[var(--fg)] hover:bg-[var(--glass-strong)] disabled:cursor-not-allowed disabled:opacity-40"
                     >
-                      <span className="grid h-10 w-10 place-items-center rounded-full border border-[var(--line)] bg-[var(--glass-strong)]">
+                      <span className="grid h-11 w-11 place-items-center rounded-full border border-[var(--line)] bg-[var(--glass-strong)]">
                         {c.icon}
                       </span>
-                      <span className="text-[10px] leading-none text-[var(--fg-muted)]">
+                      <span className="text-xs leading-none text-[var(--fg-muted)]">
                         {c.label}
                       </span>
                     </button>

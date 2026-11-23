@@ -485,7 +485,7 @@ export default function DashboardPage() {
                     href={"https://explorer.arc.io/tx/" + lastBulkPay.hash}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-mono text-xs text-[var(--data)] transition-colors hover:underline"
+                    className="link-sweep font-mono text-xs text-[var(--data)] transition-colors"
                   >
                     {truncateHash(lastBulkPay.hash)}
                   </a>
@@ -558,7 +558,7 @@ export default function DashboardPage() {
                               }
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="font-mono text-xs text-[var(--accent)] transition-colors hover:text-[var(--data)] hover:underline"
+                              className="link-sweep font-mono text-xs text-[var(--accent)] transition-colors hover:text-[var(--data)]"
                             >
                               {truncateAddress(r.address)}
                             </a>

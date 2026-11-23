@@ -221,7 +221,7 @@ function ChainEvents({ c }: { c: ChainFreezes }) {
               href={c.explorer + "/address/" + e.address}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-mono text-xs text-[var(--data)] hover:underline"
+              className="link-sweep font-mono text-xs text-[var(--data)]"
             >
               {shortAddr(e.address)}
             </a>
@@ -232,7 +232,7 @@ function ChainEvents({ c }: { c: ChainFreezes }) {
               href={c.explorer + "/tx/" + e.tx}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs font-semibold text-[var(--data)] hover:underline"
+              className="link-sweep text-xs font-semibold text-[var(--data)]"
             >
               view tx
             </a>
@@ -380,7 +380,7 @@ function FreezePanel() {
               href={lf.explorer + "/address/" + lf.address}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-mono text-lg font-semibold text-[var(--fg)] hover:underline"
+              className="link-sweep font-mono text-lg font-semibold text-[var(--fg)]"
             >
               {shortAddr(lf.address)}
             </a>
@@ -397,7 +397,7 @@ function FreezePanel() {
               href={lf.explorer + "/tx/" + lf.tx}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-semibold text-[var(--data)] hover:underline"
+              className="link-sweep font-semibold text-[var(--data)]"
             >
               View the freeze transaction
             </a>
