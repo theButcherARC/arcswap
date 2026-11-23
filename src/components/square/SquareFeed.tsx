@@ -101,7 +101,7 @@ export function SquareFeed() {
       </div>
 
       {/* Composer */}
-      <div className="mb-10 rounded-[var(--radius)] border border-[var(--line)] bg-[var(--glass)] p-5">
+      <div className="mb-10 rounded-[var(--radius)] border border-[var(--line)] bg-[var(--glass)] p-5 transition-colors focus-within:border-[var(--accent)]">
         {isConnected ? (
           <>
             <textarea

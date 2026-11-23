@@ -39,8 +39,8 @@ export function HeaderVolume() {
       title="USDC moved on Arc in the last ~10 minutes. Live from Arc RPC (Vibrain)."
     >
       <span className="relative flex h-2 w-2">
-        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-60" />
-        <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-600" />
+        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--success)] opacity-60" />
+        <span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--success)]" />
       </span>
       <span className="mono-label hidden lg:inline">Arc live volume</span>
       <span className="font-mono text-sm font-semibold tabular-nums text-[var(--fg)]">

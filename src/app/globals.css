@@ -53,6 +53,20 @@
   input[type="number"] {
     -moz-appearance: textfield;
   }
+
+  /* Hallmark Floor 5: display heads wrap safely wherever they land */
+  h1,
+  h2,
+  h3 {
+    overflow-wrap: break-word;
+    min-width: 0;
+  }
+
+  /* Hallmark F16: the caret takes the accent, like selection and scrollbar */
+  input,
+  textarea {
+    caret-color: var(--accent);
+  }
 }
 
 /* ============================================
@@ -226,26 +240,19 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #e9ebf2;
+  background: var(--glass-strong);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(39, 117, 202, 0.3);
+  background: color-mix(in srgb, var(--accent) 30%, transparent);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(39, 117, 202, 0.5);
+  background: color-mix(in srgb, var(--accent) 50%, transparent);
 }
 
-/* ============================================
-   Selection Color
-   ============================================ */
-
-::selection {
-  background: rgba(39, 117, 202, 0.25);
-  color: #0b0d16;
-}
+/* Selection color is themed once, further below (token-based ::selection) */
 
 /* ============================================
    Smooth Scroll
@@ -261,7 +268,7 @@ html {
 
 a:focus-visible,
 button:focus-visible {
-  outline: 2px solid rgba(39, 117, 202, 0.6);
+  outline: 2px solid color-mix(in srgb, var(--accent) 60%, transparent);
   outline-offset: 2px;
   border-radius: 8px;
 }
@@ -288,7 +295,7 @@ button:focus-visible {
 
 /* Number count-up flash */
 @keyframes value-flash {
-  0% { color: rgba(110, 168, 236, 0.9); }
+  0% { color: var(--data); }
   100% { color: inherit; }
 }
 
@@ -309,9 +316,9 @@ button:focus-visible {
 .skeleton {
   background: linear-gradient(
     90deg,
-    rgba(11, 13, 22, 0.05) 25%,
-    rgba(11, 13, 22, 0.1) 50%,
-    rgba(11, 13, 22, 0.05) 75%
+    color-mix(in srgb, var(--fg) 5%, transparent) 25%,
+    color-mix(in srgb, var(--fg) 10%, transparent) 50%,
+    color-mix(in srgb, var(--fg) 5%, transparent) 75%
   );
   background-size: 200% 100%;
   animation: skeleton-shimmer 1.6s ease-in-out infinite;
@@ -349,20 +356,20 @@ select:focus-visible {
 .coin-3d {
   transform-style: preserve-3d;
   animation: coin-sway 7s ease-in-out infinite;
-  filter: drop-shadow(0 18px 28px rgba(11, 13, 22, 0.22));
+  filter: drop-shadow(0 18px 28px color-mix(in srgb, var(--fg) 22%, transparent));
 }
 
 /* ============================================
    Live glass + hero visual motion (hero rebuild, Nov 2026)
    ============================================ */
 .glass-live {
-  background: rgba(255, 255, 255, 0.55);
-  border: 1px solid rgba(255, 255, 255, 0.7);
+  background: color-mix(in srgb, var(--bg-raised) 55%, transparent);
+  border: 1px solid color-mix(in srgb, var(--bg-raised) 70%, transparent);
   backdrop-filter: blur(18px) saturate(1.5);
   -webkit-backdrop-filter: blur(18px) saturate(1.5);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.8),
-    0 24px 48px rgba(11, 13, 22, 0.1);
+    inset 0 1px 0 color-mix(in srgb, var(--bg-raised) 80%, transparent),
+    0 24px 48px color-mix(in srgb, var(--fg) 10%, transparent);
 }
 
 /* App-wide polish (design skills pass): browser surfaces themed from the palette */
@@ -381,6 +388,8 @@ html {
    (addresses, memos, amounts) stays selectable and copyable. */
 html, body {
   overscroll-behavior: none;
+  /* Hallmark Floor 4: clip, never hidden, so sticky and fixed keep working */
+  overflow-x: clip;
 }
 button, a, [role="button"] {
   touch-action: manipulation;
@@ -414,8 +423,6 @@ a, button, [role="button"] {
   animation: roadmarch 1.1s linear infinite;
 }
 .rj-pin {
-  opacity: 0;
-  transform: scale(0.96);
   transition:
     opacity 0.45s var(--ease-settle),
     transform 0.45s var(--ease-settle);
@@ -425,8 +432,6 @@ a, button, [role="button"] {
   transform: scale(1);
 }
 .rj-card {
-  opacity: 0;
-  transform: translateY(14px);
   transition:
     opacity 0.65s ease,
     transform 0.65s ease;
@@ -436,8 +441,7 @@ a, button, [role="button"] {
   transform: translateY(0);
 }
 .rj-banner {
-  opacity: 0;
-  transform: translateY(calc(-50% + 14px));
+  transform: translateY(-50%);
   transition:
     opacity 0.65s ease,
     transform 0.65s ease;
@@ -445,6 +449,23 @@ a, button, [role="button"] {
 .rj-banner.on {
   opacity: 1;
   transform: translateY(-50%);
+}
+/* Hallmark gate 62: the hidden start state exists only when scripting
+   can reveal it. With scripting off (or a browser that does not know
+   the scripting media query) the content simply shows. */
+@media (scripting: enabled) {
+  .rj-pin {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  .rj-card {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  .rj-banner {
+    opacity: 0;
+    transform: translateY(calc(-50% + 14px));
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .road-dash-anim {
@@ -459,11 +480,16 @@ a, button, [role="button"] {
 
 /* Landing redesign: scroll reveals + floating widgets */
 .rv-group .rv-item {
-  opacity: 0;
-  transform: translateY(18px);
   transition:
     opacity 0.7s ease,
     transform 0.7s ease;
+}
+/* Hallmark gate 62: hidden start state only when scripting can reveal it */
+@media (scripting: enabled) {
+  .rv-group .rv-item {
+    opacity: 0;
+    transform: translateY(18px);
+  }
 }
 .rv-group.on .rv-item {
   opacity: 1;

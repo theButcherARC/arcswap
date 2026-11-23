@@ -136,7 +136,7 @@ export function ConnectButton() {
         {note ? (
           <p
             className={
-              "absolute right-0 top-full z-50 mt-2 w-60 border border-[var(--line)] bg-white p-3 text-left text-xs leading-relaxed text-[var(--fg-muted)] shadow-[0_8px_24px_rgba(11,13,22,0.10)] [transform-origin:top_right] " +
+              "absolute right-0 top-full z-50 mt-2 w-60 border border-[var(--line)] bg-white p-3 text-left text-xs leading-relaxed text-[var(--fg-muted)] shadow-[0_8px_24px_color-mix(in_srgb,var(--fg)_10%,transparent)] [transform-origin:top_right] " +
               (noteClosing ? "animate-pop-out" : "animate-pop-in")
             }
           >
@@ -172,13 +172,13 @@ export function ConnectButton() {
         aria-expanded={menuOpen}
         className="flex items-center gap-2 border border-[var(--line)] bg-[var(--glass)] px-3.5 py-1.5 text-xs font-medium text-[var(--fg)] hover:bg-[var(--glass-strong)] pressable"
       >
-        <span className="h-1.5 w-1.5 bg-emerald-400" aria-hidden="true" />
+        <span className="h-1.5 w-1.5 bg-[var(--success)]" aria-hidden="true" />
         {truncateAddress(address ?? "")}
       </button>
       {menuOpen ? (
         <div
           role="menu"
-          className="absolute right-0 top-full z-50 mt-2 w-48 animate-pop-in border border-[var(--line)] bg-white p-1.5 text-left shadow-[0_8px_24px_rgba(11,13,22,0.10)] [transform-origin:top_right]"
+          className="absolute right-0 top-full z-50 mt-2 w-48 animate-pop-in border border-[var(--line)] bg-white p-1.5 text-left shadow-[0_8px_24px_color-mix(in_srgb,var(--fg)_10%,transparent)] [transform-origin:top_right]"
         >
           <button
             role="menuitem"
@@ -193,7 +193,7 @@ export function ConnectButton() {
               setMenuOpen(false);
               disconnect();
             }}
-            className="w-full px-2.5 py-2 text-left text-xs font-medium text-rose-600 hover:bg-rose-500/[0.06] pressable"
+            className="w-full px-2.5 py-2 text-left text-xs font-medium text-[var(--danger)] hover:bg-[color-mix(in_srgb,var(--danger)_6%,transparent)] pressable"
           >
             Disconnect
           </button>

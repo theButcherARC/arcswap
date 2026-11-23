@@ -206,11 +206,16 @@ export function SquareRequests() {
                   <p className="truncate text-sm text-[var(--fg-muted)]">
                     {r.note}
                   </p>
-                  <p className="mt-0.5 text-xs text-[var(--fg-faint)]">
-                    {r.handle ? "@" + r.handle : shortAddr(r.walletAddress)}
-                    {" · "}
-                    {timeAgo(r.createdAt)}
-                    {isOpen ? "" : " · Closed"}
+                  <p className="mt-0.5 flex flex-wrap items-center gap-x-2.5 text-xs text-[var(--fg-faint)]">
+                    <span>{r.handle ? "@" + r.handle : shortAddr(r.walletAddress)}</span>
+                    <span aria-hidden="true" className="inline-block h-3 w-px bg-[var(--line-strong)]" />
+                    <span>{timeAgo(r.createdAt)}</span>
+                    {!isOpen && (
+                      <>
+                        <span aria-hidden="true" className="inline-block h-3 w-px bg-[var(--line-strong)]" />
+                        <span>Closed</span>
+                      </>
+                    )}
                   </p>
                 </div>
               </div>

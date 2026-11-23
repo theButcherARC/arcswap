@@ -323,7 +323,7 @@ export default function ShareSheet({
         <div className="fixed inset-0 z-[80]" role="presentation">
           <motion.div
             className="absolute inset-0"
-            style={{ background: "rgba(11, 13, 22, 0.45)" }}
+            style={{ background: "color-mix(in srgb, var(--fg) 45%, transparent)" }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -336,7 +336,7 @@ export default function ShareSheet({
             aria-modal="true"
             aria-label={title}
             className="absolute inset-x-0 bottom-0 max-h-[calc(100dvh-24px)] overflow-y-auto rounded-t-[20px] border border-[var(--line)] bg-[var(--bg-raised)] px-5 pb-6 pt-3 sm:inset-0 sm:m-auto sm:h-fit sm:max-w-[400px] sm:rounded-[20px] sm:pt-5"
-            style={{ boxShadow: "0 8px 24px rgba(11, 13, 22, 0.10)" }}
+            style={{ boxShadow: "0 8px 24px color-mix(in srgb, var(--fg) 10%, transparent)" }}
             initial={{
               opacity: 0,
               y: reduceMotion ? 0 : 12,

@@ -69,8 +69,8 @@ function TokenCoinIssued() {
   return (
     <span className="hidden items-center gap-2 rounded-full border border-[var(--line)] px-3.5 py-2 sm:flex">
       <span className="relative flex h-2 w-2">
-        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-60" />
-        <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-600" />
+        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--success)] opacity-60" />
+        <span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--success)]" />
       </span>
       <span className="mono-label">TOTAL SUPPLY · LIVE</span>
     </span>
@@ -101,7 +101,7 @@ function Sparkline({ points }: { points: HistoryPoint[] }) {
     <div className="mt-6">
       <div className="flex items-baseline justify-between">
         <p className="mono-label">ISSUED, LAST 24 HOURS (HOURLY)</p>
-        <p className="font-mono text-xs font-semibold text-emerald-600">
+        <p className="font-mono text-xs font-semibold text-[var(--success)]">
           {(pct >= 0 ? "+" : "") + pct.toFixed(2) + "%"}
         </p>
       </div>
@@ -199,8 +199,10 @@ function ChainEvents({ c }: { c: ChainFreezes }) {
         <h3 className="text-base font-semibold text-[var(--fg)]">
           {c.name}
         </h3>
-        <p className="font-mono text-xs text-[var(--fg-faint)]">
-          {fmtInt(c.frozenCount)} frozen · ${fmtBig(c.lockedUsdc)} locked
+        <p className="flex items-center gap-x-2.5 font-mono text-xs text-[var(--fg-faint)]">
+          <span>{fmtInt(c.frozenCount)} frozen</span>
+          <span aria-hidden="true" className="inline-block h-3 w-px bg-[var(--line-strong)]" />
+          <span>${fmtBig(c.lockedUsdc)} locked</span>
         </p>
       </div>
       <div className="divide-y divide-[var(--line)] border-y border-[var(--line)]">
@@ -212,7 +214,7 @@ function ChainEvents({ c }: { c: ChainFreezes }) {
             <span
               className={
                 "rounded-full px-2 py-0.5 text-[0.625rem] font-semibold text-white " +
-                (e.kind === "freeze" ? "bg-rose-600" : "bg-emerald-600")
+                (e.kind === "freeze" ? "bg-[var(--danger)]" : "bg-[var(--success)]")
               }
             >
               {e.kind === "freeze" ? "FREEZE" : "UNFREEZE"}
@@ -316,11 +318,11 @@ function FreezePanel() {
   return (
     <section className="mb-12 border-y border-[var(--line)] py-8">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="mono-label !text-rose-600">USDC FREEZES</p>
+        <p className="mono-label !text-[var(--danger)]">USDC FREEZES</p>
         <span className="inline-flex items-center gap-2 rounded-full bg-[var(--glass-strong)] px-3 py-1.5 font-mono text-[0.6875rem] font-semibold text-[var(--fg-muted)]">
           <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-60" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-600" />
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--success)] opacity-60" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--success)]" />
           </span>
           LIVE, ARC + ETHEREUM
         </span>
@@ -373,8 +375,8 @@ function FreezePanel() {
       </div>
 
       {lf && (
-        <div className="mt-6 rounded-2xl border border-rose-600/30 bg-rose-600/[0.04] p-5">
-          <p className="mono-label !text-rose-600">LAST FREEZE, LIVE</p>
+        <div className="mt-6 rounded-2xl border border-[color-mix(in_srgb,var(--danger)_30%,transparent)] bg-[color-mix(in_srgb,var(--danger)_4%,transparent)] p-5">
+          <p className="mono-label !text-[var(--danger)]">LAST FREEZE, LIVE</p>
           <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
             <a
               href={lf.explorer + "/address/" + lf.address}
@@ -443,13 +445,13 @@ function FreezePanel() {
             {checking ? "Checking..." : "Check"}
           </button>
         </div>
-        {checkErr && <p className="mt-2 text-sm text-rose-600">{checkErr}</p>}
+        {checkErr && <p className="mt-2 text-sm text-[var(--danger)]">{checkErr}</p>}
         {check && (
           <div className="mt-3 animate-pop-in rounded-2xl border border-[var(--line)] bg-[var(--bg-raised)] p-4">
             <p
               className={
                 "text-sm font-semibold " +
-                (check.frozen ? "text-rose-600" : "text-emerald-600")
+                (check.frozen ? "text-[var(--danger)]" : "text-[var(--success)]")
               }
             >
               {check.frozen
@@ -460,9 +462,12 @@ function FreezePanel() {
                   (check.chain === "arc" ? "Arc" : "Ethereum") +
                   ". This address is not on the blacklist right now."}
             </p>
-            <p className="mt-1 font-mono text-xs text-[var(--fg-muted)]">
-              {check.address} · balance ${fmtUsd(check.balance)} USDC · read
-              live from the contract
+            <p className="mt-1 flex flex-wrap items-center gap-x-2.5 font-mono text-xs text-[var(--fg-muted)]">
+              <span>{check.address}</span>
+              <span aria-hidden="true" className="inline-block h-3 w-px bg-[var(--line-strong)]" />
+              <span>balance ${fmtUsd(check.balance)} USDC</span>
+              <span aria-hidden="true" className="inline-block h-3 w-px bg-[var(--line-strong)]" />
+              <span>read live from the contract</span>
             </p>
           </div>
         )}
@@ -660,7 +665,7 @@ export function VibrainLive() {
                   .map(([label, w]) => (
                     <div key={label} className="bg-[var(--bg-raised)] px-4 py-3.5">
                       <p className="mono-label mb-1">{label}</p>
-                      <p className="font-mono text-base font-semibold text-emerald-600">
+                      <p className="font-mono text-base font-semibold text-[var(--success)]">
                         {(w!.pct >= 0 ? "+" : "") + w!.pct.toFixed(2) + "%"}
                       </p>
                       <p className="font-mono text-xs text-[var(--fg-muted)]">
@@ -792,12 +797,12 @@ export function VibrainLive() {
                     </span>
                     <span className="flex shrink-0 items-center gap-2">
                       {t.fromLabel === "New USDC (mint)" && (
-                        <span className="rounded-full bg-emerald-600 px-2 py-0.5 text-[0.625rem] font-semibold text-white">
+                        <span className="rounded-full bg-[var(--success)] px-2 py-0.5 text-[0.625rem] font-semibold text-white">
                           ISSUED
                         </span>
                       )}
                       {t.toLabel === "USDC (burn)" && (
-                        <span className="rounded-full bg-rose-600 px-2 py-0.5 text-[0.625rem] font-semibold text-white">
+                        <span className="rounded-full bg-[var(--danger)] px-2 py-0.5 text-[0.625rem] font-semibold text-white">
                           BURN
                         </span>
                       )}

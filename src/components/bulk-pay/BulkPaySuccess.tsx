@@ -22,7 +22,7 @@ export default function BulkPaySuccess({ txHash, onReset, tokenSymbol = "USDC", 
         {/* Success card */}
         <div className="animate-settle-in border border-[var(--line)] bg-[var(--bg-raised)] p-8 sm:p-10 text-center">
           {/* Animated checkmark circle */}
-          <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full border-2 border-[rgba(18,128,92,0.3)] bg-[var(--success-soft)] text-[var(--success)]">
+          <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full border-2 border-[color-mix(in_srgb,var(--success)_30%,transparent)] bg-[var(--success-soft)] text-[var(--success)]">
             <svg
               width="36"
               height="36"
@@ -57,7 +57,7 @@ export default function BulkPaySuccess({ txHash, onReset, tokenSymbol = "USDC", 
 
           {/* Settlement speed badge */}
           <div className="mb-2 flex justify-center">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-[rgba(18,128,92,0.3)] bg-[var(--success-soft)] px-4 py-1.5">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[color-mix(in_srgb,var(--success)_30%,transparent)] bg-[var(--success-soft)] px-4 py-1.5">
               <span className="h-1.5 w-1.5 rounded-full bg-[var(--success)] animate-pulse" />
               <span className="text-xs font-semibold text-[var(--success)] tracking-wide">
                 Settled in {"<"}1s

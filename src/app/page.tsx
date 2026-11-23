@@ -152,7 +152,7 @@ export default function VibeFlowLanding() {
           {/* 3D stage: one big glass coin, slow spin and float */}
           <div className="hi-big relative mx-auto h-[320px] w-full max-w-[440px] sm:h-[380px] lg:h-[500px] lg:max-w-none" style={{ animationDelay: "450ms" }}>
             <div aria-hidden="true" className="absolute left-1/2 top-1/2 h-[80%] w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-full" style={{ background: "radial-gradient(closest-side, rgba(39,117,202,0.20), rgba(39,117,202,0.05) 55%, transparent 72%)" }} />
-            <div aria-hidden="true" className="absolute bottom-[6%] left-1/2 h-7 w-[56%] -translate-x-1/2 rounded-[100%] bg-[#0b0d16]/15 blur-xl" />
+            <div aria-hidden="true" className="absolute bottom-[6%] left-1/2 h-7 w-[56%] -translate-x-1/2 rounded-[100%] bg-[var(--fg)]/15 blur-xl" />
             <div className="absolute left-1/2 top-1/2 w-[74%] max-w-[400px] -translate-x-1/2 -translate-y-1/2 lg:left-auto lg:right-[-4%] lg:translate-x-0">
               <div className="floaty">
                 <HeroCoin thickness={18} duration={17} />
