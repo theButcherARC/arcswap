@@ -153,7 +153,7 @@ export default function PayslipReceipt({
               verified, each with its transaction link.
             </p>
           ) : (
-            <p className="text-xs leading-relaxed text-amber-700">
+            <p className="text-xs leading-relaxed text-[var(--warn)]">
               {summary.matchedCount} of {summary.lines.length} lines matched
               a transfer onchain. {summary.missingCount} missing,{" "}
               {summary.mismatchCount} mismatched. Check the flagged lines on
@@ -200,11 +200,11 @@ export default function PayslipReceipt({
                     Pass
                   </span>
                 ) : l.status === "mismatch" ? (
-                  <span className="shrink-0 border border-amber-500/40 bg-amber-500/10 px-2 py-0.5 font-mono text-[0.625rem] font-semibold uppercase tracking-wider text-amber-700">
+                  <span className="shrink-0 border border-[color-mix(in_srgb,var(--warn)_40%,transparent)] bg-[color-mix(in_srgb,var(--warn)_10%,transparent)] px-2 py-0.5 font-mono text-[0.625rem] font-semibold uppercase tracking-wider text-[var(--warn)]">
                     Check
                   </span>
                 ) : (
-                  <span className="shrink-0 border border-rose-500/40 bg-rose-500/10 px-2 py-0.5 font-mono text-[0.625rem] font-semibold uppercase tracking-wider text-rose-700">
+                  <span className="shrink-0 border border-[color-mix(in_srgb,var(--danger)_40%,transparent)] bg-[color-mix(in_srgb,var(--danger)_10%,transparent)] px-2 py-0.5 font-mono text-[0.625rem] font-semibold uppercase tracking-wider text-[var(--danger)]">
                     Missing
                   </span>
                 )}

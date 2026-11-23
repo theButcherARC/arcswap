@@ -117,14 +117,14 @@ export default function RecipientRow({
   };
 
   const inputClasses =
-    "w-full rounded-lg bg-[var(--bg-raised)] border border-[var(--line)] text-[var(--fg)] placeholder:text-[var(--fg-faint)] px-4 py-3 text-base focus:outline-none focus:border-[var(--accent)] focus:bg-[var(--bg-raised)] focus:shadow-[0_0_0_3px_rgba(39,117,202,0.14)] transition-[border-color,background-color,box-shadow] duration-200 hover:border-[var(--line-strong)] hover:bg-[var(--glass-strong)] disabled:opacity-40 disabled:cursor-not-allowed";
+    "w-full rounded-lg bg-[var(--bg-raised)] border border-[var(--line)] text-[var(--fg)] placeholder:text-[var(--fg-faint)] px-4 py-3 text-base focus:outline-none focus:border-[var(--accent)] focus:bg-[var(--bg-raised)] focus:shadow-[0_0_0_3px_color-mix(in_srgb,var(--accent)_14%,transparent)] transition-[border-color,background-color,box-shadow] duration-200 hover:border-[var(--line-strong)] hover:bg-[var(--glass-strong)] disabled:opacity-40 disabled:cursor-not-allowed";
 
   const addressClasses =
     "w-full rounded-lg border px-4 py-3 text-base font-mono placeholder:text-[var(--fg-faint)] focus:outline-none transition-[border-color,background-color] duration-200 disabled:opacity-40 disabled:cursor-not-allowed " +
     (addressValid
-      ? "border-emerald-500/40 bg-emerald-500/5 text-[var(--fg)] focus:border-emerald-500/60"
+      ? "border-[color-mix(in_srgb,var(--success)_40%,transparent)] bg-[color-mix(in_srgb,var(--success)_5%,transparent)] text-[var(--fg)] focus:border-[color-mix(in_srgb,var(--success)_60%,transparent)]"
       : addressHasInput
-        ? "border-rose-500/40 bg-rose-500/5 text-[var(--fg)] focus:border-rose-500/60"
+        ? "border-[color-mix(in_srgb,var(--danger)_40%,transparent)] bg-[color-mix(in_srgb,var(--danger)_5%,transparent)] text-[var(--fg)] focus:border-[color-mix(in_srgb,var(--danger)_60%,transparent)]"
         : "border-[var(--line)] bg-[var(--bg-raised)] text-[var(--fg)] focus:border-[var(--accent)] hover:border-[var(--line-strong)] hover:bg-[var(--glass-strong)]");
 
   const rowNumber = index + 1;
@@ -216,7 +216,7 @@ export default function RecipientRow({
           )}
           {handleState === 'not_found' && (
             <p className="mt-1.5 text-xs text-[var(--warn)]">
-              {handleText} &mdash;{' '}
+              {handleText},{' '}
               <button
                 type="button"
                 className="underline hover:text-[var(--warn)] transition-colors"
@@ -277,7 +277,7 @@ export default function RecipientRow({
           type="button"
           onClick={() => onRemove(recipient.id)}
           disabled={isDisabled}
-          className="mt-4 flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-[var(--line)] bg-black/[0.03] text-[var(--fg-faint)] pressable hover:border-rose-500/30 hover:bg-rose-500/10 hover:text-rose-600 disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:border-[var(--line-strong)] disabled:hover:bg-black/[0.04] disabled:hover:text-[var(--fg-faint)]"
+          className="mt-4 flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-[var(--line)] bg-black/[0.03] text-[var(--fg-faint)] pressable hover:border-[color-mix(in_srgb,var(--danger)_30%,transparent)] hover:bg-[color-mix(in_srgb,var(--danger)_10%,transparent)] hover:text-[var(--danger)] disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:border-[var(--line-strong)] disabled:hover:bg-black/[0.04] disabled:hover:text-[var(--fg-faint)]"
           aria-label={"Remove recipient " + rowNumber}
         >
           <svg
