@@ -344,7 +344,7 @@ export default function CSVUploadForm() {
           {/* Right side: balance + nav tab */}
           <div className="flex items-center gap-3">
             {address && (
-              <div className="flex min-h-11 items-center gap-2 rounded-lg border border-[var(--line)] bg-black/[0.03] backdrop-blur-xl px-3.5 py-2">
+              <div className="flex min-h-11 items-center gap-2 rounded-lg border border-[var(--line)] bg-[var(--bg-raised)] px-3.5 py-2">
                 <span className="text-xs font-medium text-[var(--fg-faint)]">Balance</span>
                 <span className="text-xs font-semibold text-[var(--fg-muted)]">
                   {balance} {selectedSymbol}
@@ -380,7 +380,7 @@ export default function CSVUploadForm() {
         </Link>
 
         {/* ── Main card ──────────────────────────────────────────────────── */}
-        <div className="overflow-hidden rounded-[var(--radius)] border border-[var(--line)] bg-black/[0.03] backdrop-blur-2xl">
+        <div className="overflow-hidden rounded-[var(--radius)] border border-[var(--line)] bg-[var(--bg-raised)]">
 
           {/* ── Input mode tabs ────────────────────────────────────────── */}
           <div className="px-6 sm:px-8 pt-6 pb-0 flex items-center gap-1 border-b border-[var(--line)]">
@@ -433,12 +433,12 @@ export default function CSVUploadForm() {
                   {/* Icon */}
                   <div className={[
                     "flex h-14 w-14 items-center justify-center rounded-[var(--radius)] border transition-colors duration-300",
-                    fileName ? "border-[rgba(39,117,202,0.3)] bg-[rgba(39,117,202,0.08)]" : "border-[var(--line)] bg-black/[0.03] group-hover:border-[rgba(39,117,202,0.3)] group-hover:bg-[var(--accent-soft)]",
+                    fileName ? "border-[rgba(39,117,202,0.3)] bg-[rgba(39,117,202,0.08)] text-[var(--success)]" : "border-[var(--line)] bg-black/[0.03] group-hover:border-[rgba(39,117,202,0.3)] group-hover:bg-[var(--accent-soft)]",
                   ].join(" ")}>
                     {fileName ? (
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M9 12.75L11.25 15 15 9.75" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <circle cx="12" cy="12" r="9" stroke="#10b981" strokeWidth="1.5" strokeOpacity="0.4"/>
+                        <path d="M9 12.75L11.25 15 15 9.75" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.4"/>
                       </svg>
                     ) : (
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -499,7 +499,7 @@ export default function CSVUploadForm() {
                     value={pasteContent}
                     onChange={handlePaste}
                     placeholder="Paste CSV content here - name, address, amount per line"
-                    className="w-full h-48 rounded-lg bg-black/[0.03] border border-[var(--line)] text-[var(--fg)] placeholder:text-[var(--fg-faint)] px-4 py-3 text-base focus:outline-none sm:text-sm focus:border-[var(--accent)] focus:bg-black/[0.03] focus:shadow-[0_0_0_3px_rgba(39,117,202,0.15)] transition-colors duration-200 font-mono hover:border-[var(--line-strong)] hover:bg-black/[0.04] resize-none"
+                    className="w-full h-48 rounded-lg bg-[var(--bg-raised)] border border-[var(--line)] text-[var(--fg)] placeholder:text-[var(--fg-faint)] px-4 py-3 text-base focus:outline-none sm:text-sm focus:border-[var(--accent)] focus:bg-[var(--bg-raised)] focus:shadow-[0_0_0_3px_rgba(39,117,202,0.15)] transition-colors duration-200 font-mono hover:border-[var(--line-strong)] hover:bg-[var(--glass-strong)] resize-none"
                   />
                   <p className="text-[0.6875rem] text-[var(--fg-faint)] leading-relaxed">
                     Format: <span className="font-mono text-[var(--fg-faint)]">name, address, amount</span> or <span className="font-mono text-[var(--fg-faint)]">address, amount</span> - one row per line, no header required
@@ -513,9 +513,9 @@ export default function CSVUploadForm() {
           {parseErrors.length > 0 && (
             <div role="alert" className="px-6 sm:px-8 py-4 border-b border-[var(--line)] bg-amber-500/[0.03]">
               <div className="flex items-start gap-3">
-                <div className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center border border-amber-500/30 bg-amber-500/10">
+                <div className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center border border-[rgba(188,88,12,0.3)] bg-[var(--warn-soft)] text-[var(--warn)]">
                   <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-                    <path d="M5 3V5.5M5 7H5.005" stroke="#f59e0b" strokeWidth="1.4" strokeLinecap="round"/>
+                    <path d="M5 3V5.5M5 7H5.005" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                   </svg>
                 </div>
                 <div className="flex-1 min-w-0">
@@ -607,7 +607,7 @@ export default function CSVUploadForm() {
               onChange={(e) => setMemo(e.target.value)}
               maxLength={120}
               placeholder="e.g. July Salary, Q3 Bonus, Contractor Batch"
-              className="w-full rounded-lg bg-black/[0.03] border border-[var(--line)] text-[var(--fg)] placeholder:text-[var(--fg-faint)] px-4 py-3 text-base focus:outline-none sm:text-sm focus:border-[var(--accent)] focus:bg-black/[0.03] focus:shadow-[0_0_0_3px_rgba(39,117,202,0.15)] transition-colors duration-200 hover:border-[var(--line-strong)]"
+              className="w-full rounded-lg bg-[var(--bg-raised)] border border-[var(--line)] text-[var(--fg)] placeholder:text-[var(--fg-faint)] px-4 py-3 text-base focus:outline-none sm:text-sm focus:border-[var(--accent)] focus:bg-[var(--bg-raised)] focus:shadow-[0_0_0_3px_rgba(39,117,202,0.15)] transition-colors duration-200 hover:border-[var(--line-strong)]"
             />
             {memo.length > 0 && (
               <p className="mt-1.5 text-[0.6875rem] text-[var(--fg-faint)] text-right">{memo.length}/120 · stored onchain</p>
@@ -708,7 +708,7 @@ export default function CSVUploadForm() {
               className={
                 "w-full rounded-full px-6 py-3.5 text-sm font-semibold pressable flex items-center justify-center gap-2.5 " +
                 (canSend
-                  ? "animate-send-pulse bg-[var(--fg)] text-[var(--bg)]"
+                  ? "bg-[var(--fg)] text-[var(--bg)]"
                   : "bg-black/[0.04] text-[var(--fg-faint)] cursor-not-allowed")
               }
             >
