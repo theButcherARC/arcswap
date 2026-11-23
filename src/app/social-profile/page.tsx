@@ -303,7 +303,7 @@ export default function SocialProfilePage() {
 
                 <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-1.5 text-xs text-[var(--fg-muted)]">
                   {extras.telegram && (
-                    <a href={'https://t.me/' + extras.telegram} target="_blank" rel="noopener noreferrer" className="font-medium text-[var(--accent)] hover:underline">
+                    <a href={'https://t.me/' + extras.telegram} target="_blank" rel="noopener noreferrer" className="link-sweep font-medium text-[var(--accent)]">
                       t.me/{extras.telegram}
                     </a>
                   )}
