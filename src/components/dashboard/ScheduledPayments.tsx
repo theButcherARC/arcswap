@@ -174,7 +174,7 @@ export function ScheduledPayments() {
                         Cancelled
                       </span>
                     ) : due ? (
-                      <span className="text-[0.6875rem] font-medium text-amber-600">
+                      <span className="text-[0.6875rem] font-medium text-[var(--warn)]">
                         Due now
                       </span>
                     ) : (
@@ -193,7 +193,7 @@ export function ScheduledPayments() {
                         <button
                           type="button"
                           onClick={() => handleCancel(item.id)}
-                          className="inline-flex min-h-11 items-center px-1 text-xs text-[var(--fg-faint)] transition-colors hover:text-rose-600 active:opacity-60"
+                          className="inline-flex min-h-11 items-center px-1 text-xs text-[var(--fg-faint)] transition-colors hover:text-[var(--danger)] active:opacity-60"
                         >
                           Cancel
                         </button>

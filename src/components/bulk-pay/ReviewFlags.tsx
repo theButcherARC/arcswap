@@ -51,12 +51,12 @@ export default function ReviewFlags({
   return (
     <div className="mb-4 space-y-2.5">
       {flags.duplicates.length > 0 ? (
-        <div className="rounded-lg border border-rose-500/40 bg-rose-500/[0.07] px-4 py-3">
-          <span className="mono-label block mb-1 !text-rose-600">
+        <div className="rounded-lg border border-[color-mix(in_srgb,var(--danger)_40%,transparent)] bg-[color-mix(in_srgb,var(--danger)_7%,transparent)] px-4 py-3">
+          <span className="mono-label block mb-1 !text-[var(--danger)]">
             Check before you sign / Duplicate address
           </span>
           {flags.duplicates.map((d) => (
-            <p key={d.address} className="text-xs leading-relaxed text-rose-700">
+            <p key={d.address} className="text-xs leading-relaxed text-[var(--danger)]">
               {shortAddress(d.address)} appears on rows {listRows(d.rows)}.
               The same person would be paid {d.rows.length} times in this
               batch.
@@ -66,12 +66,12 @@ export default function ReviewFlags({
       ) : null}
 
       {flags.outliers.length > 0 ? (
-        <div className="rounded-lg border border-amber-500/40 bg-amber-500/[0.07] px-4 py-3">
-          <span className="mono-label block mb-1 !text-amber-600">
+        <div className="rounded-lg border border-[color-mix(in_srgb,var(--warn)_40%,transparent)] bg-[color-mix(in_srgb,var(--warn)_7%,transparent)] px-4 py-3">
+          <span className="mono-label block mb-1 !text-[var(--warn)]">
             Check before you sign / Unusual amount
           </span>
           {flags.outliers.slice(0, MAX_LISTED).map((l) => (
-            <p key={l.row} className="text-xs leading-relaxed text-amber-700">
+            <p key={l.row} className="text-xs leading-relaxed text-[var(--warn)]">
               Row {l.row} ({l.name || "Recipient"}, {shortAddress(l.address)})
               gets {currencySymbol}
               {formatMoney(l.amount)}, at least 10x the typical row in this
@@ -79,7 +79,7 @@ export default function ReviewFlags({
             </p>
           ))}
           {flags.outliers.length > MAX_LISTED ? (
-            <p className="text-xs leading-relaxed text-amber-700">
+            <p className="text-xs leading-relaxed text-[var(--warn)]">
               And {flags.outliers.length - MAX_LISTED} more row
               {flags.outliers.length - MAX_LISTED !== 1 ? "s" : ""} with
               unusual amounts.
@@ -89,12 +89,12 @@ export default function ReviewFlags({
       ) : null}
 
       {flags.firstTime.length > 0 ? (
-        <div className="rounded-lg border border-amber-500/40 bg-amber-500/[0.07] px-4 py-3">
-          <span className="mono-label block mb-1 !text-amber-600">
+        <div className="rounded-lg border border-[color-mix(in_srgb,var(--warn)_40%,transparent)] bg-[color-mix(in_srgb,var(--warn)_7%,transparent)] px-4 py-3">
+          <span className="mono-label block mb-1 !text-[var(--warn)]">
             Check before you sign / First-time recipient
             {flags.firstTime.length !== 1 ? "s" : ""}
           </span>
-          <p className="text-xs leading-relaxed text-amber-700">
+          <p className="text-xs leading-relaxed text-[var(--warn)]">
             {flags.firstTime.length} of {lines.length} recipients have never
             been paid from this browser before:{" "}
             {flags.firstTime
