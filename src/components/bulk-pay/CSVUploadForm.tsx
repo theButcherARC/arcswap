@@ -332,7 +332,7 @@ export default function CSVUploadForm() {
                     "flex min-h-11 items-center gap-1.5 rounded-full border px-4 py-1.5 text-xs font-semibold pressable " +
                     (selectedSymbol === sym
                       ? "bg-[var(--accent-soft)] border-[var(--accent)]/40 text-[var(--accent)]"
-                      : "bg-black/[0.03] border-[var(--line)] text-[var(--fg-faint)] hover:text-[var(--fg)] hover:border-[rgba(39,117,202,0.3)] hover:bg-[var(--accent-soft)]")
+                      : "bg-black/[0.03] border-[var(--line)] text-[var(--fg-faint)] hover:text-[var(--fg)] hover:border-[color-mix(in_srgb,var(--accent)_30%,transparent)] hover:bg-[var(--accent-soft)]")
                   }
                 >
                   {sym === "USDC" ? "$" : "€"} {sym}
@@ -375,7 +375,7 @@ export default function CSVUploadForm() {
             Skip the spreadsheet. Describe the payments in one sentence and the AI Payment Agent builds the batch for you. You review and sign, nothing is sent before that.
           </p>
           <span className="shrink-0 text-sm font-semibold text-[var(--accent)]">
-            Try the agent <span aria-hidden="true">→</span>
+            Try the agent
           </span>
         </Link>
 
@@ -426,14 +426,14 @@ export default function CSVUploadForm() {
                     isDragging
                       ? "border-[var(--accent)] bg-[var(--accent-soft)]"
                       : fileName
-                        ? "border-[rgba(39,117,202,0.4)] bg-[rgba(39,117,202,0.04)] hover:border-[rgba(39,117,202,0.6)]"
-                        : "border-[var(--line)] bg-black/[0.03] hover:border-[rgba(39,117,202,0.35)] hover:bg-[var(--accent-soft)]",
+                        ? "border-[color-mix(in_srgb,var(--accent)_40%,transparent)] bg-[color-mix(in_srgb,var(--accent)_4%,transparent)] hover:border-[color-mix(in_srgb,var(--accent)_60%,transparent)]"
+                        : "border-[var(--line)] bg-black/[0.03] hover:border-[color-mix(in_srgb,var(--accent)_35%,transparent)] hover:bg-[var(--accent-soft)]",
                   ].join(" ")}
                 >
                   {/* Icon */}
                   <div className={[
                     "flex h-14 w-14 items-center justify-center rounded-[var(--radius)] border transition-colors duration-300",
-                    fileName ? "border-[rgba(39,117,202,0.3)] bg-[rgba(39,117,202,0.08)] text-[var(--success)]" : "border-[var(--line)] bg-black/[0.03] group-hover:border-[rgba(39,117,202,0.3)] group-hover:bg-[var(--accent-soft)]",
+                    fileName ? "border-[color-mix(in_srgb,var(--accent)_30%,transparent)] bg-[color-mix(in_srgb,var(--accent)_8%,transparent)] text-[var(--success)]" : "border-[var(--line)] bg-black/[0.03] group-hover:border-[color-mix(in_srgb,var(--accent)_30%,transparent)] group-hover:bg-[var(--accent-soft)]",
                   ].join(" ")}>
                     {fileName ? (
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -442,8 +442,8 @@ export default function CSVUploadForm() {
                       </svg>
                     ) : (
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 16V8M12 8L9 11M12 8L15 11" stroke="rgba(11,13,22,0.45)" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M3 16.5V18.75C3 19.9926 4.00736 21 5.25 21H18.75C19.9926 21 21 19.9926 21 18.75V16.5" stroke="rgba(11,13,22,0.3)" strokeWidth="1.75" strokeLinecap="round"/>
+                        <path d="M12 16V8M12 8L9 11M12 8L15 11" stroke="currentColor" strokeOpacity="0.45" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M3 16.5V18.75C3 19.9926 4.00736 21 5.25 21H18.75C19.9926 21 21 19.9926 21 18.75V16.5" stroke="currentColor" strokeOpacity="0.3" strokeWidth="1.75" strokeLinecap="round"/>
                       </svg>
                     )}
                   </div>
@@ -462,10 +462,10 @@ export default function CSVUploadForm() {
                   ) : (
                     <div className="text-center">
                       <p className="text-sm font-semibold text-[var(--fg-muted)] group-hover:text-[var(--fg)] transition-colors">
-                        Upload CSV &mdash; Add up to 1,000 Recipients
+                        Upload CSV, add up to 1,000 recipients
                       </p>
                       <p className="text-xs text-[var(--fg-faint)] mt-1">
-                        Drag & drop or click to browse &mdash; .csv files only
+                        Drag & drop or click to browse (.csv files only)
                       </p>
                       <p className="text-[0.6875rem] text-[var(--fg-faint)] mt-3 font-mono">
                         Alice, 0x1234...abcd, 100.50
@@ -485,9 +485,9 @@ export default function CSVUploadForm() {
                 {/* Format hint */}
                 <p className="mt-4 text-[0.6875rem] text-[var(--fg-faint)] text-center leading-relaxed">
                   Columns: <span className="font-mono text-[var(--fg-faint)]">name, address, amount</span>
-                  &nbsp;&mdash;&nbsp;or just&nbsp;
+                  , or just{" "}
                   <span className="font-mono text-[var(--fg-faint)]">address, amount</span>
-                  &nbsp;&mdash;&nbsp;no header row required
+                  . No header row required
                 </p>
               </>
             ) : (
@@ -499,7 +499,7 @@ export default function CSVUploadForm() {
                     value={pasteContent}
                     onChange={handlePaste}
                     placeholder="Paste CSV content here - name, address, amount per line"
-                    className="w-full h-48 rounded-lg bg-[var(--bg-raised)] border border-[var(--line)] text-[var(--fg)] placeholder:text-[var(--fg-faint)] px-4 py-3 text-base focus:outline-none sm:text-sm focus:border-[var(--accent)] focus:bg-[var(--bg-raised)] focus:shadow-[0_0_0_3px_rgba(39,117,202,0.15)] transition-colors duration-200 font-mono hover:border-[var(--line-strong)] hover:bg-[var(--glass-strong)] resize-none"
+                    className="w-full h-48 rounded-lg bg-[var(--bg-raised)] border border-[var(--line)] text-[var(--fg)] placeholder:text-[var(--fg-faint)] px-4 py-3 text-base focus:outline-none sm:text-sm focus:border-[var(--accent)] focus:bg-[var(--bg-raised)] focus:shadow-[0_0_0_3px_color-mix(in_srgb,var(--accent)_15%,transparent)] transition-colors duration-200 font-mono hover:border-[var(--line-strong)] hover:bg-[var(--glass-strong)] resize-none"
                   />
                   <p className="text-[0.6875rem] text-[var(--fg-faint)] leading-relaxed">
                     Format: <span className="font-mono text-[var(--fg-faint)]">name, address, amount</span> or <span className="font-mono text-[var(--fg-faint)]">address, amount</span> - one row per line, no header required
@@ -511,16 +511,16 @@ export default function CSVUploadForm() {
 
           {/* ── Parse errors ───────────────────────────────────────────── */}
           {parseErrors.length > 0 && (
-            <div role="alert" className="px-6 sm:px-8 py-4 border-b border-[var(--line)] bg-amber-500/[0.03]">
+            <div role="alert" className="px-6 sm:px-8 py-4 border-b border-[var(--line)] bg-[color-mix(in_srgb,var(--warn)_3%,transparent)]">
               <div className="flex items-start gap-3">
-                <div className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center border border-[rgba(188,88,12,0.3)] bg-[var(--warn-soft)] text-[var(--warn)]">
+                <div className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center border border-[color-mix(in_srgb,var(--warn)_30%,transparent)] bg-[var(--warn-soft)] text-[var(--warn)]">
                   <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
                     <path d="M5 3V5.5M5 7H5.005" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                   </svg>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-semibold text-amber-600 mb-1.5">
-                    {parseErrors.length} row{parseErrors.length !== 1 ? "s" : ""} skipped &mdash; continuing with valid recipients
+                  <p className="text-xs font-semibold text-[var(--warn)] mb-1.5">
+                    {parseErrors.length} row{parseErrors.length !== 1 ? "s" : ""} skipped, continuing with valid recipients
                   </p>
                   <ul className="space-y-0.5">
                     {parseErrors.slice(0, 5).map((e, i) => (
@@ -607,7 +607,7 @@ export default function CSVUploadForm() {
               onChange={(e) => setMemo(e.target.value)}
               maxLength={120}
               placeholder="e.g. July Salary, Q3 Bonus, Contractor Batch"
-              className="w-full rounded-lg bg-[var(--bg-raised)] border border-[var(--line)] text-[var(--fg)] placeholder:text-[var(--fg-faint)] px-4 py-3 text-base focus:outline-none sm:text-sm focus:border-[var(--accent)] focus:bg-[var(--bg-raised)] focus:shadow-[0_0_0_3px_rgba(39,117,202,0.15)] transition-colors duration-200 hover:border-[var(--line-strong)]"
+              className="w-full rounded-lg bg-[var(--bg-raised)] border border-[var(--line)] text-[var(--fg)] placeholder:text-[var(--fg-faint)] px-4 py-3 text-base focus:outline-none sm:text-sm focus:border-[var(--accent)] focus:bg-[var(--bg-raised)] focus:shadow-[0_0_0_3px_color-mix(in_srgb,var(--accent)_15%,transparent)] transition-colors duration-200 hover:border-[var(--line-strong)]"
             />
             {memo.length > 0 && (
               <p className="mt-1.5 text-[0.6875rem] text-[var(--fg-faint)] text-right">{memo.length}/120 · stored onchain</p>
@@ -634,7 +634,7 @@ export default function CSVUploadForm() {
           <div className="px-6 sm:px-8 py-6">
             {/* Tx error */}
             {txError && (
-              <div role="alert" className="mb-4 rounded-lg border border-rose-500/20 bg-rose-500/[0.06] px-4 py-3 text-xs text-rose-600">
+              <div role="alert" className="mb-4 rounded-lg border border-[color-mix(in_srgb,var(--danger)_20%,transparent)] bg-[color-mix(in_srgb,var(--danger)_6%,transparent)] px-4 py-3 text-xs text-[var(--danger)]">
                 {txError}
               </div>
             )}
@@ -651,7 +651,7 @@ export default function CSVUploadForm() {
               <button
                 type="button"
                 onClick={switchToArcNetwork}
-                className="w-full mb-4 min-h-11 rounded-lg border border-amber-500/25 bg-amber-500/[0.06] px-4 py-3 text-xs font-semibold text-amber-600 hover:bg-amber-500/10 pressable"
+                className="w-full mb-4 min-h-11 rounded-lg border border-[color-mix(in_srgb,var(--warn)_25%,transparent)] bg-[color-mix(in_srgb,var(--warn)_6%,transparent)] px-4 py-3 text-xs font-semibold text-[var(--warn)] hover:bg-[color-mix(in_srgb,var(--warn)_10%,transparent)] pressable"
               >
                 Switch to Arc
               </button>
@@ -672,7 +672,7 @@ export default function CSVUploadForm() {
                 {parseErrors.length > 0 && (
                   <>
                     <span className="text-[var(--fg-faint)] text-[0.6875rem]">|</span>
-                    <span className="text-[0.6875rem] text-amber-500/70 whitespace-nowrap">
+                    <span className="text-[0.6875rem] text-[color-mix(in_srgb,var(--warn)_70%,transparent)] whitespace-nowrap">
                       {parseErrors.length} row{parseErrors.length !== 1 ? "s" : ""} skipped
                     </span>
                   </>
