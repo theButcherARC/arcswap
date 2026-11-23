@@ -58,7 +58,7 @@ function AgentPreview({
   return (
     <div
       className={
-        "mt-4 rounded-[var(--radius)] border border-[rgba(39,117,202,0.25)] bg-[rgba(39,117,202,0.05)] p-5 " +
+        "mt-4 rounded-[var(--radius)] border border-[color-mix(in_srgb,var(--accent)_25%,transparent)] bg-[color-mix(in_srgb,var(--accent)_5%,transparent)] p-5 " +
         (leaving ? "animate-pop-out" : "animate-pop-in")
       }
     >
@@ -546,7 +546,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
 
 {/* Wallet requirement banner (shown until connected) */}
           {!isConnected ? (
-            <div className="mb-7 flex flex-col gap-3 rounded-[var(--radius)] border border-[rgba(39,117,202,0.3)] bg-[var(--accent-soft)] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="mb-7 flex flex-col gap-3 rounded-[var(--radius)] border border-[color-mix(in_srgb,var(--accent)_30%,transparent)] bg-[var(--accent-soft)] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm text-[var(--fg-muted)]">
                 <span className="font-semibold text-[var(--fg)]">Connect your wallet to send.</span>{" "}
                 MetaMask on Arc Mainnet is required before you can submit a batch.
@@ -691,7 +691,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
 
                   {/* Error state */}
                   {agentError && !agentLoading ? (
-                    <div className="mt-4 rounded-lg border border-rose-500/20 bg-rose-500/[0.06] px-4 py-3">
+                    <div className="mt-4 rounded-lg border border-[color-mix(in_srgb,var(--danger)_20%,transparent)] bg-[color-mix(in_srgb,var(--danger)_6%,transparent)] px-4 py-3">
                       <div className="flex items-start gap-2.5">
                         <svg
                           className="mt-0.5 shrink-0 text-[var(--danger)]"
@@ -716,7 +716,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                           />
                           <circle cx="7" cy="10" r="0.75" fill="currentColor" />
                         </svg>
-                        <p className="text-xs text-rose-600/90 leading-relaxed">
+                        <p className="text-xs text-[color-mix(in_srgb,var(--danger)_90%,transparent)] leading-relaxed">
                           {agentError}
                         </p>
                       </div>
@@ -773,7 +773,7 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                   "text-sm font-medium pressable " +
                   (atMaxRecipients || isSending
                     ? "border-[var(--line)] bg-black/[0.03] text-[var(--fg-faint)] cursor-not-allowed"
-                    : "border-[rgba(39,117,202,0.3)] bg-black/[0.03] text-[var(--fg-muted)] hover:text-[var(--data)] hover:bg-[var(--accent-soft)] hover:border-[var(--accent)]")
+                    : "border-[color-mix(in_srgb,var(--accent)_30%,transparent)] bg-black/[0.03] text-[var(--fg-muted)] hover:text-[var(--data)] hover:bg-[var(--accent-soft)] hover:border-[var(--accent)]")
                 }
               >
                 {atMaxRecipients ? "Recipient limit reached" : "Add recipient"}
@@ -844,8 +844,8 @@ className="flex items-center rounded-lg border border-[var(--line)] bg-[var(--gl
                 </div>
 
                 {status === "error" && error ? (
-                  <div role="alert" className="mt-4 rounded-lg border border-rose-500/20 bg-rose-500/[0.06] px-4 py-3">
-                    <p className="text-xs text-rose-600/90 leading-relaxed">{error}</p>
+                  <div role="alert" className="mt-4 rounded-lg border border-[color-mix(in_srgb,var(--danger)_20%,transparent)] bg-[color-mix(in_srgb,var(--danger)_6%,transparent)] px-4 py-3">
+                    <p className="text-xs text-[color-mix(in_srgb,var(--danger)_90%,transparent)] leading-relaxed">{error}</p>
                   </div>
                 ) : null}
 
