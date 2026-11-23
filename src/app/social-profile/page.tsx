@@ -314,10 +314,10 @@ export default function SocialProfilePage() {
                 </div>
 
                 {profileError && (
-                  <p className="mt-4 rounded-lg border border-rose-500/20 bg-rose-500/10 px-3 py-2 text-xs text-rose-600">{profileError}</p>
+                  <p className="mt-4 rounded-lg border border-[color-mix(in_srgb,var(--danger)_20%,transparent)] bg-[color-mix(in_srgb,var(--danger)_10%,transparent)] px-3 py-2 text-xs text-[var(--danger)]">{profileError}</p>
                 )}
                 {saveNote && (
-                  <p className="mt-4 rounded-lg border border-[rgba(39,117,202,0.25)] bg-[var(--accent-soft)] px-3 py-2 text-xs font-medium text-[var(--accent)]">{saveNote}</p>
+                  <p className="mt-4 rounded-lg border border-[color-mix(in_srgb,var(--accent)_25%,transparent)] bg-[var(--accent-soft)] px-3 py-2 text-xs font-medium text-[var(--accent)]">{saveNote}</p>
                 )}
 
                 {editing && (
@@ -406,7 +406,7 @@ export default function SocialProfilePage() {
 
           {/* ── Payment identity ───────────────────────────────────────── */}
           {xConnected && (
-            <div className="rounded-[var(--radius)] border border-[rgba(39,117,202,0.2)] bg-[var(--accent-soft)] p-6">
+            <div className="rounded-[var(--radius)] border border-[color-mix(in_srgb,var(--accent)_20%,transparent)] bg-[var(--accent-soft)] p-6">
               <div className="mb-4 flex items-center gap-3">
                 <div className="flex h-7 w-7 items-center justify-center rounded-md bg-[var(--bg-raised)] text-xs font-bold text-[var(--accent)]">V</div>
                 <span className="text-sm font-semibold text-[var(--fg)]">VibeID</span>
@@ -416,7 +416,7 @@ export default function SocialProfilePage() {
                 <div className="h-12 animate-pulse bg-black/[0.06]" />
               ) : profile?.vibeId ? (
                 <>
-                  <div className="flex items-center justify-between gap-3 rounded-lg border border-[rgba(39,117,202,0.3)] bg-[var(--bg-raised)] px-4 py-3">
+                  <div className="flex items-center justify-between gap-3 rounded-lg border border-[color-mix(in_srgb,var(--accent)_30%,transparent)] bg-[var(--bg-raised)] px-4 py-3">
                     <div>
                       <p className="font-mono text-lg font-bold tracking-widest text-[var(--accent)]">{profile.vibeId}</p>
                       <p className="mt-0.5 text-xs text-[var(--fg-faint)]">Permanent · Cannot be changed</p>
@@ -424,7 +424,7 @@ export default function SocialProfilePage() {
                     <button
                       onClick={() => copyText('vibe', profile.vibeId)}
                       title="Copy VibeID"
-                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-[rgba(39,117,202,0.3)] bg-[var(--bg-raised)] text-[var(--accent)] pressable hover:bg-[var(--accent-soft)]"
+                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-[color-mix(in_srgb,var(--accent)_30%,transparent)] bg-[var(--bg-raised)] text-[var(--accent)] pressable hover:bg-[var(--accent-soft)]"
                     >
                       {copied === 'vibe' ? (
                         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
@@ -455,7 +455,7 @@ export default function SocialProfilePage() {
             {walletConnected ? (
               <>
               <div className="flex items-center gap-2">
-                <div className="min-w-0 flex-1 rounded-lg border border-[rgba(39,117,202,0.2)] bg-[var(--accent-soft)] px-4 py-3">
+                <div className="min-w-0 flex-1 rounded-lg border border-[color-mix(in_srgb,var(--accent)_20%,transparent)] bg-[var(--accent-soft)] px-4 py-3">
                   <p className="break-all font-mono text-sm text-[var(--fg)]">{address}</p>
                   <p className="mt-0.5 text-xs text-[var(--fg-faint)]">Wallet connected</p>
                 </div>
@@ -493,19 +493,19 @@ export default function SocialProfilePage() {
             </div>
 
             {status === 'success' ? (
-              <div className="rounded-lg border border-[rgba(39,117,202,0.25)] bg-[var(--accent-soft)] px-4 py-3">
+              <div className="rounded-lg border border-[color-mix(in_srgb,var(--accent)_25%,transparent)] bg-[var(--accent-soft)] px-4 py-3">
                 <p className="text-sm font-semibold text-[var(--accent)]">Linked successfully</p>
                 <p className="mt-0.5 text-xs text-[var(--fg-muted)]">{message}</p>
               </div>
             ) : (
               <>
                 {status === 'error' && message && (
-                  <div className="mb-3 rounded-lg border border-rose-500/20 bg-rose-500/10 px-4 py-3">
-                    <p className="text-sm text-rose-600">{message}</p>
+                  <div className="mb-3 rounded-lg border border-[color-mix(in_srgb,var(--danger)_20%,transparent)] bg-[color-mix(in_srgb,var(--danger)_10%,transparent)] px-4 py-3">
+                    <p className="text-sm text-[var(--danger)]">{message}</p>
                   </div>
                 )}
                 {profile?.username && (
-                  <div className="mb-4 rounded-lg border border-[rgba(39,117,202,0.2)] bg-[var(--accent-soft)] px-4 py-3">
+                  <div className="mb-4 rounded-lg border border-[color-mix(in_srgb,var(--accent)_20%,transparent)] bg-[var(--accent-soft)] px-4 py-3">
                     <p className="mb-1 text-xs text-[var(--fg-muted)]">X Handle (auto-detected)</p>
                     <p className="text-sm font-medium text-[var(--accent)]">@{profile.username}</p>
                   </div>
