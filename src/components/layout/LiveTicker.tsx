@@ -70,13 +70,14 @@ export function LiveTicker() {
         @keyframes vf-ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
         .vf-ticker-track { animation: vf-ticker 90s linear infinite; }
         .vf-ticker-track:hover { animation-play-state: paused; }
+        .vf-ticker-track:focus-within { animation-play-state: paused; }
         @media (prefers-reduced-motion: reduce) { .vf-ticker-track { animation: none; } }
       `}</style>
 
       <div className="absolute inset-y-0 left-0 z-10 flex items-center gap-2 bg-[var(--bg)] pl-4 pr-3 sm:pl-5">
         <span className="relative flex h-2 w-2">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-60" />
-          <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-600" />
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--success)] opacity-60" />
+          <span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--success)]" />
         </span>
         <span className="mono-label whitespace-nowrap">Live transfers</span>
       </div>

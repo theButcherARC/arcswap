@@ -26,7 +26,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               "w-full rounded-lg border bg-[var(--bg-raised)] px-4 py-3 text-base text-[var(--fg)] transition-colors",
               "placeholder:text-[var(--fg-faint)] focus:outline-none focus:ring-2",
               error
-                ? "border-[rgba(194,39,68,0.45)] focus:ring-[var(--danger-soft)]"
+                ? "border-[color-mix(in_srgb,var(--danger)_45%,transparent)] focus:ring-[var(--danger-soft)]"
                 : "border-[var(--line)] focus:border-[var(--accent)] focus:ring-[var(--accent-soft)]",
               rightSlot ? "pr-28" : "",
               className,

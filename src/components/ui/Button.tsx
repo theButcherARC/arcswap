@@ -17,7 +17,7 @@ const variantClasses: Record<Variant, string> = {
   ghost:
     "text-[var(--fg-muted)] hover:text-[var(--fg)] hover:bg-[var(--glass)] disabled:opacity-40 focus-visible:ring-[var(--accent)]",
   danger:
-    "border border-[rgba(194,39,68,0.35)] bg-[var(--danger-soft)] text-[var(--danger)] hover:bg-[rgba(194,39,68,0.13)] disabled:opacity-50 focus-visible:ring-[rgba(194,39,68,0.4)]",
+    "border border-[color-mix(in_srgb,var(--danger)_35%,transparent)] bg-[var(--danger-soft)] text-[var(--danger)] hover:bg-[color-mix(in_srgb,var(--danger)_13%,transparent)] disabled:opacity-50 focus-visible:ring-[color-mix(in_srgb,var(--danger)_40%,transparent)]",
 };
 
 const sizeClasses: Record<Size, string> = {
