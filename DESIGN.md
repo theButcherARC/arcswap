@@ -21,6 +21,7 @@ Tokens live in src/app/globals.css and are the single source. Use the CSS variab
 - --accent #2775ca: USDC blue. The only accent. Primary actions, live indicators, links of consequence.
 - --accent-soft rgba(39, 117, 202, 0.1): accent tint backgrounds.
 - --data #1f6fd0: data blue for numbers' unit labels and chart-like details.
+- --success #12805c: success and PASS states. --danger #c22744: errors and destructive actions. --warn #a35a08: warnings. Each has a soft tint (--success-soft, --danger-soft, --warn-soft) for badge and alert fills, on the --accent-soft pattern. Semantic UI uses these tokens, never Tailwind palette colors.
 - --radius 16px: default corner radius.
 
 The logo gradient (violet to blue V mark) is brand art and stays as it is; it never recolors the UI.

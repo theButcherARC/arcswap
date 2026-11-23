@@ -136,7 +136,7 @@ export function ConnectButton() {
         {note ? (
           <p
             className={
-              "absolute right-0 top-full z-50 mt-2 w-60 border border-[var(--line)] bg-white p-3 text-left text-[0.6875rem] leading-relaxed text-[var(--fg-muted)] shadow-xl [transform-origin:top_right] " +
+              "absolute right-0 top-full z-50 mt-2 w-60 border border-[var(--line)] bg-white p-3 text-left text-xs leading-relaxed text-[var(--fg-muted)] shadow-[0_8px_24px_rgba(11,13,22,0.10)] [transform-origin:top_right] " +
               (noteClosing ? "animate-pop-out" : "animate-pop-in")
             }
           >
@@ -178,7 +178,7 @@ export function ConnectButton() {
       {menuOpen ? (
         <div
           role="menu"
-          className="absolute right-0 top-full z-50 mt-2 w-48 animate-pop-in border border-[var(--line)] bg-white p-1.5 text-left shadow-xl [transform-origin:top_right]"
+          className="absolute right-0 top-full z-50 mt-2 w-48 animate-pop-in border border-[var(--line)] bg-white p-1.5 text-left shadow-[0_8px_24px_rgba(11,13,22,0.10)] [transform-origin:top_right]"
         >
           <button
             role="menuitem"
