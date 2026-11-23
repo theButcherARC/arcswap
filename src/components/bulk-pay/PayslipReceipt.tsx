@@ -3,6 +3,7 @@
 import React, { useMemo, useState } from "react";
 import { Playfair_Display } from "next/font/google";
 import { DEFAULT_CHAIN } from "@/constants/chains";
+import ShareSheet from "@/components/ui/ShareSheet";
 import { shortAddress } from "@/lib/bulkPayReview";
 import { formatTokenAmount } from "@/lib/money";
 import type { BatchResult } from "@/types/bulkPay";
@@ -252,13 +253,28 @@ export default function PayslipReceipt({
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={handleCopy}
-          className="mt-5 w-full border border-[var(--line)] bg-black/[0.03] px-4 py-3 text-sm font-medium text-[var(--fg-muted)] pressable hover:border-[var(--line-strong)] hover:text-[var(--fg)]"
-        >
-          {copied ? "Receipt copied" : "Copy receipt"}
-        </button>
+        <div className="mt-5 flex gap-2">
+          <button
+            type="button"
+            onClick={handleCopy}
+            className="min-h-[44px] flex-1 border border-[var(--line)] bg-black/[0.03] px-4 py-3 text-sm font-medium text-[var(--fg-muted)] pressable hover:border-[var(--line-strong)] hover:text-[var(--fg)]"
+          >
+            {copied ? "Receipt copied" : "Copy receipt"}
+          </button>
+          {result.txHashes.length > 0 ? (
+            <ShareSheet
+              url={`${explorerBase}/tx/${result.txHashes[0]}`}
+              title="Batch payment proof"
+              text={
+                summary
+                  ? `Paid ${fmt(grandTotal, decimals)} ${tokenSymbol} to ${summary.lines.length} recipient${summary.lines.length === 1 ? "" : "s"} on Arc via VibeFlow. Onchain proof:`
+                  : `Batch payment of ${fmt(grandTotal, decimals)} ${tokenSymbol} settled on Arc via VibeFlow. Onchain proof:`
+              }
+              triggerLabel="Share proof"
+              triggerClassName="min-h-[44px] rounded-none border-[var(--line)] bg-black/[0.03] px-4 py-3 text-sm font-medium text-[var(--fg-muted)] hover:border-[var(--line-strong)] hover:text-[var(--fg)]"
+            />
+          ) : null}
+        </div>
         <p className="mt-3 text-center text-[0.6875rem] text-[var(--fg-faint)]">
           Settled on Arc through the VibeFlow BatchPay contract. Memos and
           amounts on this payslip are read from the chain, not typed in.
