@@ -568,32 +568,32 @@ export default function VibeFlowLanding() {
             <div>
               <h4 className="mono-label mb-4 !text-[var(--fg-muted)]">Product</h4>
               <ul className="space-y-3">
-                <li><Link href={ROUTES.BULK_PAY} className="text-sm text-[var(--fg-faint)] transition-colors duration-200 hover:text-[var(--fg)]">Bulk Payments</Link></li>
-                <li><Link href={ROUTES.DASHBOARD} className="text-sm text-[var(--fg-faint)] transition-colors duration-200 hover:text-[var(--fg)]">Dashboard</Link></li>
-                <li><Link href={ROUTES.SOCIAL_PROFILE} className="text-sm text-[var(--fg-faint)] transition-colors duration-200 hover:text-[var(--fg)]">VibeID</Link></li>
-                <li><Link href={ROUTES.ROADMAP} className="text-sm text-[var(--fg-faint)] transition-colors duration-200 hover:text-[var(--fg)]">Roadmap</Link></li>
+                <li><Link href={ROUTES.BULK_PAY} className="link-sweep text-sm text-[var(--fg-faint)] transition-colors duration-200 hover:text-[var(--fg)]">Bulk Payments</Link></li>
+                <li><Link href={ROUTES.DASHBOARD} className="link-sweep text-sm text-[var(--fg-faint)] transition-colors duration-200 hover:text-[var(--fg)]">Dashboard</Link></li>
+                <li><Link href={ROUTES.SOCIAL_PROFILE} className="link-sweep text-sm text-[var(--fg-faint)] transition-colors duration-200 hover:text-[var(--fg)]">VibeID</Link></li>
+                <li><Link href={ROUTES.ROADMAP} className="link-sweep text-sm text-[var(--fg-faint)] transition-colors duration-200 hover:text-[var(--fg)]">Roadmap</Link></li>
               </ul>
             </div>
 
             <div>
               <h4 className="mono-label mb-4 !text-[var(--fg-muted)]">Built On</h4>
               <ul className="space-y-3">
-                <li><a href="https://arc.network" target="_blank" rel="noopener noreferrer" className="text-sm text-[var(--fg-faint)] transition-colors duration-200 hover:text-[var(--fg)]">Arc Blockchain</a></li>
-                <li><a href="https://circle.com" target="_blank" rel="noopener noreferrer" className="text-sm text-[var(--fg-faint)] transition-colors duration-200 hover:text-[var(--fg)]">Circle USDC</a></li>
+                <li><a href="https://arc.network" target="_blank" rel="noopener noreferrer" className="link-sweep text-sm text-[var(--fg-faint)] transition-colors duration-200 hover:text-[var(--fg)]">Arc Blockchain</a></li>
+                <li><a href="https://circle.com" target="_blank" rel="noopener noreferrer" className="link-sweep text-sm text-[var(--fg-faint)] transition-colors duration-200 hover:text-[var(--fg)]">Circle USDC</a></li>
               </ul>
             </div>
 
             <div>
               <h4 className="mono-label mb-4 !text-[var(--fg-muted)]">Resources</h4>
               <ul className="space-y-3">
-                <li><a href="https://github.com/theButcherARC/arcswap" target="_blank" rel="noopener noreferrer" className="text-sm text-[var(--fg-faint)] transition-colors duration-200 hover:text-[var(--fg)]">GitHub</a></li>
+                <li><a href="https://github.com/theButcherARC/arcswap" target="_blank" rel="noopener noreferrer" className="link-sweep text-sm text-[var(--fg-faint)] transition-colors duration-200 hover:text-[var(--fg)]">GitHub</a></li>
               </ul>
             </div>
 
             <div>
               <h4 className="mono-label mb-4 !text-[var(--fg-muted)]">Connect</h4>
               <ul className="space-y-3">
-                <li><a href="https://x.com/The_Last_Dip" target="_blank" rel="noopener noreferrer" className="text-sm text-[var(--fg-faint)] transition-colors duration-200 hover:text-[var(--fg)]">Butcher (Haroon)</a></li>
+                <li><a href="https://x.com/The_Last_Dip" target="_blank" rel="noopener noreferrer" className="link-sweep text-sm text-[var(--fg-faint)] transition-colors duration-200 hover:text-[var(--fg)]">Butcher (Haroon)</a></li>
               </ul>
             </div>
           </div>
@@ -619,6 +619,17 @@ export default function VibeFlowLanding() {
               <span className="mono-label !text-[var(--fg-muted)]">Circle USDC</span>
             </div>
           </div>
+          <p className="mono-label mt-6">
+            Link hover treatment adapted from{" "}
+            <a
+              href="https://skiper-ui.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="link-sweep !text-[var(--fg-muted)]"
+            >
+              Skiper UI
+            </a>
+          </p>
 
           {/* On-chain proof: contract addresses */}
           <div className="mt-8 flex flex-col gap-4 border-t border-[var(--line)] pt-6">
@@ -636,7 +647,7 @@ export default function VibeFlowLanding() {
                 href="https://explorer.arc.io/address/0x85D9d1754f3Fff8d9757DEADcD701614199F7A2B"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="break-all font-mono text-[0.6875rem] text-[var(--fg-faint)] transition-colors hover:text-[var(--data)]"
+                className="link-sweep break-all font-mono text-[0.6875rem] text-[var(--fg-faint)] transition-colors hover:text-[var(--data)]"
               >
                 VibeFlowBatchPay 0x85D9d1754f3Fff8d9757DEADcD701614199F7A2B
               </a>
@@ -644,7 +655,7 @@ export default function VibeFlowLanding() {
                 href="https://explorer.arc.io/tx/0xb252f440e632a2a34c69de604b4b947ecee80362ccb3d720221f662f711a480c"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="break-all font-mono text-[0.6875rem] text-[var(--fg-faint)] transition-colors hover:text-[var(--data)]"
+                className="link-sweep break-all font-mono text-[0.6875rem] text-[var(--fg-faint)] transition-colors hover:text-[var(--data)]"
               >
                 Demo batch 0xb252f440e632a2a34c69de604b4b947ecee80362ccb3d720221f662f711a480c
               </a>

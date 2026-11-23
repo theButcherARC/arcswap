@@ -2,6 +2,7 @@
 
 import { useAccount } from "wagmi";
 import { ConnectButton } from "@/components/wallet/ConnectButton";
+import AnimatedNumber from "@/components/ui/AnimatedNumber";
 import useSWR from "swr";
 import { useEffect, useState } from "react";
 import {
@@ -246,25 +247,34 @@ export default function DashboardPage() {
   const totalVolume = payments.reduce((sum, bp) => sum + bp.total, 0);
   const totalRecipients = payments.reduce((sum, bp) => sum + bp.recipients.length, 0);
 
-  const stats = [
+  const stats: {
+    label: string;
+    raw: number;
+    format: (n: number) => string;
+    sub: string;
+  }[] = [
     {
       label: "Last Payment",
-      value: lastBulkPay ? "$" + formatUsdc(lastBulkPay.total) : "$0.00",
+      raw: lastBulkPay ? lastBulkPay.total : 0,
+      format: (n) => "$" + formatUsdc(n),
       sub: "USDC",
     },
     {
       label: "Last Recipients",
-      value: lastBulkPay ? String(lastBulkPay.recipients.length) : "0",
+      raw: lastBulkPay ? lastBulkPay.recipients.length : 0,
+      format: (n) => String(Math.round(n)),
       sub: "addresses",
     },
     {
       label: "Total Volume",
-      value: "$" + formatUsdc(totalVolume),
+      raw: totalVolume,
+      format: (n) => "$" + formatUsdc(n),
       sub: "USDC",
     },
     {
       label: "Total Recipients",
-      value: String(totalRecipients),
+      raw: totalRecipients,
+      format: (n) => String(Math.round(n)),
       sub: "all payments",
     },
   ];
@@ -386,7 +396,7 @@ export default function DashboardPage() {
                       <div className="skeleton mt-3 h-8 w-24" aria-hidden="true" />
                     ) : (
                       <p className="mt-2 text-2xl font-semibold tracking-tight text-[var(--fg)] sm:text-3xl">
-                        {stat.value}
+                        <AnimatedNumber value={stat.raw} format={stat.format} />
                       </p>
                     )}
                     <p className="mono-label mt-2">{stat.sub}</p>
