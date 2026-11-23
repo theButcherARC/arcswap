@@ -117,15 +117,15 @@ export default function RecipientRow({
   };
 
   const inputClasses =
-    "w-full rounded-lg bg-black/[0.03] border border-[var(--line)] text-[var(--fg)] placeholder:text-[var(--fg-faint)] px-4 py-3 text-base focus:outline-none focus:border-[var(--accent)] focus:bg-black/[0.03] focus:shadow-[0_0_0_3px_rgba(39,117,202,0.14)] transition-all duration-200 hover:border-[var(--line-strong)] hover:bg-black/[0.04] disabled:opacity-40 disabled:cursor-not-allowed";
+    "w-full rounded-lg bg-[var(--bg-raised)] border border-[var(--line)] text-[var(--fg)] placeholder:text-[var(--fg-faint)] px-4 py-3 text-base focus:outline-none focus:border-[var(--accent)] focus:bg-[var(--bg-raised)] focus:shadow-[0_0_0_3px_rgba(39,117,202,0.14)] transition-[border-color,background-color,box-shadow] duration-200 hover:border-[var(--line-strong)] hover:bg-[var(--glass-strong)] disabled:opacity-40 disabled:cursor-not-allowed";
 
   const addressClasses =
-    "w-full rounded-lg border px-4 py-3 text-base font-mono placeholder:text-[var(--fg-faint)] focus:outline-none transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed " +
+    "w-full rounded-lg border px-4 py-3 text-base font-mono placeholder:text-[var(--fg-faint)] focus:outline-none transition-[border-color,background-color] duration-200 disabled:opacity-40 disabled:cursor-not-allowed " +
     (addressValid
       ? "border-emerald-500/40 bg-emerald-500/5 text-[var(--fg)] focus:border-emerald-500/60"
       : addressHasInput
         ? "border-rose-500/40 bg-rose-500/5 text-[var(--fg)] focus:border-rose-500/60"
-        : "border-[var(--line)] bg-black/[0.03] text-[var(--fg)] focus:border-[var(--accent)] hover:border-[var(--line-strong)] hover:bg-black/[0.04]");
+        : "border-[var(--line)] bg-[var(--bg-raised)] text-[var(--fg)] focus:border-[var(--accent)] hover:border-[var(--line-strong)] hover:bg-[var(--glass-strong)]");
 
   const rowNumber = index + 1;
 
@@ -173,7 +173,7 @@ export default function RecipientRow({
               className={addressClasses + " pr-9"}
             />
             {addressValid && (
-              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-[var(--success)]">
                 <svg
                   width="16"
                   height="16"
@@ -185,12 +185,12 @@ export default function RecipientRow({
                     cx="8"
                     cy="8"
                     r="6.5"
-                    stroke="#10b981"
+                    stroke="currentColor"
                     strokeWidth="1.5"
                   />
                   <path
                     d="M5.5 8L7.5 10L10.5 6"
-                    stroke="#10b981"
+                    stroke="currentColor"
                     strokeWidth="1.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -200,26 +200,26 @@ export default function RecipientRow({
             )}
             {addressHasInput && !addressValid && handleState === 'idle' && (
               <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <circle cx="8" cy="8" r="6.5" stroke="#f43f5e" strokeWidth="1.5" />
-                  <path d="M6 6L10 10M10 6L6 10" stroke="#f43f5e" strokeWidth="1.5" strokeLinecap="round" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-[var(--danger)]">
+                  <circle cx="8" cy="8" r="6.5" stroke="currentColor" strokeWidth="1.5" />
+                  <path d="M6 6L10 10M10 6L6 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
                 </svg>
               </div>
             )}
           </div>
           {/* Handle resolution feedback */}
           {handleState === 'resolving' && (
-            <p className="mt-1.5 text-[0.6875rem] text-[var(--fg-faint)] animate-pulse">Resolving handle...</p>
+            <p className="mt-1.5 text-xs text-[var(--fg-faint)]">Resolving handle...</p>
           )}
           {handleState === 'resolved' && (
-            <p className="mt-1.5 text-[0.6875rem] text-emerald-600 font-mono">{handleText}</p>
+            <p className="mt-1.5 text-[0.6875rem] text-[var(--success)] font-mono">{handleText}</p>
           )}
           {handleState === 'not_found' && (
-            <p className="mt-1.5 text-[0.6875rem] text-amber-600">
+            <p className="mt-1.5 text-xs text-[var(--warn)]">
               {handleText} &mdash;{' '}
               <button
                 type="button"
-                className="underline hover:text-amber-600 transition-colors"
+                className="underline hover:text-[var(--warn)] transition-colors"
                 onClick={() => {
                   setHandleState('idle');
                   onAddressChange(recipient.id, '');
@@ -230,7 +230,7 @@ export default function RecipientRow({
             </p>
           )}
           {handleState === 'error' && (
-            <p className="mt-1.5 text-[0.6875rem] text-rose-600">{handleText}</p>
+            <p className="mt-1.5 text-xs text-[var(--danger)]">{handleText}</p>
           )}
         </div>
 
@@ -252,7 +252,7 @@ export default function RecipientRow({
               disabled={isDisabled}
               placeholder={activePlaceholder}
               className={
-                "w-full rounded-lg bg-black/[0.03] border border-[var(--line)] text-[var(--fg)] placeholder:text-[var(--fg-faint)] py-3 text-base text-right focus:outline-none focus:border-[var(--accent)] transition-all duration-200 hover:border-[var(--line-strong)] hover:bg-black/[0.04] disabled:opacity-40 disabled:cursor-not-allowed " +
+                "w-full rounded-lg bg-[var(--bg-raised)] border border-[var(--line)] text-[var(--fg)] placeholder:text-[var(--fg-faint)] py-3 text-base text-right focus:outline-none focus:border-[var(--accent)] transition-[border-color,background-color] duration-200 hover:border-[var(--line-strong)] hover:bg-[var(--glass-strong)] disabled:opacity-40 disabled:cursor-not-allowed " +
                 (inputMode === "amount" ? "pl-8 pr-4" : "pl-4 pr-8")
               }
             />
