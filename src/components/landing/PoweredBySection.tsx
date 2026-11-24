@@ -5,8 +5,8 @@ const PARTNERS = [
   { name: "Groq AI" },
   { name: "Circle" },
   { name: "Arc Network" },
+  { name: "Arc Studio" },
   { name: "USDC" },
-  { name: "MetaMask" },
 ];
 
 export default function PoweredBySection() {
