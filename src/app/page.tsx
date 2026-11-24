@@ -13,7 +13,6 @@ import { HeroScroll } from "@/components/landing/HeroScroll";
 import HeroCoin from "@/components/landing/HeroCoin";
 import { TokenCoin } from "@/components/TokenCoin";
 import { JoinWithXButton } from "@/components/auth/JoinWithXButton";
-import { StudioBadge } from "@/components/brand/StudioBadge";
 
 const FEATURES = [
   {
@@ -664,7 +663,6 @@ export default function VibeFlowLanding() {
 
         </div>
       </footer>
-      <StudioBadge />
     </div>
   );
 }
