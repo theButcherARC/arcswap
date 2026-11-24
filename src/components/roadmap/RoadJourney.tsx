@@ -24,7 +24,7 @@ const ITEMS: Item[] = [
   { phase: "Later", color: "var(--fg-muted)", title: "Mobile app", body: "VibeFlow in your pocket: Android and iOS, with your batches, schedules and balance wherever you are." },
   { phase: "Growth", color: "var(--fg-muted)", title: "$VIBE fee discount", body: "Holding $VIBE cuts the batch fee. The token serves the product, not the other way around." },
   { phase: "Later", color: "var(--fg-muted)", title: "Fiat last mile", body: "Bank and card payouts through licensed partners, once volume justifies it. Receiving stays instant on Arc." },
-  { phase: "Last", color: "var(--fg-faint)", title: "Prediction markets", body: "Last on this list, and only after a full legal review." },
+  { phase: "Last", color: "var(--fg-faint)", title: "VibeMarket", body: "The marketplace comes last: buy and sell services and digital goods, settled in USDC on Arc." },
 ];
 
 const H = 3970;
@@ -92,7 +92,7 @@ export default function RoadJourney() {
   }, []);
 
   const titleColor = (item: Item) =>
-    item.title === "Prediction markets" ? "var(--fg-muted)" : item.color;
+    item.title === "VibeMarket" ? "var(--fg-muted)" : item.color;
 
   return (
     <div>
