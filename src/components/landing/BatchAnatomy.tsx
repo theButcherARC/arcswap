@@ -182,11 +182,11 @@ export default function BatchAnatomy() {
                 aria-hidden="true"
               >
                 {[
-                  [50, 50, 16, 20],
-                  [50, 50, 84, 20],
-                  [50, 50, 84, 82],
-                  [50, 50, 16, 82],
-                  [50, 50, 50, 94],
+                  [50, 50, 17, 31],
+                  [50, 50, 83, 31],
+                  [50, 50, 83, 70],
+                  [50, 50, 17, 70],
+                  [50, 50, 50, 84],
                 ].map(([x1, y1, x2, y2]) => (
                   <line
                     key={`${x2}-${y2}`}
@@ -307,7 +307,7 @@ export default function BatchAnatomy() {
                 </div>
               ))}
 
-              <span className="mono-label absolute bottom-1 left-1/2 z-[5] -translate-x-1/2 whitespace-nowrap">
+              <span className="mono-label absolute bottom-1 left-1 z-[5] whitespace-nowrap max-[640px]:bottom-auto max-[640px]:left-auto max-[640px]:right-1 max-[640px]:top-1">
                 Scroll · the batch opens
               </span>
             </div>

@@ -693,11 +693,15 @@ a, button, [role="button"] {
 /* ============================================
    Batch anatomy (landing only): the exploded batch section.
    Parts sit stacked on the batch card and separate as --ep (the
-   eased scroll progress, set by BatchAnatomy) goes 0 to 1. Offsets
-   are percentages of each part's own size, mirroring the approved
-   sample; the fee chip travels in px because it is short. Without
-   JS, --ep is unset and the stacked card is what shows.
+   eased scroll progress, set by BatchAnatomy) goes 0 to 1. Travel
+   distances are container units (cqw/cqh of the stage, with px
+   fallbacks first), so at full open every part lands clear of the
+   center card at any stage size. Without JS, --ep is unset and
+   the stacked card is what shows.
    ============================================ */
+.ba-stage {
+  container-type: size;
+}
 .ba-part {
   position: absolute;
   left: 50%;
@@ -709,7 +713,8 @@ a, button, [role="button"] {
   border-radius: var(--radius);
   box-shadow: 0 12px 32px color-mix(in srgb, var(--fg) 8%, transparent);
   transform: translate(-50%, -50%)
-    translate(calc(var(--dx, 0%) * var(--ep, 0)), calc(var(--dy, 0%) * var(--ep, 0)));
+    translate(calc(var(--dx, 0px) * var(--ep, 0)), calc(var(--dy, 0px) * var(--ep, 0)))
+    scale(var(--bs, 1));
   will-change: transform;
 }
 @media (min-width: 560px) {
@@ -718,52 +723,74 @@ a, button, [role="button"] {
   }
 }
 .ba-center {
-  --dx: 0%;
-  --dy: 0%;
+  --dx: 0px;
+  --dy: 0px;
   z-index: 3;
 }
 .ba-recipients {
-  --dx: -46%;
-  --dy: -30%;
+  --dx: -330px;
+  --dx: -33cqw;
+  --dy: -120px;
+  --dy: -19cqh;
   z-index: 2;
 }
 .ba-memo {
-  --dx: 46%;
-  --dy: -30%;
+  --dx: 330px;
+  --dx: 33cqw;
+  --dy: -120px;
+  --dy: -19cqh;
   z-index: 4;
 }
 .ba-payslip {
-  --dx: 46%;
-  --dy: 32%;
+  --dx: 330px;
+  --dx: 33cqw;
+  --dy: 130px;
+  --dy: 20cqh;
   z-index: 2;
 }
 .ba-approval {
-  --dx: -46%;
-  --dy: 32%;
+  --dx: -330px;
+  --dx: -33cqw;
+  --dy: 130px;
+  --dy: 20cqh;
   z-index: 2;
 }
 .ba-fee {
-  --dx: 0%;
-  --dy: clamp(110px, 24vh, 200px);
+  --dx: 0px;
+  --dy: clamp(150px, 30vh, 230px);
+  --dy: 34cqh;
   width: 210px;
   z-index: 2;
 }
 @media (max-width: 640px) {
+  .ba-part {
+    width: 160px;
+    padding: 10px 12px;
+    --bs: 0.8;
+  }
   .ba-recipients,
   .ba-approval {
-    --dx: -30%;
+    --dx: -105px;
+    --dx: -27cqw;
   }
   .ba-memo,
   .ba-payslip {
-    --dx: 30%;
+    --dx: 105px;
+    --dx: 27cqw;
   }
   .ba-recipients,
   .ba-memo {
-    --dy: -26%;
+    --dy: -140px;
+    --dy: -25cqh;
   }
   .ba-payslip,
   .ba-approval {
-    --dy: 28%;
+    --dy: 140px;
+    --dy: 25cqh;
+  }
+  .ba-fee {
+    --dy: 246px;
+    --dy: 44cqh;
   }
 }
 
@@ -812,25 +839,31 @@ a, button, [role="button"] {
 }
 .ba-l1 {
   left: 4%;
-  top: 10%;
+  top: 5%;
 }
 .ba-l2 {
   left: 80%;
-  top: 10%;
+  top: 5%;
 }
 .ba-l3 {
   left: 80%;
-  top: 76%;
+  top: 87%;
 }
 .ba-l4 {
   left: 4%;
-  top: 76%;
+  top: 82%;
 }
 .ba-l5 {
-  left: 43%;
-  top: 90%;
+  left: 26%;
+  top: 84%;
 }
 @media (max-width: 640px) {
+  .ba-label {
+    width: 84px;
+  }
+  .ba-label p {
+    display: none;
+  }
   .ba-l1,
   .ba-l4 {
     left: 2%;
@@ -840,8 +873,17 @@ a, button, [role="button"] {
     left: auto;
     right: 2%;
   }
+  .ba-l1,
+  .ba-l2 {
+    top: 6%;
+  }
+  .ba-l3,
+  .ba-l4 {
+    top: 46%;
+  }
   .ba-l5 {
-    left: 38%;
+    left: 2%;
+    top: 88%;
   }
 }
 
