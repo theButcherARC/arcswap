@@ -70,7 +70,7 @@ Do not: invented stats, fake balances or zeros presented as data, gradient text,
 
 Mobile first; the owner's phone is the acceptance test. Tap targets at least 44px. Tap feedback is instant (hover/active states, disabled while pending). Every send is simulated before the wallet opens so it does not fail at signing. A feature is not done until it has been checked at phone width.
 - Fast load is part of done: a slow first paint on the owner's phone is a defect, not a polish item.
-- Motion: feedback starts on pointer-down, never waits for release. Transitions use the settle curve (--ease-settle), critically damped, no overshoot. Drawers and menus stay interruptible: they can be reversed mid-motion and never lock input. Under prefers-reduced-motion, reveals become short opacity fades and the drawer snaps.
+- Motion: feedback starts on pointer-down, never waits for release. Transitions use the settle curve (--ease-settle), critically damped, no overshoot. Drawers and menus stay interruptible: they can be reversed mid-motion and never lock input. Under prefers-reduced-motion, reveals show instantly with no transition and the drawer snaps.
 
 ## 9. Agent prompt guide
 
