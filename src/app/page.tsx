@@ -10,6 +10,7 @@ import { LiveStats } from "@/components/landing/LiveStats";
 import { LiveTicker } from "@/components/layout/LiveTicker";
 import Reveal from "@/components/landing/Reveal";
 import { HeroScroll } from "@/components/landing/HeroScroll";
+import BatchAnatomy from "@/components/landing/BatchAnatomy";
 import HeroCoin from "@/components/landing/HeroCoin";
 import { TokenCoin } from "@/components/TokenCoin";
 import { JoinWithXButton } from "@/components/auth/JoinWithXButton";
@@ -282,6 +283,9 @@ export default function VibeFlowLanding() {
           </div>
         </div>
       </section>
+
+      {/* ==================== BATCH ANATOMY ==================== */}
+      <BatchAnatomy />
 
       {/* ==================== THE PROBLEM ==================== */}
       <section className="relative px-5 pb-28 pt-14 sm:px-8" aria-label="The problem">
