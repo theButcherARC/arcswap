@@ -689,3 +689,200 @@ a, button, [role="button"] {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ============================================
+   Batch anatomy (landing only): the exploded batch section.
+   Parts sit stacked on the batch card and separate as --ep (the
+   eased scroll progress, set by BatchAnatomy) goes 0 to 1. Offsets
+   are percentages of each part's own size, mirroring the approved
+   sample; the fee chip travels in px because it is short. Without
+   JS, --ep is unset and the stacked card is what shows.
+   ============================================ */
+.ba-part {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 212px;
+  padding: 14px 16px;
+  background: var(--bg-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 12px 32px color-mix(in srgb, var(--fg) 8%, transparent);
+  transform: translate(-50%, -50%)
+    translate(calc(var(--dx, 0%) * var(--ep, 0)), calc(var(--dy, 0%) * var(--ep, 0)));
+  will-change: transform;
+}
+@media (min-width: 560px) {
+  .ba-part {
+    width: 250px;
+  }
+}
+.ba-center {
+  --dx: 0%;
+  --dy: 0%;
+  z-index: 3;
+}
+.ba-recipients {
+  --dx: -46%;
+  --dy: -30%;
+  z-index: 2;
+}
+.ba-memo {
+  --dx: 46%;
+  --dy: -30%;
+  z-index: 4;
+}
+.ba-payslip {
+  --dx: 46%;
+  --dy: 32%;
+  z-index: 2;
+}
+.ba-approval {
+  --dx: -46%;
+  --dy: 32%;
+  z-index: 2;
+}
+.ba-fee {
+  --dx: 0%;
+  --dy: clamp(110px, 24vh, 200px);
+  width: 210px;
+  z-index: 2;
+}
+@media (max-width: 640px) {
+  .ba-recipients,
+  .ba-approval {
+    --dx: -30%;
+  }
+  .ba-memo,
+  .ba-payslip {
+    --dx: 30%;
+  }
+  .ba-recipients,
+  .ba-memo {
+    --dy: -26%;
+  }
+  .ba-payslip,
+  .ba-approval {
+    --dy: 28%;
+  }
+}
+
+.ba-pill {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--success);
+  border: 1px solid color-mix(in srgb, var(--success) 35%, transparent);
+  padding: 2px 7px;
+  border-radius: 999px;
+}
+.ba-chip {
+  display: inline-block;
+  font-size: 12px;
+  white-space: nowrap;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 10px;
+}
+.ba-perf {
+  border-top: 2px dashed var(--line);
+  margin-top: 8px;
+  padding-top: 8px;
+}
+.ba-muted {
+  color: var(--fg-muted);
+}
+.ba-strong {
+  color: var(--fg);
+}
+
+.ba-label {
+  position: absolute;
+  z-index: 4;
+  width: 92px;
+  pointer-events: none;
+  opacity: var(--ep, 0);
+}
+@media (min-width: 560px) {
+  .ba-label {
+    width: 118px;
+  }
+}
+.ba-l1 {
+  left: 4%;
+  top: 10%;
+}
+.ba-l2 {
+  left: 80%;
+  top: 10%;
+}
+.ba-l3 {
+  left: 80%;
+  top: 76%;
+}
+.ba-l4 {
+  left: 4%;
+  top: 76%;
+}
+.ba-l5 {
+  left: 43%;
+  top: 90%;
+}
+@media (max-width: 640px) {
+  .ba-l1,
+  .ba-l4 {
+    left: 2%;
+  }
+  .ba-l2,
+  .ba-l3 {
+    left: auto;
+    right: 2%;
+  }
+  .ba-l5 {
+    left: 38%;
+  }
+}
+
+/* Blueprint mode: surfaces swap for edges (BatchAnatomy toggle). */
+.batch-anatomy[data-blueprint="true"] .ba-stage {
+  background:
+    repeating-linear-gradient(
+      0deg,
+      color-mix(in srgb, var(--accent) 6%, transparent) 0 1px,
+      transparent 1px 28px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--accent) 6%, transparent) 0 1px,
+      transparent 1px 28px
+    ),
+    color-mix(in srgb, var(--accent) 3%, var(--bg));
+}
+.batch-anatomy[data-blueprint="true"] .ba-part {
+  background: color-mix(in srgb, var(--accent) 4%, transparent);
+  border: 1.5px dashed var(--accent);
+  box-shadow: none;
+  color: var(--accent);
+}
+.batch-anatomy[data-blueprint="true"] .ba-row,
+.batch-anatomy[data-blueprint="true"] .ba-perf {
+  border-top-color: color-mix(in srgb, var(--accent) 35%, transparent);
+}
+.batch-anatomy[data-blueprint="true"] .ba-pill {
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+}
+.batch-anatomy[data-blueprint="true"] .ba-chip {
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+}
+.batch-anatomy[data-blueprint="true"] .ba-muted {
+  color: var(--accent);
+}
+.batch-anatomy[data-blueprint="true"] .ba-strong {
+  color: var(--accent);
+}
+.batch-anatomy[data-blueprint="true"] .ba-stage .mono-label {
+  color: var(--accent);
+}

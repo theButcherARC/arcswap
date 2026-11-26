@@ -54,7 +54,7 @@ No other accent colors. No gradient washes on surfaces.
 - App screens: max-w-3xl column for feed-like pages, max-w-5xl/6xl for data and landing.
 - One section, one message. Sections separated by whitespace and hairlines, not boxes inside boxes.
 - Everything reachable within two taps from the sidebar (mobile bottom bar: Home, Vibrain, Square, Earn, Pay).
-- Landing: hero statement, live numbers strip, product screen, numbered how-it-works (1 Connect, 2 Add recipients, 3 Review and send), features, FAQ, footer with the onchain contract proof row.
+- Landing: hero statement, live numbers strip, product screen, an exploded batch anatomy section after the product screen (the batch card separates into its five checked parts on scroll, FIG labels, with a blueprint toggle), numbered how-it-works (1 Connect, 2 Add recipients, 3 Review and send), features, FAQ, footer with the onchain contract proof row.
 - The landing headline is locked: "The people layer of Arc." It never changes. Outcome wording goes in the subtext, never in the headline.
 
 ## 6. Elevation
